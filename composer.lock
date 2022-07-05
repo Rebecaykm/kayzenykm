@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8be704ad908df4fde949bfff0b7808e",
+    "content-hash": "0f63178780c11187b606245ff5756ffe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6066,6 +6066,66 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yoramdelangen/laravel-pdo-odbc",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yoramdelangen/laravel-pdo-odbc.git",
+                "reference": "af5c3e95e7cdbaf39df127ac78a371d91d9de42f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yoramdelangen/laravel-pdo-odbc/zipball/af5c3e95e7cdbaf39df127ac78a371d91d9de42f",
+                "reference": "af5c3e95e7cdbaf39df127ac78a371d91d9de42f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-odbc": "*",
+                "ext-pdo_odbc": "*",
+                "illuminate/database": ">= 7.0",
+                "illuminate/support": ">= 7.0",
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelPdoOdbc\\ODBCServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelPdoOdbc\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrea Abram",
+                    "email": "andreossido@gmail.com",
+                    "homepage": "https://github.com/andreossido",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Yoram de Langen",
+                    "email": "yoramdelangen@gmail.com",
+                    "homepage": "https://github.com/yoramdelangen",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PDO ODBC integration for Laravel 7 & 8 framework. Tested for Snowflake connections",
+            "homepage": "https://github.com/yoramdelangen/laravel-odbc",
+            "support": {
+                "issues": "https://github.com/yoramdelangen/laravel-pdo-odbc/issues",
+                "source": "https://github.com/yoramdelangen/laravel-pdo-odbc/tree/1.1.5"
+            },
+            "time": "2022-05-25T08:26:32+00:00"
         }
     ],
     "packages-dev": [
