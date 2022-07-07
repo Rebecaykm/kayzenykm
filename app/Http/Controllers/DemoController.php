@@ -14,7 +14,10 @@ class DemoController extends Controller
      */
     public function index()
     {
-        $demos = Demo::query()->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])->orderBy('SDDTE', 'ASC')->limit(10)->get();
+        $demos = Demo::query()
+            ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+            ->orderBy('SDDTE', 'ASC')
+            ->simplePaginate(10);
         return view('demo', ['demos' => $demos]);
     }
 
