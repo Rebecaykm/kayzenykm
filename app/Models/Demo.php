@@ -9,7 +9,7 @@ class Demo extends Model
 {
     use HasFactory;
 
-    protected $connection = 'odbc-connection-infor';
+    protected $connection = 'odbc-connection-fpo';
     protected $table = 'LX834F02.FSO';
 
     protected $fillable = [

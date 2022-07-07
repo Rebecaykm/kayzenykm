@@ -14,11 +14,8 @@ class DemoController extends Controller
      */
     public function index()
     {
-        $fso = Demo::query()->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])->orderBy('SDDTE', 'DESC')->paginate(5);
-        dd($fso);
-
-//        $data = DB::connection('odbc-connection-infor')->table('LX834F02.FSO')->select('SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN')->orderBy('SDDTE', 'DESC')->limit(20)->get();
-//        dd($data);
+        $demos = Demo::query()->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])->orderBy('SDDTE', 'ASC')->limit(10)->get();
+        return view('demo', ['demos' => $demos]);
     }
 
     /**
