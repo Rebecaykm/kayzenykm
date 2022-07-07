@@ -16,7 +16,7 @@ class DemoController extends Controller
     {
         $demos = Demo::query()
             ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
-            ->orderBy('SDDTE', 'ASC')
+            ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(10);
         return view('demo', ['demos' => $demos]);
     }
