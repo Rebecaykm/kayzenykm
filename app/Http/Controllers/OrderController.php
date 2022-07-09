@@ -2,23 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Demo;
+use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class DemoController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $demos = Demo::query()
-            ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
-            ->orderBy('SDDTE', 'DESC')
-            ->simplePaginate(10);
-        return view('demo', ['demos' => $demos]);
+
+        if (is_null($request->start) || is_null($request->end)) {
+            $orders = Order::query()
+                ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+                ->orderBy('SDDTE', 'DESC')
+                ->get();
+        } else {
+            $start = $request->start;
+            $end = $request->end;
+
+            $orders = Order::query()
+                ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+                ->whereBetween(
+                    'SDDTE',
+                    [
+                        Carbon::parse($start)->format('Ymd'),
+                        Carbon::parse($end)->format('Ymd')
+                    ]
+                )
+                ->orderBy('SDDTE', 'DESC')
+                ->get();
+        }
+        $orders->simplePaginate(10);
+
+        dd($orders);
+
+        return view('order', ['orders' => $orders]);
     }
 
     /**

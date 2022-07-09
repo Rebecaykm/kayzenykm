@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    Route::get('demo', [\App\Http\Controllers\DemoController::class, 'index'])->name('demo');
+    Route::get('order', [\App\Http\Controllers\OrderController::class, 'index'])->name('order');
     Route::view('production', 'production')->name('production');
     Route::view('daily', 'daily')->name('daily');
 });
