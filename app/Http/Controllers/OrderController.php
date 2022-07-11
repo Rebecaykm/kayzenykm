@@ -15,31 +15,34 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        // $start = $request->start;
+        // $end = $request->end;
 
-        if (is_null($request->start) || is_null($request->end)) {
-            $orders = Order::query()
+
+        // if (is_null($request->start) || is_null($request->end)) {
+        //     $orders = Order::query()
+        //         ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+        //         ->orderBy('SDDTE', 'DESC')
+        //         ->simplePaginate(15);
+        // } else {
+
+        //     $orders = Order::query()
+        //         ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+        //         ->whereBetween(
+        //             'SDDTE',
+        //             [
+        //                 Carbon::parse($start)->format('Ymd'),
+        //                 Carbon::parse($end)->format('Ymd')
+        //             ]
+        //         )
+        //         ->orderBy('SDDTE', 'DESC')
+        //         ->simplePaginate(15);
+        // }
+
+        $orders = Order::query()
                 ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
                 ->orderBy('SDDTE', 'DESC')
-                ->get();
-        } else {
-            $start = $request->start;
-            $end = $request->end;
-
-            $orders = Order::query()
-                ->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
-                ->whereBetween(
-                    'SDDTE',
-                    [
-                        Carbon::parse($start)->format('Ymd'),
-                        Carbon::parse($end)->format('Ymd')
-                    ]
-                )
-                ->orderBy('SDDTE', 'DESC')
-                ->get();
-        }
-        $orders->simplePaginate(10);
-
-        dd($orders);
+                ->simplePaginate(15);
 
         return view('order', ['orders' => $orders]);
     }

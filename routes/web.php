@@ -34,4 +34,5 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('order', [\App\Http\Controllers\OrderController::class, 'index'])->name('order');
     Route::view('production', 'production')->name('production');
     Route::view('daily', 'daily')->name('daily');
+    Route::view('open-order', 'open-order')->name('open-order');
 });

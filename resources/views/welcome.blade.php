@@ -141,7 +141,7 @@
     <title>Document</title>
 </head>
 <body>
-    @livewire('search')
+    @livewire('date')
 
     @livewireScripts
 </body>
