@@ -10,6 +10,7 @@ class OpenOrders extends Component
 
     public $sort = 'SDDTE';
     public $direction = 'DESC';
+    public $modal = true;
 
     public function render()
     {
