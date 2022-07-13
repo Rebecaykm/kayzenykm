@@ -36,5 +36,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('production', 'production')->name('production');
     Route::view('daily', 'daily')->name('daily');
 
-    Route::view('open-order', 'open-order')->name('open-order');
+    Route::view('open-orders', 'open-orders')->name('open-orders');
+
+    Route::view('users', 'users')->name('users');
 });
