@@ -7,6 +7,9 @@ use Livewire\Component;
 
 class IndexUser extends Component
 {
+
+    protected $listeners = ['render' => 'render'];
+
     public $search;
     public $sort = 'id';
     public $direction = 'DESC';
