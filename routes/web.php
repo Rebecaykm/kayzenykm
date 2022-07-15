@@ -32,11 +32,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    Route::get('order', [\App\Http\Controllers\OrderController::class, 'index'])->name('order');
+    // Route::get('order', [\App\Http\Controllers\OrderController::class, 'index'])->name('order');
     Route::view('production', 'production')->name('production');
     Route::view('daily', 'daily')->name('daily');
 
-    Route::view('open-orders', 'open-orders')->name('open-orders');
-
-    Route::view('users', 'users')->name('users');
+    /**
+     * Routes Open Orders
+     */
+    Route::get('open-orders', [\App\Http\Controllers\FsoController::class, 'index'])->name('open-orders.index');
+    Route::post('open-orders/show', [\App\Http\Controllers\FsoController::class, 'show'])->name('open-orders.show');
+    Route::get('open-orders/store', [\App\Http\Controllers\FsoController::class, 'store'])->name('open-orders.store');
 });
