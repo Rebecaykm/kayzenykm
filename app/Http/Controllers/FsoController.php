@@ -45,9 +45,9 @@ class FsoController extends Controller
             ]);
         }
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU02.YSF004C";
-        // $result = odbc_exec($conn, $query);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YSF004C";
+        $result = odbc_exec($conn, $query);
 
         // dd($result);
 

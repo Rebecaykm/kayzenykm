@@ -108,16 +108,6 @@ return [
             'username' => "LXSECOFR",
             'password' => "LXSECOFR"
         ],
-
-        'odbc-connection-lx834fou02' => [
-            'driver' => 'odbc',
-            'dsn' => "Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;",
-            'database' => "LX834FOU02",
-            'host' => "192.168.200.7",
-            'username' => "LXSECOFR",
-            'password' => "LXSECOFR"
-        ]
-
     ],
 
     /*
