@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OpenOrders\EditOpenOrderRequest;
 use App\Models\Fso;
-use App\Models\FsoLocal;
+use App\Models\Yf005;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -14,52 +13,45 @@ class FsoController extends Controller
     public function index()
     {
         $openOrders = Fso::query()
-            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])
+            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
             ->where('SID', '=', 'SO')
+            ->whereNotIn('SSTAT', ['X', 'Y'])
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(5);
-
         return view('openOrders.index', ['openOrders' => $openOrders]);
     }
 
     public function create(Request $request)
     {
-        dd($request->all());
-        $openOrder = Fso::query()->select(['SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN'])->where('SORD', '=', $request->sord)->first();
-
-        return view('openOrders.edit', ['openOrder' => $openOrder]);
+        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if (!$request->cdte == null){
-            $cdte = Carbon::parse($request->cdte)->format('Ymd');
-        } else {
-            $cdte = '';
-        }
-        if (!$request->canc == null){
-            $canc = $request->canc;
-        } else {
-            $canc = '0';
+
+        foreach ($request->arrayOpenOrders as $arrayOpenOrder) {
+            $cdte = !$arrayOpenOrder['cdte'] == null ? Carbon::parse($arrayOpenOrder['cdte'])->format('Ymd') : '';
+            $canc = $arrayOpenOrder['canc'] ?? 0;
+            $data = Yf005::query()->insert([
+                'F5ID' => $arrayOpenOrder['sid'],
+                'F5WRKC' => $arrayOpenOrder['swrkc'],
+                'F5DDTE' => $arrayOpenOrder['sddte'],
+                'F5ORD' => $arrayOpenOrder['sord'],
+                'F5PROD' => $arrayOpenOrder['sprod'],
+                'F5QREQ' => $arrayOpenOrder['sqreq'],
+                'F5QFIN' => $arrayOpenOrder['sqfin'],
+                'F5CDTE' => $cdte,
+                'F5CAN' => $canc,
+            ]);
         }
 
-        $fso = FsoLocal::create([
-            'SID' => $request->sid,
-            'SWRKC' => $request->swrkc,
-            'SDDTE' => $request->sddte,
-            'SORD' => $request->sord,
-            'SPROD' => $request->sprod,
-            'SQREQ' => $request->sqreq,
-            'SQFIN' => $request->sqfin,
-            'CDTE' => $cdte,
-            'CANC' => $canc,
-        ]);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU02.YSF004C";
+        // $result = odbc_exec($conn, $query);
+
+        // dd($result);
+
+        // $call = DB::select("CALL LX834OU02.YSF004C");
 
         return redirect('open-orders');
     }

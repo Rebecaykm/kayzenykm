@@ -23,7 +23,7 @@ class CreateFsoLocalsTable extends Migration
             $table->string('SQREQ');
             $table->string('SQFIN');
             $table->string('CDTE');
-            $table->integer('CANC');
+            $table->integer('CANC')->default(0);
             $table->timestamps();
         });
     }

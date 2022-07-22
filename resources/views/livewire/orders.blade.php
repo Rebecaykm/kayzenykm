@@ -22,38 +22,63 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                     @foreach($orders as $order)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SWRKC }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SDDTE }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SORD }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SPROD }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SQREQ }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $order->SQFIN }}
-                            </td>
-                            <td class="px-3 py-2">
-                                <label class="block text-sm">
-                                    <input type="date" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
-                                </label>
-                            </td>
-                            <td class="px-3 py-2">
+
+                            <td class="px-2 py-2 text-xs">
                                 <label class="flex items-center justify-center dark:text-gray-400">
-                                    <input type="checkbox" class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"/>
+                                    <input type="text" name="sid" id="sid" value="{{ $openOrder->SID }}" hidden/>
+                                    {{ $openOrder->SID }}
                                 </label>
                             </td>
-                            <td class="px-3 py-2">
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="swrkc" id="swrkc" value="{{ $openOrder->SWRKC }}" hidden/>
+                                    {{ $openOrder->SWRKC }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="sddte" id="sddte" value="{{ $openOrder->SDDTE }}" hidden/>
+                                    {{ $openOrder->SDDTE }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="sord" id="sord" value="{{ $openOrder->SORD }}" hidden/>
+                                    {{ $openOrder->SORD }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="sprod" id="sprod" value="{{ $openOrder->SPROD }}" hidden/>
+                                    {{ $openOrder->SPROD }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="sqreq" id="sqreq" value="{{ $openOrder->SQREQ }}" hidden/>
+                                    {{ $openOrder->SQREQ }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2 text-xs">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input type="text" name="sqfin" id="sqfin" value="{{ $openOrder->SQFIN }}" hidden/>
+                                    {{ $openOrder->SQFIN }}
+                                </label>
+                            </td>
+                            <td class="px-2 py-2">
+                                <label class="block text-sm">
+                                    <input id="cdte" name="cdte" type="date" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
+                                </label>
+                            </td>
+                            <td class="px-2 py-2">
+                                <label class="flex items-center justify-center dark:text-gray-400">
+                                    <input id="canc" name="canc" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"/>
+                                </label>
+                            </td>
+                            <td class="px-2 py-2">
                                 <div class="flex items-center justify-center space-x-4 text-sm">
-                                    <button class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <button type="submit" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-blue-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                     </button>
