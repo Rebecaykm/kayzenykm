@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\OpenOrders;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,13 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
+    Route::view('orders', 'orders')->name('orders');
+    Route::view('production', 'production')->name('production');
+    Route::view('daily', 'daily')->name('daily');
+
+    /**
+     * Routes Open Orders
+     */
+    Route::get('open-orders', [\App\Http\Controllers\FsoController::class, 'index'])->name('open-orders.index');
+    Route::post('open-orders', [\App\Http\Controllers\FsoController::class, 'store'])->name('open-orders.store');
 });

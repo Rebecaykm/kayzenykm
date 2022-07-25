@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8be704ad908df4fde949bfff0b7808e",
+    "content-hash": "f35773c9b95cb106f70ca1b68d358819",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3237,16 +3237,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.6",
+            "version": "v0.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "3f5b5f8aaa979fbd0d1783173f4c82ad529fe621"
+                "reference": "77fc7270031fbc28f9a7bea31385da5c4855cb7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3f5b5f8aaa979fbd0d1783173f4c82ad529fe621",
-                "reference": "3f5b5f8aaa979fbd0d1783173f4c82ad529fe621",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/77fc7270031fbc28f9a7bea31385da5c4855cb7a",
+                "reference": "77fc7270031fbc28f9a7bea31385da5c4855cb7a",
                 "shasum": ""
             },
             "require": {
@@ -3307,9 +3307,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.6"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.7"
             },
-            "time": "2022-07-03T16:40:23+00:00"
+            "time": "2022-07-07T13:49:11+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -6066,6 +6066,66 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yoramdelangen/laravel-pdo-odbc",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yoramdelangen/laravel-pdo-odbc.git",
+                "reference": "af5c3e95e7cdbaf39df127ac78a371d91d9de42f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yoramdelangen/laravel-pdo-odbc/zipball/af5c3e95e7cdbaf39df127ac78a371d91d9de42f",
+                "reference": "af5c3e95e7cdbaf39df127ac78a371d91d9de42f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-odbc": "*",
+                "ext-pdo_odbc": "*",
+                "illuminate/database": ">= 7.0",
+                "illuminate/support": ">= 7.0",
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelPdoOdbc\\ODBCServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelPdoOdbc\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrea Abram",
+                    "email": "andreossido@gmail.com",
+                    "homepage": "https://github.com/andreossido",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Yoram de Langen",
+                    "email": "yoramdelangen@gmail.com",
+                    "homepage": "https://github.com/yoramdelangen",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PDO ODBC integration for Laravel 7 & 8 framework. Tested for Snowflake connections",
+            "homepage": "https://github.com/yoramdelangen/laravel-odbc",
+            "support": {
+                "issues": "https://github.com/yoramdelangen/laravel-pdo-odbc/issues",
+                "source": "https://github.com/yoramdelangen/laravel-pdo-odbc/tree/1.1.5"
+            },
+            "time": "2022-05-25T08:26:32+00:00"
         }
     ],
     "packages-dev": [
