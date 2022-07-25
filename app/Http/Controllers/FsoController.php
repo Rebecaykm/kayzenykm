@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fso;
+use App\Models\FsoLocal;
 use App\Models\Yf005;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,14 +11,28 @@ use Illuminate\Http\Request;
 class FsoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $openOrders = Fso::query()
-            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-            ->where('SID', '=', 'SO')
-            ->whereNotIn('SSTAT', ['X', 'Y'])
-            ->orderBy('SDDTE', 'DESC')
-            ->simplePaginate(5);
+        $start = $request->start ?? '';
+        $end = $request->end ?? '';
+
+        if ($start == '' && $end == '') {
+            $openOrders = Fso::query()
+                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+                ->where('SID', '=', 'SO')
+                ->whereNotIn('SSTAT', ['X', 'Y'])
+                ->orderBy('SDDTE', 'DESC')
+                ->simplePaginate(10);
+        } else {
+            $openOrders = Fso::query()
+                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+                ->where('SID', '=', 'SO')
+                ->whereNotIn('SSTAT', ['X', 'Y'])
+                ->whereBetween('SDDTE', [Carbon::parse($start)->format('Ymd'), Carbon::parse($end)->format('Ymd')])
+                ->orderBy('SDDTE', 'DESC')
+                ->simplePaginate(10);
+        }
+
         return view('openOrders.index', ['openOrders' => $openOrders]);
     }
 
@@ -30,28 +45,52 @@ class FsoController extends Controller
     {
 
         foreach ($request->arrayOpenOrders as $arrayOpenOrder) {
+
             $cdte = !$arrayOpenOrder['cdte'] == null ? Carbon::parse($arrayOpenOrder['cdte'])->format('Ymd') : '';
             $canc = $arrayOpenOrder['canc'] ?? 0;
-            $data = Yf005::query()->insert([
-                'F5ID' => $arrayOpenOrder['sid'],
-                'F5WRKC' => $arrayOpenOrder['swrkc'],
-                'F5DDTE' => $arrayOpenOrder['sddte'],
-                'F5ORD' => $arrayOpenOrder['sord'],
-                'F5PROD' => $arrayOpenOrder['sprod'],
-                'F5QREQ' => $arrayOpenOrder['sqreq'],
-                'F5QFIN' => $arrayOpenOrder['sqfin'],
-                'F5CDTE' => $cdte,
-                'F5CAN' => $canc,
-            ]);
+            if ($cdte != '') {
+                if ($canc != 0) {
+                    $data = Yf005::query()->insert([
+                        'F5ID' => $arrayOpenOrder['sid'],
+                        'F5WRKC' => $arrayOpenOrder['swrkc'],
+                        'F5DDTE' => $arrayOpenOrder['sddte'],
+                        'F5ORD' => $arrayOpenOrder['sord'],
+                        'F5PROD' => $arrayOpenOrder['sprod'],
+                        'F5QREQ' => $arrayOpenOrder['sqreq'],
+                        'F5QFIN' => $arrayOpenOrder['sqfin'],
+                        'F5CDTE' => $cdte,
+                        'F5CAN' => $canc,
+                    ]);
+                } else {
+                    $data = Yf005::query()->insert([
+                        'F5ID' => $arrayOpenOrder['sid'],
+                        'F5WRKC' => $arrayOpenOrder['swrkc'],
+                        'F5DDTE' => $arrayOpenOrder['sddte'],
+                        'F5ORD' => $arrayOpenOrder['sord'],
+                        'F5PROD' => $arrayOpenOrder['sprod'],
+                        'F5QREQ' => $arrayOpenOrder['sqreq'],
+                        'F5QFIN' => $arrayOpenOrder['sqfin'],
+                        'F5CDTE' => $cdte,
+                        'F5CAN' => $canc,
+                    ]);
+                }
+            } elseif ($canc != 0) {
+                $data = Yf005::query()->insert([
+                    'F5ID' => $arrayOpenOrder['sid'],
+                    'F5WRKC' => $arrayOpenOrder['swrkc'],
+                    'F5DDTE' => $arrayOpenOrder['sddte'],
+                    'F5ORD' => $arrayOpenOrder['sord'],
+                    'F5PROD' => $arrayOpenOrder['sprod'],
+                    'F5QREQ' => $arrayOpenOrder['sqreq'],
+                    'F5QFIN' => $arrayOpenOrder['sqfin'],
+                    'F5CDTE' => $cdte,
+                    'F5CAN' => $canc,
+                ]);
+            }
         }
-
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF004C";
         $result = odbc_exec($conn, $query);
-
-        // dd($result);
-
-        // $call = DB::select("CALL LX834OU02.YSF004C");
 
         return redirect('open-orders');
     }
