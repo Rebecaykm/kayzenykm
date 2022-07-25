@@ -22,7 +22,7 @@ class FsoController extends Controller
                 ->where('SID', '=', 'SO')
                 ->whereNotIn('SSTAT', ['X', 'Y'])
                 ->orderBy('SDDTE', 'DESC')
-                ->simplePaginate(10);
+                ->simplePaginate(100);
         } else {
             $openOrders = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
@@ -30,7 +30,7 @@ class FsoController extends Controller
                 ->whereNotIn('SSTAT', ['X', 'Y'])
                 ->whereBetween('SDDTE', [Carbon::parse($start)->format('Ymd'), Carbon::parse($end)->format('Ymd')])
                 ->orderBy('SDDTE', 'DESC')
-                ->simplePaginate(10);
+                ->simplePaginate(100);
         }
 
         return view('openOrders.index', ['openOrders' => $openOrders]);
