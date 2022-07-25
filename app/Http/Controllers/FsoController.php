@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fso;
-use App\Models\FsoLocal;
 use App\Models\Yf005;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,6 +22,7 @@ class FsoController extends Controller
                 ->whereNotIn('SSTAT', ['X', 'Y'])
                 ->orderBy('SDDTE', 'DESC')
                 ->simplePaginate(100);
+            return view('openOrders.index', ['openOrders' => $openOrders]);
         } else {
             $openOrders = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
@@ -31,9 +31,8 @@ class FsoController extends Controller
                 ->whereBetween('SDDTE', [Carbon::parse($start)->format('Ymd'), Carbon::parse($end)->format('Ymd')])
                 ->orderBy('SDDTE', 'DESC')
                 ->simplePaginate(100);
+            return view('openOrders.index', ['openOrders' => $openOrders]);
         }
-
-        return view('openOrders.index', ['openOrders' => $openOrders]);
     }
 
     public function create(Request $request)
