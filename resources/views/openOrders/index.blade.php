@@ -17,33 +17,39 @@
                     <span class="text-gray-700 dark:text-gray-400">From</span>
                 </label>
                 <label class="block text-sm mx-2">
-                    <input type="date" id="start" name="start" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
+                    <input type="date" id="start" name="start"
+                           class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
                 </label>
                 <label class="flex items-center grid place-items-center text-sm mx-2">
                     <span class="text-gray-700 dark:text-gray-400">To</span>
                 </label>
                 <label class="block text-sm mx-2">
-                    <input type="date" id="end" name="end" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
+                    <input type="date" id="end" name="end"
+                           class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
                 </label>
-                <button type="submit" class="flex items-center justify-between px-4 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                <button type="submit"
+                        class="flex items-center justify-between px-4 py-2 mx-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                     <span class="mx-4">Search</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </button>
             </div>
         </form>
 
-        <form method="post" action="{{ route('open-orders.store') }}">
-            @csrf
-            <div class="w-full overflow-hidden rounded-lg shadow-xs px-4 py-3 mb-8 bg-white shadow-md dark:bg-gray-800">
-                <div class="w-full overflow-x-auto">
+
+        <div class="w-full overflow-hidden rounded-lg shadow-xs px-4 py-3 mb-8 bg-white shadow-md dark:bg-gray-800">
+            <div class="w-full overflow-x-auto">
+                <form method="post" action="{{ route('open-orders.store') }}">
+                    @csrf
                     <div class="m-2 flex justify-between">
-                        <h4 class="my-2 text-xl font-semibold text-gray-600 dark:text-gray-300">
-                            Open shop order report
+                        <h4 class="mb-4 text-xl font-bold text-gray-600 dark:text-gray-300">
+                            Open Shop Order Report
                         </h4>
                         <button type="submit"
-                                class="flex items-center justify-end px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                                class="flex items-center justify-end p-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                             <span class="mx-4">Save</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -136,17 +142,18 @@
                         @endforeach
                         </tbody>
                     </table>
-                </div>
-                <div
-                    class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                </form>
+            </div>
+            <div
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
+                    Y-Tec Keylex México
                 </span>
-                    <!-- Pagination -->
-                    <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+                <!-- Pagination -->
+                <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                     {{ $openOrders->links() }}
                 </span>
-                </div>
             </div>
-        </form>
+        </div>
     </div>
 </x-app-layout>
