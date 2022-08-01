@@ -1,5 +1,5 @@
 <x-app-layout title="Open Shop Orders">
-    @livewire('orders')
+    @livewire('open-shop-orders')
 
     @livewireScripts
 </x-app-layout>
