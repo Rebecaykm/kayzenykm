@@ -9,22 +9,19 @@ use Illuminate\Http\Request;
 
 class FsoController extends Controller
 {
-
-    private $due_date;
-
     public function index(Request $request)
     {
-        $this->due_date = Carbon::parse($request->due_date)->format('Ymd') ?? Carbon::now()->format('Ymd');
+        $date = Carbon::parse($request->due_date)->format('Ymd') ?? Carbon::now()->format('Ymd');
 
         $openOrders = Fso::query()
             ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
             ->where('SID', '=', 'SO')
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
-            ->Where('SDDTE', '<=', $this->due_date)
+            ->Where('SDDTE', '<=', $date)
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
-        return view('openOrders.index', ['openOrders' => $openOrders, 'dueDate' => $this->due_date]);
+        return view('openOrders.index', ['openOrders' => $openOrders]);
     }
 
     public function create(Request $request)
