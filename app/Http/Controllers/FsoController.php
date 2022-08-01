@@ -9,30 +9,19 @@ use Illuminate\Http\Request;
 
 class FsoController extends Controller
 {
-
     public function index(Request $request)
     {
-        $start = $request->start ?? '';
-        $end = $request->end ?? '';
+        $date = Carbon::parse($request->due_date)->format('Ymd') ?? Carbon::now()->format('Ymd');
 
-        if ($start == '' && $end == '') {
-            $openOrders = Fso::query()
-                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-                ->where('SID', '=', 'SO')
-                ->whereNotIn('SSTAT', ['X', 'Y'])
-                ->orderBy('SDDTE', 'DESC')
-                ->simplePaginate(100);
-            return view('openOrders.index', ['openOrders' => $openOrders]);
-        } else {
-            $openOrders = Fso::query()
-                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-                ->where('SID', '=', 'SO')
-                ->whereNotIn('SSTAT', ['X', 'Y'])
-                ->whereBetween('SDDTE', [Carbon::parse($start)->format('Ymd'), Carbon::parse($end)->format('Ymd')])
-                ->orderBy('SDDTE', 'DESC')
-                ->simplePaginate(100);
-            return view('openOrders.index', ['openOrders' => $openOrders]);
-        }
+        $openOrders = Fso::query()
+            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+            ->where('SID', '=', 'SO')
+            ->where('SSTAT', '!=', 'X')
+            ->where('SSTAT', '!=', 'Y')
+            ->Where('SDDTE', '<=', $date)
+            ->orderBy('SDDTE', 'DESC')
+            ->simplePaginate(100);
+        return view('openOrders.index', ['openOrders' => $openOrders]);
     }
 
     public function create(Request $request)
@@ -50,7 +39,7 @@ class FsoController extends Controller
             if ($cdte != '') {
                 if ($canc != 0) {
                     $data = Yf005::query()->insert([
-                        'F5ID' => $arrayOpenOrder['sid'],
+                        'F5ID' => 'SO',
                         'F5WRKC' => $arrayOpenOrder['swrkc'],
                         'F5DDTE' => $arrayOpenOrder['sddte'],
                         'F5ORD' => $arrayOpenOrder['sord'],
@@ -62,7 +51,7 @@ class FsoController extends Controller
                     ]);
                 } else {
                     $data = Yf005::query()->insert([
-                        'F5ID' => $arrayOpenOrder['sid'],
+                        'F5ID' => 'SO',
                         'F5WRKC' => $arrayOpenOrder['swrkc'],
                         'F5DDTE' => $arrayOpenOrder['sddte'],
                         'F5ORD' => $arrayOpenOrder['sord'],
@@ -75,7 +64,7 @@ class FsoController extends Controller
                 }
             } elseif ($canc != 0) {
                 $data = Yf005::query()->insert([
-                    'F5ID' => $arrayOpenOrder['sid'],
+                    'F5ID' => 'SO',
                     'F5WRKC' => $arrayOpenOrder['swrkc'],
                     'F5DDTE' => $arrayOpenOrder['sddte'],
                     'F5ORD' => $arrayOpenOrder['sord'],
