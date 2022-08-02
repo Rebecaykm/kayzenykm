@@ -21,7 +21,17 @@ class FsoController extends Controller
             ->Where('SDDTE', '<=', $date)
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
-        return view('openOrders.index', ['openOrders' => $openOrders]);
+
+        $totalOpenOrders = Fso::query()
+            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+            ->where('SID', '=', 'SO')
+            ->where('SSTAT', '!=', 'X')
+            ->where('SSTAT', '!=', 'Y')
+            ->Where('SDDTE', '<=', $date)
+            ->orderBy('SDDTE', 'DESC')
+            ->count();
+
+        return view('openOrders.index', ['openOrders' => $openOrders, 'totalOrder' => $totalOpenOrders]);
     }
 
     public function create(Request $request)
