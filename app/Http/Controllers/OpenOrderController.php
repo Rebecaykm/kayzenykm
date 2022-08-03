@@ -7,7 +7,7 @@ use App\Models\Yf005;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class FsoController extends Controller
+class OpenOrderController extends Controller
 {
     public function index(Request $request)
     {

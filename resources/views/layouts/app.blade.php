@@ -52,15 +52,6 @@
 
         @livewireScripts
 
-        <script>
-            Livewire.on('alert', function(title, message) {
-                Swal.fire(
-                    title,
-                    message,
-                    'success'
-                )
-            })
-        </script>
     </div>
 </body>
 

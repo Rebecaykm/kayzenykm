@@ -39,6 +39,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      * Routes Open Orders
      */
-    Route::get('open-orders', [\App\Http\Controllers\FsoController::class, 'index'])->name('open-orders.index');
-    Route::post('open-orders', [\App\Http\Controllers\FsoController::class, 'store'])->name('open-orders.store');
+    Route::get('open-orders', [\App\Http\Controllers\OpenOrderController::class, 'index'])->name('open-orders.index');
+    Route::post('open-orders', [\App\Http\Controllers\OpenOrderController::class, 'store'])->name('open-orders.store');
 });
