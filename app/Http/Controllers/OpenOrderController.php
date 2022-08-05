@@ -11,6 +11,31 @@ class OpenOrderController extends Controller
 {
     public function index(Request $request)
     {
+        $date = $request->due_date == '' ? Carbon::now()->format('Ymd') : Carbon::parse($request->due_date)->format('Ymd');
+
+        $openOrders = Fso::query()
+            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+            ->where('SID', '=', 'SO')
+            ->where('SSTAT', '!=', 'X')
+            ->where('SSTAT', '!=', 'Y')
+            ->Where('SDDTE', '<=', $date)
+            ->orderBy('SDDTE', 'DESC')
+            ->simplePaginate(100);
+
+        $totalOpenOrders = Fso::query()
+            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
+            ->where('SID', '=', 'SO')
+            ->where('SSTAT', '!=', 'X')
+            ->where('SSTAT', '!=', 'Y')
+            ->Where('SDDTE', '<=', $date)
+            ->orderBy('SDDTE', 'DESC')
+            ->count();
+
+        return view('openOrders.index', ['openOrders' => $openOrders, 'totalOrder' => $totalOpenOrders]);
+    }
+
+    public function indexSearch(Request $request)
+    {
         $date = Carbon::parse($request->due_date)->format('Ymd') ?? Carbon::now()->format('Ymd');
 
         $openOrders = Fso::query()
