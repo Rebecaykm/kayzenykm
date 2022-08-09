@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('calendar', 'calendar')->name('calendar');
     Route::view('open-shop-orders', 'open-shop-orders')->name('open-shop-orders');
     Route::view('production', 'production')->name('production');
-    Route::view('daily', 'daily')->name('daily');
+    Route::view('search', 'search')->name('search');
 
     /**
      * Routes Open Orders
@@ -46,5 +46,4 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      * Routes Daily Production
      */
     Route::get('daily-production', [\App\Http\Controllers\DailyProductionController::class, 'index'])->name('daily-production.index');
-
 });
