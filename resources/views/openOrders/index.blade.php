@@ -1,5 +1,6 @@
 <x-app-layout title="Open Orders">
     <div class="container grid px-6 mx-auto">
+
         <form method="get" action="{{ route('open-orders.index') }}">
             <div class="flex flex-row grid grid-cols-4 items-center my-2">
                 <div class="col-span-2">
@@ -29,9 +30,9 @@
                 @csrf
                 <div class="flex flex-row items-center justify-end">
                     <div class="flex flex-end">
-                        {{-- <span class="flex m-2 sm:m-auto sm:justify-end sm:text-xs">
+                        <span class="flex m-2 sm:m-auto sm:justify-end sm:text-xs">
                             {{ $openOrders->withQueryString()->links() }}
-                        </span> --}}
+                        </span>
                         <button type="submit"
                             class="flex items-center justify-end p-2 m-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                             <span class="mx-2">Update</span>
@@ -45,10 +46,10 @@
                 </div>
                 <div class="w-full overflow-x-auto">
                     @if ($openOrders->count())
-                        <table class="w-full whitespace-normal ">
+                        <table class="w-full whitespace-normal">
                             <thead>
                                 <tr
-                                    class="text-xs font-semibold tracking-wide text-left text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                    class="text-xs font-semibold tracking-wide text-left text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-100 dark:text-gray-500 dark:bg-gray-800">
                                     <th class="px-2 py-2">Work Center</th>
                                     <th class="px-2 py-2">Due Date</th>
                                     <th class="px-2 py-2">Shop Order Number</th>
@@ -130,14 +131,14 @@
                             </tbody>
                         </table>
                     @else
-                        <div class="px-4 py-3 rounded-md text-md text-center font-semibold text-gray-600 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"">
-                            Registros no encontrados
+                        <div class="px-4 py-3 rounded-md text-sm font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800"">
+                            Open orders not found
                         </div>
                     @endif
                 </div>
             </form>
             <div
-                class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-600 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
                     Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
                 </span>

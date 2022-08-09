@@ -92,7 +92,7 @@ class OpenOrderController extends Controller
         $query = "CALL LX834OU02.YSF004C";
         $result = odbc_exec($conn, $query);
 
-        return redirect('open-orders');
+        return redirect()->back();
     }
 
     /**
