@@ -107,20 +107,20 @@
                                             if ($cont!=0 ){
                                              $tablaD = $obj->Forecast($pro, $hoy,'%D%');
                                                 ?>
-                                @foreach ($tablaD as $dates)
-                                    <td class="px-4 py-3 text-xs">
-                                        {{ $dates->MQTY }}
-                                    </td>
-                                @endforeach
-                                <?php
-                                            }else {
+                                                    @foreach ($tablaD as $dates)
+                                                        <td class="px-4 py-3 text-xs">
+                                                            {{ $dates->MQTY }}
+                                                        </td>
+                                                    @endforeach
+                                                    <?php
+                                                                }else {
 
-                                                ?>
-                                <td class="px-4 py-3 text-xs">
-                                    0
-                                </td>
+                                                                    ?>
+                                                    <td class="px-4 py-3 text-xs">
+                                                        0
+                                                    </td>
 
-                                <?php
+                                                    <?php
                                             }
 
                                             ?>

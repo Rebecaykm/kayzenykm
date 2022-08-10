@@ -20,6 +20,17 @@ class registros
             ->where('MPROD', '=', $producto)
             ->where('MRCNO', 'like', $turno)
             ->get();
+        return $plan;
+    }
+    function contard($producto, $fecha, $turno)
+    {
+
+        $plan = kmr::query()
+            ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
+            ->where('MRDTE', '=', $fecha)
+            ->where('MPROD', '=', $producto)
+            ->where('MRCNO', 'like', $turno)
+            ->count();
 
         return $plan;
     }
