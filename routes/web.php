@@ -41,4 +41,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::get('open-orders', [\App\Http\Controllers\FsoController::class, 'index'])->name('open-orders.index');
     Route::post('open-orders', [\App\Http\Controllers\FsoController::class, 'store'])->name('open-orders.store');
+
+    /**
+     * Routes planeacion
+     */
+    Route::get('planeacion', [\App\Http\Controllers\PlaneacionController::class, 'index'])->name('planeacion.index');
+    Route::post('planeacion', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
+
 });
