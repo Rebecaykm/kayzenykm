@@ -11,6 +11,8 @@ class OpenOrderController extends Controller
 {
     public function index(Request $request)
     {
+
+        $search = $request->search ?? '';
         $date = $request->due_date != '' ? Carbon::parse($request->due_date)->format('Ymd') : '';
 
         $openOrders = Fso::query()
@@ -20,6 +22,9 @@ class OpenOrderController extends Controller
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
+            // ->orWhere('SORD', 'LIKE', '%' . $search . '%')
+            // ->orWhere('SWRKC', 'LIKE', '%' . $search . '%')
+            // ->orWhere('SPROD', 'LIKE', '%' . $search . '%')
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
 
@@ -30,6 +35,9 @@ class OpenOrderController extends Controller
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
+            // ->orWhere('SORD', 'LIKE', '%' . $search . '%')
+            // ->orWhere('SWRKC', 'LIKE', '%' . $search . '%')
+            // ->orWhere('SPROD', 'LIKE', '%' . $search . '%')
             ->orderBy('SDDTE', 'DESC')
             ->count();
 
