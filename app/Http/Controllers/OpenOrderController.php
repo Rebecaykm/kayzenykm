@@ -11,7 +11,10 @@ class OpenOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $date = $request->due_date == '' ? Carbon::now()->format('Ymd') : Carbon::parse($request->due_date)->format('Ymd');
+        $swrkc = $request->swrkc ?? '';
+        $sord = $request->sord ?? '';
+        $sprod = $request->sprod ?? '';
+        $date = $request->due_date != '' ? Carbon::parse($request->due_date)->format('Ymd') : '';
 
         $openOrders = Fso::query()
             ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
@@ -19,6 +22,10 @@ class OpenOrderController extends Controller
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
+            ->whereColumn('SQREQ', '>', 'SQFIN')
+            ->Where('SORD', 'LIKE', '%' . $sord . '%')
+            ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
+            ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
 
@@ -28,31 +35,10 @@ class OpenOrderController extends Controller
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
-            ->orderBy('SDDTE', 'DESC')
-            ->count();
-
-        return view('openOrders.index', ['openOrders' => $openOrders, 'totalOrder' => $totalOpenOrders]);
-    }
-
-    public function indexSearch(Request $request)
-    {
-        $date = Carbon::parse($request->due_date)->format('Ymd') ?? Carbon::now()->format('Ymd');
-
-        $openOrders = Fso::query()
-            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-            ->where('SID', '=', 'SO')
-            ->where('SSTAT', '!=', 'X')
-            ->where('SSTAT', '!=', 'Y')
-            ->Where('SDDTE', '<=', $date)
-            ->orderBy('SDDTE', 'DESC')
-            ->simplePaginate(100);
-
-        $totalOpenOrders = Fso::query()
-            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-            ->where('SID', '=', 'SO')
-            ->where('SSTAT', '!=', 'X')
-            ->where('SSTAT', '!=', 'Y')
-            ->Where('SDDTE', '<=', $date)
+            ->whereColumn('SQREQ', '>', 'SQFIN')
+            ->Where('SORD', 'LIKE', '%' . $sord . '%')
+            ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
+            ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
             ->orderBy('SDDTE', 'DESC')
             ->count();
 
@@ -115,7 +101,7 @@ class OpenOrderController extends Controller
         $query = "CALL LX834OU02.YSF004C";
         $result = odbc_exec($conn, $query);
 
-        return redirect('open-orders');
+        return redirect()->back();
     }
 
     /**
