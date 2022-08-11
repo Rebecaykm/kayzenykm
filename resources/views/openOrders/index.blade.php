@@ -1,13 +1,13 @@
 <x-app-layout title="Open Orders">
     <div class="container grid px-6 mx-auto p-1">
-        <h2 class="py-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        <h2 class="py-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Open shop order report
         </h2>
         <div class="p-2 w-full overflow-hidden rounded-lg shadow-xs">
             <form method="get" action="{{ route('open-orders.index') }}">
                 <div class="flex flex-row grid grid-cols-4 items-center gap-1">
-                    <div class="col-span-2 gap-1 ">
-                        {{-- <div class="flex justify-center">
+                    <div class="flex flex-row col-span-2 gap-1 ">
+                        <div class="flex justify-center">
                             <div class="relative w-full max-w-xl focus-within:text-blue-500">
                                 <div class="absolute inset-y-0 flex items-center pl-2">
                                     <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -16,12 +16,42 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <input id="search" name="search"
+                                <input id="swrkc" name="swrkc"
                                     class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
-                                    type="text" placeholder="Search in open orders" aria-label="Search"
+                                    type="text" placeholder="Work Center" aria-label="Search"
                                     autocomplete="off"/>
                             </div>
-                        </div> --}}
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="relative w-full max-w-xl focus-within:text-blue-500">
+                                <div class="absolute inset-y-0 flex items-center pl-2">
+                                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input id="sord" name="sord"
+                                       class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                       type="text" placeholder="Shop Order" aria-label="Search"
+                                       autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="relative w-full max-w-xl focus-within:text-blue-500">
+                                <div class="absolute inset-y-0 flex items-center pl-2">
+                                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input id="sprod" name="sprod"
+                                       class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                       type="text" placeholder="Item Number" aria-label="Search"
+                                       autocomplete="off"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-span-2 flex flex-row justify-end gap-1">
                         <input type="date" id="due_date" name="due_date"

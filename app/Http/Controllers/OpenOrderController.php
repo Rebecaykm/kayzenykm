@@ -11,33 +11,34 @@ class OpenOrderController extends Controller
 {
     public function index(Request $request)
     {
-
-        $search = $request->search ?? '';
+        $swrkc = $request->swrkc ?? '';
+        $sord = $request->sord ?? '';
+        $sprod = $request->sprod ?? '';
         $date = $request->due_date != '' ? Carbon::parse($request->due_date)->format('Ymd') : '';
 
         $openOrders = Fso::query()
             ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
             ->where('SID', '=', 'SO')
-            ->whereColumn('SQREQ', '>', 'SQFIN')
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
-            // ->orWhere('SORD', 'LIKE', '%' . $search . '%')
-            // ->orWhere('SWRKC', 'LIKE', '%' . $search . '%')
-            // ->orWhere('SPROD', 'LIKE', '%' . $search . '%')
+            ->whereColumn('SQREQ', '>', 'SQFIN')
+            ->Where('SORD', 'LIKE', '%' . $sord . '%')
+            ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
+            ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
 
         $totalOpenOrders = Fso::query()
             ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
             ->where('SID', '=', 'SO')
-            ->whereColumn('SQREQ', '>', 'SQFIN')
             ->where('SSTAT', '!=', 'X')
             ->where('SSTAT', '!=', 'Y')
             ->Where('SDDTE', '<=', $date)
-            // ->orWhere('SORD', 'LIKE', '%' . $search . '%')
-            // ->orWhere('SWRKC', 'LIKE', '%' . $search . '%')
-            // ->orWhere('SPROD', 'LIKE', '%' . $search . '%')
+            ->whereColumn('SQREQ', '>', 'SQFIN')
+            ->Where('SORD', 'LIKE', '%' . $sord . '%')
+            ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
+            ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
             ->orderBy('SDDTE', 'DESC')
             ->count();
 
