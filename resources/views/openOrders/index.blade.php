@@ -5,7 +5,7 @@
         </h2>
         <div class="p-1 w-full overflow-hidden rounded-lg shadow-xs">
             <form method="get" action="{{ route('open-orders.index') }}">
-                <div class="flex flex-row items-center justify-center gap-2 p-2">
+                <div class="flex flex-row items-center justify-end gap-2 p-2">
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
                             <div class="absolute inset-y-0 flex items-center pl-2">
