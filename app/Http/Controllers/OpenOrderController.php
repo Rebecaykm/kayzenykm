@@ -59,6 +59,9 @@ class OpenOrderController extends Controller
             $canc = $arrayOpenOrder['canc'] ?? 0;
             if ($cdte != '') {
                 if ($canc != 0) {
+
+                    $data = Yf005::storeOpenOrder();
+
                     $data = Yf005::query()->insert([
                         'F5ID' => 'SO',
                         'F5WRKC' => $arrayOpenOrder['swrkc'],

@@ -29,4 +29,19 @@ class Yf005 extends Model
     {
         return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
     }
+
+    public static function storeOpenOrder(string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, string $sqfin, string $cdte, int $canc)
+    {
+        return Yf005::query()->insert([
+            'F5ID' => 'SO',
+            'F5WRKC' => $swrkc,
+            'F5DDTE' => $sddte,
+            'F5ORD' => $sord,
+            'F5PROD' => $sprod,
+            'F5QREQ' => $sqreq,
+            'F5QFIN' => $sqfin,
+            'F5CDTE' => $cdte,
+            'F5CAN' => $canc,
+        ]);
+    }
 }
