@@ -57,46 +57,18 @@ class OpenOrderController extends Controller
 
             $cdte = !$arrayOpenOrder['cdte'] == null ? Carbon::parse($arrayOpenOrder['cdte'])->format('Ymd') : '';
             $canc = $arrayOpenOrder['canc'] ?? 0;
+
             if ($cdte != '') {
                 if ($canc != 0) {
-                    $data = Yf005::query()->insert([
-                        'F5ID' => 'SO',
-                        'F5WRKC' => $arrayOpenOrder['swrkc'],
-                        'F5DDTE' => $arrayOpenOrder['sddte'],
-                        'F5ORD' => $arrayOpenOrder['sord'],
-                        'F5PROD' => $arrayOpenOrder['sprod'],
-                        'F5QREQ' => $arrayOpenOrder['sqreq'],
-                        'F5QFIN' => $arrayOpenOrder['sqfin'],
-                        'F5CDTE' => $cdte,
-                        'F5CAN' => $canc,
-                    ]);
+                    $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
                 } else {
-                    $data = Yf005::query()->insert([
-                        'F5ID' => 'SO',
-                        'F5WRKC' => $arrayOpenOrder['swrkc'],
-                        'F5DDTE' => $arrayOpenOrder['sddte'],
-                        'F5ORD' => $arrayOpenOrder['sord'],
-                        'F5PROD' => $arrayOpenOrder['sprod'],
-                        'F5QREQ' => $arrayOpenOrder['sqreq'],
-                        'F5QFIN' => $arrayOpenOrder['sqfin'],
-                        'F5CDTE' => $cdte,
-                        'F5CAN' => $canc,
-                    ]);
+                    $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
                 }
             } elseif ($canc != 0) {
-                $data = Yf005::query()->insert([
-                    'F5ID' => 'SO',
-                    'F5WRKC' => $arrayOpenOrder['swrkc'],
-                    'F5DDTE' => $arrayOpenOrder['sddte'],
-                    'F5ORD' => $arrayOpenOrder['sord'],
-                    'F5PROD' => $arrayOpenOrder['sprod'],
-                    'F5QREQ' => $arrayOpenOrder['sqreq'],
-                    'F5QFIN' => $arrayOpenOrder['sqfin'],
-                    'F5CDTE' => $cdte,
-                    'F5CAN' => $canc,
-                ]);
+                $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
             }
         }
+
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF004C";
         $result = odbc_exec($conn, $query);
