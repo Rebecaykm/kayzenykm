@@ -1,9 +1,9 @@
 <x-app-layout title="Open Orders">
-    <div class="container grid px-6 mx-auto p-1">
+    <div class="container grid px-6 mx-auto gap-y-2">
         <h2 class="py-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Open shop order report
         </h2>
-        <div class="p-2 w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="p-1 w-full overflow-hidden rounded-lg shadow-xs">
             <form method="get" action="{{ route('open-orders.index') }}">
                 <div class="flex flex-row items-center justify-center gap-2 p-2">
                     <div class="flex justify-center">
@@ -16,7 +16,7 @@
                                 </svg>
                             </div>
                             <input id="swrkc" name="swrkc"
-                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
                                 type="text" placeholder="Work Center" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                                 </svg>
                             </div>
                             <input id="sord" name="sord"
-                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
                                 type="text" placeholder="Shop Order" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
@@ -44,14 +44,14 @@
                                 </svg>
                             </div>
                             <input id="sprod" name="sprod"
-                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
                                 type="text" placeholder="Item Number" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
                             <input id="due_date" name="due_date"
-                                class="w-full text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-0 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
+                                class="w-full text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
                                 type="date" />
                         </div>
                     </div>
@@ -60,10 +60,14 @@
                             <button type="submit"
                                 class="flex items-center justify-end text-sm font-medium leading-5 p-2 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                 <span class="mr-2">Search</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2h-1.528A6 6 0 004 9.528V4z" />
-                                    <path fill-rule="evenodd" d="M8 10a4 4 0 00-3.446 6.032l-1.261 1.26a1 1 0 101.414 1.415l1.261-1.261A4 4 0 108 10zm-2 4a2 2 0 114 0 2 2 0 01-4 0z" clip-rule="evenodd" />
-                                  </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2h-1.528A6 6 0 004 9.528V4z" />
+                                    <path fill-rule="evenodd"
+                                        d="M8 10a4 4 0 00-3.446 6.032l-1.261 1.26a1 1 0 101.414 1.415l1.261-1.261A4 4 0 108 10zm-2 4a2 2 0 114 0 2 2 0 01-4 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -71,10 +75,10 @@
             </form>
         </div>
 
-        <div class="p-1 w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs ">
             <form method="post" action="{{ route('open-orders.store') }}">
                 @csrf
-                <div class="flex flex-row justify-end">
+                <div class="flex flex-row justify-end px-4 py-3">
                     <div class="flex flex-end">
                         <span class="flex m-2 sm:m-auto sm:justify-end sm:text-xs">
                             {{ $openOrders->withQueryString()->links() }}
@@ -82,17 +86,20 @@
                         <button type="submit"
                             class="flex items-center justify-end text-sm font-medium leading-5 px-4 py-2 m-1 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                             <span class="mr-2">Update</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-                              </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
+                            </svg>
                         </button>
                     </div>
                 </div>
-                <div class="w-full overflow-x-auto bg-gray-600 p-2">
+                <div class="w-full overflow-x-auto h-screen">
                     @if ($openOrders->count())
-                        <table class="w-full whitespace-no-wrap rounded-lg">
+                        <table class="relative w-full whitespace-no-wrap rounded-lg">
                             <thead>
-                                <tr class="text-xs font-semibold tracking-wide text-center text-gray-700 uppercase border-b dark:border-gray-800 bg-gray-200 dark:text-gray-600 dark:bg-gray-800">
+                                <tr
+                                    class="text-xs font-semibold tracking-wide text-center text-gray-800 uppercase border-b-2 sticky top-0 dark:border-gray-800 bg-gray-200 dark:text-gray-600 dark:bg-gray-800">
                                     <th class="px-2 py-2">Work Center</th>
                                     <th class="px-2 py-2">Due Date</th>
                                     <th class="px-2 py-2">Shop Order Number</th>
@@ -105,7 +112,7 @@
                             </thead>
                             <tbody class="bg-white divide-y dark:divide-gray-800 dark:bg-gray-800">
                                 @foreach ($openOrders as $openOrder)
-                                    <tr class="text-gray-700 dark:text-gray-400 overflow-y-auto">
+                                    <tr class="text-gray-700 dark:text-gray-400">
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
                                                 <input type="text"
