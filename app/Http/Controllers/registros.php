@@ -14,7 +14,7 @@ class registros
     function Forecast($producto, $fecha, $turno)
     {
 
-        $plan = kmr::query()
+       $plan = kmr::query()
             ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
             ->where('MRDTE', '=', $fecha)
             ->where('MPROD', '=', $producto)
@@ -25,25 +25,23 @@ class registros
     function contard($producto, $fecha, $turno)
     {
 
-        $plan = kmr::query()
+        $cond = kmr::query()
             ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
             ->where('MRDTE', '=', $fecha)
             ->where('MPROD', '=', $producto)
             ->where('MRCNO', 'like', $turno)
             ->count();
-
-        return $plan;
+        return $cond;
     }
 
 
-    function contar($producto, $fecha, $fechafin, $turno)
+    function contar($producto, $fecha, $fechafin)
     {
         $WCs = kmr::query()
             ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
             ->where('MRDTE', '>=', $fecha)
             ->where('MRDTE', '<=', $fechafin)
             ->where('MPROD', '=', $producto)
-            ->where('MRCNO', 'like', $turno)
             ->count();
         return $WCs;
     }

@@ -60,7 +60,7 @@ class PlaneacionController extends Controller
                     ->where('IMPLC', '!=', 'OBSOLETE')
                     ->where('ICLAS ', '=', 'F1')
                     ->distinct('IPROD')
-                    ->limit(6)
+                    ->limit(20)
                     ->get();
 
 

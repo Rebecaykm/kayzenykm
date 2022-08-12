@@ -1,17 +1,4 @@
 <x-app-layout title="Plan">
-    <style type="text/css">
-        thead tr th {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: #ffffff;
-        }
-
-        .table-responsive {
-            height: 200px;
-            overflow: scroll;
-        }
-    </style>
     <?php
     include_once '../app/Http/Controllers/registros.php'; ?>
     <div class="container">
@@ -34,7 +21,7 @@
                             <th class=" header px-4 py-3">Part No
                             <th class=" header px-4 py-3"></th>
                             <?php
-                    $hoy = '20220808';
+                    $hoy = '20220815';
                     $fin = date('Ymd', strtotime($hoy . '+7 day'));
                     while ($hoy != $fin) {
                        ?>
@@ -55,7 +42,7 @@
                             <td class="px-4 py-3 text-xs">
                             </td>
                             <?php
-                        $hoy = '20220808';
+                        $hoy = '20220815';
                         $fin = date('Ymd', strtotime($hoy . '+7 day'));
                         while ($hoy != $fin) {
                            ?> <td class="px-4 py-3 text-xs">
@@ -73,10 +60,10 @@
                                 <td class="px-4 py-3 text-xs text-center">
                                     {{ $pro = $plans->IPROD }}
                                     <?php
-                                    $hoy = '20220808';
+                                    $hoy = '20220815';
                                     $fin = date('Ymd', strtotime($hoy . '+7 day'));
-                                    echo $cont = $obj->contar($pro, $hoy, $fin, '%D%');
-                                    echo $contN = $obj->contar($pro, $hoy, $fin, '%N%');
+                                    echo $cont = $obj->contar($plans->IPROD, '20220815', $fin);
+                                    echo $cont1 = $obj->contar($plans->IPROD, $hoy, $fin);
                                     ?>
                                 </td>
                                 <?php
@@ -100,39 +87,59 @@
                                 </td>
 
                                 <?php
-                                $hoy= '20220808';
+                                $hoy= '20220815';
                                 $fin= date('Ymd', strtotime($hoy . '+7 day'));
-                                if ($cont!=0 &&  $cont!=0) {
+
+                                if ($cont!=0) {
                                         While($hoy!=$fin){
-                                            if ($cont!=0 ){
-                                             $tablaD = $obj->Forecast($pro, $hoy,'%D%');
+
+
+                                             $contarD = $obj->contard($plans->IPROD,$hoy ,'%D%');
+
+                                             if($contarD !=0 )
+                                             {
+                                                $tablaD = $obj->Forecast($pro, $hoy,'%D%');
                                                 ?>
+                                                 <td class="px-4 py-3 text-xs">
                                                     @foreach ($tablaD as $dates)
-                                                        <td class="px-4 py-3 text-xs">
-                                                            {{ $dates->MQTY }}
-                                                        </td>
+                                                        {{ $dates->MQTY }}
                                                     @endforeach
-                                                    <?php
-                                                                }else {
+                                                </td>
+                                                <?php
+                                             }
+                                             else {
+                                               ?>
+                                               <td class="px-4 py-3 text-xs">
+                                                0
+                                               </td>
+                                               <?php
+                                             }
+                                             $contarN= $obj->contard($plans->IPROD, $hoy,'%N%');
+                                             if($contarN !=0 )
+                                             {
+                                                $tablaN = $obj->Forecast($pro, $hoy,'%N%');
+                                                ?>
+                                                 <td class="px-4 py-3 text-xs">
+                                                    @foreach ($tablaN as $datesN)
+                                                        {{ $datesN->MQTY }}
+                                                    @endforeach
+                                                </td>
+                                                <?php
 
-                                                                    ?>
-                                                    <td class="px-4 py-3 text-xs">
-                                                        0
-                                                    </td>
-
-                                                    <?php
-                                            }
-
-                                            ?>
-
-
+                                             } else {
+                                               ?>
+                                               <td class="px-4 py-3 text-xs">
+                                                0
+                                               </td>
+                                               <?php
+                                             }
+                                                ?>
                                 <?php
                                               $hoy= date('Ymd', strtotime($hoy . '+1 day'));
                                              }
-
                             }
                             else {
-                                $hoy= '20220808';
+                                $hoy= '20220815';
                                 $fin= date('Ymd', strtotime($hoy . '+7 day'));
                                 While($hoy!=$fin){
                                ?>
