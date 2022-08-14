@@ -2,30 +2,24 @@
     <?php
     include_once '../app/Http/Controllers/registros.php'; ?>
     <div class="container">
-
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-
-
-
-            <div class=" w-full overflow-x-auto">
+        <div class="flex flex-col h-screen">
+            <div class="flex-grow overflow-auto">
                 <?php
                 $obj = new registros();
-
                 ?>
-
-                <table class="w-full whitespace-no-wrap">
-                    <thead>
+                <table class="relative w-full border">
+                    <thead class='fija'>
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <?php $variable = 'jhiodhod'; ?>
-                            <th class=" header px-4 py-3">Part No
-                            <th class=" header px-4 py-3"></th>
+                            <th class=" header px-4 py-3 sticky" rowspan="4">Part No
+                            <th class=" header px-4 py-3 sticky colmde"></th>
                             <?php
                     $hoy = '20220815';
                     $fin = date('Ymd', strtotime($hoy . '+7 day'));
                     while ($hoy != $fin) {
                        ?>
-                            <th colspan="2" align="center" class=" headerpx-4 py-3 text-xs">
+                            <th colspan="2" align="center" class="sticky headerpx-4 py-3 text-xs text-center colmde">
                                 <?php echo date('Ymd', strtotime($hoy)) . '<br>' . date('l', strtotime($hoy)); ?>
                             </th>
 
@@ -39,16 +33,16 @@
                         <tr>
                             <td class="px-4 py-3 text-xs text-center">
                             </td>
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs text-center colmde ">
                             </td>
                             <?php
                         $hoy = '20220815';
                         $fin = date('Ymd', strtotime($hoy . '+7 day'));
                         while ($hoy != $fin) {
-                           ?> <td class="px-4 py-3 text-xs">
+                           ?> <td class="px-4 py-3 text-xs text-center ">
                                 D
                             </td>
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs text-center colmde ">
                                 N
                             </td><?php
                             $hoy= date('Ymd', strtotime($hoy . '+1 day'));
@@ -57,21 +51,23 @@
                         </tr>
                         @foreach ($plan as $plans)
                             <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3 text-xs text-center">
+                                <td class="px-4 py-3 text-xs text-center ">
                                     {{ $pro = $plans->IPROD }}
                                     <?php
                                     $hoy = '20220815';
                                     $fin = date('Ymd', strtotime($hoy . '+7 day'));
-                                    echo $cont = $obj->contar($plans->IPROD, '20220815', $fin);
-                                    echo $cont1 = $obj->contar($plans->IPROD, $hoy, $fin);
+                                     $cont = $obj->contar($plans->IPROD, '20220815', $fin);
+                                    $cont1 = $obj->contar($plans->IPROD, $hoy, $fin);
                                     ?>
+                                </td>
+                                <td class='px-4 py-3 text-xs text-center colmde'>
                                 </td>
                                 <?php
                                   while ($hoy != $fin) {
                                ?>
-                                <td class="px-4 py-3 text-xs">
+                                <td class="px-4 py-3 text-xs text-center ">
                                 </td>
-                                <td class="px-4 py-3 text-xs">
+                                <td class="px-4 py-3 text-xs text-center colmde  ">
                                 </td><?php
                                 $hoy= date('Ymd', strtotime($hoy . '+1 day'));
                             }
@@ -82,7 +78,7 @@
 
                                 <td class="px-4 py-3 text-xs text-center">
                                 </td>
-                                <td class="px-4 py-3 text-xs">
+                                <td class="px-4 py-3 text-xs text-center colmde">
                                     Requeriment (Forecast)
                                 </td>
 
@@ -100,7 +96,7 @@
                                              {
                                                 $tablaD = $obj->Forecast($pro, $hoy,'%D%');
                                                 ?>
-                                                 <td class="px-4 py-3 text-xs">
+                                                 <td class="px-4 py-3 text-xs text-center ">
                                                     @foreach ($tablaD as $dates)
                                                         {{ $dates->MQTY }}
                                                     @endforeach
@@ -109,7 +105,7 @@
                                              }
                                              else {
                                                ?>
-                                               <td class="px-4 py-3 text-xs">
+                                               <td class="px-4 py-3 text-xs text-center ">
                                                 0
                                                </td>
                                                <?php
@@ -119,7 +115,7 @@
                                              {
                                                 $tablaN = $obj->Forecast($pro, $hoy,'%N%');
                                                 ?>
-                                                 <td class="px-4 py-3 text-xs">
+                                                 <td class="px-4 py-3 text-xs text-center  colmde ">
                                                     @foreach ($tablaN as $datesN)
                                                         {{ $datesN->MQTY }}
                                                     @endforeach
@@ -128,7 +124,7 @@
 
                                              } else {
                                                ?>
-                                               <td class="px-4 py-3 text-xs">
+                                               <td class="px-4 py-3 text-xs text-center  colmde ">
                                                 0
                                                </td>
                                                <?php
@@ -144,9 +140,9 @@
                                 While($hoy!=$fin){
                                ?>
 
-                                <td class="px-4 py-3 text-xs">0
+                                <td class="px-4 py-3 text-xs text-center ">0
                                 </td>
-                                <td class="px-4 py-3 text-xs">0
+                                <td class="px-4 py-3 text-xs text-center colmde">0
                                 </td>
 
                                 <?php
