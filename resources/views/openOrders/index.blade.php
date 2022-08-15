@@ -94,7 +94,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="w-full overflow-x-auto h-screen">
+                <div class="w-full overflow-x-auto h-96">
                     @if ($openOrders->count())
                         <table class="relative w-full whitespace-no-wrap rounded-lg">
                             <thead>

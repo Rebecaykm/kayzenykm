@@ -36,7 +36,6 @@
 </head>
 
 <body>
-     <div class="loader"></div>
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
         @include('layouts.menu')
         @include('layouts.mobile-menu')
@@ -54,17 +53,6 @@
         @livewireScripts
 
     </div>
-    <script>
-        window.addEventListener("load", () => {
-            const loader = document.querySelector(".loader");
-
-            loader.classList.add("loader--hidden");
-
-            loader.addEventListener("transitionend", () => {
-                document.body.removeChild(loader);
-            });
-        });
-    </script>
 </body>
 
 </html>
