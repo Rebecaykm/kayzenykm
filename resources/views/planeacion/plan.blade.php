@@ -9,9 +9,7 @@
                 ?>
                 <table class="relative w-full border">
                     <thead class='fija'>
-                        <tr
-                            class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <?php $variable = 'jhiodhod'; ?>
+                        <tr  class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class=" header px-4 py-3 sticky" rowspan="4">Part No
                             <th class=" header px-4 py-3 sticky colmde"></th>
                             <?php
@@ -77,6 +75,37 @@
                             <tr class="text-gray-700 dark:text-gray-400">
 
                                 <td class="px-4 py-3 text-xs text-center">
+                                Parte final:  <?php
+                                //    echo $plans->BPROD;
+                                //      echo "-";
+                                $prodclas=$plans->BCLAS;
+                                    if ($prodclas !='F1')
+                                    {
+                                        $prodf1=$plans->BPROD;
+                                         $prodclas=$plans->BCLAS;
+                                        while($prodclas !='F1')
+                                        {
+                                            $cicloF1=$obj->F1($prodf1);
+
+                                            foreach( $cicloF1 as $f1)
+                                            {
+                                             $prodf1=$f1->BPROD;
+                                             $prodclas=$f1->BCLAS;
+                                            }
+                                            if( $prodclas =='F1')
+                                            {
+                                                echo $prodf1;
+                                                 $prodclas;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                      echo $plans->IPROD;
+                                    //  echo "-";
+                                    //   $plans->BCLAS;
+                                    }
+
+                                     ?>
                                 </td>
                                 <td class="px-4 py-3 text-xs text-center colmde">
                                     Requeriment (Forecast)
@@ -89,12 +118,18 @@
                                 if ($cont!=0) {
                                         While($hoy!=$fin){
 
-
-                                             $contarD = $obj->contard($plans->IPROD,$hoy ,'%D%');
+                                            if($plans->BCLAC!='F1')
+                                            {
+                                                $final=$prodf1;
+                                            }
+                                            else {
+                                                $final=$plans->IPROD;
+                                            }
+                                             $contarD = $obj->contard($final,$hoy ,'%D%');
 
                                              if($contarD !=0 )
                                              {
-                                                $tablaD = $obj->Forecast($pro, $hoy,'%D%');
+                                                $tablaD = $obj->Forecast($final, $hoy,'%D%');
                                                 ?>
                                                  <td class="px-4 py-3 text-xs text-center ">
                                                     @foreach ($tablaD as $dates)
@@ -110,10 +145,10 @@
                                                </td>
                                                <?php
                                              }
-                                             $contarN= $obj->contard($plans->IPROD, $hoy,'%N%');
+                                             $contarN= $obj->contard($final, $hoy,'%N%');
                                              if($contarN !=0 )
                                              {
-                                                $tablaN = $obj->Forecast($pro, $hoy,'%N%');
+                                                $tablaN = $obj->Forecast($final, $hoy,'%N%');
                                                 ?>
                                                  <td class="px-4 py-3 text-xs text-center  colmde ">
                                                     @foreach ($tablaN as $datesN)
@@ -150,6 +185,39 @@
                                 }
                             }
                             ?>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-xs text-center ">
+                                Parte padre: <?php
+                                    if ($plans->ICLAS !='F1')
+                                    {
+                                        echo $plans->BPROD ;
+                                    }else {
+
+                                        echo $plans->IPROD;
+                                    }
+
+                                     ?>
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center colmde">
+                                  Requirement
+                                </td>
+                              <?php
+                               $hoy= '20220815';
+                                $fin= date('Ymd', strtotime($hoy . '+7 day'));
+                                While($hoy!=$fin){
+                               ?>
+                                <td class="px-4 py-3 text-xs text-center ">0
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center colmde">0
+                                </td>
+
+                                <?php
+                            $hoy= date('Ymd', strtotime($hoy . '+1 day'));
+                                }
+
+
+                              ?>
                             </tr>
                         @endforeach
                     </tbody>

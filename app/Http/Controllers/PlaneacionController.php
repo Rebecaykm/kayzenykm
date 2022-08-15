@@ -52,10 +52,11 @@ class PlaneacionController extends Controller
                 if($TP==1)
                 {
                     $plan = IPB::query()
-                    ->select('IPROD', 'IREF04', 'IID', 'IMPLC', 'ICLAS')
+                    ->select('IPROD','BPROD','BCLAS','BCHLD','BCLAC','ICLAS','IREF04','IID','IMPLC')
                     ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                     ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                     ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                    ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
                     ->where('PBPBC', '=', $CP)
                     ->where('IID', '!=', 'IZ')
                     ->where('IMPLC', '!=', 'OBSOLETE')
@@ -67,10 +68,11 @@ class PlaneacionController extends Controller
                 }
                 else{
                     $plan = IPB::query()
-                    ->select('IPROD', 'IREF04', 'IID', 'IMPLC', 'ICLAS')
+                    ->select('IPROD','BPROD','BCLAS','BCHLD','BCLAC','ICLAS','IREF04','IID','IMPLC')
                     ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                     ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                     ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                    ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
                     ->where('PBPBC', '=', $CP)
                     ->where('IID', '!=', 'IZ')
                     ->where('IMPLC', '!=', 'OBSOLETE')

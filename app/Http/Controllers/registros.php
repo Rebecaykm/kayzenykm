@@ -3,7 +3,7 @@
 use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\Kmr;
-
+use App\Models\MBMr;
 
 date_default_timezone_set('America/Monterrey');
 // include_once("conexionloc.php");
@@ -44,6 +44,15 @@ class registros
             ->where('MPROD', '=', $producto)
             ->count();
         return $WCs;
+    }
+    function F1($pro)
+    {
+        $MBMS =MBMr::query()
+        ->select('BPROD','BCLAS','BCHLD','BCLAC')
+        ->where('BCHLD','=',$pro)
+        ->get();
+        return $MBMS;
+
     }
 
     function Productos()
