@@ -4,7 +4,7 @@
             Open shop order report
         </h2>
         <div class="p-1 w-full overflow-hidden rounded-lg shadow-xs">
-            <form method="get" action="{{ route('open-orders.index') }}">
+            <form method="GET" action="{{ route('open-orders.index') }}">
                 <div class="flex flex-row items-center justify-end gap-2 p-2">
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
@@ -189,18 +189,20 @@
                     @endif
                 </div>
             </form>
-            <div
-                class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
-                <span class="flex items-center col-span-3">
-                    Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
-                </span>
-                <!-- Pagination -->
-                <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                    @if ($openOrders->count())
+            @if ($openOrders->count())
+                <div
+                    class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                    <span class="flex items-center col-span-3">
+                        Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
+                    </span>
+                    <!-- Pagination -->
+                    <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+
                         {{ $openOrders->withQueryString()->links() }}
-                    @endif
-                </span>
-            </div>
+
+                    </span>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

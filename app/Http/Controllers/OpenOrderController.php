@@ -26,6 +26,7 @@ class OpenOrderController extends Controller
             ->Where('SORD', 'LIKE', '%' . $sord . '%')
             ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
             ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
+            ->orderBy('SORD', 'DESC')
             ->orderBy('SDDTE', 'DESC')
             ->simplePaginate(100);
 
@@ -39,7 +40,6 @@ class OpenOrderController extends Controller
             ->Where('SORD', 'LIKE', '%' . $sord . '%')
             ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
             ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
-            ->orderBy('SDDTE', 'DESC')
             ->count();
 
         return view('openOrders.index', ['openOrders' => $openOrders, 'totalOrder' => $totalOpenOrders]);
