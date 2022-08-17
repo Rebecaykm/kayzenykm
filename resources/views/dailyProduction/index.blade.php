@@ -1,7 +1,7 @@
 <x-app-layout title="Daily Production">
     <div class="container grid px-6 mx-auto gap-y-2">
         <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Daily Production Panning
+            Daily Production Planning
         </h2>
         <form method="GET" action="{{ route('daily-production.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
@@ -34,7 +34,6 @@
                         </svg>
                     </button>
                 </div>
-
             </div>
         </form>
         <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 bg-white dark:bg-gray-800">
