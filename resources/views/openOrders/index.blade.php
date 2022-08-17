@@ -75,7 +75,7 @@
             </form>
         </div>
 
-        <div class="w-full overflow-hidden rounded-lg shadow-xs ">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 bg-white dark:bg-gray-800">
             <form method="post" action="{{ route('open-orders.store') }}">
                 @csrf
                 <div class="flex flex-row justify-end px-4 py-3">

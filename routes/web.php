@@ -46,4 +46,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      * Routes Daily Production
      */
     Route::get('daily-production', [\App\Http\Controllers\DailyProductionController::class, 'index'])->name('daily-production.index');
+    Route::get('daily-production-user', [\App\Http\Controllers\DailyProductionController::class, 'indexUser'])->name('daily-production.user');
+    Route::post('daily-production', [\App\Http\Controllers\DailyProductionController::class, 'store'])->name('daily-production.store');
 });
