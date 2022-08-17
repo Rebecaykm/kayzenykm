@@ -6,20 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FsoLocal extends Model
+class Lwk extends Model
 {
     use HasFactory;
 
+    protected $connection = 'odbc-connection-lx834f02';
+    protected $table = 'LX834F02.LWK';
+
     protected $fillable = [
-        'SID',
-        'SWRKC',
-        'SDDTE',
-        'SORD',
-        'SPROD',
-        'SQREQ',
-        'SQFIN',
-        'CDTE',
-        'CANC',
+        'WWRKC',
+        'WDESC',
     ];
 
     public function fromDateTime($value)

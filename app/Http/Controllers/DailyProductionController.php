@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fso;
+use App\Models\Lwk;
+use App\Models\Yf006;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DailyProductionController extends Controller
@@ -11,9 +15,74 @@ class DailyProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dailyProduction.index');
+        $work = $request->workCenter ?? '';
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
+
+        $workCenters = Lwk::query()
+            ->select('WWRKC', 'WDESC')
+            ->orderBy('WWRKC', 'ASC')
+            ->get();
+
+        $dailyDiurno = Fso::query()
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
+            ->where('SWRKC', '=', $work)
+            ->where('SDDTE', '=', $date)
+            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->orderBy('SOCNO', 'ASC')
+            ->simplePaginate(100);
+
+        $dailyNocturno = Fso::query()
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
+            ->where('SWRKC', '=', $work)
+            ->where('SDDTE', '=', $date)
+            ->where('SOCNO', 'LIKE', '%N%')
+            ->orderBy('SOCNO', 'ASC')
+            ->simplePaginate(100);
+
+        return view('dailyProduction.index', [
+            'dailyDiurnos' => $dailyDiurno,
+            'dailyNocturnos' => $dailyNocturno,
+            'workCenters' => $workCenters,
+            'work'  => $work,
+            'date' => $date
+        ]);
+    }
+
+    public function indexUser(Request $request)
+    {
+        $work = $request->workCenter ?? '';
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
+
+        $workCenters = Lwk::query()
+            ->select('WWRKC', 'WDESC')
+            ->orderBy('WWRKC', 'ASC')
+            ->get();
+
+        $dailyDiurno = Fso::query()
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
+            ->where('SWRKC', '=', $work)
+            ->where('SDDTE', '=', $date)
+            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->orderBy('SOCNO', 'ASC')
+            ->simplePaginate(100);
+
+        $dailyNocturno = Fso::query()
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
+            ->where('SWRKC', '=', $work)
+            ->where('SDDTE', '=', $date)
+            ->where('SOCNO', 'LIKE', '%N%')
+            ->orderBy('SOCNO', 'ASC')
+            ->simplePaginate(100);
+
+        return view('dailyProduction.user', [
+            'dailyDiurnos' => $dailyDiurno,
+            'dailyNocturnos' => $dailyNocturno,
+            'workCenters' => $workCenters,
+            'work'  => $work,
+            'date' => $date
+        ]);
     }
 
     /**
@@ -24,7 +93,28 @@ class DailyProductionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        foreach ($request->arrayDailyProductions as $arrayDaily) {
+            $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
+            $canc = $arrayDaily['canc'] ?? 0;
+
+            $data = Fso::query()
+                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
+                ->where('SORD', '=', $arrayDaily['sord'])
+                ->first();
+
+            if ($data->SID == 'SO') {
+                if ($cdte != '') {
+                    if ($canc != 0) {
+                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
+                    } else {
+                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
+                    }
+                } elseif ($canc != 0) {
+                    $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
+                }
+            }
+        }
+        dd("Termino el Foreach");
     }
 
     /**

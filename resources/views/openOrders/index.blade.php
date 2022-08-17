@@ -1,10 +1,10 @@
 <x-app-layout title="Open Orders">
     <div class="container grid px-6 mx-auto gap-y-2">
-        <h2 class="py-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Open shop order report
         </h2>
-        <div class="p-1 w-full overflow-hidden rounded-lg shadow-xs">
-            <form method="get" action="{{ route('open-orders.index') }}">
+        <div class="p-2 w-full overflow-hidden rounded-lg shadow-xs">
+            <form method="GET" action="{{ route('open-orders.index') }}">
                 <div class="flex flex-row items-center justify-end gap-2 p-2">
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
@@ -75,18 +75,22 @@
             </form>
         </div>
 
-        <div class="w-full overflow-hidden rounded-lg shadow-xs ">
-            <form method="post" action="{{ route('open-orders.store') }}">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 bg-white dark:bg-gray-800">
+            <form method="POST" action="{{ route('open-orders.store') }}">
                 @csrf
-                <div class="flex flex-row justify-end px-4 py-3">
-                    <div class="flex flex-end">
-                        <span class="flex m-2 sm:m-auto sm:justify-end sm:text-xs">
+                <div
+                    class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 grid-cols-6 dark:text-gray-400 dark:bg-gray-800"">
+                    <div class="col-span-3 flex flex-row">
+
+                    </div>
+                    <div class="col-span-3 gap-x-4  flex justify-end">
+                        <span class="flex items-center">
                             {{ $openOrders->withQueryString()->links() }}
                         </span>
                         <button type="submit"
-                            class="flex items-center justify-end text-sm font-medium leading-5 px-4 py-2 m-1 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            class="flex items-center justify-end text-xs font-medium leading-5 px-3 py-2 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                             <span class="mr-2">Update</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20"
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                 fill="currentColor">
                                 <path
                                     d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
@@ -94,18 +98,24 @@
                         </button>
                     </div>
                 </div>
+
+                {{-- <div class="flex flex-row justify-end px-4 py-3">
+                    <div class="flex flex-end">
+
+                    </div>
+                </div> --}}
                 <div class="w-full overflow-x-auto h-96">
                     @if ($openOrders->count())
                         <table class="relative w-full whitespace-no-wrap rounded-lg">
                             <thead>
                                 <tr
                                     class="text-xs font-semibold tracking-wide text-center text-gray-800 uppercase border-b-2 sticky top-0 dark:border-gray-800 bg-gray-200 dark:text-gray-600 dark:bg-gray-800">
-                                    <th class="px-2 py-2">Work Center</th>
-                                    <th class="px-2 py-2">Due Date</th>
-                                    <th class="px-2 py-2">Shop Order Number</th>
-                                    <th class="px-2 py-2">Item Number</th>
-                                    <th class="px-2 py-2">Quantity Required</th>
-                                    <th class="px-2 py-2">Quantity Finished</th>
+                                    <th class="px-3 py-2">Work Center</th>
+                                    <th class="px-3 py-2">Due Date</th>
+                                    <th class="px-3 py-2">Shop Order Number</th>
+                                    <th class="px-3 py-2">Item Number</th>
+                                    <th class="px-3 py-2">Quantity Required</th>
+                                    <th class="px-3 py-2">Quantity Finished</th>
                                     <th class="px-3 py-2">Data Change</th>
                                     <th class="px-3 py-2">Cancel</th>
                                 </tr>
@@ -181,26 +191,26 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
-                        <div
-                            class="px-4 py-3 rounded-md text-sm font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
-                            Open orders not found
-                        </div>
                     @endif
                 </div>
             </form>
-            <div
-                class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
-                <span class="flex items-center col-span-3">
-                    Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
-                </span>
-                <!-- Pagination -->
-                <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                    @if ($openOrders->count())
+            @if ($openOrders->count())
+                <div
+                    class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                    <span class="flex items-center col-span-3">
+                        Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
+                    </span>
+                    <!-- Pagination -->
+                    <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                         {{ $openOrders->withQueryString()->links() }}
-                    @endif
-                </span>
-            </div>
+                    </span>
+                </div>
+            @else
+                <div
+                    class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                    Open orders not found
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
