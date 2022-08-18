@@ -70,41 +70,55 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                        @php
+                            $dayStoragePlan = 0;
+                            $dayStorageReal = 0;
+                            $dayStorageScrap = 0;
+                            $nightStoragePlan = 0;
+                            $nightStorageReal = 0;
+                            $nightStorageScrap = 0;
+                        @endphp
                         @foreach ($dailyDiurnos as $key => $dailyDiurno)
                             <tr>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     D
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $num = $key + 1 }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyDiurno->SPROD }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{-- {{ $dailyDiurno-> }} --}}
+                                    --
                                 </td>
-                                <td class="px-2 py-2 text-xs">
-                                    <label class="flex items-center justify-center dark:text-gray-400">
-                                        <input type="text"
-                                            name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sord]" id="sord"
-                                            value="{{ $dailyDiurno->SORD }}" hidden />
-                                        {{ $dailyDiurno->SORD }}
-                                    </label>
+                                <td class="px-4 py-3 text-xs">
+                                    {{ $dailyDiurno->SORD }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyDiurno->SQREQ }}
+                                    @php
+                                        $dayStoragePlan += $dailyDiurno->SQREQ;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{-- {{ $dailyDiurno-> }} --}}
+                                    --
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyDiurno->SQFIN }}
+                                    @php
+                                        $dayStorageReal += $dailyDiurno->SQFIN;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyDiurno->SQREMM }}
+                                    @php
+                                        $dayStorageScrap += $dailyDiurno->SQREMM;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
                                         <span
                                             class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
@@ -124,53 +138,59 @@
                                 </td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr class="bg-gray-50">
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">Subtotal</td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStoragePlan }}.000</td>
+                            <td class="px-4 py-3 text-xs">--</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageScrap }}.000</td>
+                            <td class="px-4 py-3 text-xs"></td>
                         </tr>
                         @foreach ($dailyNocturnos as $key => $dailyNocturno)
                             <tr>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     N
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $num = $num + 1 }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyNocturno->SPROD }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{-- {{ $dailyNocturno-> }} --}}
+                                    --
                                 </td>
-                                <td class="px-2 py-2 text-xs">
-                                    <label class="flex items-center justify-center dark:text-gray-400">
-                                        <input type="text"
-                                            name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sord]"
-                                            id="sord" value="{{ $dailyNocturno->SORD }}" hidden />
-                                        {{ $dailyNocturno->SORD }}
-                                    </label>
+                                <td class="px-4 py-3 text-xs">
+                                    {{ $dailyNocturno->SORD }}
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyNocturno->SQREQ }}
+                                    @php
+                                        $nightStoragePlan += $dailyNocturno->SQREQ;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{-- {{ $dailyNocturno-> }} --}}
+                                    --
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyNocturno->SQFIN }}
+                                    @php
+                                        $nightStorageReal += $dailyNocturno->SQFIN;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     {{ $dailyNocturno->SQREMM }}
+                                    @php
+                                        $nightStorageScrap += $dailyNocturno->SQREMM;
+                                    @endphp
                                 </td>
-                                <td class="px-2 py-2 text-xs">
+                                <td class="px-4 py-3 text-xs">
                                     @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
                                         <span
                                             class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
@@ -190,17 +210,29 @@
                                 </td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr class="bg-gray-50">
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">Subtotal</td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">{{ $nightStoragePlan }}.000</td>
+                            <td class="px-4 py-3 text-xs">--</td>
+                            <td class="px-4 py-3 text-xs">{{ $nightStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $nightStorageScrap }}.000</td>
+                            <td class="px-4 py-3 text-xs"></td>
+                        </tr>
+                        <tr class="bg-green-100">
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">Total</td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs"></td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
+                            <td class="px-4 py-3 text-xs">--</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal + $nightStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
+                            <td class="px-4 py-3 text-xs"></td>
                         </tr>
                     </tbody>
                 </table>

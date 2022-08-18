@@ -94,6 +94,8 @@ class DailyProductionController extends Controller
     public function store(Request $request)
     {
         foreach ($request->arrayDailyProductions as $arrayDaily) {
+            $sqfin = $arrayDaily['sqfin'];
+            $sqremm = $arrayDaily['sqremm'];
             $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
             $canc = $arrayDaily['canc'] ?? 0;
 
@@ -103,15 +105,7 @@ class DailyProductionController extends Controller
                 ->first();
 
             if ($data->SID == 'SO') {
-                if ($cdte != '') {
-                    if ($canc != 0) {
-                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                    } else {
-                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                    }
-                } elseif ($canc != 0) {
-                    $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                }
+                $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
         dd("Termino el Foreach");

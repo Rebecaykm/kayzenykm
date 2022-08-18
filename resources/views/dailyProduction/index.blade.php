@@ -40,7 +40,7 @@
             <form method="POST" action="{{ route('daily-production.store') }}">
                 @csrf
                 <div
-                    class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-100 grid-cols-6 dark:text-gray-400 dark:bg-gray-800"">
+                    class="grid px-2 py-1 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-100 grid-cols-6 dark:text-gray-400 dark:bg-gray-800"">
                     <div class="col-span-3 gap-x-4 flex flex-row">
                         <span class="flex items-center">
                             Work Center: {{ $work }}
@@ -68,36 +68,46 @@
                         <thead>
                             <tr
                                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
-                                <th class="px-4 py-3">Shift</th>
-                                <th class="px-4 py-3">No.</th>
-                                <th class="px-4 py-3">Parts No.</th>
-                                <th class="px-4 py-3">Cycle Time</th>
-                                <th class="px-4 py-3">Shop Order</th>
-                                <th class="px-4 py-3">Plan Quantity</th>
-                                <th class="px-4 py-3">Plan Time (Min)</th>
-                                <th class="px-4 py-3">Real Quantity</th>
-                                <th class="px-4 py-3">Scrap Quantity</th>
-                                <th class="px-4 py-3">Situation</th>
-                                <th class="px-4 py-3">Date Change</th>
-                                <th class="px-4 py-3">Cancel</th>
+                                <th class="px-3 py-2">Shift</th>
+                                <th class="px-3 py-2">No.</th>
+                                <th class="px-3 py-2">Parts No.</th>
+                                <th class="px-3 py-2">Cycle Time</th>
+                                <th class="px-3 py-2">Shop Order</th>
+                                <th class="px-3 py-2">Plan Quantity</th>
+                                <th class="px-3 py-2">Plan Time (Min)</th>
+                                <th class="px-3 py-2">Real Quantity</th>
+                                <th class="px-3 py-2">Scrap Quantity</th>
+                                <th class="px-3 py-2">Situation</th>
+                                <th class="px-3 py-2">Date Change</th>
+                                <th class="px-3 py-2">Cancel</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+
+                            @php
+                                $dayStoragePlan = 0;
+                                $dayStorageReal = 0;
+                                $dayStorageScrap = 0;
+                                $nightStoragePlan = 0;
+                                $nightStorageReal = 0;
+                                $nightStorageScrap = 0;
+                            @endphp
                             @foreach ($dailyDiurnos as $key => $dailyDiurno)
                                 <tr>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         D
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $num = $key + 1 }}
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $dailyDiurno->SPROD }}
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{-- {{ $dailyDiurno-> }} --}}
+                                        --
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         <label class="flex items-center justify-center dark:text-gray-400">
                                             <input type="text"
                                                 name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sord]"
@@ -105,19 +115,37 @@
                                             {{ $dailyDiurno->SORD }}
                                         </label>
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $dailyDiurno->SQREQ }}
+                                        @php
+                                            $dayStoragePlan += $dailyDiurno->SQREQ;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{-- {{ $dailyDiurno-> }} --}}
+                                        --
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
-                                        {{ $dailyDiurno->SQFIN }}
+                                    <td class="px-2 py-1 text-xs ">
+                                        <label class="block text-sm">
+                                            <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]"
+                                                type="number" value="{{ $dailyDiurno->SQFIN }}"
+                                                class="w-32 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+                                        @php
+                                            $dayStorageReal += $dailyDiurno->SQFIN;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
-                                        {{ $dailyDiurno->SQREMM }}
+                                    <td class="px-2 py-1 text-xs">
+                                        <label class="block text-sm">
+                                            <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]"
+                                                type="number" value="{{ $dailyDiurno->SQREMM }}"
+                                                class="w-32 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+                                        @php
+                                            $dayStorageScrap += $dailyDiurno->SQREMM;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
                                             <span
                                                 class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
@@ -135,7 +163,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="px-2 py-1">
                                         <label class="block text-sm">
                                             <input id="cdte"
                                                 name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]"
@@ -143,7 +171,7 @@
                                                 class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="px-2 py-1">
                                         <label class="flex items-center justify-center dark:text-gray-400">
                                             <input id="canc"
                                                 name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]"
@@ -153,33 +181,36 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr class="bg-gray-50">
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">Subtotal</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStoragePlan }}.000</td>
+                                <td class="px-3 py-2 text-xs">--</td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageReal }}.000</td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageScrap }}.000</td>
+                                <td class="px-3 py-2 text-xs"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             @foreach ($dailyNocturnos as $key => $dailyNocturno)
                                 <tr>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         N
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $num = $num + 1 }}
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $dailyNocturno->SPROD }}
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{-- {{ $dailyNocturno-> }} --}}
+                                        --
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         <label class="flex items-center justify-center dark:text-gray-400">
                                             <input type="text"
                                                 name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sord]"
@@ -187,19 +218,37 @@
                                             {{ $dailyNocturno->SORD }}
                                         </label>
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{ $dailyNocturno->SQREQ }}
+                                        @php
+                                            $nightStoragePlan += $dailyNocturno->SQREQ;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         {{-- {{ $dailyNocturno-> }} --}}
+                                        --
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
-                                        {{ $dailyNocturno->SQFIN }}
+                                    <td class="px-2 py-1 text-xs ">
+                                        <label class="block text-sm">
+                                            <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]"
+                                                type="number" value="{{ $dailyNocturno->SQFIN }}"
+                                                class="w-32 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+                                        @php
+                                            $nightStorageReal += $dailyNocturno->SQFIN;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
-                                        {{ $dailyNocturno->SQREMM }}
+                                    <td class="px-2 py-1 text-xs">
+                                        <label class="block text-sm">
+                                            <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]"
+                                                type="number" value="{{ $dailyNocturno->SQREMM }}"
+                                                class="w-32 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+                                        @php
+                                            $nightStorageScrap += $dailyNocturno->SQREMM;
+                                        @endphp
                                     </td>
-                                    <td class="px-2 py-2 text-xs">
+                                    <td class="px-2 py-1 text-xs">
                                         @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
                                             <span
                                                 class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
@@ -217,7 +266,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="px-2 py-1">
                                         <label class="block text-sm">
                                             <input id="cdte"
                                                 name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]"
@@ -225,7 +274,7 @@
                                                 class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                         </label>
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="px-2 py-1">
                                         <label class="flex items-center justify-center dark:text-gray-400">
                                             <input id="canc"
                                                 name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]"
@@ -235,24 +284,40 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr class="bg-gray-50">
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">Subtotal</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">{{ $nightStoragePlan }}.000</td>
+                                <td class="px-3 py-2 text-xs">--</td>
+                                <td class="px-3 py-2 text-xs">{{ $nightStorageReal }}.000</td>
+                                <td class="px-3 py-2 text-xs">{{ $nightStorageScrap }}.000</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                            </tr>
+                            <tr class="bg-green-100">
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">Total</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
+                                <td class="px-3 py-2 text-xs">--</td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageReal + $nightStorageReal }}.000</td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </form>
             <div
-                class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                class="grid px-2 py-1 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
                     {{-- Show {{ $dailyProdcution->firstItem() }} - {{ $dailyProdcution->lastItem() }} --}}
                 </span>
@@ -268,7 +333,7 @@
             </div>
 
             {{-- <div
-                class="px-4 py-3 text-center rounded-md text-sm font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                class="px-2 py-1 text-center rounded-md text-sm font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 No data to show
             </div> --}}
 
