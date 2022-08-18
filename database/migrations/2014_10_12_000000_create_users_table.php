@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
+
+    public const ADMIN_ROLE = 1;
+
     /**
      * Run the migrations.
      *
@@ -17,12 +20,15 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->default(\Carbon\Carbon::now());
             $table->string('password');
+            $table->unsignedBigInteger('role_id');
             $table->rememberToken();
             $table->string('current_team_id')->nullable();
             $table->text('profile_photo_path')->nullable();
             $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles');
         });
     }
 
