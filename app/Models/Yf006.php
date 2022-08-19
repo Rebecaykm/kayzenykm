@@ -31,7 +31,7 @@ class Yf006 extends Model
         'F6CDTE',
     ];
 
-    public static function storeDailyProduction(string $sid, string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, string $sqfin, string $sqremm, string $canc, string $cdte)
+    public static function storeDailyProduction(string $sid, string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, float $sqfin, float $sqremm, int $canc, string $cdte)
     {
         return Yf006::query()->insert([
             'F6ID' => $sid,

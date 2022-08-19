@@ -11,9 +11,8 @@ use Illuminate\Http\Request;
 class DailyProductionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
@@ -50,6 +49,10 @@ class DailyProductionController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function indexUser(Request $request)
     {
         $work = $request->workCenter ?? '';
@@ -86,35 +89,33 @@ class DailyProductionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
     public function store(Request $request)
     {
         foreach ($request->arrayDailyProductions as $arrayDaily) {
-            $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
-            $canc = $arrayDaily['canc'] ?? 0;
-
             $data = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
                 ->where('SORD', '=', $arrayDaily['sord'])
                 ->first();
 
             if ($data->SID == 'SO') {
-                if ($cdte != '') {
-                    if ($canc != 0) {
-                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                    } else {
-                        $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                    }
-                } elseif ($canc != 0) {
-                    $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $data->SQFIN, $data->SQREMM, $canc, $cdte);
-                }
+
+                $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
+                $canc = $arrayDaily['canc'] ?? 0;
+                $sqfin = $arrayDaily['sqfin'];
+                $sqremm = $arrayDaily['sqremm'];
+
+                $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
-        dd("Termino el Foreach");
+        dd("Program");
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YSF008C";
+        $result = odbc_exec($conn, $query);
+
+        return redirect()->back();
     }
 
     /**
