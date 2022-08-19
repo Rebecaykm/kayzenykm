@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
+use Carbon\Carbon;
 
 
 class PlaneacionController extends Controller
@@ -45,10 +46,15 @@ class PlaneacionController extends Controller
      */
     public function create(Request $request)
     {
+        dd('hvhv');
+         $dias = $request->workCenter ?? '5';
+         $fecha= $request->dueDate != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now();
+        $fecha=$fecha->format('Ymd');
 
         $TP=$request->SeTP;
         $CP=$request->SePC;
         $WC=$request->SeWC;
+
                 if($TP==1)
                 {
                     $plan = IPB::query()
@@ -62,7 +68,7 @@ class PlaneacionController extends Controller
                     ->where('IMPLC', '!=', 'OBSOLETE')
                     ->where('ICLAS ', '=', 'F1')
                     ->distinct('IPROD')
-                    ->limit(15)
+                    ->limit(1)
                     ->get();
 
                 }
@@ -80,19 +86,18 @@ class PlaneacionController extends Controller
                     ->orwhere('ICLAS ', '=', 'M3')
                     ->orwhere('ICLAS ', '=', 'M4')
                     ->distinct('IPROD')
-                    ->limit(15)
+                    ->limit(1)
                     ->get();
                 }
 
-
-
-
-        return view('planeacion.plan', [ 'plan'=>$plan,'tp'=>$TP,'cp'=>$CP,'wc'=>$WC]);
+        return view('planeacion.plan', [ 'plan'=>$plan,'tp'=>$TP,'cp'=>$CP,'wc'=>$WC,'fecha'=>$fecha,'dias'=>$dias]);
     }
 
 
     public function store(Request $request)
     {
+
+
 
 
     }
