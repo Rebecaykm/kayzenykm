@@ -95,21 +95,22 @@ class DailyProductionController extends Controller
     public function store(Request $request)
     {
         foreach ($request->arrayDailyProductions as $arrayDaily) {
-            $sqfin = $arrayDaily['sqfin'];
-            $sqremm = $arrayDaily['sqremm'];
-            $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
-            $canc = $arrayDaily['canc'] ?? 0;
-
             $data = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
                 ->where('SORD', '=', $arrayDaily['sord'])
                 ->first();
 
             if ($data->SID == 'SO') {
+
+                $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
+                $canc = $arrayDaily['canc'] ?? 0;
+                $sqfin = $arrayDaily['sqfin'];
+                $sqremm = $arrayDaily['sqremm'];
+
                 $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
-        dd("Ya casi finalizo");
+        dd("Program");
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
