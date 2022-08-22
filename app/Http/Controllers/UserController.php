@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('id', '!=', Auth::user()->id)->orderBy('id','DESC')->paginate(10);
+        $users = User::where('id', '!=', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
 
         return view('users.index', ['users' => $users]);
     }
@@ -30,7 +30,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::all();
+
+        return view('users.create', ['roles' => $roles]);
     }
 
     /**
@@ -41,7 +43,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only(['name', 'email', 'password']);
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
+        $user->roles()->sync($request->role_id);
+        return redirect()->back()->with('success', 'User created successfully');
     }
 
     /**
@@ -84,8 +90,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->back();
     }
 }

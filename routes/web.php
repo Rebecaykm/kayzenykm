@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      * Routes Users
      */
-    Route::resource('user', \App\Http\Controllers\UserController::class);
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 
     /**
      * Routes Open Orders
