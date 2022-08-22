@@ -32,9 +32,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    Route::view('open-shop-orders', 'open-shop-orders')->name('open-shop-orders');
     Route::view('production', 'production')->name('production');
-    Route::view('search', 'search')->name('search');
+
+    /**
+     * Routes Users
+     */
+    Route::resource('user', \App\Http\Controllers\UserController::class);
 
     /**
      * Routes Open Orders
