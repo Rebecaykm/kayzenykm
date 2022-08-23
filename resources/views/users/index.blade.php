@@ -35,7 +35,17 @@
                                             </div>
                                         </div>
                                         <div>
+                                            <p class="font-semibold"></p>
+                                        </div>
+                                        <div>
                                             <p class="font-semibold">{{ $user->name }}</p>
+                                            @if (!empty($user->getRoleNames()))
+                                                @foreach ($user->getRoleNames() as $nameRole)
+                                                    <p class="text-xs text-gray-600 dark:text-gray-400">
+                                                        {{ $nameRole }}
+                                                    </p>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                 </td>

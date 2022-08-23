@@ -67,9 +67,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $roles = Role::all();
+
+        return view('users.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     /**
@@ -79,9 +81,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $data = $request->except('password', 'role_id');
+        if (!empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $user->fill($data);
+        if ($user->isDirty()) {
+            $user->save();
+        }
+        if (!empty($request->role_id)) {
+            $user->roles()->sync($request->role_id);
+        }
+
+        return redirect()->back()->with('status', 'User updated successfully');
     }
 
     /**
