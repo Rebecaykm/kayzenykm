@@ -21,18 +21,18 @@ class RoleSeeder extends Seeder
 
         Permission::create(['name' => 'dashboard'])->syncRoles([$adminRole, $userRole, $guestRole]);
 
-        Permission::create(['name' => 'users.index'])->assignRole($adminRole);
-        Permission::create(['name' => 'users.create'])->assignRole($adminRole);
-        Permission::create(['name' => 'users.store'])->assignRole($adminRole);
-        Permission::create(['name' => 'users.edit'])->assignRole($adminRole);
-        Permission::create(['name' => 'users.update'])->assignRole($adminRole);
-        Permission::create(['name' => 'users.destroy'])->assignRole($adminRole);
+        Permission::create(['name' => 'users.index'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.create'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.store'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.edit'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.update'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.destroy'])->syncRoles([$adminRole]);
 
         Permission::create(['name' => 'open-orders.index'])->syncRoles([$adminRole, $userRole]);
         Permission::create(['name' => 'open-orders.store'])->syncRoles([$adminRole, $userRole]);
 
         Permission::create(['name' => 'daily-production.index'])->syncRoles([$adminRole, $userRole]);
-        Permission::create(['name' => 'daily-production.user'])->syncRoles([$adminRole, $userRole, $guestRole]);
+        Permission::create(['name' => 'daily-production.user'])->syncRoles([$adminRole, $guestRole]);
         Permission::create(['name' => 'daily-production.store'])->syncRoles([$adminRole, $userRole]);
     }
 }
