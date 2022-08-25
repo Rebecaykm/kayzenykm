@@ -18,9 +18,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create(['name' => 'Admin Test', 'email' => 'admin@admin.com', 'email_verified_at' => now(),'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrator');
-        User::create(['name' => 'It Test', 'email' => 'it@ykm.com.mx', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrator');
-        User::create(['name' => 'User Test', 'email' => 'user@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('User');
-        User::create(['name' => 'Guest Test', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Guest');
+        User::create(['name' => 'User Admin', 'email' => 'admin@admin.com', 'email_verified_at' => now(),'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrator');
+        User::create(['name' => 'User It', 'email' => 'it@ykm.com.mx', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrator');
+        User::create(['name' => 'User Production', 'email' => 'user@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('User');
+        User::create(['name' => 'User Guest', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Guest');
     }
 }
