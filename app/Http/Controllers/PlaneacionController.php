@@ -17,7 +17,7 @@ class PlaneacionController extends Controller
      * @return\Illuminate\Http\Response
      */
 
-    public $plan=null;
+    public $plan = null;
     public function index()
     {
         $this->WCs = LWK::query()
@@ -46,60 +46,63 @@ class PlaneacionController extends Controller
      */
     public function create(Request $request)
     {
-        dd('hvhv');
-         $dias = $request->workCenter ?? '5';
-         $fecha= $request->dueDate != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now();
-        $fecha=$fecha->format('Ymd');
 
-        $TP=$request->SeTP;
-        $CP=$request->SePC;
-        $WC=$request->SeWC;
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $TP = $request->SeTP;
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
 
-                if($TP==1)
-                {
-                    $plan = IPB::query()
-                    ->select('IPROD','BPROD','BCLAS','BCHLD','BCLAC','ICLAS','IREF04','IID','IMPLC')
-                    ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-                    ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-                    ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                    ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
-                    ->where('PBPBC', '=', $CP)
-                    ->where('IID', '!=', 'IZ')
-                    ->where('IMPLC', '!=', 'OBSOLETE')
-                    ->where('ICLAS ', '=', 'F1')
-                    ->distinct('IPROD')
-                    ->limit(1)
-                    ->get();
+        if ($TP == 1) {
+            $plan = IPB::query()
+                ->select('IPROD', 'BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
+                ->where('PBPBC', '=', $CP)
+                ->where('IID', '!=', 'IZ')
+                ->where('IMPLC', '!=', 'OBSOLETE')
+                ->where('ICLAS ', '=', 'F1')
+                ->distinct('BCHLD')
+                ->orderby('IPROD')
+                ->limit(15)
+                ->get();
+        } else {
+            $plan = IPB::query()
+                ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->where('PBPBC', '=', $CP)
+                ->where('IID', '!=', 'IZ')
+                ->where('IMPLC', '!=', 'OBSOLETE')
+                ->where('ICLAS ', '=', 'M2','and','ICLAS ', '=', 'M3','and','ICLAS ', '=', 'M4')
+                ->distinct('IPROD')
+                ->limit(15)
+                ->get();
+                // dd($plan);
+            // $planning = IPB::select("SELECT DISTINCT BCHLD,IPROD, BPROD, BCLAS,  BCLAC,IREF04, iid, IMPLC, ICLAS
+            // FROM LX834F01.IIM IIM
+            // INNER JOIN LX834F01.IPB IPB ON  IBUYC = PBPBC
+            // INNER JOIN LX834F01.FRT FRT ON  IIM.IPROD =FRT.RPROD
+            // INNER JOIN LX834F01.LWK ON  RWRKC=WWRKC
+            // INNER JOIN LX834F01.MBM on BCHLD=IPROD
+            // WHERE iid !='IZ'
+            // AND PBPBC='CB4'
+            // AND (ICLAS ='M2'
+            // or  ICLAS ='M3'
+            // or  ICLAS ='M4')
+            // AND IMPLC !='OBSOLETE' ");
 
-                }
-                else{
-                    $plan = IPB::query()
-                    ->select('IPROD','BPROD','BCLAS','BCHLD','BCLAC','ICLAS','IREF04','IID','IMPLC')
-                    ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-                    ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-                    ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                    ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
-                    ->where('PBPBC', '=', $CP)
-                    ->where('IID', '!=', 'IZ')
-                    ->where('IMPLC', '!=', 'OBSOLETE')
-                    ->where('ICLAS ', '=', 'M2')
-                    ->orwhere('ICLAS ', '=', 'M3')
-                    ->orwhere('ICLAS ', '=', 'M4')
-                    ->distinct('IPROD')
-                    ->limit(1)
-                    ->get();
-                }
+        }
 
-        return view('planeacion.plan', [ 'plan'=>$plan,'tp'=>$TP,'cp'=>$CP,'wc'=>$WC,'fecha'=>$fecha,'dias'=>$dias]);
+        return view('planeacion.plan', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
 
     public function store(Request $request)
     {
-
-
-
-
     }
 
     /**
@@ -147,8 +150,10 @@ class PlaneacionController extends Controller
         //
     }
 }
-class miguel{
-    function contar($var1){
-        dd('la variable es'.$var1);
+class miguel
+{
+    function contar($var1)
+    {
+        dd('la variable es' . $var1);
     }
 }
