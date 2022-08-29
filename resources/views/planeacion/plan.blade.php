@@ -142,22 +142,22 @@
 
                                                     foreach ($F1 as $F1s) {
                                                         if ($F1s->Bclas != 'F1') {
-                                                            $procase = $F1s->Bclas;
-                                                            $propadre='';
-                                                            while ($procase == 'F1') {
+                                                            $procase = $F1s->BCLAS;
+                                                            $propadre=$F1s->BPROD;
+                                                            while ($procase != 'F1') {
                                                                 $padre1 = $obj->Padre($plans->BPROD);
 
                                                                 foreach ($padre1 as $padre1s) {
-
                                                                     if ($padre1s->BCLAS == 'F1') {
                                                                         $propadre = $padre1s->BPROD;
                                                                         $procase = $padre1s->BCLAS;
                                                                     }
                                                                 }
                                                             }
-                                                            echo  $propadre ;
-                                                             echo $procase;
+                                                            echo $propadre;
+                                                            echo $procase;
                                                             echo '<br>';
+
                                                         } else {
                                                             echo $F1s->BPROD;
                                                             echo '<br>';
