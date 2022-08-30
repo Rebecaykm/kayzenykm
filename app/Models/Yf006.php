@@ -13,10 +13,14 @@ class Yf006 extends Model
     protected $connection = 'odbc-connection-lx834fu02';
     protected $table = 'LX834FU02.YF006';
 
-    public function fromDateTime($value)
-    {
-        return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-    }
+    /**
+     * @param $value
+     * @return string|null
+     */
+    // public function fromDateTime($value)
+    // {
+    //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    // }
 
     protected $fillable = [
         'F6ID',

@@ -52,12 +52,14 @@ class OpenOrderController extends Controller
 
     public function store(Request $request)
     {
-
         foreach ($request->arrayOpenOrders as $arrayOpenOrder) {
 
-            $cdte = !$arrayOpenOrder['cdte'] == null ? Carbon::parse($arrayOpenOrder['cdte'])->format('Ymd') : '';
+            if (!isset($arrayOpenOrder['cdte'])) {
+                $cdte = '';
+            } else {
+                $cdte = Carbon::parse($arrayOpenOrder['cdte'])->format('Ymd');
+            }
             $canc = $arrayOpenOrder['canc'] ?? 0;
-
             if ($cdte != '') {
                 if ($canc != 0) {
                     $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);

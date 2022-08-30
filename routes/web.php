@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
@@ -24,7 +22,9 @@ Route::get('/', function () {
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('/', function () {
+        return view('dashboard');
+    });
     Route::view('forms', 'forms')->name('forms');
     Route::view('cards', 'cards')->name('cards');
     Route::view('charts', 'charts')->name('charts');
@@ -32,9 +32,17 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    Route::view('open-shop-orders', 'open-shop-orders')->name('open-shop-orders');
     Route::view('production', 'production')->name('production');
-    Route::view('search', 'search')->name('search');
+
+    /**
+     * Routes Roles
+     */
+    Route::resource('roles', \App\Http\Controllers\RoleController::class);
+
+    /**
+     * Routes Users
+     */
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 
     /**
      * Routes Open Orders

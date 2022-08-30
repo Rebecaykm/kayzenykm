@@ -100,6 +100,9 @@ return [
             'password' => "LXSECOFR"
         ],
 
+        /**
+         * Revisar
+         */
         'odbc-connection-lx834fu02' => [
             'driver' => 'odbc',
             'dsn' => "Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;",
