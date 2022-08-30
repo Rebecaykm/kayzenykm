@@ -24,49 +24,34 @@
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
                             <div class="absolute inset-y-0 flex items-center pl-2">
                                 <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                        clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input id="sord" name="sord"
-                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
-                                type="text" placeholder="Shop Order" aria-label="Search" autocomplete="off" />
+                            <input id="sord" name="sord" class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input" type="text" placeholder="Shop Order" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
                             <div class="absolute inset-y-0 flex items-center pl-2">
                                 <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                        clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input id="sprod" name="sprod"
-                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
-                                type="text" placeholder="Item Number" aria-label="Search" autocomplete="off" />
+                            <input id="sprod" name="sprod" class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-300 bg-white border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input" type="text" placeholder="Item Number" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
-                            <input id="due_date" name="due_date"
-                                class="w-full text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input"
-                                type="date" />
+                            <input id="due_date" name="due_date" class="w-full text-sm text-gray-700 placeholder-gray-300 bg-whit-100 border-2 rounded-md dark:placeholder-gray-300 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-300 dark:bg-gray-700 dark:text-gray-400 focus:placeholder-gray-200 focus:bg-white focus:border-blue-300 focus:outline-none focus:shadow-outline-blue form-input" type="date" />
                         </div>
                     </div>
                     <div class="flex justify-center">
                         <div class="relative w-full max-w-xl focus-within:text-blue-500">
-                            <button type="submit"
-                                class="flex items-center justify-end text-sm font-medium leading-5 p-2 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            <button type="submit" class="flex items-center justify-end text-sm font-medium leading-5 p-2 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                 <span class="mr-2">Search</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2h-1.528A6 6 0 004 9.528V4z" />
-                                    <path fill-rule="evenodd"
-                                        d="M8 10a4 4 0 00-3.446 6.032l-1.261 1.26a1 1 0 101.414 1.415l1.261-1.261A4 4 0 108 10zm-2 4a2 2 0 114 0 2 2 0 01-4 0z"
-                                        clip-rule="evenodd" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2h-1.528A6 6 0 004 9.528V4z" />
+                                    <path fill-rule="evenodd" d="M8 10a4 4 0 00-3.446 6.032l-1.261 1.26a1 1 0 101.414 1.415l1.261-1.261A4 4 0 108 10zm-2 4a2 2 0 114 0 2 2 0 01-4 0z" clip-rule="evenodd" />
                                 </svg>
                             </button>
                         </div>
@@ -98,12 +83,6 @@
                         </button>
                     </div>
                 </div>
-
-                {{-- <div class="flex flex-row justify-end px-4 py-3">
-                    <div class="flex flex-end">
-
-                    </div>
-                </div> --}}
                 <div class="w-full overflow-x-auto h-96">
                     @if ($openOrders->count())
                         <table class="relative w-full whitespace-no-wrap rounded-lg">
@@ -125,66 +104,48 @@
                                     <tr class="text-gray-700 dark:text-gray-400">
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][swrkc]"
-                                                    id="swrkc" value="{{ $openOrder->SWRKC }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][swrkc]" id="swrkc" value="{{ $openOrder->SWRKC }}" hidden />
                                                 {{ $openOrder->SWRKC }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][sddte]"
-                                                    id="sddte" value="{{ $openOrder->SDDTE }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][sddte]" id="sddte" value="{{ $openOrder->SDDTE }}" hidden />
                                                 {{ $openOrder->SDDTE }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][sord]"
-                                                    id="sord" value="{{ $openOrder->SORD }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][sord]" id="sord" value="{{ $openOrder->SORD }}" hidden />
                                                 {{ $openOrder->SORD }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][sprod]"
-                                                    id="sprod" value="{{ $openOrder->SPROD }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][sprod]" id="sprod" value="{{ $openOrder->SPROD }}" hidden />
                                                 {{ $openOrder->SPROD }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][sqreq]"
-                                                    id="sqreq" value="{{ $openOrder->SQREQ }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][sqreq]" id="sqreq" value="{{ $openOrder->SQREQ }}" hidden />
                                                 {{ $openOrder->SQREQ }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2 text-xs">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input type="text"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][sqfin]"
-                                                    id="sqfin" value="{{ $openOrder->SQFIN }}" hidden />
+                                                <input type="text" name="arrayOpenOrders[{{ $openOrder->SORD }}][sqfin]" id="sqfin" value="{{ $openOrder->SQFIN }}" hidden />
                                                 {{ $openOrder->SQFIN }}
                                             </label>
                                         </td>
                                         <td class="px-2 py-2">
                                             <label class="block text-sm">
-                                                <input id="cdte"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][cdte]"
-                                                    type="date"
-                                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                <input id="date{{ $openOrder->SORD }}" name="arrayOpenOrders[{{ $openOrder->SORD }}][cdte]" type="date" onclick="disableInputCancel({{ $openOrder->SORD }})" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                         </td>
                                         <td class="px-2 py-2">
                                             <label class="flex items-center justify-center dark:text-gray-400">
-                                                <input id="canc"
-                                                    name="arrayOpenOrders[{{ $openOrder->SORD }}][canc]"
-                                                    type="checkbox" value="1"
-                                                    class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
+                                                <input id="cancel{{ $openOrder->SORD }}" name="arrayOpenOrders[{{ $openOrder->SORD }}][canc]" type="checkbox" value="1" onclick="disableInputDate({{ $openOrder->SORD }})" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
                                             </label>
                                         </td>
                                     </tr>
@@ -195,8 +156,7 @@
                 </div>
             </form>
             @if ($openOrders->count())
-                <div
-                    class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                     <span class="flex items-center col-span-3">
                         Show {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} of {{ $totalOrder }}
                     </span>
@@ -206,11 +166,23 @@
                     </span>
                 </div>
             @else
-                <div
-                    class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                     Open orders not found
                 </div>
             @endif
         </div>
     </div>
+    <script>
+        function disableInputCancel($value) {
+            let value = $value;
+            let inputCancel = "cancel" + value;
+            document.getElementById(inputCancel).disabled = true;
+        }
+
+        function disableInputDate($value) {
+            let value = $value;
+            let inputDate = "date" + value
+            document.getElementById(inputDate).disabled = true;
+        }
+    </script>
 </x-app-layout>

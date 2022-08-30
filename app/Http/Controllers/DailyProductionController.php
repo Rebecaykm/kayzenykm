@@ -101,8 +101,11 @@ class DailyProductionController extends Controller
                 ->first();
 
             if ($data->SID == 'SO') {
-
-                $cdte = !$arrayDaily['cdte'] == null ? Carbon::parse($arrayDaily['cdte'])->format('Ymd') : '';
+                if (!isset($arrayDaily['cdte'])) {
+                    $cdte = '';
+                } else {
+                    $cdte = $arrayDaily['cdte'] = Carbon::parse($arrayDaily['cdte'])->format('Ymd');
+                }
                 $canc = $arrayDaily['canc'] ?? 0;
                 $sqfin = $arrayDaily['sqfin'];
                 $sqremm = $arrayDaily['sqremm'];
@@ -110,7 +113,6 @@ class DailyProductionController extends Controller
                 $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
-        dd("Program");
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
