@@ -139,8 +139,17 @@
                                                     echo $plans->BCLAC . '/' . $plans->BCHLD;
                                                 } else {
                                                     $F1 = $obj->F1($plans->IPROD);
+                                                    $cF1=$obj->contarF1($plans->IPROD);
+                                                    iftarF1($F1s->BCHLD);
+                                                            }
+                                                          ($cF1==0){
+                                                            $F1= $obj->padre($plans->IPROD);
+                                                            foreach($F1 as $F1s)
+                                                            {
+                                                                $cF1=$obj->con
 
-                                                    foreach ($F1 as $F1s) {
+                                                    }else{
+                                                        foreach ($F1 as $F1s) {
                                                         if ($F1s->Bclas != 'F1') {
                                                             $procase = $F1s->BCLAS;
                                                             $propadre=$F1s->BPROD;
@@ -163,6 +172,8 @@
                                                             echo '<br>';
                                                         }
                                                     }
+                                                    }
+
                                                 }
 
                                             @endphp
@@ -270,9 +281,7 @@
                                             }
                                             echo $totalN;
                                             ?>
-
                                         </td>
-
                                         <?php
                                                     $hoy= date('Ymd', strtotime($hoy . '+1 day'));
                                                     }

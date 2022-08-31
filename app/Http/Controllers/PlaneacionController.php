@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
+use App\Models\kFP;
 use Carbon\Carbon;
 
 
@@ -18,8 +19,15 @@ class PlaneacionController extends Controller
      */
 
     public $plan = null;
-    public function index()
+    public function index(Request $request)
     {
+
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $plan = '';
+        $TP = 'NO';
+        $CP = '';
+        $WC = '';
         $this->WCs = LWK::query()
             ->select('WID', 'WDEPT', 'WWRKC', 'WDESC')
             ->where('WID', '=', 'WK')
@@ -53,6 +61,7 @@ class PlaneacionController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
 
+
         if ($TP == 1) {
             $plan = IPB::query()
                 ->select('IPROD', 'BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
@@ -77,11 +86,11 @@ class PlaneacionController extends Controller
                 ->where('PBPBC', '=', $CP)
                 ->where('IID', '!=', 'IZ')
                 ->where('IMPLC', '!=', 'OBSOLETE')
-                ->where('ICLAS ', '=', 'M2','and','ICLAS ', '=', 'M3','and','ICLAS ', '=', 'M4')
+                ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
                 ->distinct('IPROD')
                 ->limit(15)
                 ->get();
-                // dd($plan);
+            // dd($plan);
             // $planning = IPB::select("SELECT DISTINCT BCHLD,IPROD, BPROD, BCLAS,  BCLAC,IREF04, iid, IMPLC, ICLAS
             // FROM LX834F01.IIM IIM
             // INNER JOIN LX834F01.IPB IPB ON  IBUYC = PBPBC
@@ -97,7 +106,11 @@ class PlaneacionController extends Controller
 
         }
 
-        return view('planeacion.plan', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        if ($TP == 1) {
+            return view('planeacion.planfinal', [ 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        } else {
+            return view('planeacion.plancomponente', [ 'ipb' => $CP, 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        }
     }
 
 

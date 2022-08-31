@@ -5,6 +5,7 @@ use App\Models\IPB;
 use App\Models\Kmr;
 use App\Models\Fma;
 use App\Models\Ecl;
+use App\Models\kFP;
 use App\Models\MBMr;
 
 date_default_timezone_set('America/Monterrey');
@@ -50,16 +51,7 @@ class registros
     }
     function F1($pro)
     {
-        $MBMS =MBMr::query()
-        ->select('BPROD','BCLAS','BCHLD','BCLAC')
-        ->where('BCHLD','=',$pro)
-        ->where('BCLAS','=','F1')
-        ->get();
-        return $MBMS;
 
-    }
-    function padre($pro)
-    {
         $MBMS =MBMr::query()
         ->select('BPROD','BCLAS','BCHLD','BCLAC')
         ->where('BCHLD','=',$pro)
@@ -73,10 +65,32 @@ class registros
         $MBMS =MBMr::query()
         ->select('BPROD','BCLAS','BCHLD','BCLAC')
         ->where('BCHLD','=',$pro)
-        ->where('BCLAS','!=','X1')
+        ->where('BCLAS','=','F1')
         ->count();
         return $MBMS;
 
+    }
+    function plan($pro,$fecha,$turno)
+    {
+        $kfps =kFP::query()
+        ->select('FPROD','FQTY','FTYPE','FRDTE','FPCNO' )
+        ->where('FPROD','=',$pro)
+        ->where('FPCNO','like',$turno)
+        ->where('FRDTE','=',$fecha)
+        ->where('FTYPE','=','P')
+        ->get();
+        return $kfps;
+    }
+    function contarplan($pro,$fecha,$fechafin)
+    {
+        $kfps =kFP::query()
+        ->select('FPROD','FQTY','FTYPE','FRDTE','FPCNO' )
+        ->where('FPROD','=',$pro)
+        ->where('FRDTE','>=',$fecha)
+        ->where('FRDTE','<=',$fechafin)
+        ->where('FTYPE','=','P')
+        ->count();
+        return $kfps;
     }
 
     function requerimiento( $producto, $fecha, $turno)
@@ -107,8 +121,6 @@ class registros
     }
 
     return $ECL;
-
-
     }
 
 }
