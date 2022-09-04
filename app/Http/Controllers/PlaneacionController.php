@@ -55,7 +55,7 @@ class PlaneacionController extends Controller
     public function create(Request $request)
     {
 
-        $dias = $request->dias ?? '5';
+        $dias = $request->dias ?? '7';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeTP;
         $CP = $request->SePC;
@@ -64,18 +64,17 @@ class PlaneacionController extends Controller
 
         if ($TP == 1) {
             $plan = IPB::query()
-                ->select('IPROD', 'BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+                ->select('IPROD')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                ->join('LX834F01.MBM', 'LX834F01.MBM.BCHLD', '=', 'LX834F01.IIM.IPROD ')
                 ->where('PBPBC', '=', $CP)
                 ->where('IID', '!=', 'IZ')
                 ->where('IMPLC', '!=', 'OBSOLETE')
                 ->where('ICLAS ', '=', 'F1')
-                ->distinct('BCHLD')
+                ->distinct('IPROD')
                 ->orderby('IPROD')
-                ->limit(15)
+                ->limit(10)
                 ->get();
         } else {
             $plan = IPB::query()

@@ -22,7 +22,7 @@ class registros
             ->where('MRDTE', '=', $fecha)
             ->where('MPROD', '=', $producto)
             ->where('MRCNO', 'like', $turno)
-            ->get();
+            ->sum('MQTY');
 
         return $plan;
     }
@@ -78,7 +78,29 @@ class registros
         ->where('FPCNO','like',$turno)
         ->where('FRDTE','=',$fecha)
         ->where('FTYPE','=','P')
-        ->get();
+        ->sum('FQTY');
+        return $kfps;
+    }
+    function Firme($pro,$fecha,$turno)
+    {
+        $kfps =kFP::query()
+        ->select('FPROD','FQTY','FTYPE','FRDTE','FPCNO' )
+        ->where('FPROD','=',$pro)
+        ->where('FPCNO','like',$turno)
+        ->where('FRDTE','=',$fecha)
+        ->where('FTYPE','=','F')
+        ->sum('FQTY');
+        return $kfps;
+    }
+    function contarfirme($pro,$fecha,$fechafin)
+    {
+        $kfps =kFP::query()
+        ->select('FPROD','FQTY','FTYPE','FRDTE','FPCNO' )
+        ->where('FPROD','=',$pro)
+        ->where('FRDTE','>=',$fecha)
+        ->where('FRDTE','<=',$fechafin)
+        ->where('FTYPE','=','F')
+        ->count();
         return $kfps;
     }
     function contarplan($pro,$fecha,$fechafin)

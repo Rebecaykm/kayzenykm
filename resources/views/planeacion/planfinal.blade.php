@@ -84,11 +84,14 @@
                     </div>
                 </form> --}}
                 <form method="post" action="{{ route('planeacion.create') }}">
+                    <h2>
+                        Partes Finales
+                    </h2>
                     @csrf
                     <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                        <input type="text" name="nombre" id="SeTP" value={{$tp}}>
-                        <input type="text" name="nombre" id="SePC" value={{$cp}}>
-                        <input type="text" name="nombre" id="SeWC" value={{$wc}}>
+                        <input type="hidden" name="SeTP" id="SeTP" value={{ $tp }}>
+                        <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                        <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                         <label class="block text-sm ">
                             <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
                             <input id="dias" name="dias" type="number" max="7" min="1"
@@ -128,9 +131,9 @@
                     <div class="flex flex-col h-screen">
                         <div class="flex-grow overflow-auto h-96">
                             <table class="relative w-full border">
-                                <thead class='fija'>
+                                <thead>
                                     <tr
-                                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0">
+                                        class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0 ">
                                         <th class=" header px-4 py-3 sticky" rowspan="4">Part No
                                         <th class=" header px-4 py-3 sticky "></th>
                                         <th class=" header px-4 py-3 sticky colmde"></th>
@@ -143,9 +146,23 @@
                                         @while ($hoy != $fin)
                                             <th colspan="2" align="center"
                                                 class="sticky headerpx-4 py-3 text-xs text-center colmde">
-                                                {{ date('Ymd', strtotime($hoy)) }}
-                                                <br>
-                                                {{ date('l', strtotime($hoy)) }}
+                                                <div>
+                                                    {{ date('Ymd', strtotime($hoy)) }}
+                                                </div>
+                                                <div>
+                                                    {{ date('l', strtotime($hoy)) }}
+                                                </div>
+
+                                                <div class="row ">
+                                                    <div class="col-sm-6 " aling="center">
+                                                        D
+                                                    </div>
+                                                    <div class="col-sm-6" aling="center">
+                                                        N
+                                                    </div>
+                                                </div>
+
+
                                             </th>
                                             @php
                                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
@@ -153,33 +170,33 @@
                                             @endphp
                                         @endwhile
                                     </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                    <tr>
-                                        <td class="px-4 py-3 text-xs text-center">
-                                        </td>
-                                        <td class="px-4 py-3 text-xs text-center">
-                                        </td>
-                                        <td class="px-4 py-3 text-xs text-center colmde ">
-                                        </td>
+                                    {{-- <tr class='sticky top-0'>
+
+                                        <th class="px-4 py-3 text-xs text-center">
+                                        </th>
+                                        <th class="px-4 py-3 text-xs text-center colmde ">
+                                        </th>
                                         @php
                                             $coni = 0;
                                         @endphp
                                         @while ($coni < $totalD)
-                                            <td class="px-4 py-3 text-xs text-center ">
+                                            <th class="px-4 py-3 text-xs text-center ">
                                                 D
-                                            </td>
-                                            <td class="px-4 py-3 text-xs text-center colmde ">
+                                            </th>
+                                            <th class="px-4 py-3 text-xs text-center colmde ">
                                                 N
-                                            </td>
+                                            </th>
                                             @php
                                                 $coni++;
                                             @endphp
                                         @endwhile
-                                    </tr>
+                                    </tr> --}}
+                                </thead>
+                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+
                                     @foreach ($plan as $plans)
-                                        <tr class="text-gray-700 dark:text-gray-400">
-                                            <td class="px-4 py-3 text-xs text-center ">
+                                        <tr class="text-gray-700 dark:text-gray-400" >
+                                            <td class="px-4 py-3 text-xs text-center " rowspan="3">
                                                 {{ $plans->IPROD }}
 
                                             </td>
@@ -206,7 +223,7 @@
                                             </td>
                                             <td class="px-4 py-3 text-xs text-center">
                                                 Parte final:<br>
-                                                {{ $plans->BCLAC }} /{{ $plans->BCHLD }}
+                                                {{ $plans->IPROD }}
                                             </td>
                                             <td class="px-4 py-3 text-xs text-center colmde">
                                                 Requeriment (Forecast)
@@ -217,23 +234,19 @@
                                             @if ($cont != 0)
                                                 @php
                                                     $hoy = $fecha;
-                                                    $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+
+                                                    $coni = 0;
                                                 @endphp
-                                                @while ($hoy != $fin)
+                                                @while ($coni < $totalD)
                                                     <td class="px-4 py-3 text-xs text-center  ">
                                                         @php
                                                             $QTY = $obj->contard($plans->IPROD, $hoy, '%D%');
                                                         @endphp
                                                         @if ($QTY != 0)
                                                             @php
-                                                                $QTY = $obj->Forecast($plans->IPROD, $hoy, '%D%');
-                                                                $totalD1 = 0;
+                                                                $totalD1 = $obj->Forecast($plans->IPROD, $hoy, '%D%');
+                                                                $totalD1 = $totalD1 + 0;
                                                             @endphp
-                                                            @foreach ($QTY as $QTYs)
-                                                                @php
-                                                                    $totalD1 = $totalD1 + $QTYs->MQTY;
-                                                                @endphp
-                                                            @endforeach
                                                             {{ $totalD1 }}
                                                         @else
                                                             0 <br>
@@ -246,14 +259,9 @@
                                                         @endphp
                                                         @if ($QTY != 0)
                                                             @php
-                                                                $QTY = $obj->Forecast($plans->IPROD, $hoy, '%N%');
-                                                                $totaln1 = 0;
+                                                                $totaln1 = $obj->Forecast($plans->IPROD, $hoy, '%N%');
+                                                                $totaln1 = $totaln1 + 0;
                                                             @endphp
-                                                            @foreach ($QTY as $QTYs)
-                                                                @php
-                                                                    $totaln1 = $totaln1 + $QTYs->MQTY;
-                                                                @endphp
-                                                            @endforeach
                                                             {{ $totaln1 }}
                                                         @else
                                                             0 <br>
@@ -262,6 +270,7 @@
                                                     </td>
                                                     @php
                                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                                        $coni++;
                                                     @endphp
                                                 @endwhile
                                             @else
@@ -281,6 +290,62 @@
                                                 @endwhile
                                             @endif
                                         </tr>
+                                        {{-- {{Plan}} --}}
+                                        <tr>
+                                            <td class="px-4 py-3 text-xs text-center">
+                                            </td>
+                                            <td class="px-4 py-3 text-xs text-center">
+                                            </td>
+                                            <td class="px-4 py-3 text-xs text-center colmde">
+                                                Cantidad de plan
+                                            </td>
+                                            @php
+
+                                                $conplanq = $obj->contarplan($plans->IPROD, $hoy, $fin);
+                                                $coni = 0;
+                                            @endphp
+                                            @if ($conplanq == 0)
+                                                @while ($coni < $totalD)
+                                                    <td class="px-4 py-3 text-xs text-center ">
+                                                        0
+                                                    </td>
+                                                    <td class="px-4 py-3 text-xs text-center colmde  ">
+                                                        0
+                                                    </td>
+                                                    @php
+                                                        $coni++;
+                                                    @endphp
+                                                @endwhile
+                                            @else
+                                                @php
+                                                    $hoy = $fecha;
+                                                    $coni = 0;
+                                                @endphp
+                                                @while ($coni < $totalD)
+                                                    <td class="px-4 py-3 text-xs text-center  ">
+                                                        @php
+                                                            $totalplan = 0;
+                                                            $planq = $obj->plan($plans->IPROD, $hoy, '%D%');
+                                                            $planq = $planq + 0;
+                                                        @endphp
+                                                        {{ $planq }}
+                                                    </td>
+                                                    <td class="px-4 py-3 text-xs text-center  colmde ">
+                                                        @php
+
+                                                            $planqn = $obj->plan($plans->IPROD, $hoy, '%N%');
+                                                            $planqn = $planqn + 0;
+                                                        @endphp
+                                                        {{ $planqn }}
+                                                    </td>
+                                                    @php
+                                                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                                        $coni++;
+                                                    @endphp
+                                                @endwhile
+                                            @endif
+                                        <tr>
+                                            {{-- {{Firme}} --}}
                                         <tr>
                                             <td class="px-4 py-3 text-xs text-center">
                                             </td>
@@ -288,54 +353,51 @@
 
                                             </td>
                                             <td class="px-4 py-3 text-xs text-center colmde">
-                                                Cantidad de plan
+                                                Firme
                                             </td>
                                             @php
-                                                $hoy = $fecha;
-                                                $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                                                $conplanq = $obj->contarplan($plans->IPROD, $hoy, $fin);
+                                                $confirmeq = $obj->contarfirme($plans->IPROD, $hoy, $fin);
                                                 $coni = 0;
                                             @endphp
-                                            @if ($conplanq == 0)
+                                            @if ($confirmeq == 0)
                                                 @while ($coni < $totalD)
                                                     <td class="px-4 py-3 text-xs text-center ">
-                                                        0x
+                                                        <input  value='0' style="text-size:8pt;" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"  />
                                                     </td>
                                                     <td class="px-4 py-3 text-xs text-center colmde  ">
-                                                        0y
+                                                        <input  value='0' class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"  />
                                                     </td>
                                                     @php
                                                         $coni++;
                                                     @endphp
                                                 @endwhile
                                             @else
-                                                @while ($hoy != $fin)
+                                                @php
+                                                    $hoy = $fecha;
+                                                    $coni = 0;
+                                                @endphp
+                                                @while ($coni < $totalD)
                                                     <td class="px-4 py-3 text-xs text-center  ">
                                                         @php
-                                                            $totalplan = 0;
-                                                            $planq = $obj->plan($plans->IPROD, $hoy, '%D%');
+
+                                                            $firmeq = $obj->firme($plans->IPROD, $hoy, '%D%');
+                                                            $firmeq = $firmeq + 0;
                                                         @endphp
-                                                        @foreach ($planq as $plansq)
-                                                            @php
-                                                                $totalplan = $totalplan + $plansq->FQTY;
-                                                            @endphp
-                                                        @endforeach
-                                                        {{ $totalplan }}
+                                                        <input type="number" value="{{ $firmeq }}" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"  />
+
                                                     </td>
                                                     <td class="px-4 py-3 text-xs text-center  colmde ">
                                                         @php
-                                                            $totalplan = 0;
-                                                            $planq = $obj->plan($plans->IPROD, $hoy, '%N%');
+                                                            $firmen = $obj->firme($plans->IPROD, $hoy, '%N%');
+                                                            $firmen = $firmen + 0;
                                                         @endphp
-                                                        @foreach ($planq as $plansq)
-                                                            @php
-                                                                $totalplan = $totalplan + $plansq->FQTY;
-                                                            @endphp
-                                                        @endforeach
-                                                        {{ $totalplan }}
+                                                        <input type="number" value="{{ $firmen }}" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"  />
+
+
                                                     </td>
                                                     @php
                                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                                        $coni++;
                                                     @endphp
                                                 @endwhile
                                             @endif
