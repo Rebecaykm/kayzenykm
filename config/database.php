@@ -78,6 +78,7 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        /*
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
@@ -86,6 +87,20 @@ return [
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+        */
+
+        'sqlsrv' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => '192.168.130.7',
+            'port' => '1433',
+            'database' => 'dbTimeClock',
+            'username' => 'sa',
+            'password' => 'Password9',
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

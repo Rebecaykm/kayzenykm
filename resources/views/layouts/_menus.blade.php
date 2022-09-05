@@ -94,7 +94,7 @@
             </li>
         @endcan
 
-        @can('roles.index')
+        {{-- @can('roles.index')
             <li class="relative px-6 py-3">
                 {!! request()->routeIs('roles.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
                 <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('roles.index')}}">
@@ -104,7 +104,7 @@
                     <span class="ml-4">Roles</span>
                 </a>
             </li>
-        @endcan
+        @endcan --}}
 
         <li class="relative px-6 py-3">
             {!! request()->routeIs('production') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
