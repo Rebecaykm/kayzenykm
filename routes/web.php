@@ -35,6 +35,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('production', 'production')->name('production');
 
     /**
+     *
+     */
+    Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+
+    /**
      * Routes Roles
      */
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
