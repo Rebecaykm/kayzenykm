@@ -62,9 +62,9 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
 
-        if ($TP == 1) {
+        // if ($TP == 1) {
             $plan = IPB::query()
-                ->select('IPROD')
+                ->select(['IPROD'])
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
@@ -74,21 +74,20 @@ class PlaneacionController extends Controller
                 ->where('ICLAS ', '=', 'F1')
                 ->distinct('IPROD')
                 ->orderby('IPROD')
-                ->limit(10)
-                ->get();
-        } else {
-            $plan = IPB::query()
-                ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
-                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                ->where('PBPBC', '=', $CP)
-                ->where('IID', '!=', 'IZ')
-                ->where('IMPLC', '!=', 'OBSOLETE')
-                ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
-                ->distinct('IPROD')
-                ->limit(15)
-                ->get();
+                ->simplePaginate(10);
+        // } else {
+        //     $plan = IPB::query()
+        //         ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+        //         ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+        //         ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+        //         ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+        //         ->where('PBPBC', '=', $CP)
+        //         ->where('IID', '!=', 'IZ')
+        //         ->where('IMPLC', '!=', 'OBSOLETE')
+        //         ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
+        //         ->distinct('IPROD')
+        //         ->limit(15)
+        //         ->paginate();
             // dd($plan);
             // $planning = IPB::select("SELECT DISTINCT BCHLD,IPROD, BPROD, BCLAS,  BCLAC,IREF04, iid, IMPLC, ICLAS
             // FROM LX834F01.IIM IIM
@@ -103,7 +102,7 @@ class PlaneacionController extends Controller
             // or  ICLAS ='M4')
             // AND IMPLC !='OBSOLETE' ");
 
-        }
+        // }
 
         if ($TP == 1) {
             return view('planeacion.planfinal', [ 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
