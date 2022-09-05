@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Example extends Model
 {
-    protected $connection = 'sqlsrv';
-    protected $table = 'tblChecada';
-
     use HasFactory;
+
+    protected $connection = 'sqlsrv';
+    protected $table = 'tblTrabajador';
 }

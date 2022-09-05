@@ -14,7 +14,7 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        $trabajadores = Example::query()->where('Trabajador', '=', 22262)->where('Fecha', '=', '2022-09-05 00:00:00')->orderBy('Checada', 'DESC')->get();
+        $trabajadores = Example::orderBy('Trabajador', 'DESC')->paginate(10);
         dd($trabajadores);
     }
 
