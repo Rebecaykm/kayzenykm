@@ -134,9 +134,12 @@ class PlaneacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $TP = $request->SeTP;
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
+        dd($TP, $CP, $WC);
     }
 
     /**
