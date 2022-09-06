@@ -29,28 +29,36 @@
                     @method('PUT')
 
                     <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Nombre</span>
+                        <span class="text-gray-700 dark:text-gray-400">Name</span>
                         <input
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                             placeholder="Jane Doe" type="text" name="name" value=" {{ $user->name }} " />
                     </label>
+
                     <label class="block mt-4 text-sm">
                         <span class="text-gray-700 dark:text-gray-400">Email</span>
                         <input
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Jane Doe" type="email" name="email" value=" {{ $user->email }} " />
+                            placeholder="test@example.com" type="email" name="email" value=" {{ $user->email }} " />
                     </label>
 
                     <label class="block mt-4 text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Contraseña</span>
+                        <span class="text-gray-700 dark:text-gray-400">Password</span>
                         <input
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                             placeholder="***************" type="password" name="password" />
                     </label>
 
                     <label class="block mt-4 text-sm">
+                        <span class="text-gray-700 dark:text-gray-400">User Infor</span>
+                        <input
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="YKMS000" type="infor" name="infor" value=" {{ $user->infor }} "/>
+                    </label>
+
+                    <label class="block mt-4 text-sm">
                         <span class="text-gray-700 dark:text-gray-400">
-                            Selecciona un rol
+                            Select a Role
                         </span>
                         <select name="role_id"
                             class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"

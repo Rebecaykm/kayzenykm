@@ -39,7 +39,7 @@
                                 <span class="text-gray-700 dark:text-gray-400">Email</span>
                                 <input
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Jane Doe" type="email" name="email" required />
+                                    placeholder="test@xample.com" type="email" name="email" required />
                             </label>
                         </div>
                         <div class="col-span-2">
@@ -55,7 +55,7 @@
                                 <span class="text-gray-700 dark:text-gray-400">User Infor</span>
                                 <input
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="YKMS000" type="text" name="user_infor" required />
+                                    placeholder="YKMS000" type="text" name="infor" required />
                             </label>
                         </div>
                         <div class="col-span-2">
