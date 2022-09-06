@@ -6,6 +6,7 @@ use App\Models\Kmr;
 use App\Models\Fma;
 use App\Models\Ecl;
 use App\Models\kFP;
+use App\Models\Fso;
 use App\Models\MBMr;
 
 date_default_timezone_set('America/Monterrey');
@@ -92,6 +93,16 @@ class registros
         ->sum('FQTY');
         return $kfps;
     }
+    function ShopO($pro,$fecha,$turno)
+    {
+        $Fsos =Fso::query()
+        ->select('SQREQ' )
+        ->where('SPROD','=',$pro)
+        ->where('SOCNO','like',$turno)
+        ->where('SDDTE','=',$fecha)
+        ->sum('SQREQ');
+        return $Fsos;
+    }
     function contarfirme($pro,$fecha,$fechafin)
     {
         $kfps =kFP::query()
@@ -113,6 +124,17 @@ class registros
         ->where('FTYPE','=','P')
         ->count();
         return $kfps;
+    }
+
+    function contarShopO($pro,$fecha,$fechafin)
+    {
+        $Fsos =Fso::query()
+        ->select('SQREQ' )
+        ->where('SPROD','=',$pro)
+        ->where('SDDTE','>=',$fecha)
+        ->where('SDDTE','<=',$fechafin)
+        ->count();
+        return $Fsos;
     }
 
     function requerimiento( $producto, $fecha, $turno)
@@ -141,6 +163,8 @@ class registros
             dd($ECL);
         }
     }
+
+
 
     return $ECL;
     }

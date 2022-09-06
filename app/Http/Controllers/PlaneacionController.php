@@ -7,6 +7,7 @@ use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
+
 use Carbon\Carbon;
 
 
@@ -62,7 +63,7 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
 
-        // if ($TP == 1) {
+         if ($TP == 1) {
             $plan = IPB::query()
                 ->select(['IPROD'])
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
@@ -75,34 +76,22 @@ class PlaneacionController extends Controller
                 ->distinct('IPROD')
                 ->orderby('IPROD')
                 ->simplePaginate(10);
-        // } else {
-        //     $plan = IPB::query()
-        //         ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
-        //         ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-        //         ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-        //         ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-        //         ->where('PBPBC', '=', $CP)
-        //         ->where('IID', '!=', 'IZ')
-        //         ->where('IMPLC', '!=', 'OBSOLETE')
-        //         ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
-        //         ->distinct('IPROD')
-        //         ->limit(15)
-        //         ->paginate();
-            // dd($plan);
-            // $planning = IPB::select("SELECT DISTINCT BCHLD,IPROD, BPROD, BCLAS,  BCLAC,IREF04, iid, IMPLC, ICLAS
-            // FROM LX834F01.IIM IIM
-            // INNER JOIN LX834F01.IPB IPB ON  IBUYC = PBPBC
-            // INNER JOIN LX834F01.FRT FRT ON  IIM.IPROD =FRT.RPROD
-            // INNER JOIN LX834F01.LWK ON  RWRKC=WWRKC
-            // INNER JOIN LX834F01.MBM on BCHLD=IPROD
-            // WHERE iid !='IZ'
-            // AND PBPBC='CB4'
-            // AND (ICLAS ='M2'
-            // or  ICLAS ='M3'
-            // or  ICLAS ='M4')
-            // AND IMPLC !='OBSOLETE' ");
+         } else {
+            $plan = IPB::query()
+                ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->where('PBPBC', '=', $CP)
+                ->where('IID', '!=', 'IZ')
+                ->where('IMPLC', '!=', 'OBSOLETE')
+                ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
+                ->distinct('IPROD')
+                ->limit(15)
+                ->simplePaginate(10);
 
-        // }
+
+         }
 
         if ($TP == 1) {
             return view('planeacion.planfinal', [ 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
