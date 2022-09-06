@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Yf006 extends Model
 {
@@ -48,6 +49,9 @@ class Yf006 extends Model
             'F6QREJ' => $sqremm,
             'F6CAN' => $canc,
             'F6CDTE' => $cdte,
+            'F6IUSR' => Auth::user()->infor ?? '',
+            'F6IDTE' => Carbon::now()->format('Ymd'),
+            'F6ITIM' => Carbon::now()->format('His'),
         ]);
     }
 }

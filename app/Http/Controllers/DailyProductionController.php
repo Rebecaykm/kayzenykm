@@ -44,7 +44,7 @@ class DailyProductionController extends Controller
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work'  => $work,
+            'work' => $work,
             'date' => $date
         ]);
     }
@@ -83,7 +83,7 @@ class DailyProductionController extends Controller
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work'  => $work,
+            'work' => $work,
             'date' => $date
         ]);
     }
@@ -106,6 +106,7 @@ class DailyProductionController extends Controller
                 } else {
                     $cdte = $arrayDaily['cdte'] = Carbon::parse($arrayDaily['cdte'])->format('Ymd');
                 }
+
                 $canc = $arrayDaily['canc'] ?? 0;
                 $sqfin = $arrayDaily['sqfin'];
                 $sqremm = $arrayDaily['sqremm'];
@@ -113,6 +114,7 @@ class DailyProductionController extends Controller
                 $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
+        
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
@@ -123,7 +125,7 @@ class DailyProductionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -134,8 +136,8 @@ class DailyProductionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -146,7 +148,7 @@ class DailyProductionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

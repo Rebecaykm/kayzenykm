@@ -106,6 +106,9 @@ return [
             'prefix_indexes' => true,
         ],
 
+        /**
+         * FSO
+         */
         'odbc-connection-lx834f02' => [
             'driver' => 'odbc',
             'dsn' => "Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;",
@@ -116,7 +119,7 @@ return [
         ],
 
         /**
-         * Revisar
+         * LWK
          */
         'odbc-connection-lx834fu02' => [
             'driver' => 'odbc',
