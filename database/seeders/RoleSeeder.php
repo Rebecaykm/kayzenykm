@@ -19,27 +19,27 @@ class RoleSeeder extends Seeder
         $userRole = Role::create(['name' => 'User']);
         $guestRole = Role::create(['name' => 'Guest']);
 
-        Permission::create(['name' => 'dashboard'])->syncRoles([$adminRole, $userRole, $guestRole]);
+        Permission::create(['name' => 'dashboard', 'description' => 'View Dashboard'])->syncRoles([$adminRole, $userRole, $guestRole]);
 
-        Permission::create(['name' => 'users.index'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'users.create'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'users.store'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'users.edit'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'users.update'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'users.destroy'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.index', 'description' => 'View list of Users'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.create', 'description' => 'Create User'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.edit', 'description' => 'Edit User'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.destroy', 'description' => 'Delete User'])->syncRoles([$adminRole]);
 
-        Permission::create(['name' => 'roles.index'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'roles.create'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'roles.store'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'roles.edit'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'roles.update'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'roles.destroy'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'roles.index', 'description' => 'View List of Roles'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'roles.create', 'description' => 'Create Role'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'roles.edit', 'description' => 'Edit Role'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'roles.destroy', 'description' => 'Delete Role'])->syncRoles([$adminRole]);
 
-        Permission::create(['name' => 'open-orders.index'])->syncRoles([$adminRole, $userRole]);
-        Permission::create(['name' => 'open-orders.store'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'open-orders.index', 'description' => 'View list of Open Orders'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'open-orders.store', 'description' => 'Update Open Order Data'])->syncRoles([$adminRole, $userRole]);
 
-        Permission::create(['name' => 'daily-production.index'])->syncRoles([$adminRole, $userRole]);
-        Permission::create(['name' => 'daily-production.user'])->syncRoles([$adminRole, $guestRole]);
-        Permission::create(['name' => 'daily-production.store'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'daily-production.index', 'description' => 'View list of Daily Production as Administrator'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'daily-production.user', 'description' => 'View list of Daily Production as User'])->syncRoles([$adminRole, $guestRole]);
+        Permission::create(['name' => 'daily-production.store', 'description' => 'Update Daily Production Data'])->syncRoles([$adminRole, $userRole]);
+
+        Permission::create(['name' => 'planeacion.index', 'description' => 'Index Planning'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'planeacion.create', 'description' => 'Create Planning'])->syncRoles([$adminRole, $guestRole]);
+        Permission::create(['name' => 'planeacion.update', 'description' => 'Update Planning'])->syncRoles([$adminRole, $userRole]);
     }
 }
