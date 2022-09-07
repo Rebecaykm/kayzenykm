@@ -63,7 +63,7 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
 
-         if ($TP == 1) {
+        if ($TP == 1) {
             $plan = IPB::query()
                 ->select(['IPROD'])
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
@@ -76,7 +76,7 @@ class PlaneacionController extends Controller
                 ->distinct('IPROD')
                 ->orderby('IPROD')
                 ->simplePaginate(10);
-         } else {
+        } else {
             $plan = IPB::query()
                 ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
@@ -89,14 +89,12 @@ class PlaneacionController extends Controller
                 ->distinct('IPROD')
                 ->limit(15)
                 ->simplePaginate(10);
-
-
-         }
+        }
 
         if ($TP == 1) {
-            return view('planeacion.planfinal', [ 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+            return view('planeacion.planfinal', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
         } else {
-            return view('planeacion.plancomponente', [ 'ipb' => $CP, 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+            return view('planeacion.plancomponente', ['ipb' => $CP, 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
         }
     }
 
@@ -139,8 +137,41 @@ class PlaneacionController extends Controller
         $TP = $request->SeTP;
         $CP = $request->SePC;
         $WC = $request->SeWC;
-        dd($TP, $CP, $WC);
+        $fecha = $request->fecha;
+        $dias = $request->dias;
+
+
+        $plan = IPB::query()
+            ->select(['IPROD', 'IVEND', 'IVEND', 'IPURC', 'IBUYC', 'ICLAS', 'IMRP'])
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+            ->where('PBPBC', '=', $CP)
+            ->where('IID', '!=', 'IZ')
+            ->where('IMPLC', '!=', 'OBSOLETE')
+            ->where('ICLAS ', '=', 'F1')
+            ->distinct('IPROD')
+            ->orderby('IPROD')
+            ->get();
+
+
+        foreach ($plan as $plans) {
+
+            $part = str_replace(" ", "_", $plans->IPROD);
+            $inp = $part . "/" . $fecha . "/D";
+            $val = $request->$inp;
+            $hora = date('His', time());
+            $hoy = date('Ymd', strtotime('now'));
+            $firday = date('md', $fecha) . 'D';
+            if ($plans->IMAS == 'M') {
+                $IMASs = 'Y';
+            } else {
+                $IMASs = '';
+            }
+
+
     }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -151,12 +182,5 @@ class PlaneacionController extends Controller
     public function destroy($id)
     {
         //
-    }
-}
-class miguel
-{
-    function contar($var1)
-    {
-        dd('la variable es' . $var1);
     }
 }

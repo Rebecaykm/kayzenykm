@@ -7,6 +7,7 @@ use App\Models\Fma;
 use App\Models\Ecl;
 use App\Models\kFP;
 use App\Models\Fso;
+use App\Models\Fpo;
 use App\Models\MBMr;
 
 date_default_timezone_set('America/Monterrey');

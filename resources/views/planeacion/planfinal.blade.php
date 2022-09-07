@@ -59,7 +59,9 @@
                                 <input type="hidden" name="SeTP" id="SeTP" value={{ $tp }}>
                                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                                 <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                                <table class="relative w-full border">
+                                <input type="hidden" name="fecha" id="SePC" value={{ $fecha }}>
+                                <input type="hidden" name="dias" id="SeWC" value={{ $dias }}>
+                                <table class=" table-auto ">
                                     <thead>
                                         <tr
                                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0 ">
@@ -215,20 +217,25 @@
 
                                                         </div>
                                                         <div class=' border border-t-2 mt-2'>
+                                                            @php
+                                                                $nam = $plans->IPROD . '/' . $hoy . '/D';
+                                                            @endphp
                                                             @if ($confirme != 0)
                                                                 @php
                                                                     $firmeq = $obj->firme($plans->IPROD, $hoy, '%D%');
                                                                     $firmeq = $firmeq + 0;
                                                                 @endphp
                                                                 <input type="number" maxlength="6"
-                                                                    id="{{ $plans->IPROD }}{{ $hoy }}D"
-                                                                    name="{{ $plans->IPROD }}{{ $hoy }}D"
+                                                                    id="{{ $nam }}"
+                                                                    name="{{ $nam }}"
+                                                                    onchange="myFunction(this.id)"
                                                                     value={{ $firmeq }}
                                                                     class="  block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
                                                             @else
                                                                 <input type="number" maxlength="6" value="0"
-                                                                    id="{{ $plans->IPROD }}{{ $hoy }}D"
-                                                                    name="{{ $plans->IPROD }}{{ $hoy }}D"
+                                                                    id="{{ $nam }}"
+                                                                    name="{{ $nam }}"
+                                                                    onchange="myFunction(this.id)"
                                                                     class=" block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
                                                             @endif
                                                         </div>
@@ -268,7 +275,7 @@
                                                             @if ($conplanq == 0)
                                                                 <input value="0"
                                                                     class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                                    disbaled />
+                                                                    disabled />
                                                             @else
                                                                 @php
                                                                     $planqn = $obj->plan($plans->IPROD, $hoy, '%N%');
@@ -280,19 +287,23 @@
                                                             @endif
                                                         </div>
                                                         <div class=' border border-t-2 mt-2 border-rose-600 '>
+                                                            @php
+                                                                $namen = $plans->IPROD . '/' . $hoy . '/N';
+                                                            @endphp
                                                             @if ($confirme != 0)
                                                                 @php
                                                                     $firmeN = $obj->firme($plans->IPROD, $hoy, '%N%');
                                                                     $firmeN = $firmeN + 0;
+
                                                                 @endphp
-                                                                <input id="{{ $plans->IPROD }}{{ $hoy }}N"
-                                                                    name="{{ $plans->IPROD }}{{ $hoy }}N"
+                                                                <input id="{{ $namen }}"
+                                                                    name="{{ $namen }}"
                                                                     onchange="myFunction(this.id)" type="number"
                                                                     maxlength="6" value={{ $firmeN }}
                                                                     class="  block w-16 text-xs text-center dark:text-gray-300 dark:border-rose-600 dark:bg-green-700 focus:border-rose-600 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-green form-input" />
                                                             @else
-                                                                <input id="{{ $plans->IPROD }}/{{ $hoy }}/N"
-                                                                    name="{{ $plans->IPROD }}/{{ $hoy }}/N"
+                                                                <input id="{{ $namen }}"
+                                                                    name="{{ $namen }}"
                                                                     onchange="myFunction(this.id)" value="0"
                                                                     class="  block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-green dark:focus:shadow-outline-green form-input caret-green-100" />
                                                             @endif
