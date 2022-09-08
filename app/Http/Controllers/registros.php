@@ -74,6 +74,7 @@ class registros
     }
     function plan($pro,$fecha,$turno)
     {
+
         $kfps =kFP::query()
         ->select('FPROD','FQTY','FTYPE','FRDTE','FPCNO' )
         ->where('FPROD','=',$pro)

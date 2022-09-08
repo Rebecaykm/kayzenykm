@@ -85,7 +85,7 @@ class PlaneacionController extends Controller
                 ->where('PBPBC', '=', $CP)
                 ->where('IID', '!=', 'IZ')
                 ->where('IMPLC', '!=', 'OBSOLETE')
-                ->where('ICLAS ', '=', 'M2', 'and', 'ICLAS ', '=', 'M3', 'and', 'ICLAS ', '=', 'M4')
+                ->where('ICLAS ', '=', 'M2', 'or', 'ICLAS ', '=', 'M3', 'or', 'ICLAS ', '=', 'M4')
                 ->distinct('IPROD')
                 ->limit(15)
                 ->simplePaginate(10);

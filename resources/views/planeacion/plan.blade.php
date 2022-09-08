@@ -140,9 +140,8 @@
                                                 } else {
                                                     $F1 = $obj->F1($plans->IPROD);
                                                     $cF1=$obj->contarF1($plans->IPROD);
-                                                    iftarF1($F1s->BCHLD);
-                                                            }
-                                                          ($cF1==0){
+
+                                                            if($cF1==0){
                                                             $F1= $obj->padre($plans->IPROD);
                                                             foreach($F1 as $F1s)
                                                             {
