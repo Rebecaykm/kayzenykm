@@ -40,6 +40,10 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required']
+        ]);
+
         $role = Role::create($request->all());
         $role->permissions()->sync($request->permissions);
 
@@ -63,9 +67,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        return view('roles.edit');
+        $permissions = Permission::all();
+
+        return view('roles.edit', ['role' => $role, 'permissions' => $permissions]);
     }
 
     /**
@@ -75,9 +81,15 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        dd("Editar Nuevo Rol Vista");
+        $role->update($request->all());
+
+        if (!empty($request->permissions)) {
+            $role->permissions()->sync($request->permissions);
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -88,6 +100,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        dd($role);
+        $role->delete();
+        return redirect()->back();
     }
 }
