@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -15,7 +16,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::orderBy('id', 'DESC')->paginate(10);
-        dd($roles);
+
         return view('roles.index', ['roles' => $roles]);
     }
 
@@ -26,7 +27,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $permissions = Permission::all();
+
+        return view('roles.create', ['permissions' => $permissions]);
     }
 
     /**
@@ -37,7 +40,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required']
+        ]);
+
+        $role = Role::create($request->all());
+        $role->permissions()->sync($request->permissions);
+
+        return redirect('roles')->with('success', 'Role Created Successfully');
     }
 
     /**
@@ -57,9 +67,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        $permissions = Permission::all();
+
+        return view('roles.edit', ['role' => $role, 'permissions' => $permissions]);
     }
 
     /**
@@ -69,9 +81,15 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        $role->update($request->all());
+
+        if (!empty($request->permissions)) {
+            $role->permissions()->sync($request->permissions);
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -80,8 +98,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return redirect()->back();
     }
 }

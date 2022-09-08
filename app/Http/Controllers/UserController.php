@@ -43,11 +43,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required'],
+            'email' => ['required'],
+            'password' => ['required'],
+            'infor' => ['required']
+        ]);
+
         $data = $request->only(['name', 'email', 'password', 'infor']);
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $user->roles()->sync($request->role_id);
-        return redirect()->back()->with('success', 'User created successfully');
+        return redirect('users')->with('success', 'User created successfully');
     }
 
     /**
