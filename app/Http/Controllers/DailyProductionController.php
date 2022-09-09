@@ -30,7 +30,7 @@ class DailyProductionController extends Controller
             ->where('SDDTE', '=', $date)
             ->where('SOCNO', 'NOT LIKE', '%N%')
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
 
         $dailyNocturno = Fso::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
@@ -38,7 +38,7 @@ class DailyProductionController extends Controller
             ->where('SDDTE', '=', $date)
             ->where('SOCNO', 'LIKE', '%N%')
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
 
         return view('dailyProduction.index', [
             'dailyDiurnos' => $dailyDiurno,
@@ -110,7 +110,6 @@ class DailyProductionController extends Controller
                 $canc = $arrayDaily['canc'] ?? 0;
                 $sqfin = $arrayDaily['sqfin'];
                 $sqremm = $arrayDaily['sqremm'];
-
                 $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
