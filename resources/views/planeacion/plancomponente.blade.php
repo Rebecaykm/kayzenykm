@@ -149,30 +149,22 @@
                                                     @php
                                                         $F1 = $obj->F1($plans->IPROD);
                                                         $cF1 = $obj->contarF1($plans->IPROD);
-
                                                     @endphp
                                                     @foreach ($F1 as $F1s)
-                                                    {{$F1s->BPROD}}/{{$F1s->BCLAS}}<br>
-                                                        @switch($F1s->BCLAS)
-                                                            @case('F1')
+                                                    {{ $F1s->BPROD }}
+                                                    @php
+                                                      $clasP= $F1s->BCLAS;
+                                                      $prof1=$F1s->BPROD;
+                                                    @endphp
+                                                    @while ($clasP='f1')
+                                                    @php
+                                                    $padre=$obj->padre($plans->IPROD);
 
-                                                                **{{ $F1s->BPROD }}**
-                                                                <br>
-                                                            @break
+                                                        $clasP= $F1s->BCLAS;
+                                                    $prof1=$F1s->BPROD;
+                                                    @endphp
 
-                                                            @case('01')
-                                                                @php
-                                                                    $procase = $F1s->BCLAS;
-                                                                    $propadre = $F1s->BPROD;
-                                                                    $Fp1 = $obj->F1($F1s->BPROD);
-                                                                @endphp
-                                                                   <br>
-                                                                @foreach ($Fp1 as $F1ps)
-                                                                    +++{{ $F1s->BPROD }}+++
-                                                                @endforeach
-
-
-                                                            @endswitch
+                                                    @endwhile
                                                         @endforeach
 
 

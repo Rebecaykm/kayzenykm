@@ -51,7 +51,7 @@ class registros
             ->count();
         return $WCs;
     }
-    function F1($pro)
+    function padre($pro)
     {
 
         $MBMS =MBMr::query()
@@ -62,6 +62,18 @@ class registros
         return $MBMS;
 
     }
+    function F1($pro)
+    {
+
+        $MBMS =MBMr::query()
+        ->select('BPROD','BCLAS','BCHLD','BCLAC')
+        ->where('BCHLD','=',$pro)
+        ->where('BCLAS','=','F1')
+        ->get();
+        return $MBMS;
+
+    }
+
     function contarF1($pro)
     {
         $MBMS =MBMr::query()
