@@ -147,7 +147,6 @@
                                                 <td class="px-4 py-3 text-xs text-center">
                                                     Parte final:<br>
                                                     @php
-
                                                         $cF1 = $obj->contarF1($plans->IPROD);
                                                     @endphp
                                                     @if ($cF1 != 0)
@@ -156,20 +155,24 @@
 
                                                         @endphp
                                                         @foreach ($F1 as $F1s)
-                                                            {{ $F1 }}
+                                                            {{ $F1s->BPROD }},{{ $F1s->BCLAS }}
                                                         @endforeach
                                                     @else
                                                         @php
                                                             $F1 = $obj->padre($plans->IPROD);
+                                                            $clasP = $F1s->BCLAS;
+                                                                $prof1 = $F1s->BPROD;
                                                         @endphp
                                                         @foreach ($F1 as $F1s)
+
+                                                            @while($clasP != 'F1')
                                                             @php
                                                                 $clasP = $F1s->BCLAS;
                                                                 $prof1 = $F1s->BPROD;
-
-                                                            @endphp
-
+                                                                $F1 = $obj->padre($prof1);
+                                                                @endphp
                                                                 {{ $clasP }} {{ $prof1 }}
+                                                            @endwhile
 
                                                         @endforeach
                                                     @endif

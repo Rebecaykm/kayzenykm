@@ -77,8 +77,8 @@ class PlaneacionController extends Controller
                 ->where('ICLAS ', '=', 'F1')
                 ->distinct('IPROD')
                 ->orderby('IPROD')
-                ->simplePaginate(10)
-               ;
+                ->simplePaginate(10)               ;
+
 
         } else {
             $plan = IPB::query()
@@ -87,17 +87,17 @@ class PlaneacionController extends Controller
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
                 ->where([
-                    ['LX834F01.IIM.IBUYC', '=', 'CB4'],
+                    ['LX834F01.IIM.IBUYC', 'CB4'],
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
-                    ['ICLAS ', '=', 'M2','or',
-                    'ICLAS ', '=', 'M3','or',
-                    'ICLAS ', '=', 'M4'],
-
                 ])
+                ->where(function($query) {
+                    $query->where('ICLAS ', 'M2')
+                          ->orwhere('ICLAS ', 'M3')
+                          ->orwhere('ICLAS ','=', 'M4');})
                 ->distinct('IPROD')
                 ->simplePaginate(10);
-                dd($plan);
+
 
         }
 
