@@ -7,7 +7,7 @@ use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
-
+use App\Models\YK006;
 use Carbon\Carbon;
 
 
@@ -60,7 +60,9 @@ class PlaneacionController extends Controller
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeTP;
         $CP = $request->SePC;
+
         $WC = $request->SeWC;
+
 
 
         if ($TP == 1) {
@@ -69,26 +71,34 @@ class PlaneacionController extends Controller
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                ->where('PBPBC', '=', $CP)
+                ->where('IBUYC', '=', $CP)
                 ->where('IID', '!=', 'IZ')
                 ->where('IMPLC', '!=', 'OBSOLETE')
                 ->where('ICLAS ', '=', 'F1')
                 ->distinct('IPROD')
                 ->orderby('IPROD')
-                ->simplePaginate(10);
+                ->simplePaginate(10)
+               ;
+
         } else {
             $plan = IPB::query()
-                ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC')
+                ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC','IBUYC','IMPLC')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                ->where('PBPBC', '=', $CP)
-                ->where('IID', '!=', 'IZ')
-                ->where('IMPLC', '!=', 'OBSOLETE')
-                ->where('ICLAS ', '=', 'M2', 'or', 'ICLAS ', '=', 'M3', 'or', 'ICLAS ', '=', 'M4')
+                ->where([
+                    ['LX834F01.IIM.IBUYC', '=', 'CB4'],
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                    ['ICLAS ', '=', 'M2','or',
+                    'ICLAS ', '=', 'M3','or',
+                    'ICLAS ', '=', 'M4'],
+
+                ])
                 ->distinct('IPROD')
-                ->limit(15)
                 ->simplePaginate(10);
+                dd($plan);
+
         }
 
         if ($TP == 1) {
@@ -96,6 +106,9 @@ class PlaneacionController extends Controller
         } else {
             return view('planeacion.plancomponente', ['ipb' => $CP, 'plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
         }
+
+
+
     }
 
 
@@ -142,7 +155,7 @@ class PlaneacionController extends Controller
 
 
         $plan = IPB::query()
-            ->select(['IPROD', 'IVEND', 'IVEND', 'IPURC', 'IBUYC', 'ICLAS', 'IMRP'])
+            ->select(['IPROD', 'IVEND', 'IVEND', 'IPURC', 'IBUYC', 'ICLAS', 'IMRP','WWRKC'])
             ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
             ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
             ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
@@ -157,17 +170,31 @@ class PlaneacionController extends Controller
 
         foreach ($plan as $plans) {
 
-            $part = str_replace(" ", "_", $plans->IPROD);
-            $inp = $part . "/" . $fecha . "/D";
-            $val = $request->$inp;
-            $hora = date('His', time());
             $hoy = date('Ymd', strtotime('now'));
-            $firday = date('md', $fecha) . 'D';
-            if ($plans->IMAS == 'M') {
-                $IMASs = 'Y';
-            } else {
-                $IMASs = '';
+            $cont=0;
+            $fefin=date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+            While($cont<=$dias)
+            {
+                $part = str_replace(" ", "_", $plans->IPROD);
+                $inpD = $part . "/" . $fecha . "/D";
+                $inpN = $part . "/" . $fecha . "/N";
+                if(isset($request->$inpD) && isset($request->$inpN)){
+                    $val = $request->$inpD;
+                    $valN = $request->$inpN;
+                    $hora = date('His', time());
+                    $hoy=date('Ymd', strtotime($hoy . '+1 day'));
+
+                    $cadena=$plans->IPROD.'/'.$plans->WWRKC.'/'.$fecha.'/'.$fefin.'/'.$hoy.'/'.'D'.'/'.$val;
+                    echo $cadena;
+                    echo '<br>';
+                    $cadenaN=$plans->IPROD.'/'.$plans->WWRKC.'/'.$fecha.'/'.$fefin.'/'.$hoy.'/'.'N'.'/'.$valN;
+                   echo $cadenaN;
+                   echo '<br>';
+                }
+
+                $cont++;
             }
+
 
 
     }

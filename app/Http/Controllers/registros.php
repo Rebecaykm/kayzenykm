@@ -55,10 +55,21 @@ class registros
     {
 
         $MBMS =MBMr::query()
-        ->select('BPROD','BCLAS','BCHLD','BCLAC')
+        ->select('BPROD','BCLAS','BCHLD','BCLAC','BDDIS')
         ->where('BCHLD','=',$pro)
-        ->where('BCLAS','!=','X1')
+        ->where('BDDIS','=','99999999')
         ->get();
+        return $MBMS;
+
+    }
+    function padrecon($pro)
+    {
+
+        $MBMS =MBMr::query()
+        ->select('BPROD','BCLAS','BCHLD','BCLAC','BDDIS')
+        ->where('BCHLD','=',$pro)
+        ->where('BDDIS','=','99999999')
+        ->count();
         return $MBMS;
 
     }
@@ -66,10 +77,11 @@ class registros
     {
 
         $MBMS =MBMr::query()
-        ->select('BPROD','BCLAS','BCHLD','BCLAC')
+        ->select('BPROD','BCLAS','BCHLD','BCLAC','BDDIS' )
         ->where('BCHLD','=',$pro)
         ->where('BCLAS','=','F1')
         ->get();
+
         return $MBMS;
 
     }
@@ -80,6 +92,7 @@ class registros
         ->select('BPROD','BCLAS','BCHLD','BCLAC')
         ->where('BCHLD','=',$pro)
         ->where('BCLAS','=','F1')
+        ->where('BDDIS','=','99999999')
         ->count();
         return $MBMS;
 
@@ -96,6 +109,7 @@ class registros
         ->sum('FQTY');
         return $kfps;
     }
+
     function Firme($pro,$fecha,$turno)
     {
         $kfps =kFP::query()
