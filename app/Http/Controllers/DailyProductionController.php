@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fso;
+use App\Models\Iim;
 use App\Models\Lwk;
 use App\Models\Yf006;
 use Carbon\Carbon;
@@ -64,27 +65,38 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'NOT LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
+
 
         return view('dailyProduction.user', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
             'work' => $work,
-            'date' => $date
+            'date' => Carbon::parse($date)->format('d / m / Y')
         ]);
     }
 

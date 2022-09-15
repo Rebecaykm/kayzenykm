@@ -17,17 +17,19 @@ class OpenOrderController extends Controller
         $date = $request->due_date != '' ? Carbon::parse($request->due_date)->format('Ymd') : '';
 
         $openOrders = Fso::query()
-            ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
-            ->where('SID', '=', 'SO')
-            ->where('SSTAT', '!=', 'X')
-            ->where('SSTAT', '!=', 'Y')
-            ->Where('SDDTE', '<=', $date)
+            ->select([
+                'SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'
+            ])
             ->whereColumn('SQREQ', '>', 'SQFIN')
-            ->Where('SORD', 'LIKE', '%' . $sord . '%')
-            ->Where('SWRKC', 'LIKE', '%' . $swrkc . '%')
-            ->Where('SPROD', 'LIKE', '%' . $sprod . '%')
-            ->orderBy('SORD', 'DESC')
-            ->orderBy('SDDTE', 'DESC')
+            ->where([
+                ['SSTAT', '!=', 'X'],
+                ['SSTAT', '!=', 'Y'],
+                ['SDDTE', '<=', $date],
+                ['SORD', 'LIKE', '%' . $sord . '%'],
+                ['SWRKC', 'LIKE', '%' . $swrkc . '%'],
+                ['SPROD', 'LIKE', '%' . $sprod . '%']
+            ])
+            ->orderByRaw('SORD DESC', 'SDDTE DESC')
             ->simplePaginate(100);
 
         $totalOpenOrders = Fso::query()
