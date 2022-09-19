@@ -26,18 +26,28 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'NOT LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
@@ -96,7 +106,7 @@ class DailyProductionController extends Controller
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
             'work' => $work,
-            'date' => Carbon::parse($date)->format('d / m / Y')
+            'date' => $date
         ]);
     }
 
