@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fso;
-use App\Models\Iim;
 use App\Models\Lwk;
 use App\Models\Yf006;
 use Carbon\Carbon;
@@ -51,12 +50,16 @@ class DailyProductionController extends Controller
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
+        $countDiurno = $dailyDiurno->count();
+        $countNocturno = $dailyNocturno->count();
+
         return view('dailyProduction.index', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work' => $work,
-            'date' => $date
+            'date' => $date,
+            'countDiurno' => $countDiurno,
+            'countNocturno' => $countNocturno,
         ]);
     }
 
@@ -100,13 +103,16 @@ class DailyProductionController extends Controller
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
+        $countDiurno = $dailyDiurno->count();
+        $countNocturno = $dailyNocturno->count();
 
         return view('dailyProduction.user', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work' => $work,
-            'date' => $date
+            'date' => $date,
+            'countDiurno' => $countDiurno,
+            'countNocturno' => $countNocturno,
         ]);
     }
 
@@ -140,7 +146,7 @@ class DailyProductionController extends Controller
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Se Actualiza con Éxito');
     }
 
     /**

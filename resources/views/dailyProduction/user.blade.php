@@ -8,7 +8,7 @@
                 <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-400 text-xs">Centro de Trabajo</span>
                     <select id="workCenter" name="workCenter" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                        <option>Selecciona un Centro de Trabajo</option>
+                        <option>Selecciona Centro de Trabajo</option>
                         @foreach ($workCenters as $workCenter)
                         <option value="{{ $workCenter->WWRKC }}">
                             {{ $workCenter->WWRKC }} - {{ $workCenter->WDESC }}
@@ -32,7 +32,7 @@
             </div>
         </form>
         <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 bg-white dark:bg-gray-800">
-            <div class="grid grid-cols-6 px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-100  dark:text-gray-400 dark:bg-gray-800">
+            <div class="grid grid-cols-6 px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-50  dark:text-gray-400 dark:bg-gray-800">
                 <div class=" col-span-6 gap-x-4 flex flex-row">
                     <span class="flex items-center">
                         Fecha de Entrega: {{ $date }}
@@ -41,6 +41,7 @@
             </div>
             <div class="w-full overflow-x-auto text-center">
                 <table class="w-full whitespace-no-wrap">
+                    @if ($countDiurno > 0 || $countNocturno > 0)
                     <thead>
                         <tr class="text-xs text-center font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Centro de Trabajo</th>
@@ -55,6 +56,7 @@
                             <th class="px-4 py-3">Inventario</th>
                         </tr>
                     </thead>
+                    @endif
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @php
                         $realQuantity = 0;
@@ -132,6 +134,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        @if ($countDiurno > 0)
                         <tr class="bg-gray-100">
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
@@ -139,11 +142,12 @@
                             <td class="px-4 py-3 text-xs">Subtotal</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs">{{ $dayStoragePlan }}.000</td>
-                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs">{{ $dayStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
                         </tr>
+                        @endif
                         @foreach ($dailyNocturnos as $key => $dailyNocturno)
                         <tr>
                             <td class="px-4 py-3 text-xs">
@@ -210,6 +214,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        @if ($countNocturno > 0)
                         <tr class="bg-gray-100">
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
@@ -217,11 +222,13 @@
                             <td class="px-4 py-3 text-xs">Subtotal</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs">{{ $nightStoragePlan }}.000</td>
-                            <td class="px-4 py-3 text-xs">{{ $nightStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $nightStorageReal - $nightStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs">{{ $nightStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
                         </tr>
+                        @endif
+                        @if ($countDiurno > 0 || $countNocturno > 0)
                         <tr class="bg-teal-100">
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
@@ -229,14 +236,16 @@
                             <td class="px-4 py-3 text-xs">Total</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
-                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal + $nightStorageReal }}.000</td>
+                            <td class="px-4 py-3 text-xs">{{ $dayStorageReal + $nightStorageReal - $dayStorageScrap - $nightStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
                             <td class="px-4 py-3 text-xs"></td>
                             <td class="px-4 py-3 text-xs"></td>
                         </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
+            @if ($countDiurno > 0 || $countNocturno > 0)
             <div class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
                     {{-- Show {{ $dailyProdcution->firstItem() }} - {{ $dailyProdcution->lastItem() }} --}}
@@ -251,5 +260,10 @@
                     </nav>
                 </span>
             </div>
+            @else
+            <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                Planificación y Progreso Diario No Encontrado
+            </div>
+            @endif
         </div>
 </x-app-layout>
