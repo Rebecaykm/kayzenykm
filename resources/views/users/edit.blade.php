@@ -1,9 +1,9 @@
-<x-app-layout title="User">
+<x-app-layout title="Editar Usuario">
     <div x-data="app()" x-cloak>
         <div class="container grid px-6 mx-auto ">
             <div class="w-full">
                 <h1 class="mt-8 mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                    Editar usuario
+                    Editar Usuario
                 </h1>
                 @if ($errors->any())
                 <div class="mb-4">
@@ -29,33 +29,33 @@
                     <div class="grid grid-cols-6 gap-4">
                         <div class="col-span-3">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Name</span>
+                                <span class="text-gray-700 dark:text-gray-400">Nombre</span>
                                 <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Jane Doe" type="text" name="name" value=" {{ $user->name }} " />
                             </label>
                         </div>
                         <div class="col-span-3">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Email</span>
+                                <span class="text-gray-700 dark:text-gray-400">Correo</span>
                                 <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="test@example.com" type="email" name="email" value=" {{ $user->email }} " />
                             </label>
                         </div>
 
                         <div class="col-span-2">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Password</span>
+                                <span class="text-gray-700 dark:text-gray-400">Contraseña</span>
                                 <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="***************" type="password" name="password" />
                             </label>
                         </div>
                         <div class="col-span-2">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">User Infor</span>
+                                <span class="text-gray-700 dark:text-gray-400">Usuario de Infor</span>
                                 <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="YKMS000" type="infor" name="infor" value=" {{ $user->infor }} " />
                             </label>
                         </div>
                         <div class="col-span-2">
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">
-                                    Select a Role
+                                    Selecciona un Rol
                                 </span>
                                 <select name="role_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" x-model="role">
                                     @foreach ($roles as $role)
@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-span-6">
                             <button class="block w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" type="submit">
-                                {{ __('Save') }}
+                                Guardar
                             </button>
                         </div>
                     </div>

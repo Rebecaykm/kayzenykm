@@ -1,7 +1,7 @@
-<x-app-layout title="Users">
-    <div class="container grid px-6 mx-auto">
+<x-app-layout title="Usuarios">
+    <div class="container grid px-3 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Users
+            Usuarios
         </h2>
 
         @if ($errors->any())
@@ -24,7 +24,7 @@
 
         <div class="flex justify-end mb-4">
             <a href="{{ route('users.create') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                New User
+                Nuevo Usuario
             </a>
         </div>
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -32,12 +32,12 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">Name</th>
-                            <th class="px-4 py-3">Email</th>
-                            <th class="px-4 py-3">User Infor</th>
-                            <th class="px-4 py-3">Creation date</th>
-                            <th class="px-4 py-3">Latest update</th>
-                            <th class="px-4 py-3">Actions</th>
+                            <th class="px-4 py-3">Nombre</th>
+                            <th class="px-4 py-3">Correo</th>
+                            <th class="px-4 py-3">Usuario de Infor</th>
+                            <th class="px-4 py-3">Fecha de Creación</th>
+                            <th class="px-4 py-3">Fecha de Actualización</th>
+                            <th class="px-4 py-3">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">

@@ -25,27 +25,41 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'NOT LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
+
+        $countDiurno = $dailyDiurno->count();
+        $countNocturno = $dailyNocturno->count();
 
         return view('dailyProduction.index', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work' => $work,
-            'date' => $date
+            'date' => $date,
+            'countDiurno' => $countDiurno,
+            'countNocturno' => $countNocturno,
         ]);
     }
 
@@ -64,27 +78,41 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'NOT LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'NOT LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID'])
-            ->where('SWRKC', '=', $work)
-            ->where('SDDTE', '=', $date)
-            ->where('SOCNO', 'LIKE', '%N%')
+            ->select([
+                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
+            ])
+            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->where([
+                ['SWRKC', '=', $work],
+                ['SDDTE', '=', $date],
+                ['SOCNO', 'LIKE', '%N%']
+            ])
             ->orderBy('SOCNO', 'ASC')
-            ->simplePaginate(100);
+            ->get();
+
+        $countDiurno = $dailyDiurno->count();
+        $countNocturno = $dailyNocturno->count();
 
         return view('dailyProduction.user', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
-            'work' => $work,
-            'date' => $date
+            'date' => $date,
+            'countDiurno' => $countDiurno,
+            'countNocturno' => $countNocturno,
         ]);
     }
 
@@ -110,7 +138,6 @@ class DailyProductionController extends Controller
                 $canc = $arrayDaily['canc'] ?? 0;
                 $sqfin = $arrayDaily['sqfin'];
                 $sqremm = $arrayDaily['sqremm'];
-
                 $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
             }
         }
@@ -119,7 +146,7 @@ class DailyProductionController extends Controller
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Se Actualiza con Éxito');
     }
 
     /**
