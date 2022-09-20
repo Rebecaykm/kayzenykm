@@ -1,5 +1,5 @@
 <x-app-layout title="Informe de Órdenes Abiertas">
-    <div class="container grid px-3 mx-auto gap-y-2">
+    <div class="grid px-3 py-4 mx-auto gap-y-2">
         <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Informe de Órdenes Abiertas
         </h2>
@@ -73,10 +73,10 @@
             {{ session('success') }}
         </div>
         @endif
-        <div class="w-full overflow-hidden rounded-lg shadow-xs  dark:bg-gray-800">
+        <div class="w-full overflow-hidden rounded-lg shadow-xs dark:bg-gray-800">
             <form method="POST" action="{{ route('open-orders.store') }}">
                 @csrf
-                <div class="grid px-1 py-2 rounded-t-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 grid-cols-6 dark:text-gray-400 dark:bg-gray-800">
+                <div class="grid px-1 py-2 rounded-t-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-white grid-cols-6 dark:text-gray-400 dark:bg-gray-800">
                     <div class="col-span-3 flex flex-row">
 
                     </div>
@@ -166,7 +166,7 @@
                 </div>
             </form>
             @if ($openOrders->count())
-                <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-white grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                     <span class="flex items-center col-span-3">
                         Mostrando {{ $openOrders->firstItem() }} - {{ $openOrders->lastItem() }} de {{ $totalOrder }}
                     </span>
@@ -176,7 +176,7 @@
                     </span>
                 </div>
             @else
-                <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-100 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-white sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                     Órdenes abiertas no encontradas
                 </div>
             @endif

@@ -1,5 +1,5 @@
 <x-app-layout title="Planificación y Progreso Diario de la Producción">
-    <div class="container grid px-3 mx-auto gap-y-2">
+    <div class="grid px-3 py-4 mx-auto gap-y-2">
         <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Planificación y Progreso Diario de la Producción
         </h2>
@@ -51,7 +51,7 @@
         <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 bg-white dark:bg-gray-800">
             <form method="POST" action="{{ route('daily-production.store') }}">
                 @csrf
-                <div class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-gray-50 grid-cols-6 dark:text-gray-400 dark:bg-gray-800">
+                <div class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-white grid-cols-6 dark:text-gray-400 dark:bg-gray-800">
                     <div class="col-span-3 gap-x-4 flex flex-row">
                         <span class="flex items-center">
                             Fecha de Entrega: {{ $date }}
@@ -370,7 +370,7 @@
                 </div>
             </form>
             @if ($countDiurno > 0 || $countNocturno > 0)
-            <div class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-100 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+            <div class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-white sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
                     {{-- Show {{ $dailyProdcution->firstItem() }} - {{ $dailyProdcution->lastItem() }} --}}
                 </span>
@@ -385,7 +385,7 @@
                 </span>
             </div>
             @else
-            <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+            <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-white sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 Planificación y Progreso Diario No Encontrado
             </div>
             @endif
