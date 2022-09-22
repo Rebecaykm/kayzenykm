@@ -15,17 +15,17 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::create(['name' => 'Administrator']);
-        $userRole = Role::create(['name' => 'User']);
-        $guestRole = Role::create(['name' => 'Guest']);
+        $adminRole = Role::create(['name' => 'Administrador']);
+        $userRole = Role::create(['name' => 'Usuario']);
+        $guestRole = Role::create(['name' => 'Invitado']);
 
         Permission::create(['name' => 'dashboard', 'description' => 'Dashboard'])->syncRoles([$adminRole, $userRole, $guestRole]);
 
-        Permission::create(['name' => 'users.index', 'description' => 'Users'])->syncRoles([$adminRole]);
+        Permission::create(['name' => 'users.index', 'description' => 'Usuarios'])->syncRoles([$adminRole]);
         Permission::create(['name' => 'roles.index', 'description' => 'Roles'])->syncRoles([$adminRole]);
-        Permission::create(['name' => 'open-orders.index', 'description' => 'Open Shop Order Report'])->syncRoles([$adminRole, $userRole]);
-        Permission::create(['name' => 'daily-production.index', 'description' => 'Daily Production Planning & Progress (View Admin)'])->syncRoles([$adminRole, $userRole]);
-        Permission::create(['name' => 'daily-production.user', 'description' => 'Daily Production Planning & Progress (View User)'])->syncRoles([$adminRole, $guestRole]);
+        Permission::create(['name' => 'open-orders.index', 'description' => 'Informe de Órdenes Abiertas'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'daily-production.index', 'description' => 'Planificación y Progreso Diario de la Producción (Admin)'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'daily-production.user', 'description' => 'Planificación y Progreso Diario de la Producción (Usuario)'])->syncRoles([$adminRole, $guestRole]);
         Permission::create(['name' => 'planeacion.index', 'description' => 'Planning'])->syncRoles([$adminRole, $userRole]);
 
         // Permission::create(['name' => 'users.index', 'description' => 'View list of Users'])->syncRoles([$adminRole]);

@@ -16,6 +16,14 @@ module.exports = {
                 },
             },
         }),
+        container: {
+            screens: {
+                sm: '100%',
+                md: '100%',
+                lg: '100%',
+                xl: '100%',
+              },
+        },
         colors: {
             transparent: 'transparent',
             white: '#ffffff',

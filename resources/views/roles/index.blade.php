@@ -1,7 +1,7 @@
-<x-app-layout title="Roles">
+<x-app-layout title="Roles & Permisos">
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Roles
+            Roles & Permisos
         </h2>
 
         @if ($errors->any())
@@ -24,7 +24,7 @@
 
         <div class="flex justify-end mb-4">
             <a href="{{ route('roles.create') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                New Role
+                Nuevo Rol
             </a>
         </div>
 
@@ -33,10 +33,10 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">Name Role</th>
-                            <th class="px-4 py-3">Creation date</th>
-                            <th class="px-4 py-3">Latest update</th>
-                            <th class="px-4 py-3">Actions</th>
+                            <th class="px-4 py-3">Nombre del Rol</th>
+                            <th class="px-4 py-3">Fecha de Creación</th>
+                            <th class="px-4 py-3">Fecha de Actualizacón</th>
+                            <th class="px-4 py-3">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -78,7 +78,7 @@
             </div>
             <div <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
-                    Show {{ $roles->firstItem() }} - {{ $roles->lastItem() }} of {{ $roles->total() }}
+                    Mostrando {{ $roles->firstItem() }} - {{ $roles->lastItem() }} de {{ $roles->total() }}
                 </span>
                 <!-- Pagination -->
                 <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
