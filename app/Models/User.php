@@ -59,8 +59,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function fromDateTime($value)
-    {
-        return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-    }
+    // public function fromDateTime($value)
+    // {
+    //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    // }
 }

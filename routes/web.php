@@ -48,5 +48,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('planeacion', [\App\Http\Controllers\PlaneacionController::class, 'index'])->name('planeacion.index');
     Route::post('planeacion', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
     Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
+    /**
+     * Estructura BOM
+     */
+    Route::get('Structure', [\App\Http\Controllers\Structure::class, 'index'])->name('Structure.index');
 
 });
