@@ -101,6 +101,7 @@ class registros
         $res = Structure::query()
         ->select('Final','componente')
         ->where('Final',$prod)
+        ->where('clase','!=','01')
         ->get();
         return $res;
     }

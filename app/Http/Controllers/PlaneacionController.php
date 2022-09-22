@@ -76,7 +76,7 @@ class PlaneacionController extends Controller
             $query->where('ICLAS ', 'F1');
         })
         ->distinct('IPROD')
-        ->simplePaginate(30);
+        ->simplePaginate(10);
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
