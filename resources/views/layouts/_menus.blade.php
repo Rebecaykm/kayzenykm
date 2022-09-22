@@ -1,5 +1,5 @@
 <div class="py-4 text-gray-500 dark:text-gray-400">
-    <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+    <a class="ml-6 text-2xl font-bold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-red-600 via-blue-600 to-blue-600" href="#">
         {{ config('app.name') }}
     </a>
     <ul class="mt-6">

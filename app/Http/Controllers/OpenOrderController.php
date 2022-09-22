@@ -54,6 +54,10 @@ class OpenOrderController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'arrayOpenOrders' => 'required|array',
+        ]);
+
         foreach ($request->arrayOpenOrders as $arrayOpenOrder) {
 
             if (!isset($arrayOpenOrder['cdte'])) {
@@ -77,7 +81,7 @@ class OpenOrderController extends Controller
         $query = "CALL LX834OU02.YSF004C";
         $result = odbc_exec($conn, $query);
 
-        return redirect()->back()->with('success', 'Se Actualiza con Éxito');
+        return redirect()->back()->with('success', 'Registro(s) Actuaizado(s) con Éxito');
     }
 
     /**

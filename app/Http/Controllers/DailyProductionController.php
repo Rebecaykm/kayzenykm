@@ -122,6 +122,10 @@ class DailyProductionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'arrayDailyProductions' => 'required|array',
+        ]);
+
         foreach ($request->arrayDailyProductions as $arrayDaily) {
             $data = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
@@ -146,7 +150,7 @@ class DailyProductionController extends Controller
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
 
-        return redirect()->back()->with('success', 'Se Actualiza con Éxito');
+        return redirect()->back()->with('success', 'Registro(s) Actuaizado(s) con Éxito');
     }
 
     /**

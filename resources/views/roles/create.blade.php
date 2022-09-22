@@ -1,8 +1,8 @@
-<x-app-layout title="Create Role">
+<x-app-layout title="Crear Rol">
     <div class="container grid px-6 mx-auto overflow-y-auto">
         <div class="w-full">
             <h1 class="mt-8 mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                Create User
+                Crear Rol
             </h1>
 
             @if ($errors->any())
@@ -28,7 +28,7 @@
                 <div class="grid grid-cols-6 gap-4 px-4 py-2 rounded-lg shadow-xs border-1 bg-white dark:bg-gray-80">
                     <div class="col-span-6">
                         <label class="block text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Name</span>
+                            <span class="text-gray-700 dark:text-gray-400">Nombre del Rol</span>
                             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Enter the role name" type="text" name="name" required autofocus />
                         </label>
                     </div>
@@ -44,7 +44,7 @@
                     @endforeach
                     <div class="col-span-6">
                         <button class="block w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" type="submit">
-                            Save
+                            Guardar
                         </button>
                     </div>
                 </div>
