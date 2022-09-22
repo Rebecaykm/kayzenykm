@@ -1,5 +1,5 @@
 <x-app-layout title="Planificación y Progreso Diario de la Producción">
-    <div class=" gap-y-2 px-4 py-3 mx-auto">
+    <div class="xl:container lg:container md:container sm:container grid px-3 py-4 mx-auto gap-y-2">
         <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Planificación y Progreso Diario de la Producción
         </h2>

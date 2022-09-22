@@ -1,5 +1,5 @@
 <x-app-layout title="Informe de Órdenes Abiertas">
-    <div class="grid px-3 py-4 mx-auto gap-y-2">
+    <div class="xl:container lg:container md:container sm:container grid px-3 py-4 mx-auto gap-y-2">
         <h2 class="p-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Informe de Órdenes Abiertas
         </h2>
