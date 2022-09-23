@@ -16,47 +16,60 @@ class DailyProductionController extends Controller
      */
     public function index(Request $request)
     {
+        $area = $request->area ?? '';
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
-        $workCenters = Lwk::query()
-            ->select('WWRKC', 'WDESC')
-            ->orderBy('WWRKC', 'ASC')
-            ->get();
+        $workCenters = Lwk::query()->select('WWRKC', 'WDESC')->orderBy('WWRKC', 'ASC')->get();
 
         $dailyDiurno = Fso::query()
-            ->select([
-                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
-            ])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
-                ['SWRKC', '=', $work],
                 ['SDDTE', '=', $date],
+                ['SWRKC', 'LIKE', '%' . $work . '%'],
+                ['SWRKC', 'LIKE', $area . '%'],
                 ['SOCNO', 'NOT LIKE', '%N%']
             ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select([
-                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
-            ])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
-                ['SWRKC', '=', $work],
                 ['SDDTE', '=', $date],
+                ['SWRKC', 'LIKE', '%' . $work . '%'],
+                ['SWRKC', 'LIKE', $area . '%'],
                 ['SOCNO', 'LIKE', '%N%']
             ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
+        if (strncmp($work, '11', 2) === 0 || strncmp($area, '11', 2) === 0) {
+            $areaName = 'Estampado';
+        } elseif (strncmp($work, '12', 2) === 0 || strncmp($area, '12', 2) === 0) {
+            $areaName = 'Carrocería';
+        } elseif (strncmp($work, '13', 2) === 0 || strncmp($area, '13', 2) === 0) {
+            $areaName = 'Chasis';
+        } elseif (strncmp($work, '14', 2) === 0 || strncmp($area, '14', 2) === 0) {
+            $areaName = 'Pintura';
+        } elseif (strncmp($work, '40', 2) === 0 || strncmp($area, '40', 2) === 0) {
+            $areaName = 'Proveedor';
+        } else {
+            $areaName = 'Área no Definida';
+        }
+
         $countDiurno = $dailyDiurno->count();
         $countNocturno = $dailyNocturno->count();
+
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : '';
 
         return view('dailyProduction.index', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
+            'area' => $areaName,
             'date' => $date,
             'countDiurno' => $countDiurno,
             'countNocturno' => $countNocturno,
@@ -69,47 +82,60 @@ class DailyProductionController extends Controller
      */
     public function indexUser(Request $request)
     {
+        $area = $request->area ?? '';
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
-        $workCenters = Lwk::query()
-            ->select('WWRKC', 'WDESC')
-            ->orderBy('WWRKC', 'ASC')
-            ->get();
+        $workCenters = Lwk::query()->select('WWRKC', 'WDESC')->orderBy('WWRKC', 'ASC')->get();
 
         $dailyDiurno = Fso::query()
-            ->select([
-                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'
-            ])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
-                ['SWRKC', '=', $work],
                 ['SDDTE', '=', $date],
-                ['SOCNO', 'NOT LIKE', '%N%']
+                ['SWRKC', 'LIKE', '%' . $work . '%'],
+                ['SWRKC', 'LIKE', $area . '%'],
+                ['SOCNO', 'NOT LIKE', '%N%'],
             ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select([
-                'SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ',
-            ])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
-                ['SWRKC', '=', $work],
                 ['SDDTE', '=', $date],
-                ['SOCNO', 'LIKE', '%N%']
+                ['SWRKC', 'LIKE', '%' . $work . '%'],
+                ['SWRKC', 'LIKE', $area . '%'],
+                ['SOCNO', 'LIKE', '%N%'],
             ])
             ->orderBy('SOCNO', 'ASC')
             ->get();
 
+        if (strncmp($work, '11', 2) === 0 || strncmp($area, '11', 2) === 0) {
+            $areaName = 'Estampado';
+        } elseif (strncmp($work, '12', 2) === 0 || strncmp($area, '12', 2) === 0) {
+            $areaName = 'Carrocería';
+        } elseif (strncmp($work, '13', 2) === 0 || strncmp($area, '13', 2) === 0) {
+            $areaName = 'Chasis';
+        } elseif (strncmp($work, '14', 2) === 0 || strncmp($area, '14', 2) === 0) {
+            $areaName = 'Pintura';
+        } elseif (strncmp($work, '40', 2) === 0 || strncmp($area, '40', 2) === 0) {
+            $areaName = 'Proveedor';
+        } else {
+            $areaName = 'Área no Definida';
+        }
+
         $countDiurno = $dailyDiurno->count();
         $countNocturno = $dailyNocturno->count();
+
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : '';
 
         return view('dailyProduction.user', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
             'workCenters' => $workCenters,
+            'area' => $areaName,
             'date' => $date,
             'countDiurno' => $countDiurno,
             'countNocturno' => $countNocturno,

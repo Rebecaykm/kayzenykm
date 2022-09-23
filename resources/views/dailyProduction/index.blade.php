@@ -6,9 +6,20 @@
         <form method="GET" action="{{ route('daily-production.index') }}">
             <div class="flex flex-row gap-x-4 justify-end justify-items-stretch p-2 rounded-lg">
                 <label class="block text-sm ">
+                    <span class="text-gray-700 dark:text-gray-300 text-xs">Área</span>
+                    <select id="area" name="area" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                        <option></option>
+                        <option value="11">Estampado</option>
+                        <option value="12">Carrocería</option>
+                        <option value="13">Chasis</option>
+                        <option value="14">Pintura</option>
+                        <option value="40">Proveedor</option>
+                    </select>
+                </label>
+                <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-300 text-xs">Centro de Trabajo</span>
                     <select id="workCenter" name="workCenter" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                        <option>Selecciona Centro de Trabajo</option>
+                        <option></option>
                         @foreach ($workCenters as $workCenter)
                         <option value="{{ $workCenter->WWRKC }}">
                             {{ $workCenter->WWRKC }} - {{ $workCenter->WDESC }}
@@ -35,7 +46,6 @@
         @if ($errors->any())
         <div class="my-2">
             <div class="text-lg font-semibold text-red-600">¡Oh no! Algo salió mal.</div>
-
             <!-- <ul class="mt-3 text-xs text-red-600 list-disc list-inside">
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -55,6 +65,9 @@
                 @csrf
                 <div class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-white grid-cols-6 dark:text-gray-200 dark:bg-gray-800">
                     <div class="col-span-3 gap-x-4 flex flex-row">
+                        <span class="flex items-center">
+                            Área: {{ $area }}
+                        </span>
                         <span class="flex items-center">
                             Fecha de Entrega: {{ $date }}
                         </span>
