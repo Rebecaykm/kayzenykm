@@ -6,9 +6,20 @@
         <form method="GET" action="{{ route('daily-production.user') }}">
             <div class="flex flex-row gap-x-4 justify-end justify-items-stretch p-2 rounded-lg">
                 <label class="block text-sm ">
+                    <span class="text-gray-700 dark:text-gray-300 text-xs">Área</span>
+                    <select id="area" name="area" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
+                        <option></option>
+                        <option value="11">Estampado</option>
+                        <option value="12">Carrocería</option>
+                        <option value="13">Chasis</option>
+                        <option value="14">Pintura</option>
+                        <option value="40">Proveedor</option>
+                    </select>
+                </label>
+                <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-300 text-xs">Centro de Trabajo</span>
                     <select id="workCenter" name="workCenter" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
-                        <option>Selecciona Centro de Trabajo</option>
+                        <option></option>
                         @foreach ($workCenters as $workCenter)
                         <option value="{{ $workCenter->WWRKC }}">
                             {{ $workCenter->WWRKC }} - {{ $workCenter->WDESC }}
@@ -35,6 +46,9 @@
             <div class="grid grid-cols-6 px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-white  dark:text-gray-200 dark:bg-gray-800">
                 <div class=" col-span-6 gap-x-4 flex flex-row">
                     <span class="flex items-center">
+                        Área: {{ $area }}
+                    </span>
+                    <span class="flex items-center">
                         Fecha de Entrega: {{ $date }}
                     </span>
                 </div>
@@ -44,9 +58,9 @@
                     @if ($countDiurno > 0 || $countNocturno > 0)
                     <thead>
                         <tr class="text-xs text-center font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                            <th class="px-3 py-2">No.</th>
                             <th class="px-3 py-2">Centro de Trabajo</th>
                             <th class="px-3 py-2">Turno</th>
-                            <th class="px-3 py-2">No.</th>
                             <th class="px-3 py-2">No. Parte</th>
                             <th class="px-3 py-2">Orden de Producción</th>
                             <th class="px-3 py-2">Cantidad Planeada</th>
@@ -71,13 +85,13 @@
                         @foreach ($dailyDiurnos as $key => $dailyDiurno)
                         <tr>
                             <td class="px-3 py-2 text-xs">
+                                {{ $num = $key + 1 }}
+                            </td>
+                            <td class="px-3 py-2 text-xs">
                                 {{ $dailyDiurno->SWRKC }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 D
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $num = $key + 1 }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyDiurno->SPROD }}
@@ -151,13 +165,13 @@
                         @foreach ($dailyNocturnos as $key => $dailyNocturno)
                         <tr>
                             <td class="px-3 py-2 text-xs">
+                                {{ $num = $num + 1 }}
+                            </td>
+                            <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SWRKC }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 N
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $num = $num + 1 }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SPROD }}
