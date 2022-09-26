@@ -151,7 +151,6 @@ class DailyProductionController extends Controller
         $this->validate($request, [
             'arrayDailyProductions' => 'required|array',
         ]);
-
         foreach ($request->arrayDailyProductions as $arrayDaily) {
             $data = Fso::query()
                 ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
@@ -168,9 +167,17 @@ class DailyProductionController extends Controller
                 $canc = $arrayDaily['canc'] ?? 0;
                 $sqfin = $arrayDaily['sqfin'];
                 $sqremm = $arrayDaily['sqremm'];
-                $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
+                if ($cdte !== '' || $canc !== 0 || $sqfin !== '0' || $sqremm !== '0') {
+                    echo "Tiene datos $data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte <br>";
+                    // $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
+                } else {
+                    echo "Ceros $data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte <br>";
+                }
+
             }
         }
+
+        dd("Fin");
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF008C";
