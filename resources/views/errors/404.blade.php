@@ -2,4 +2,4 @@
 
 @section('title', __('Not Found'))
 @section('code', '404')
-@section('message', 'Hola')
+@section('message', __('Not Found'))
