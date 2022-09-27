@@ -21,9 +21,9 @@
                     <select id="workCenter" name="workCenter" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                         <option></option>
                         @foreach ($workCenters as $workCenter)
-                        <option value="{{ $workCenter->WWRKC }}">
-                            {{ $workCenter->WWRKC }} - {{ $workCenter->WDESC }}
-                        </option>
+                            <option value="{{ $workCenter->WWRKC }}">
+                                {{ $workCenter->WWRKC }} - {{ $workCenter->WDESC }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -44,19 +44,25 @@
         </form>
 
         @if ($errors->any())
-        <div class="my-2">
-            <div class="text-lg font-semibold text-red-600">¡Oh no! Algo salió mal.</div>
-            <!-- <ul class="mt-3 text-xs text-red-600 list-disc list-inside">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul> -->
-        </div>
+            <div class="my-2">
+                <div class="text-lg font-semibold text-red-600">¡Oh no! Algo salió mal.</div>
+                <!-- <ul class="mt-3 text-xs text-red-600 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul> -->
+            </div>
         @endif
 
         @if (session('success'))
         <div class="my-2 text-lg font-semibold text-green-500">
             {{ session('success') }}
+        </div>
+        @endif
+
+        @if (session('danger'))
+        <div class="my-2 text-lg font-semibold text-red-500">
+            {{ session('danger') }}
         </div>
         @endif
 
@@ -85,324 +91,385 @@
                 <div class="w-full overflow-x-auto text-center">
                     <table class="w-full whitespace-no-wrap">
                         @if ($countDiurno > 0 || $countNocturno > 0)
-                        <thead>
-                            <tr class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-                                <th class="px-2 py-1">No.</th>
-                                <th class="px-2 py-1">Centro de Trabajo</th>
-                                <th class="px-2 py-1">Turno</th>
-                                <th class="px-2 py-1">No. Parte</th>
-                                <th class="px-2 py-1">Orden de Producción</th>
-                                <th class="px-2 py-1">Cantidad Planeada</th>
-                                <th class="px-2 py-1">Cantidad Real</th>
-                                <th class="px-2 py-1">Cantidad de Desecho</th>
-                                <th class="px-2 py-1">Estado</th>
-                                <th class="px-2 py-1">Inventario</th>
-                                <th class="px-2 py-1">Cambio de Fecha</th>
-                                <th class="px-2 py-1">Cancelar</th>
-                            </tr>
-                        </thead>
+                            <thead>
+                                <tr class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                                    <th class="px-2 py-1">No.</th>
+                                    <th class="px-2 py-1">Centro de Trabajo</th>
+                                    <th class="px-2 py-1">Turno</th>
+                                    <th class="px-2 py-1">No. Parte</th>
+                                    <th class="px-2 py-1">Orden de Producción</th>
+                                    <th class="px-2 py-1">Cantidad Planeada</th>
+                                    <th class="px-2 py-1">Cantidad Real</th>
+                                    <th class="px-2 py-1">Cantidad de Desecho</th>
+                                    <th class="px-2 py-1">Estado</th>
+                                    <th class="px-2 py-1">Inventario</th>
+                                    <th class="px-2 py-1">Cambio de Fecha</th>
+                                    <th class="px-2 py-1">Cancelar</th>
+                                </tr>
+                            </thead>
                         @endif
                         <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                             @php
-                            $realQuantity = 0;
-                            $dayStoragePlan = 0;
-                            $dayStorageReal = 0;
-                            $dayStorageScrap = 0;
-                            $nightStoragePlan = 0;
-                            $nightStorageReal = 0;
-                            $nightStorageScrap = 0;
-                            $inventory = 0;
-                            $realQuantity = 0;
+                                $realQuantity = 0;
+                                $dayStoragePlan = 0;
+                                $dayStorageReal = 0;
+                                $dayStorageScrap = 0;
+                                $nightStoragePlan = 0;
+                                $nightStorageReal = 0;
+                                $nightStorageScrap = 0;
+                                $inventory = 0;
+                                $realQuantity = 0;
                             @endphp
                             @foreach ($dailyDiurnos as $key => $dailyDiurno)
-                            <tr>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $num = $key + 1 }}
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyDiurno->SWRKC }}
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    D
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyDiurno->SPROD }}
-                                </td>
-                                <td class="px-2 py-1 text-xs text-center">
-                                    <label class="flex items-center justify-center">
-                                        <input type="text" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sord]" id="sord" value="{{ $dailyDiurno->SORD }}" hidden />
-                                        {{ $dailyDiurno->SORD }}
-                                    </label>
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyDiurno->SQREQ }}
-                                    @php
-                                    $dayStoragePlan += $dailyDiurno->SQREQ;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs text-center">
-                                    @php
-                                    $realQuantity = $dailyDiurno->SQFIN - $dailyDiurno->SQREMM;
-                                    @endphp
-                                    @if ($dailyDiurno->SID == 'SO')
-                                    <label class="block text-sm">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                    @php
-                                    $dayStorageReal += $dailyDiurno->SQFIN;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs text-center">
-                                    @if ($dailyDiurno->SID == 'SO')
-                                    <label class="block text-sm">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                    @php
-                                    $dayStorageScrap += $dailyDiurno->SQREMM;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
-                                        <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                            Finalizado
-                                        </span>
+                                <tr>
+                                    <!-- Numero de Fila -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $num = $key + 1 }}
+                                    </td>
+                                    <!-- Centro de Trabajo -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyDiurno->SWRKC }}
+                                    </td>
+                                    <!-- Turno -->
+                                    <td class="px-2 py-1 text-xs">
+                                        D
+                                    </td>
+                                    <!-- Número de Parte -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyDiurno->SPROD }}
+                                    </td>
+                                    <!-- Orden de Producción -->
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        <label class="flex items-center justify-center">
+                                            <input type="text" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sord]" id="sord" value="{{ $dailyDiurno->SORD }}" hidden />
+                                            {{ $dailyDiurno->SORD }}
+                                        </label>
+                                    </td>
+                                    <!-- Cantidad Planeada -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyDiurno->SQREQ }}
+                                        @php
+                                            $dayStoragePlan += $dailyDiurno->SQREQ;
+                                        @endphp
+                                    </td>
+                                    <!-- Cantidad Real -->
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        @php
+                                            $realQuantity = $dailyDiurno->SQFIN - $dailyDiurno->SQREMM;
+                                        @endphp
+                                        @if ($dailyDiurno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="block text-sm">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                </label>
+                                            @else
+                                                <label class="block text-sm">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="block text-sm">
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                        @php
+                                            $dayStorageReal += $dailyDiurno->SQFIN;
+                                        @endphp
+                                    </td>
+                                    <!-- Scrap -->
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        @if ($dailyDiurno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="block text-sm">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                </label>
+                                            @else
+                                                <label class="block text-sm">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="block text-sm">
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                        @php
+                                            $dayStorageScrap += $dailyDiurno->SQREMM;
+                                        @endphp
+                                    </td>
+                                    <!-- Estado -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                            <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                Finalizado
+                                            </span>
                                         @elseif ($dailyDiurno->SQREQ > $dailyDiurno->SQFIN && $dailyDiurno->SID == 'SZ')
-                                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                            Canceldo
-                                        </span>
+                                            <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                Canceldo
+                                            </span>
                                         @else
-                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                            En Proceso
-                                        </span>
+                                            <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                En Proceso
+                                            </span>
                                         @endif
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @php
-                                    $inventory = $dailyDiurno->IOPB + $dailyDiurno->IRCT - $dailyDiurno->IISS + $dailyDiurno->IADJ;
-                                    @endphp
-                                    @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        {{ $inventory }}
-                                        </span>
+                                    </td>
+                                    <!-- Inventario -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @php
+                                            $inventory = $dailyDiurno->IOPB + $dailyDiurno->IRCT - $dailyDiurno->IISS + $dailyDiurno->IADJ;
+                                        @endphp
+                                        @if ($inventory < 0)
+                                            <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                {{ $inventory }}
+                                            </span>
                                         @else
-                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                            {{ $inventory }}
-                                        </span>
+                                            <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                {{ $inventory }}
+                                            </span>
                                         @endif
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @if ($dailyDiurno->SID == 'SO')
-                                    <label class="block text-sm">
-                                        <input id="date{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="disableInputCancel({{ $dailyDiurno->SORD }})" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                </td>
-                                <td class="px-2 py-1 text-md">
-                                    @if ($dailyDiurno->SID == 'SO')
-                                    <label class="flex items-center justify-center dark:text-gray-400">
-                                        <input id="cancel{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" onclick="disableInputDate({{ $dailyDiurno->SORD }})" />
-                                    </label>
-                                    @else
-                                    <label class="flex items-center justify-center dark:text-gray-400">
-                                        <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
-                                    </label>
-                                    @endif
-                                </td>
-                            </tr>
+                                    </td>
+                                    <!-- Cambio de Fecha -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @if ($dailyDiurno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="block text-sm">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                </label>
+                                            @else
+                                                <label class="block text-sm">
+                                                    <input id="date{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="disableInputCancel({{ $dailyDiurno->SORD }})" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="block text-sm">
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                    </td>
+                                    <!-- Cancelado -->
+                                    <td class="px-2 py-1 text-md">
+                                        @if ($dailyDiurno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="flex items-center justify-center dark:text-gray-400">
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
+                                                </label>
+                                            @else
+                                                <label class="flex items-center justify-center dark:text-gray-400">
+                                                    <input id="cancel{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" onclick="disableInputDate({{ $dailyDiurno->SORD }})" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="flex items-center justify-center dark:text-gray-400">
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
+                                            </label>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                             @if ($countDiurno > 0)
-                            <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">Subtotal</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStoragePlan }}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStorageScrap }}.000</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                            </tr>
+                                <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">Subtotal</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStorageScrap }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                </tr>
                             @endif
                             @foreach ($dailyNocturnos as $key => $dailyNocturno)
-                            <tr>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $num = $num + 1 }}
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyNocturno->SWRKC }}
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    N
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyNocturno->SPROD }}
-                                </td>
-                                <td class="px-2 py-1 text-xs text-center">
-                                    <label class="flex items-center justify-center">
-                                        <input type="text" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sord]" id="sord" value="{{ $dailyNocturno->SORD }}" hidden />
-                                        {{ $dailyNocturno->SORD }}
-                                    </label>
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    {{ $dailyNocturno->SQREQ }}
-                                    @php
-                                    $nightStoragePlan += $dailyNocturno->SQREQ;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs ">
-                                    @php
-                                    $realQuantity = $dailyNocturno->SQFIN - $dailyNocturno->SQREMM;
-                                    @endphp
-                                    @if ($dailyNocturno->SID == 'SO')
-                                    <label class="block text-sm text-center">
-                                        <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm text-center">
-                                        <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                    @php
-                                    $nightStorageReal += $dailyNocturno->SQFIN;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @if ($dailyNocturno->SID == 'SO')
-                                    <label class="block text-sm text-center">
-                                        <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm text-center">
-                                        <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                    @php
-                                    $nightStorageScrap += $dailyNocturno->SQREMM;
-                                    @endphp
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
-                                        <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                            Finalizado
-                                        </span>
+                                <tr>
+                                    <!-- Numero de Fila -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $num = $num + 1 }}
+                                    </td>
+                                    <!-- Centro de Trabajo -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyNocturno->SWRKC }}
+                                    </td>
+                                    <!-- Turno -->
+                                    <td class="px-2 py-1 text-xs">
+                                        N
+                                    </td>
+                                    <!-- Número de Parte -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyNocturno->SPROD }}
+                                    </td>
+                                    <!-- Orden de Producción -->
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        <label class="flex items-center justify-center">
+                                            <input type="text" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sord]" id="sord" value="{{ $dailyNocturno->SORD }}" hidden />
+                                            {{ $dailyNocturno->SORD }}
+                                        </label>
+                                    </td>
+                                    <!-- Cantidad Planeada -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyNocturno->SQREQ }}
+                                        @php
+                                            $nightStoragePlan += $dailyNocturno->SQREQ;
+                                        @endphp
+                                    </td>
+                                    <!-- Cantidad Real -->
+                                    <td class="px-2 py-1 text-xs ">
+                                        @php
+                                            $realQuantity = $dailyNocturno->SQFIN - $dailyNocturno->SQREMM;
+                                        @endphp
+                                        @if ($dailyNocturno->SID == 'SO')
+                                            <label class="block text-sm text-center">
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                        @else
+                                            <label class="block text-sm text-center">
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                        @php
+                                            $nightStorageReal += $dailyNocturno->SQFIN;
+                                        @endphp
+                                    </td>
+                                    <!-- Scrap -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @if ($dailyNocturno->SID == 'SO')
+                                            <label class="block text-sm text-center">
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                        @else
+                                            <label class="block text-sm text-center">
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                        @php
+                                            $nightStorageScrap += $dailyNocturno->SQREMM;
+                                        @endphp
+                                    </td>
+                                    <!-- Estado -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
+                                            <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                Finalizado
+                                            </span>
                                         @elseif ($dailyNocturno->SQREQ > $dailyNocturno->SQFIN && $dailyNocturno->SID == 'SZ')
-                                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                            Cancelado
-                                        </span>
+                                            <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                Cancelado
+                                            </span>
                                         @else
-                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                            En Proceso
-                                        </span>
+                                            <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                En Proceso
+                                            </span>
                                         @endif
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @php
-                                    $inventory = $dailyNocturno->IOPB + $dailyNocturno->IRCT - $dailyNocturno->IISS + $dailyNocturno->IADJ;
-                                    @endphp
-                                    @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        {{ $inventory }}
-                                        </span>
-                                        @else
-                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                    </td>
+                                    <!-- Inventario -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @php
+                                            $inventory = $dailyNocturno->IOPB + $dailyNocturno->IRCT - $dailyNocturno->IISS + $dailyNocturno->IADJ;
+                                        @endphp
+                                        @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
                                             {{ $inventory }}
-                                        </span>
+                                            </span>
+                                        @else
+                                            <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                {{ $inventory }}
+                                            </span>
                                         @endif
-                                </td>
-                                <td class="px-2 py-1 text-xs">
-                                    @if ($dailyNocturno->SID == 'SO')
-                                    <label class="block text-sm">
-                                        <input id="date{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="disableInputCancel({{ $dailyNocturno->SORD }})" />
-                                    </label>
-                                    @else
-                                    <label class="block text-sm">
-                                        <input id="cdte" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                    </label>
-                                    @endif
-                                </td>
-                                <td class="px-2 py-1 text-md">
-                                    @if ($dailyNocturno->SID == 'SO')
-                                    <label class="flex items-center justify-center">
-                                        <input id="cancel{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" onclick="disableInputDate({{ $dailyNocturno->SORD }})" />
-                                    </label>
-                                    @else
-                                    <label class="flex items-center justify-center">
-                                        <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
-                                    </label>
-                                    @endif
-                                </td>
-                            </tr>
+                                    </td>
+                                    <!-- Cambio de Fecha -->
+                                    <td class="px-2 py-1 text-xs">
+                                        @if ($dailyNocturno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="block text-sm">
+                                                    <input id="cdte" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                </label>
+                                            @else
+                                                <label class="block text-sm">
+                                                    <input id="date{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="disableInputCancel({{ $dailyNocturno->SORD }})" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="block text-sm">
+                                                <input id="cdte" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][cdte]" type="date" class="mt-1 text-sm text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                        @endif
+                                    </td>
+                                    <!-- Cancelado -->
+                                    <td class="px-2 py-1 text-md">
+                                        @if ($dailyNocturno->SID == 'SO')
+                                            @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                                <label class="flex items-center justify-center">
+                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
+                                                </label>
+                                            @else
+                                                <label class="flex items-center justify-center">
+                                                    <input id="cancel{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" onclick="disableInputDate({{ $dailyNocturno->SORD }})" />
+                                                </label>
+                                            @endif
+                                        @else
+                                            <label class="flex items-center justify-center">
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][canc]" type="checkbox" value="1" class="text-blue-600 form-checkbox focus:border-blue-800 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" disabled />
+                                            </label>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                             @if ($countNocturno > 0)
-                            <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">Subtotal</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">{{ $nightStoragePlan }}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $nightStorageReal - $nightStorageScrap}}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $nightStorageScrap }}.000</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                            </tr>
+                                <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">Subtotal</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">{{ $nightStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $nightStorageReal - $nightStorageScrap}}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $nightStorageScrap }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                </tr>
                             @endif
                             @if ($countDiurno > 0 || $countNocturno > 0)
-                            <tr class="bg-teal-100 font-medium dark:text-gray-200 dark:bg-gray-800">
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">Total</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStorageReal + $nightStorageReal - $dayStorageScrap - $nightStorageScrap }}.000</td>
-                                <td class="px-2 py-1 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                                <td class="px-2 py-1 text-xs"></td>
-                            </tr>
+                                <tr class="bg-teal-100 font-medium dark:text-gray-200 dark:bg-gray-800">
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">Total</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStorageReal + $nightStorageReal - $dayStorageScrap - $nightStorageScrap }}.000</td>
+                                    <td class="px-2 py-1 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                </tr>
                             @endif
                         </tbody>
                     </table>
                 </div>
             </form>
             @if ($countDiurno > 0 || $countNocturno > 0)
-            <div class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-white sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-                <span class="flex items-center col-span-3">
-                    {{-- Show {{ $dailyProdcution->firstItem() }} - {{ $dailyProdcution->lastItem() }} --}}
-                </span>
-                <span class="col-span-2"></span>
-                <!-- Pagination -->
-                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                    <nav aria-label="Table navigation">
-                        <ul class="inline-flex items-center">
-                            {{-- {{ $dailyProdcution->withQueryString()->links() }} --}}
-                        </ul>
-                    </nav>
-                </span>
-            </div>
+                <div class="grid px-4 py-3 rounded-b-lg text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-white sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                    <span class="flex items-center col-span-3">
+                        {{-- Show {{ $dailyProdcution->firstItem() }} - {{ $dailyProdcution->lastItem() }} --}}
+                    </span>
+                    <span class="col-span-2"></span>
+                    <!-- Pagination -->
+                    <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                        <nav aria-label="Table navigation">
+                            <ul class="inline-flex items-center">
+
+                            </ul>
+                        </nav>
+                    </span>
+                </div>
             @else
-            <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-white sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
-                Planificación y Progreso Diario No Encontrado
-            </div>
+                <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-white sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+                    Planificación y Progreso Diario No Encontrado
+                </div>
             @endif
 
         </div>

@@ -151,39 +151,35 @@ class DailyProductionController extends Controller
         $this->validate($request, [
             'arrayDailyProductions' => 'required|array',
         ]);
+
         foreach ($request->arrayDailyProductions as $arrayDaily) {
-            $data = Fso::query()
-                ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
-                ->where('SORD', '=', $arrayDaily['sord'])
-                ->first();
+            $sqfin = $arrayDaily['sqfin'] ?? '0';
+            $sqremm = $arrayDaily['sqremm'] ?? '0';
+            $cdte = !isset($arrayDaily['cdte']) ? $cdte = '' :  Carbon::parse($arrayDaily['cdte'])->format('Ymd');
+            $canc = $arrayDaily['canc'] ?? 0;
 
-            if ($data->SID == 'SO') {
-                if (!isset($arrayDaily['cdte'])) {
-                    $cdte = '';
-                } else {
-                    $cdte = $arrayDaily['cdte'] = Carbon::parse($arrayDaily['cdte'])->format('Ymd');
+            if ($cdte !== '' || $canc !== 0 || $sqfin !== '0' || $sqremm !== '0') {
+                $data = Fso::query()
+                    ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
+                    ->where('SORD', '=', $arrayDaily['sord'])
+                    ->first();
+                if ($data->SID == 'SO') {
+                    $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
                 }
-
-                $canc = $arrayDaily['canc'] ?? 0;
-                $sqfin = $arrayDaily['sqfin'];
-                $sqremm = $arrayDaily['sqremm'];
-                if ($cdte !== '' || $canc !== 0 || $sqfin !== '0' || $sqremm !== '0') {
-                    echo "Tiene datos $data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte <br>";
-                    // $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
-                } else {
-                    echo "Ceros $data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte <br>";
-                }
-
             }
         }
-
-        dd("Fin");
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YSF008C";
         $result = odbc_exec($conn, $query);
 
-        return redirect()->back()->with('success', 'Registro(s) Actuaizado(s) con Éxito');
+        if ($result) {
+            return redirect()->back()->with('success', 'Registro(s) Actuaizado(s) con Éxito');
+        } else {
+            return redirect()->back()->with('danger', '¡Oh no! Algo salió mal.');
+        }
+
+
     }
 
     /**
