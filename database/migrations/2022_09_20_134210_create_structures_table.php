@@ -15,9 +15,10 @@ class CreateStructuresTable extends Migration
     {
         Schema::create('structures', function (Blueprint $table) {
             $table->id();
-            $table->string('final');
-            $table->string('componente');
-            $table->string('clase');
+            $table->string('Final');
+            $table->string('Componente');
+            $table->string('Clase');
+            $table->string('Activo');
             $table->timestamps();
         });
     }

@@ -7,6 +7,7 @@ use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
+use App\Models\ZCC;
 use App\Models\YK006;
 use App\Models\Structure;
 use Carbon\Carbon;
@@ -30,13 +31,11 @@ class PlaneacionController extends Controller
         $TP = 'NO';
         $CP = '';
         $WC = '';
-        $this->WCs = LWK::query()
-            ->select('WID', 'WDEPT', 'WWRKC', 'WDESC')
-            ->where('WID', '=', 'WK')
-            ->Where('WDEPT', '=', '1200')
-            ->orWhere('WDEPT', '=', '1300')
-            ->orWhere('WDEPT', '=', '1400')
-            ->orderBy('WDESC', 'ASC')
+        $this->WCs = ZCC::query()
+            ->select('CCID', 'CCTABL', 'CCCODE','CCDESC')
+            ->where('CCID', '=', 'CC')
+            ->Where('CCTABL', '=', 'SIRF4')
+            ->orderBy('CCID', 'ASC')
             ->get();
 
         $this->PCs = IPB::query()
@@ -58,25 +57,46 @@ class PlaneacionController extends Controller
     {
         $dias = $request->dias ?? '7';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $TP = $request->SeTP;
+        $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;
 
-        $plan = IPB::query()
-        ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
-        ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-        ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-        ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-        ->where([
-            ['IBUYC', '!=', $CP],
-            ['IID', '!=', 'IZ'],
-            ['IMPLC', '!=', 'OBSOLETE'],
-        ])
-        ->where(function ($query) {
-            $query->where('ICLAS ', 'F1');
-        })
-        ->distinct('IPROD')
-        ->simplePaginate(10);
+        if($TP !='')
+        {
+            $plan = IPB::query()
+            ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+            ->where([
+                ['IREF04','like','%'.$TP.'%' ],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+
+            ])
+            ->where(function ($query) {
+                $query->where('ICLAS ', 'F1');
+            })
+            ->distinct('IPROD')
+            ->simplePaginate(10);
+        }else{
+            $plan = IPB::query()
+            ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+            ->where([
+                ['IBUYC', '!=', $CP],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where(function ($query) {
+                $query->where('ICLAS ', 'F1');
+            })
+            ->distinct('IPROD')
+            ->simplePaginate(10);
+        }
+
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 

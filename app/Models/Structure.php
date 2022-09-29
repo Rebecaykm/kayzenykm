@@ -13,6 +13,7 @@ class Structure extends Model
     protected $fillable = [
         'final',
         'componente',
-        'clase'
+        'clase',
+        'Activo'
     ];
 }

@@ -99,7 +99,7 @@ class registros
     function cargar($prod)
     {
         $res = Structure::query()
-        ->select('Final','componente')
+        ->select('Final','Componente','Activo')
         ->where('Final',$prod)
         ->where('clase','!=','01')
         ->get();
@@ -124,7 +124,8 @@ class registros
             $data = Structure::create([
                 'final'=>$prod,
                 'componente'=>$sub,
-                'clase'=>$clase
+                'clase'=>$clase,
+                'Activo'=>'1',
             ]);
         }
 
