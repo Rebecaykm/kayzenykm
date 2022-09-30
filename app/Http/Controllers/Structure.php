@@ -33,7 +33,7 @@ class Structure extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(10);
+                ->simplePaginate(7);
 
             return view('planeacion.Estructura', ['plan' => $plan,'LWK'=>$WCs,'SEpro'=> $Pr ]);
 

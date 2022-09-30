@@ -96,49 +96,75 @@ class registros
         return $MBMS;
     }
     //---------------------------------------Buscar estructuras ------------------------------------------------------
+
+
     function cargar($prod)
     {
         $res = Structure::query()
-        ->select('Final','Componente','Activo')
-        ->where('Final',$prod)
-        ->where('clase','!=','01')
-        ->get();
+            ->select('Final', 'Componente', 'Activo')
+            ->where('Final', $prod)
+            ->where('clase', '!=', '01')
+            ->get();
         return $res;
     }
 
     function cargarF1($prod)
     {
         $res = Structure::query()
-        ->select('Final','componente')
-        ->where('componente',$prod)
-        ->get();
+            ->select('Final', 'componente')
+            ->where('componente', $prod)
+            ->get();
         return $res;
     }
 
-    // ---------------------------------guardar estructuras de BOM----------------------------------------------
-    function guardar($prod,$sub,$clase)
+    function Cargarforcast($prod, $hoy)
     {
-        $res = self::buscar($prod,$sub);
-        if($res == 0)
-        {
+        $inF1 = array();
+        $total = array();
+        $sub = self::cargar($prod);
+        foreach ($sub as $subs) {
+            $F1 = self::cargarF1($subs->Componente);
+            $tD = 0;
+            $tN = 0;
+            foreach ($F1 as $F1s) {
+                $valD = self::Forecast($F1s->Final, $hoy, '%D%');
+                $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                $tD = $valD + $tD;
+                $tN = $valN + $tN;
+            }
+            $inF1[] = [
+                'sub' => $subs->Componente,
+                'dia' => $hoy,
+                'valD' =>  $tD,
+                'valN' => $tN
+            ];
+        }
+        return $inF1;
+    }
+
+
+    // ---------------------------------guardar estructuras de BOM----------------------------------------------
+    function guardar($prod, $sub, $clase)
+    {
+        $res = self::buscar($prod, $sub);
+        if ($res == 0) {
             $data = Structure::create([
-                'final'=>$prod,
-                'componente'=>$sub,
-                'clase'=>$clase,
-                'Activo'=>'1',
+                'final' => $prod,
+                'componente' => $sub,
+                'clase' => $clase,
+                'Activo' => '1',
             ]);
         }
-
     }
-    function buscar($prod,$sub)
+    function buscar($prod, $sub)
     {
         $data = Structure::query()
-        ->select('final', 'componente')
-        ->where('final','=',$prod)
-        ->where('componente','=',$sub)
-        ->count();
+            ->select('final', 'componente')
+            ->where('final', '=', $prod)
+            ->where('componente', '=', $sub)
+            ->count();
 
-     return $data;
+        return $data;
     }
     function buscarF1($prod)
     {
@@ -197,7 +223,7 @@ class registros
         return $MBMS;
     }
 
-// -----------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
 
 
 
