@@ -63,6 +63,7 @@
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
                                 $hoy = $fecha;
+                                $dias=4;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $totalD = 0;
                             @endphp
@@ -95,6 +96,7 @@
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $plans)
+                        dd
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
@@ -109,21 +111,7 @@
                                             class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                                             disabled />
                                     </div>
-                                    {{-- <div class='w-40  border  border-b-4 mt-2  border-rose-600'>
-                                            <input value="Cantidad de plan"
-                                                class="block w-full text-xs text-center border-rose-600 form-input"
-                                                disabled />
-                                        </div>
-                                        <div class='w-40  border border-t-4 mt-2'>
-                                            <input value="Firme"
-                                                class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                disabled />
-                                        </div>
-                                        <div class='w-40 border mt-2'>
-                                            <input value="Shop Order"
-                                                class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                disabled />
-                                        </div> --}}
+
                                 </td>
                                 @php
                                     $hoy = $fecha;
@@ -135,6 +123,7 @@
                                     $coni = 0;
                                 @endphp
                                 @while ($coni < $totalD)
+
                                     <td class="px-2 py-1 text-xs text-center  ">
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
 
@@ -170,57 +159,7 @@
                                                 </label>
                                             @endif
                                         </div>
-                                        {{-- <div class=' border mt-2'>
-                                                @if ($conplanq == 0)
-                                                    <input value=" 0"
-                                                        class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                @else
-                                                    @php
-                                                        $totalplan = 0;
-                                                        $planq = $obj->plan($plans->IPROD, $hoy, '%D%');
-                                                        $planq = $planq + 0;
-                                                    @endphp
-                                                    <input
-                                                        class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                @endif
 
-                                            </div> --}}
-                                        {{-- <div class=' border border-t-2 mt-2'>
-                                                @php
-                                                    $nam = $plans->IPROD . '/' . $hoy . '/D';
-                                                @endphp
-                                                @if ($confirme != 0)
-                                                    @php
-                                                        $firmeq = $obj->firme($plans->IPROD, $hoy, '%D%');
-                                                        $firmeq = $firmeq + 0;
-                                                    @endphp
-                                                    <input type="number" maxlength="6" id="{{ $nam }}"
-                                                        name="{{ $nam }}" onchange="myFunction(this.id)"
-                                                        value={{ $firmeq }}
-                                                        class="  block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
-                                                @else
-                                                    <input type="number" maxlength="6" value="0"
-                                                        onchange="myFunction(this.id)"
-                                                        class=" block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
-                                                @endif
-                                            </div> --}}
-                                        {{-- <div class='border border-t-2 mt-2'>
-                                                @if ($conshop != 0)
-                                                    @php
-                                                        $shop = $obj->ShopO($plans->IPROD, $hoy, '%D%');
-                                                        $shop = $shop + 0;
-                                                    @endphp
-                                                    <input value={{ $shop }}
-                                                        class=" block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                @else
-                                                    <input value="0"
-                                                        class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                @endif
-                                            </div> --}}
                                     </td>
                                     @php
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
@@ -229,29 +168,34 @@
                                 @endwhile
                             </tr>
                             @php
-                                $Sub = $obj->cargar($plans->IPROD);
 
+                                $Sub = $obj->cargar($plans->IPROD);
                                 $hoy = $fecha;
 
                             @endphp
                             @foreach ($Sub as $subs)
+                            @php
 
+                                $subcomponetes = $obj->Cargarforcast($subs->Componente, $hoy,$dias);
+
+                            @endphp
                                 {{-- forecast --}}
+                                @foreach( $subcomponetes as $substotal)
                                 <tr class="text-gray-700 dark:text-gray-400 ">
                                     <td class="px-2 py-1 text-xs text-center ">
 
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
 
-                                        {{ $subs->Componente }}
-
+                                        {{-- {{ $subs->Componente }} --}}
+                                        {{ $substotal['sub'] }}
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
 
-                                        $F1sub = $obj->cargarF1($subs->Componente);
+                                            $F1sub = $obj->cargarF1($subs['sub']);
                                         @endphp
-                                         @foreach ($F1sub as $F1subs)
+                                        @foreach ($F1sub as $F1subs)
                                             {{ $F1subs->Final }}
                                             <br>
                                         @endforeach
@@ -265,28 +209,10 @@
                                                 disabled />
                                         </div>
 
-                                        {{-- <div class='w-40  border  border-b-4 mt-2  border-rose-600'>
-                                                <input value="Cantidad de plan"
-                                                    class="block w-full text-xs text-center border-rose-600 form-input"
-                                                    disabled />
-                                            </div>
-                                            <div class='w-40  border border-t-4 mt-2'>
-                                                <input value="Firme"
-                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </div>
-                                            <div class='w-40 border mt-2'>
-                                                <input value="Shop Order"
-                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </div> --}}
+
                                     </td>
-                                    {{-- @php
-                                                    $cont = $obj->contar($plans->IPROD, $hoy, $fin);
-                                                    $conplanq = $obj->contarplan($plans->IPROD, $hoy, $fin);
-                                                    $confirme = $obj->contarfirme($plans->IPROD, $hoy, $fin);
-                                                    $conshop = $obj->contarShopO($plans->IPROD, $hoy, $fin);
-                                                @endphp --}}
+
+
                                     @php
 
                                         $coni = 0;
@@ -294,117 +220,43 @@
                                         $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                     @endphp
 
-                                    @while ($coni < $totalD)
+                                    {{-- @while ($coni < $totalD) --}}
                                         <td class="px-2 py-1 text-xs text-center  ">
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                                                @php
-                                                    $totalforcastcom = 0;
-                                                    $totalforcastcomN = 0;
-                                                    $subcomponetes= $obj->Cargarforcast($plans->IPROD, $hoy);
 
-                                                @endphp
-                                                {{-- @foreach ($F1sub as $F1subs)
-                                                    @php
-                                                        $contsub = $obj->contar($F1subs->Final, $hoy, $fin);
-                                                        // echo $F1subs->Final . '/' . $hoy . '/' . $fin . '/' . $contsub;
-                                                        // $conplanq = $obj->contarplan($plans->IPROD, $hoy, $fin);
-                                                        // $confirme = $obj->contarfirme($plans->IPROD, $hoy, $fin);
-                                                        // $conshop = $obj->contarShopO($plans->IPROD, $hoy, $fin);
-                                                    @endphp
-                                                    @if ($contsub != 0)
-                                                        @php
-                                                            $totalforcast1 = $obj->Forecast($F1subs->Final, $hoy, '%D%');
-                                                            $totalforcast2 = $obj->Forecast($F1subs->Final, $hoy, '%N%');
-                                                            $totalforcastcom = $totalforcast1 + $totalforcastcom;
-                                                            $totalforcastcomN = $totalforcast2 + $totalforcastcomN;
-                                                        @endphp
-                                                    @else
-                                                        @php
 
-                                                            $totalforcastcom = $totalforcastcom + 0;
-                                                            $totalforcastcomN = $totalforcastcomN + 0;
+                                            {{-- @php
+                                                $totalforcastcom = 0;
+                                                $totalforcastcomN = 0;
 
-                                                        @endphp
-                                                    @endif
+                                            @endphp
+                                            {{-- @foreach ($subcomponetes as $subcomponetest) --}}
+                                            {{-- {{$subcomponetest['sub']}}/{{$subcomponetest['dia']}}/{{$subcomponetest['valD']}}/{{$subcomponetest['valN']}}
 
-                                                    <br>
-                                                @endforeach --}}
-                                                @foreach ( $subcomponetes as $subcomponetest )
-                                               {{$subcomponetest['sub']}}/{{$subcomponetest['dia']}}/{{$subcomponetest['valD']}}/{{$subcomponetest['valN']}}
-                                                @endforeach
+                                            --}} <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+
                                                 <label class="block text-sm ">
 
-                                                    <input value={{ $totalforcastcom }}
+                                                    <input value={{  $substotal['valD'] }}
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                                 <label class="block text-sm ">
 
-                                                    <input value={{ $totalforcastcomN }}
+                                                    <input value={{ $substotal['valN'] }}
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                             </div>
-                                            {{-- <div class=' border mt-2'> --}}
-                                            {{-- @if ($conplanq == 0) --}}
-                                            {{-- <input value=" 0"
-                                                    class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled /> --}}
-                                            {{-- @else
-                                                                @php
-                                                                    $totalplan = 0;
-                                                                    $planq = $obj->plan($plans->IPROD, $hoy, '%D%');
-                                                                    $planq = $planq + 0;
-                                                                @endphp --}}
-                                            {{-- <input
-                                                    class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled /> --}}
-                                            {{-- @endif --}}
 
-                                            {{-- </div>
-                                                <div class=' border border-t-2 mt-2'> --}}
-                                            {{-- @php
-                                                                $nam = $plans->IPROD . '/' . $hoy . '/D';
-                                                            @endphp
-                                                            @if ($confirme != 0)
-                                                                @php
-                                                                    $firmeq = $obj->firme($plans->IPROD, $hoy, '%D%');
-                                                                    $firmeq = $firmeq + 0;
-                                                                @endphp
-                                                                <input type="number" maxlength="6"
-                                                                    id="{{ $nam }}"
-                                                                    name="{{ $nam }}"
-                                                                    onchange="myFunction(this.id)"
-                                                                    value={{ $firmeq }}
-                                                                    class="  block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
-                                                            @else --}}
-                                            {{-- <input type="number" maxlength="6" value="0"
-                                                    onchange="myFunction(this.id)"
-                                                    class=" block w-16 text-xs text-center dark:text-gray-300 dark:border-green-600 dark:bg-green-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input caret-green-100" />
-                                                @endif --}}
-                                            {{-- </div>
-                                                <div class='border border-t-2 mt-2'> --}}
-                                            {{-- @if ($conshop != 0)
-                                                                @php
-                                                                    $shop = $obj->ShopO($plans->IPROD, $hoy, '%D%');
-                                                                    $shop = $shop + 0;
-                                                                @endphp
-                                                                <input value={{ $shop }}
-                                                                    class=" block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                                    disabled />
-                                                            @else --}}
-                                            {{-- <input value="0"
-                                                    class="block w-16 text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled /> --}}
-                                            {{-- @endif --}}
-                                            {{-- </div> --}}
                                         </td>
-
+{{--
                                         @php
                                             $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                             $coni++;
                                         @endphp
-                                    @endwhile
+                                    @endwhile --}}
 
                                 </tr>
+
+                                @endforeach
                             @endforeach
                         @endforeach
                     </tbody>

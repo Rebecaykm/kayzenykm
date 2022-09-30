@@ -46,10 +46,10 @@
             <div class="container w-full">
                 <div class="flex flex-col h-screen">
                     <div class="flex-grow overflow-auto h-96">
-                        <table class=" table-auto ">
+                        <table class="w-full whitespace-no-wrap">
                             <thead>
                                 <tr
-                                    class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 sticky top-0 ">
+                                    class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
                                     <th class=" header px-4 py-3 sticky">No de parte final(es) </th>
                                     <th class=" header px-4 py-3 sticky ">
                                         Componentes
@@ -59,8 +59,10 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                @foreach ($plan as $plans)
+                        </thead>
+                        <tbody
+                            class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                               @foreach ($plan as $plans)
                                     <tr class="text-gray-700 dark:text-gray-400">
                                         <td class="px-4 py-3 text-xs text-center ">
                                             {{ $plans->IPROD }}

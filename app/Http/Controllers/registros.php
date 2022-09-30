@@ -117,28 +117,34 @@ class registros
         return $res;
     }
 
-    function Cargarforcast($prod, $hoy)
+    function Cargarforcast($prod, $hoy, $dias)
     {
         $inF1 = array();
         $total = array();
         $sub = self::cargar($prod);
-        foreach ($sub as $subs) {
-            $F1 = self::cargarF1($subs->Componente);
-            $tD = 0;
-            $tN = 0;
-            foreach ($F1 as $F1s) {
-                $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                $valN = self::Forecast($F1s->Final, $hoy, '%N%');
-                $tD = $valD + $tD;
-                $tN = $valN + $tN;
+            $connt = 1;
+            while ($connt <= $dias) {
+
+                $F1 = self::cargarF1($prod);
+                $tD = 0;
+                $tN = 0;
+                foreach ($F1 as $F1s) {
+                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
+                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                    $tD = $valD + $tD;
+                    $tN = $valN + $tN;
+                }
+                $inF1[] = [
+                    'sub' => $prod,
+                    'dia' => $hoy,
+                    $hoy . '-D' =>  $tD,
+                    $hoy . '-N' => $tN
+                ];
+                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                $connt++;
             }
-            $inF1[] = [
-                'sub' => $subs->Componente,
-                'dia' => $hoy,
-                'valD' =>  $tD,
-                'valN' => $tN
-            ];
-        }
+
+
         return $inF1;
     }
 

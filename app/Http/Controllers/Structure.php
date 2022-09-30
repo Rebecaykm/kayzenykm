@@ -25,7 +25,8 @@ class Structure extends Controller
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
                 ->where([
-                    ['IREF04','like','%'.$Pr.'%' ],
+                    // ['IREF04','like','%'.$Pr.'%' ],
+                    ['IREF04','=',$Pr ],
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
@@ -33,7 +34,7 @@ class Structure extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(7);
+                ->simplePaginate(30);
 
             return view('planeacion.Estructura', ['plan' => $plan,'LWK'=>$WCs,'SEpro'=> $Pr ]);
 
