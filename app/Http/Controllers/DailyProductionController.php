@@ -20,8 +20,6 @@ class DailyProductionController extends Controller
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
-        $workCenters = Lwk::query()->select('WWRKC', 'WDESC')->orderBy('WWRKC', 'ASC')->get();
-
         $dailyDiurno = Fso::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
@@ -63,12 +61,11 @@ class DailyProductionController extends Controller
         $countDiurno = $dailyDiurno->count();
         $countNocturno = $dailyNocturno->count();
 
-        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : '';
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : 'Fecha no Definida';
 
         return view('dailyProduction.index', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
-            'workCenters' => $workCenters,
             'area' => $areaName,
             'date' => $date,
             'countDiurno' => $countDiurno,
@@ -85,8 +82,6 @@ class DailyProductionController extends Controller
         $area = $request->area ?? '';
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
-
-        $workCenters = Lwk::query()->select('WWRKC', 'WDESC')->orderBy('WWRKC', 'ASC')->get();
 
         $dailyDiurno = Fso::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
@@ -129,12 +124,11 @@ class DailyProductionController extends Controller
         $countDiurno = $dailyDiurno->count();
         $countNocturno = $dailyNocturno->count();
 
-        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : '';
+        $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('d-m-Y') : 'Fecha no Definida';
 
         return view('dailyProduction.user', [
             'dailyDiurnos' => $dailyDiurno,
             'dailyNocturnos' => $dailyNocturno,
-            'workCenters' => $workCenters,
             'area' => $areaName,
             'date' => $date,
             'countDiurno' => $countDiurno,
