@@ -184,13 +184,23 @@
         function disableInputCancel($value) {
             let value = $value;
             let inputCancel = "cancel" + value;
-            document.getElementById(inputCancel).disabled = true;
+
+            if (document.getElementById(inputCancel).disabled == false) {
+                document.getElementById(inputCancel).disabled = true;
+            } else {
+                document.getElementById(inputCancel).disabled = false;
+            }
         }
 
         function disableInputDate($value) {
             let value = $value;
-            let inputDate = "date" + value
-            document.getElementById(inputDate).disabled = true;
+            let inputDate = "date" + value;
+
+            if (document.getElementById(inputDate).disabled == false) {
+                document.getElementById(inputDate).disabled = true;
+            } else {
+                document.getElementById(inputDate).disabled = false;
+            }
         }
     </script>
 </x-app-layout>
