@@ -63,7 +63,7 @@
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
                                 $hoy = $fecha;
-                                $dias=4;
+                                $dias = 4;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $totalD = 0;
                             @endphp
@@ -96,7 +96,6 @@
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $plans)
-                        dd
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
@@ -123,7 +122,6 @@
                                     $coni = 0;
                                 @endphp
                                 @while ($coni < $totalD)
-
                                     <td class="px-2 py-1 text-xs text-center  ">
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
 
@@ -174,33 +172,32 @@
 
                             @endphp
                             @foreach ($Sub as $subs)
-                            @php
+                                @php
 
-                                $subcomponetes = $obj->Cargarforcast($subs->Componente, $hoy,$dias);
+                                    $subcomponentes = $obj->Cargarforcast($subs->Componente, $hoy, $dias);
 
-                            @endphp
+                                @endphp
+
                                 {{-- forecast --}}
-                                @foreach( $subcomponetes as $substotal)
+
                                 <tr class="text-gray-700 dark:text-gray-400 ">
                                     <td class="px-2 py-1 text-xs text-center ">
-
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
-
                                         {{-- {{ $subs->Componente }} --}}
-                                        {{ $substotal['sub'] }}
+                                        @php
+
+                                        @endphp
+                                        {{ $subcomponentes['sub'] }}
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
-
                                             $F1sub = $obj->cargarF1($subs['sub']);
                                         @endphp
                                         @foreach ($F1sub as $F1subs)
                                             {{ $F1subs->Final }}
                                             <br>
                                         @endforeach
-
-
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
                                         <div class='w-40  border  border-b-4 border-rose-600 '>
@@ -208,55 +205,52 @@
                                                 class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </div>
-
-
                                     </td>
-
-
                                     @php
-
                                         $coni = 0;
                                         $hoy = $fecha;
                                         $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+
                                     @endphp
-
-                                    {{-- @while ($coni < $totalD) --}}
+                                    @while ($coni < $totalD)
                                         <td class="px-2 py-1 text-xs text-center  ">
-
-
                                             {{-- @php
                                                 $totalforcastcom = 0;
                                                 $totalforcastcomN = 0;
-
                                             @endphp
                                             {{-- @foreach ($subcomponetes as $subcomponetest) --}}
                                             {{-- {{$subcomponetest['sub']}}/{{$subcomponetest['dia']}}/{{$subcomponetest['valD']}}/{{$subcomponetest['valN']}}
 
-                                            --}} <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-
+                                            --}} <div
+                                                class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
-
-                                                    <input value={{  $substotal['valD'] }}
+                                                    @php
+                                                        //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
+                                                        echo $subcomponentes['fecha'] / $subcomponentes['valor'];
+                                                        dd($valhoy);
+                                                        // echo $valhoy;
+                                                    @endphp
+                                                    <input value=''
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                                 <label class="block text-sm ">
-
-                                                    <input value={{ $substotal['valN'] }}
+                                                    @php
+                                                        //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
+                                                    @endphp
+                                                    <input
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                             </div>
 
                                         </td>
-{{--
+
                                         @php
                                             $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                             $coni++;
                                         @endphp
-                                    @endwhile --}}
+                                    @endwhile
 
                                 </tr>
-
-                                @endforeach
                             @endforeach
                         @endforeach
                     </tbody>

@@ -119,31 +119,33 @@ class registros
 
     function Cargarforcast($prod, $hoy, $dias)
     {
-        $inF1 = array();
-        $total = array();
+        $inF1=array();
+        $total=array();
         $sub = self::cargar($prod);
             $connt = 1;
+            $inF1 = [
+                'sub' => $prod
+            ];
             while ($connt <= $dias) {
-
                 $F1 = self::cargarF1($prod);
                 $tD = 0;
                 $tN = 0;
                 foreach ($F1 as $F1s) {
                     $valD = self::Forecast($F1s->Final, $hoy, '%D%');
                     $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
                 }
-                $inF1[] = [
-                    'sub' => $prod,
-                    'dia' => $hoy,
-                    $hoy . '-D' =>  $tD,
-                    $hoy . '-N' => $tN
-                ];
+                $hyd=$hoy.'D';
+                $hyn=$hoy.'N';
+                $inF1 +=[ 'fecha'=>$tD];
+                $inF1 +=['fecha' =>$tN];
+
                 $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                 $connt++;
             }
-
+                dd($inF1);
 
         return $inF1;
     }

@@ -78,7 +78,7 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(10);
+            ->simplePaginate(5);
         }else{
             $plan = IPB::query()
             ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
@@ -94,7 +94,7 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(10);
+            ->simplePaginate(5);
         }
 
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
