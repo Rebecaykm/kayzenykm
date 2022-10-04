@@ -124,7 +124,7 @@ class registros
         $sub = self::cargar($prod);
             $connt = 1;
             $inF1 = [
-                'sub' => $prod
+                'sub' => $prod,
             ];
             while ($connt <= $dias) {
                 $F1 = self::cargarF1($prod);
@@ -137,15 +137,15 @@ class registros
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
                 }
-                $hyd=$hoy.'D';
-                $hyn=$hoy.'N';
-                $inF1 +=[ 'fecha'=>$tD];
-                $inF1 +=['fecha' =>$tN];
+                $hyd='D'.$hoy.'D';
+                $hyn='N'.$hoy.'N';
+                $inF1 +=['D'.$hoy => $hoy];
+                $inF1 +=[ 'D'.$hoy.'D'=>$tD];
+                $inF1 +=['N'.$hoy.'N'=>$tN];
 
                 $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                 $connt++;
             }
-                dd($inF1);
 
         return $inF1;
     }
