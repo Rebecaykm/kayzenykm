@@ -12,12 +12,12 @@
                 <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
                     <input id="dias" name="dias" type="number" max="7" min="1"
-                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                 </label>
                 <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
                     <input id="fecha" name="fecha" type="date"
-                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                 </label>
                 <div class="flex justify-center">
                     <button type="submit"
@@ -59,7 +59,7 @@
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
                                 $hoy = $fecha;
-                                $dias = 4;
+                                $dias = 2;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $totalD = 0;
                             @endphp
@@ -126,12 +126,12 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
                                                 <input value={{ $info['F' . $hoy . 'D'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['F' . $hoy . 'N'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
                                         </div>
@@ -139,12 +139,12 @@
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['P' . $hoy . 'D'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['P' . $hoy . 'N'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
                                         </div>
@@ -152,12 +152,12 @@
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['Fi' . $hoy . 'D'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['Fi' . $hoy . 'N'] }}
-                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
                                         </div>
@@ -216,39 +216,52 @@
                                         </td>
                                         @php
                                             $coni = 0;
+                                        $hoy1=$fecha;
+                                            $datossub = $obj->Cargarforcast($plans->IPROD, $hoy, $dias);
 
                                         @endphp
-                                        @while ($coni < $totalD)
+                                        @foreach($datossub  as $datossubs)
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input
-                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        <input value={{$datossubs['F' . $hoy . 'D']}}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input
-                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        <input value={{$datossubs['F' . $hoy . 'N']}}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input
-                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        <input value={{$datossubs['P' . $hoy . 'N']}}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input
-                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        <input value={{$datossubs['P' . $hoy . 'N']}}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
+                                                <div
+                                                class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{$datossubs['Fi' . $hoy . 'N']}}
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    <input value={{$datossubs['Fi' . $hoy . 'N']}}
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                            </div>
 
                                             </td>
                                             @php
                                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                                $coni++;
+
                                             @endphp
-                                        @endwhile
+                                        @endforeach
                                     </tr>
                                 @endforeach
                             @endif

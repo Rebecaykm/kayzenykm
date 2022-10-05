@@ -59,10 +59,10 @@
                                     </th>
                                 </tr>
                             </thead>
-                        </thead>
-                        <tbody
-                            class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                               @foreach ($plan as $plans)
+                            </thead>
+                            <tbody
+                                class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                                @foreach ($plan as $plans)
                                     <tr class="text-gray-700 dark:text-gray-400">
                                         <td class="px-4 py-3 text-xs text-center ">
                                             {{ $plans->IPROD }}
@@ -98,8 +98,12 @@
                                                 @else
                                                     @php
                                                         $clase = $valor;
-                                                        $obj->guardar($prod, $sub, $clase);
                                                     @endphp
+                                                    @if ($clase != '01')
+                                                        @php
+                                                            $obj->guardar($prod, $sub, $clase);
+                                                        @endphp
+                                                    @endif
                                                     <td class="px-4 py-3 text-xs text-center">
                                                         {{ $valor }}
                                                     </td>

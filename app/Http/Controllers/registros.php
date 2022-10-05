@@ -88,7 +88,7 @@ class registros
     function contarF1($pro)
     {
         $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC')
+            ->select('BPROD')
             ->where('BCHLD', '=', $pro)
             ->where('BCLAS', '=', 'F1')
             ->where('BDDIS', '>=', '99999997')
@@ -100,7 +100,7 @@ class registros
     function contcargar($prod)
     {
         $res = Structure::query()
-            ->select('Final', 'Componente', 'Activo')
+            ->select('Final')
             ->where('Final', $prod)
             ->where('clase', '!=', '01')
             ->count();
@@ -122,6 +122,14 @@ class registros
             ->select('Final', 'componente')
             ->where('componente', $prod)
             ->get();
+        return $res;
+    }
+    function contcargarF1($prod)
+    {
+        $res = Structure::query()
+            ->select('Final', 'componente')
+            ->where('componente', $prod)
+            ->count();
         return $res;
     }
     function CargarforcastF1($prod, $hoy, $dias)
@@ -169,38 +177,56 @@ class registros
         $dia = $hoy;
         while ($connt <= $dias) {
             $inF1 = [
-                'sub' => 'ForeCaste',
+                'sub' => $hoy,
             ];
-            $F1 = self::cargarF1($prod);
+
+            $contF1 = self::contcargarF1($prod);
             $tD = 0;
             $tN = 0;
             $tPD = 0;
             $tFD = 0;
             $tPN = 0;
             $tFN = 0;
-            $PlanD = 0;
-            $PlanN = 0;
-            foreach ($F1 as $F1s) {
-                $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                $valPD = self::plan($F1s->Final, $dia, '%D%');
-                $valFD = self::Firme($F1s->Final, $dia, '%D%');
-                $valN = self::Forecast($F1s->Final, $hoy, '%N%');
-                $valPN = self::plan($F1s->Final, $dia, '%N%');
-                $valFN = self::Firme($F1s->Final, $dia, '%N%');
-                $tD = $valD + $tD;
-                $tN = $valN + $tN;
-                $tPD = $valD + $tPD;
-                $tPN = $valN + $tPN;
-                $tFD = $valD + $tFD;
-                $tFN = $valN + $tFN;
+            if( $contF1!=0)
+            {
+                $F1 = self::cargarF1($prod);
+                foreach ($F1 as $F1s) {
+                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
+                    $valPD = self::plan($F1s->Final, $dia, '%D%');
+                    $valFD = self::Firme($F1s->Final, $dia, '%D%');
+                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                    $valPN = self::plan($F1s->Final, $dia, '%N%');
+                    $valFN = self::Firme($F1s->Final, $dia, '%N%');
+                    $tD = $valD + $tD;
+                    $tN = $valN + $tN;
+                    $tPD = $valPD + $tPD;
+                    $tPN = $valPN + $tPN;
+                    $tFD = $valFD + $tFD;
+                    $tFN = $valFN + $tFN;
+                }
+                $inF1 += ['F' . $dia . 'D' => $valD];
+                $inF1 += ['F' . $dia . 'N' => $valN];
+                $inF1 += ['P' . $dia . 'D' => $valPD];
+                $inF1 += ['P' . $dia . 'N' => $valPN];
+                $inF1 += ['Fi' . $dia . 'D' => $valFD];
+                $inF1 += ['Fi' . $dia . 'N' => $valFN];
+
+            }else{
+                $valD = self::Forecast($prod, $dia, '%D%');
+                $valPD = self::plan($prod, $dia, '%D%');
+                $valFD = self::Firme($prod, $dia, '%D%');
+                $valN = self::Forecast($prod, $dia, '%N%');
+                $valPN = self::plan($prod, $dia, '%N%');
+                $valFN = self::Firme($prod, $dia, '%N%');
+
+                $inF1 += ['F' . $dia . 'D' => $valD];
+                $inF1 += ['F' . $dia . 'N' => $valN];
+                $inF1 += ['P' . $dia . 'D' => $valPD];
+                $inF1 += ['P' . $dia . 'N' => $valPN];
+                $inF1 += ['Fi' . $dia . 'D' => $valFD];
+                $inF1 += ['Fi' . $dia . 'N' => $valFN];
             }
-            $inF1 += ['F' . $dia . 'D' => $valD];
-            $inF1 += ['F' . $dia . 'N' => $valN];
-            $inF1 += ['P' . $dia . 'D' => $valPD];
-            $inF1 += ['P' . $dia . 'N' => $valPN];
-            $inF1 += ['Fi' . $dia . 'D' => $valFD];
-            $inF1 += ['Fi' . $dia . 'N' => $valFN];
-            $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+            $dia = $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
             array_push($total, $inF1);
         }
@@ -308,7 +334,7 @@ class registros
     function Firme($pro, $fecha, $turno)
     {
         $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
+            ->select('FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
             ->where('FRDTE', '=', $fecha)
