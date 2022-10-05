@@ -128,7 +128,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input id="inputsqfin{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyDiurno->SORD }})"/>
+                                                    <input id="inputsqfin{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -149,7 +149,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input id="inputsqremm{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyDiurno->SORD }})"/>
+                                                    <input id="inputsqremm{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -290,7 +290,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input id="inputsqfin{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyNocturno->SORD }})"/>
+                                                    <input id="inputsqfin{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -311,7 +311,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input id="inputsqremm{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyNocturno->SORD }})"/>
+                                                    <input id="inputsqremm{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -478,7 +478,6 @@
             let inputSqremm = document.getElementById("inputsqremm" + $value).value;
             let inputDate = "date" + $value;
             let inputCancel = "cancel" + $value;
-            console.log(inputSqfin, inputSqremm, inputCancel, inputDate);
 
             if (inputSqfin > 0 || inputSqremm > 0)  {
                 document.getElementById(inputDate).disabled = true;
