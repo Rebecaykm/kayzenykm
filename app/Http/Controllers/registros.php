@@ -124,96 +124,88 @@ class registros
             ->get();
         return $res;
     }
+    function CargarforcastF1($prod, $hoy, $dias)
+    {
+        $inF1 = array();
+        $total = array();
+        $dia = $hoy;
+        $connt = 1;
+        while ($connt <= $dias) {
+            $inF1 = [
+                'Dia' => $dia,
+            ];
+            $tD = 0;
+            $tN = 0;
+
+
+            $valD = self::Forecast($prod, $dia, '%D%');
+            $valPD = self::plan($prod, $dia, '%D%');
+            $valFD = self::Firme($prod, $dia, '%D%');
+            $valN = self::Forecast($prod, $dia, '%N%');
+            $valPN = self::plan($prod, $dia, '%N%');
+            $valFN = self::Firme($prod, $dia, '%N%');
+
+            $inF1 += ['F' . $dia . 'D' => $valD];
+            $inF1 += ['F' . $dia . 'N' => $valN];
+            $inF1 += ['P' . $dia . 'D' => $valPD];
+            $inF1 += ['P' . $dia . 'N' => $valPN];
+            $inF1 += ['Fi' . $dia . 'D' => $valFD];
+            $inF1 += ['Fi' . $dia . 'N' => $valFN];
+
+            $dia = date('Ymd', strtotime($dia . '+1 day'));
+            $connt++;
+            array_push($total, $inF1);
+        }
+
+
+        return $total;
+    }
 
     function Cargarforcast($prod, $hoy, $dias)
     {
-        $inF1=array();
-        $total=array();
-        $sub = self::cargar($prod);
-            $connt = 1;
+        $inF1 = array();
+        $total = array();
+        $connt = 1;
+        $dia = $hoy;
+        while ($connt <= $dias) {
             $inF1 = [
                 'sub' => 'ForeCaste',
             ];
-            $inplanF1 = [
-                'sub' => 'Plan',
-            ];
-            while ($connt <= $dias) {
-                $F1 = self::cargarF1($prod);
-                $tD = 0;
-                $tN = 0;
-                $PlanD = 0;
-                $PlanN = 0;
-                foreach ($F1 as $F1s) {
-                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
-                    $tD = $valD + $tD;
-                    $tN = $valN + $tN;
-                }
-                $hyd='D'.$hoy.'D';
-                $hyn='N'.$hoy.'N';
-
-                $inF1 +=[ 'D'.$hoy.'D'=>$tD];
-                $inF1 +=['N'.$hoy.'N'=>$tN];
-
-                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                $connt++;
+            $F1 = self::cargarF1($prod);
+            $tD = 0;
+            $tN = 0;
+            $tPD = 0;
+            $tFD = 0;
+            $tPN = 0;
+            $tFN = 0;
+            $PlanD = 0;
+            $PlanN = 0;
+            foreach ($F1 as $F1s) {
+                $valD = self::Forecast($F1s->Final, $hoy, '%D%');
+                $valPD = self::plan($F1s->Final, $dia, '%D%');
+                $valFD = self::Firme($F1s->Final, $dia, '%D%');
+                $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                $valPN = self::plan($F1s->Final, $dia, '%N%');
+                $valFN = self::Firme($F1s->Final, $dia, '%N%');
+                $tD = $valD + $tD;
+                $tN = $valN + $tN;
+                $tPD = $valD + $tPD;
+                $tPN = $valN + $tPN;
+                $tFD = $valD + $tFD;
+                $tFN = $valN + $tFN;
             }
-            array_push($total,$inF1);
-            $connt=1;
-            while ($connt <= $dias) {
-                $F1 = self::cargarF1($prod);
-                $PlanD = 0;
-                $PlanN = 0;
-                foreach ($F1 as $F1s) {
-                    $valPD = self::plan($F1s->Final, $hoy, '%D%');
-                    $valPN = self::plan($F1s->Final, $hoy, '%N%');
-                    $PlanD = $valPD +  $PlanD;
-                    $PlanN= $valPN +  $PlanN;
-                }
-
-
-                $inplanF1 +=[ 'D'.$hoy.'D'=>$tD];
-                $inplanF1 +=['N'.$hoy.'N'=>$tN];
-
-                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                $connt++;
-            }
-            array_push($total,$inplanF1);
-            dd($total);
-        return $inF1;
+            $inF1 += ['F' . $dia . 'D' => $valD];
+            $inF1 += ['F' . $dia . 'N' => $valN];
+            $inF1 += ['P' . $dia . 'D' => $valPD];
+            $inF1 += ['P' . $dia . 'N' => $valPN];
+            $inF1 += ['Fi' . $dia . 'D' => $valFD];
+            $inF1 += ['Fi' . $dia . 'N' => $valFN];
+            $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+            $connt++;
+            array_push($total, $inF1);
+        }
+        return $total;
     }
-    function Cargarplan($prod, $hoy, $dias)
-    {
-        $inF1=array();
-        $total=array();
-        $sub = self::cargar($prod);
-            $connt = 1;
-            $inF1 = [
-                'sub' => $prod,
-            ];
-            while ($connt <= $dias) {
-                $F1 = self::cargarF1($prod);
-                $tD = 0;
-                $tN = 0;
-                foreach ($F1 as $F1s) {
-                    $valD = self::plan($F1s->Final, $hoy, '%D%');
-                    $valN = self::plan($F1s->Final, $hoy, '%N%');
-                    $tD = $valD + $tD;
-                    $tN = $valN + $tN;
-                }
-                $hyd='D'.$hoy.'D';
-                $hyn='N'.$hoy.'N';
-                $inF1 +=['D'.$hoy => $hoy];
-                $inF1 +=[ 'D'.$hoy.'D'=>$tD];
-                $inF1 +=['N'.$hoy.'N'=>$tN];
-
-                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                $connt++;
-            }
-
-        return $inF1;
-    }
-
 
     // ---------------------------------guardar estructuras de BOM----------------------------------------------
     function guardar($prod, $sub, $clase)
@@ -304,7 +296,7 @@ class registros
     {
 
         $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
+            ->select('FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
             ->where('FRDTE', '=', $fecha)

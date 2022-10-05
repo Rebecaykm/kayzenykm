@@ -31,16 +31,12 @@
                         </svg>
                     </button>
                 </div>
-
             </div>
         </form>
-
         @php
             include_once '../app/Http/Controllers/registros.php';
             $obj = new registros();
         @endphp
-
-
         <div class="flex-grow overflow-auto">
             <form action="{{ route('planeacion.update') }}" method="POST">
                 @csrf
@@ -68,21 +64,20 @@
                                 $totalD = 0;
                             @endphp
                             @while ($hoy != $fin)
-                                <th align="center" class="sticky headerpx-4 py-3 text-xs text-center ">
+                                <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
                                     <div class='W-full'>
                                         {{ date('Ymd', strtotime($hoy)) }}
                                     </div>
                                     <div class='w-full'>
                                         {{ date('l', strtotime($hoy)) }}
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                                        <label class="block text-sm ">
-                                            <span
-                                                class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">Dia</span>
+                                    <div
+                                        class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg border-0 bg-inherit">
+                                        <label class="block w-1/2 text-sm border-0 bg-inherit ">
+                                            <span class="block  text-xs  form-input ">Dia</span>
                                         </label>
-                                        <label class="block text-sm ">
-                                            <span
-                                                class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">Noche</span>
+                                        <label class="block  w-1/2 text-sm  border-0 bg-inherit">
+                                            <span class="block  text-xs form-input bg-inherit">Noche</span>
                                         </label>
                                     </div>
                                 </th>
@@ -95,6 +90,7 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                        {{-- ------------------------------------------------------- $plan variable que viene desde controlador  ---------------------------------------------------------- --}}
                         @foreach ($plan as $plans)
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
@@ -106,145 +102,75 @@
                                 </td>
                                 <td class="px-2 py-1 text-xs text-center ">
                                     <div class='w-40  border  border-b-4 border-rose-600 '>
-                                        <input value=" Requeriment (Forecast)"
+                                        <input value=" Requeriment (Forecast) "
                                             class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                                             disabled />
                                     </div>
-
+                                    <div class='w-40  border  border-b-4 border-rose-600 '>
+                                        <input value=" Plan  "
+                                            class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                            disabled />
+                                    </div>
+                                    <div class='w-40  border  border-b-4 border-rose-600 '>
+                                        <input value=" Firme  "
+                                            class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                            disabled />
+                                    </div>
                                 </td>
                                 @php
                                     $hoy = $fecha;
-
-                                    $cont = $obj->contar($plans->IPROD, $hoy, $fin);
-                                    // $conplanq = $obj->contarplan($plans->IPROD, $hoy, $fin);
-                                    // $confirme = $obj->contarfirme($plans->IPROD, $hoy, $fin);
-                                    // $conshop = $obj->contarShopO($plans->IPROD, $hoy, $fin);
-                                    $coni = 0;
+                                    $datos = $obj->CargarforcastF1($plans->IPROD, $hoy, $dias);
                                 @endphp
-                                @while ($coni < $totalD)
+                                @foreach ($datos as $info)
                                     <td class="px-2 py-1 text-xs text-center  ">
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value={{ $info['F' . $hoy . 'D'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                            <label class="block text-sm ">
 
-                                            @if ($cont != 0)
-                                                @php
+                                                <input value={{ $info['F' . $hoy . 'D'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
 
-                                                    $totalD1 = $obj->Forecast($plans->IPROD, $hoy, '%D%');
-                                                    $totalD1 = $totalD1 + 0;
-                                                    $totalN1 = $obj->Forecast($plans->IPROD, $hoy, '%N%');
-                                                    $totalN1 = $totalN1 + 0;
-                                                @endphp
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <label class="block text-sm ">
 
-                                                <label class="block text-sm ">
+                                                <input value={{ $info['P' . $hoy . 'D'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                            <label class="block text-sm ">
 
-                                                    <input value={{ $totalD1 }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
+                                                <input value={{ $info['P' . $hoy . 'N'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
 
-                                                    <input value={{ $totalN1 }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                            @else
-                                                <label class="block text-sm ">
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <label class="block text-sm ">
 
-                                                    <input value='0'
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
+                                                <input value={{ $info['Fi' . $hoy . 'D'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                            <label class="block text-sm ">
 
-                                                    <input value='0'
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                            @endif
+                                                <input value={{ $info['Fi' . $hoy . 'N'] }}
+                                                    class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+
                                         </div>
                                     </td>
                                     @php
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                        $coni++;
+
                                     @endphp
-                                @endwhile
+                                @endforeach
+
                             </tr>
-                            @php
-                                $Sub = $obj->cargar($plans->IPROD);
-                                $ContSub = $obj->contcargar($plans->IPROD);
+                            {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
 
-                            @endphp
-                            @if($ContSub>0)
-                            @foreach ($Sub as $subs)
-                                @php
-                                    $hoy = $fecha;
-                                    $subcomponentes = $obj->Cargarforcast($subs->Componente, $hoy, $dias);
-                                @endphp
-                                {{-- forecast --}}
-
-                                <tr class="text-gray-700 dark:text-gray-400 ">
-                                    <td class="px-2 py-1 text-xs text-center ">
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center">
-                                        {{ $subcomponentes['sub'] }}
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center">
-                                        @php
-                                            $F1sub = $obj->cargarF1($subcomponentes['sub']);
-                                        @endphp
-                                        @foreach ($F1sub as $F1subs)
-                                            {{ $F1subs->Final }}
-                                            <br>
-                                        @endforeach
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center ">
-                                        <div class='w-40  border  border-b-4 border-rose-600 '>
-                                            <input value=" Requeriment (Forecast)"
-                                                class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                disabled />
-                                        </div>
-
-                                        @php
-                                            $coni = 0;
-                                        @endphp
-
-                                    </td>
-                                    @while ($coni < $totalD)
-                                        <td class="px-2 py-1 text-xs text-center  ">
-
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $subcomponentes['D' . $hoy . 'D'] }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    @php
-                                                        //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
-                                                    @endphp
-                                                    <input value={{ $subcomponentes['N' . $hoy . 'N'] }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $subcomponentesPlan['D' . $hoy . 'D'] }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    @php
-                                                        //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
-                                                    @endphp
-                                                    <input value={{ $subcomponentesPlan['N' . $hoy . 'N'] }}
-                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                            </div>
-
-                                        </td>
-
-                                        @php
-                                            $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                            $coni++;
-                                        @endphp
-                                    @endwhile
-
-                                </tr>
-                            @endforeach
-                            @endif
                         @endforeach
                     </tbody>
                 </table>
