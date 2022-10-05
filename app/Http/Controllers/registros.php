@@ -111,7 +111,10 @@ class registros
         $res = Structure::query()
             ->select('Final', 'Componente', 'Activo')
             ->where('Final', $prod)
-            ->where('clase', '!=', '01')
+            ->where([
+                ['clase', '!=', '01'],
+                ['Activo', '1'],
+            ])
             ->get();
         return $res;
     }
