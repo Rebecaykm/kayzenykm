@@ -90,8 +90,8 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        {{-- ------------------------------------------------------- $plan variable que viene desde controlador  ---------------------------------------------------------- --}}
                         @foreach ($plan as $plans)
+                            {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
@@ -130,7 +130,7 @@
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $info['F' . $hoy . 'D'] }}
+                                                <input value={{ $info['F' . $hoy . 'N'] }}
                                                     class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
@@ -170,7 +170,88 @@
 
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
+                            @php
+                                $contsub = $obj->contcargar($plans->IPROD);
+                            @endphp
+                            @if ($contsub != 0)
+                                @php
+                                    $Sub = $obj->cargar($plans->IPROD);
+                                @endphp
+                                @foreach ($Sub as $subs)
+                                    @php
+                                        $hoy = $fecha;
+                                    @endphp
+                                    <tr class="text-gray-700 dark:text-gray-400 ">
+                                        <td class="px-2 py-1 text-xs text-center ">
+                                        </td>
+                                        <td class="px-2 py-1 text-xs text-center">
+                                            {{ $subs['Componente'] }}
+                                        </td>
+                                        <td class="px-2 py-1 text-xs text-center">
+                                            @php
+                                                $F1sub = $obj->cargarF1($subs['Componente']);
+                                            @endphp
+                                            @foreach ($F1sub as $F1subs)
+                                                {{ $F1subs->Final }}
+                                                <br>
+                                            @endforeach
+                                        </td>
+                                        <td class="px-2 py-1 text-xs text-center ">
+                                            <div class='w-40  border  border-b-4 border-rose-600 '>
+                                                <input value=" Requeriment (Forecast) "
+                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </div>
+                                            <div class='w-40  border  border-b-4 border-rose-600 '>
+                                                <input value=" Plan  "
+                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </div>
+                                            <div class='w-40  border  border-b-4 border-rose-600 '>
+                                                <input value=" Firme  "
+                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </div>
 
+                                        </td>
+                                        @php
+                                            $coni = 0;
+
+                                        @endphp
+                                        @while ($coni < $totalD)
+                                            <td class="px-2 py-1 text-xs text-center  ">
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        <input
+                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
+                                                        <input
+                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                </div>
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        <input
+                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
+                                                        <input
+                                                            class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                </div>
+
+                                            </td>
+                                            @php
+                                                $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                                $coni++;
+                                            @endphp
+                                        @endwhile
+                                    </tr>
+                                @endforeach
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
