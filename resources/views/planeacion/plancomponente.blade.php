@@ -166,13 +166,17 @@
                             </tr>
                             @php
                                 $Sub = $obj->cargar($plans->IPROD);
+                                $ContSub = $obj->contcargar($plans->IPROD);
+
                             @endphp
+                            @if($ContSub>0)
                             @foreach ($Sub as $subs)
                                 @php
                                     $hoy = $fecha;
                                     $subcomponentes = $obj->Cargarforcast($subs->Componente, $hoy, $dias);
                                 @endphp
                                 {{-- forecast --}}
+
                                 <tr class="text-gray-700 dark:text-gray-400 ">
                                     <td class="px-2 py-1 text-xs text-center ">
                                     </td>
@@ -203,20 +207,8 @@
                                     @while ($coni < $totalD)
                                         <td class="px-2 py-1 text-xs text-center  ">
 
-                                            {{-- @php
-                                                $totalforcastcom = 0;
-                                                $totalforcastcomN = 0;
-                                            @endphp
-                                            {{-- @foreach ($subcomponetes as $subcomponetest) --}}
-                                            {{-- {{$subcomponetest['sub']}}/{{$subcomponetest['dia']}}/{{$subcomponetest['valD']}}/{{$subcomponetest['valN']}}
-
-                                            --}} <div
-                                                class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
-                                                    @php
-
-                                                    @endphp
-
                                                     <input value={{ $subcomponentes['D' . $hoy . 'D'] }}
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
@@ -225,6 +217,19 @@
                                                         //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
                                                     @endphp
                                                     <input value={{ $subcomponentes['N' . $hoy . 'N'] }}
+                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $subcomponentesPlan['D' . $hoy . 'D'] }}
+                                                        class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        //   dd($subcomponentes['sub'],$subcomponentes,$subcomponentes['20221003D'])
+                                                    @endphp
+                                                    <input value={{ $subcomponentesPlan['N' . $hoy . 'N'] }}
                                                         class="block w-60 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                             </div>
@@ -239,6 +244,7 @@
 
                                 </tr>
                             @endforeach
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

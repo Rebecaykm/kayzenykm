@@ -97,7 +97,15 @@ class registros
     }
     //---------------------------------------Buscar estructuras ------------------------------------------------------
 
-
+    function contcargar($prod)
+    {
+        $res = Structure::query()
+            ->select('Final', 'Componente', 'Activo')
+            ->where('Final', $prod)
+            ->where('clase', '!=', '01')
+            ->count();
+        return $res;
+    }
     function cargar($prod)
     {
         $res = Structure::query()
@@ -124,6 +132,63 @@ class registros
         $sub = self::cargar($prod);
             $connt = 1;
             $inF1 = [
+                'sub' => 'ForeCaste',
+            ];
+            $inplanF1 = [
+                'sub' => 'Plan',
+            ];
+            while ($connt <= $dias) {
+                $F1 = self::cargarF1($prod);
+                $tD = 0;
+                $tN = 0;
+                $PlanD = 0;
+                $PlanN = 0;
+                foreach ($F1 as $F1s) {
+                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
+                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                    $tD = $valD + $tD;
+                    $tN = $valN + $tN;
+                }
+                $hyd='D'.$hoy.'D';
+                $hyn='N'.$hoy.'N';
+
+                $inF1 +=[ 'D'.$hoy.'D'=>$tD];
+                $inF1 +=['N'.$hoy.'N'=>$tN];
+
+                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                $connt++;
+            }
+            array_push($total,$inF1);
+            $connt=1;
+            while ($connt <= $dias) {
+                $F1 = self::cargarF1($prod);
+                $PlanD = 0;
+                $PlanN = 0;
+                foreach ($F1 as $F1s) {
+                    $valPD = self::plan($F1s->Final, $hoy, '%D%');
+                    $valPN = self::plan($F1s->Final, $hoy, '%N%');
+                    $PlanD = $valPD +  $PlanD;
+                    $PlanN= $valPN +  $PlanN;
+                }
+
+
+                $inplanF1 +=[ 'D'.$hoy.'D'=>$tD];
+                $inplanF1 +=['N'.$hoy.'N'=>$tN];
+
+                $hoy = $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                $connt++;
+            }
+            array_push($total,$inplanF1);
+            dd($total);
+        return $inF1;
+    }
+    function Cargarplan($prod, $hoy, $dias)
+    {
+        $inF1=array();
+        $total=array();
+        $sub = self::cargar($prod);
+            $connt = 1;
+            $inF1 = [
                 'sub' => $prod,
             ];
             while ($connt <= $dias) {
@@ -131,9 +196,8 @@ class registros
                 $tD = 0;
                 $tN = 0;
                 foreach ($F1 as $F1s) {
-                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
-
+                    $valD = self::plan($F1s->Final, $hoy, '%D%');
+                    $valN = self::plan($F1s->Final, $hoy, '%N%');
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
                 }
