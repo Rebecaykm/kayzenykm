@@ -487,6 +487,5 @@
                 document.getElementById(inputCancel).disabled = false;
             }
         }
-
     </script>
 </x-app-layout>
