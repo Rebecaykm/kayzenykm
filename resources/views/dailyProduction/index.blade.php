@@ -31,7 +31,7 @@
         @endif
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs border-2 dark:border-transparent bg-white dark:bg-gray-800">
-            <form method="POST" action="{{ route('daily-production.store') }}">
+            <form method="POST" action="{{ route('daily-production.store') }}" onKeypress="if(event.keyCode == 13) event.returnValue = false;">
                 @csrf
                 <div class="grid px-4 py-3 rounded-t-lg text-xs font-semibold tracking-wide text-gray-600 uppercase border-b dark:border-gray-700 bg-white grid-cols-6 dark:text-gray-200 dark:bg-gray-800">
                     <div class="col-span-3 gap-x-4 flex flex-row">
@@ -128,7 +128,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    <input id="inputsqfin{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -149,7 +149,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    <input id="inputsqremm{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -290,7 +290,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    <input id="inputsqfin{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -311,7 +311,7 @@
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    <input id="inputsqremm{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" onclick="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
@@ -471,7 +471,23 @@
             } else {
                 document.getElementById(inputDate).disabled = false;
             }
-
         }
+
+        function getValueInput($value) {
+            let inputSqfin = document.getElementById("inputsqfin" + $value).value;
+            let inputSqremm = document.getElementById("inputsqremm" + $value).value;
+            let inputDate = "date" + $value;
+            let inputCancel = "cancel" + $value;
+            console.log(inputSqfin, inputSqremm, inputCancel, inputDate);
+
+            if (inputSqfin > 0 || inputSqremm > 0)  {
+                document.getElementById(inputDate).disabled = true;
+                document.getElementById(inputCancel).disabled = true;
+            } else {
+                document.getElementById(inputDate).disabled = false;
+                document.getElementById(inputCancel).disabled = false;
+            }
+        }
+
     </script>
 </x-app-layout>

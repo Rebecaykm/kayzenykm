@@ -142,6 +142,7 @@ class DailyProductionController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'arrayDailyProductions' => 'required|array',
         ]);
