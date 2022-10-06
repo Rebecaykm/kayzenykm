@@ -17,17 +17,19 @@
                     </span>
                 </div>
             </div>
-            <div class="w-full overflow-x-auto text-center">
-                <table class="w-full whitespace-no-wrap">
+            <div class="w-full overflow-x-auto text-center sm:h-80 md:h-96 lg:h-112 xl:h-128">
+                <table class="w-full whitespace-nowrap">
                     @if ($countDiurno > 0 || $countNocturno > 0)
                     <thead>
-                        <tr class="text-xs text-center font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                        <tr class="text-xs text-center font-semibold tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800 sticky top-0">
                             <th class="px-3 py-2">No.</th>
                             <th class="px-3 py-2">Centro de Trabajo</th>
                             <th class="px-3 py-2">Turno</th>
                             <th class="px-3 py-2">No. Parte</th>
                             <th class="px-3 py-2">Orden de Producción</th>
                             <th class="px-3 py-2">Cantidad Planeada</th>
+                            <th class="px-3 py-2">Tipo de SNP</th>
+                            <th class="px-3 py-2">Cantidad de SNP</th>
                             <th class="px-3 py-2">Cantidad Real</th>
                             <th class="px-3 py-2">Cantidad de Desecho</th>
                             <th class="px-3 py-2">Estado</th>
@@ -68,6 +70,12 @@
                                 @php
                                 $dayStoragePlan += $dailyDiurno->SQREQ;
                                 @endphp
+                            </td>
+                            <td class="px-3 py-2 text-xs">
+                                {{ $dailyDiurno->IMSPKT }}
+                            </td>
+                            <td class="px-3 py-2 text-xs">
+                                {{ $dailyDiurno->IMBOXQ }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 @php
@@ -120,6 +128,8 @@
                             <td class="px-3 py-2 text-xs">Subtotal</td>
                             <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $dayStoragePlan }}.000</td>
+                            <td class="px-3 py-2 text-xs"></td>
+                            <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs">{{ $dayStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs"></td>
@@ -148,6 +158,14 @@
                                 @php
                                 $nightStoragePlan += $dailyNocturno->SQREQ;
                                 @endphp
+                            </td>
+                            <!-- Tipo de SNP -->
+                            <td class="px-3 py-2 text-xs">
+                                {{ $dailyNocturno->IMSPKT }}
+                            </td>
+                            <!-- Cantidad de SNP -->
+                            <td class="px-3 py-2 text-xs">
+                                {{ $dailyNocturno->IMBOXQ }}
                             </td>
                             <td class="px-3 py-2 text-xs">
                                 @php
@@ -200,6 +218,8 @@
                             <td class="px-3 py-2 text-xs">Subtotal</td>
                             <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $nightStoragePlan }}.000</td>
+                            <td class="px-3 py-2 text-xs"></td>
+                            <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $nightStorageReal - $nightStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs">{{ $nightStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs"></td>
@@ -214,6 +234,8 @@
                             <td class="px-3 py-2 text-xs">Total</td>
                             <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
+                            <td class="px-3 py-2 text-xs"></td>
+                            <td class="px-3 py-2 text-xs"></td>
                             <td class="px-3 py-2 text-xs">{{ $dayStorageReal + $nightStorageReal - $dayStorageScrap - $nightStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
                             <td class="px-3 py-2 text-xs"></td>

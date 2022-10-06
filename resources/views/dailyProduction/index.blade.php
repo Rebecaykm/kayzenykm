@@ -52,17 +52,19 @@
                         </button>
                     </div>
                 </div>
-                <div class="w-full overflow-x-auto text-center">
+                <div class="w-full overflow-x-auto text-center sm:h-80 md:h-96 lg:h-112 xl:h-128">
                     <table class="w-full whitespace-no-wrap">
                         @if ($countDiurno > 0 || $countNocturno > 0)
                             <thead>
-                                <tr class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                                <tr class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800 sticky top-0">
                                     <th class="px-2 py-1">No.</th>
                                     <th class="px-2 py-1">Centro de Trabajo</th>
                                     <th class="px-2 py-1">Turno</th>
                                     <th class="px-2 py-1">No. Parte</th>
                                     <th class="px-2 py-1">Orden de Producción</th>
                                     <th class="px-2 py-1">Cantidad Planeada</th>
+                                    <th class="px-3 py-2">Tipo de SNP</th>
+                                    <th class="px-3 py-2">Cantidad de SNP</th>
                                     <th class="px-2 py-1">Cantidad Real</th>
                                     <th class="px-2 py-1">Cantidad de Desecho</th>
                                     <th class="px-2 py-1">Estado</th>
@@ -116,6 +118,14 @@
                                             $dayStoragePlan += $dailyDiurno->SQREQ;
                                         @endphp
                                     </td>
+                                    <!-- Tipo de SNP -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyDiurno->IMSPKT }}
+                                    </td>
+                                    <!-- Cantidad de SNP -->
+                                    <td class="px-2 py-1 text-xs">
+                                        {{ $dailyDiurno->IMBOXQ }}
+                                    </td>
                                     <!-- Cantidad Real -->
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
@@ -124,16 +134,16 @@
                                         @if ($dailyDiurno->SID == 'SO')
                                             @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN && $dailyDiurno->SQREQ > 0)
                                                 <label class="block text-sm">
-                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-20 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input id="inputsqfin{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
+                                                    <input id="inputsqfin{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-20 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
                                             <label class="block text-sm">
-                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-20 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                             </label>
                                         @endif
                                         @php
@@ -145,16 +155,16 @@
                                         @if ($dailyDiurno->SID == 'SO')
                                             @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN && $dailyDiurno->SQREQ > 0)
                                                 <label class="block text-sm">
-                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                    <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                                 </label>
                                             @else
                                                 <label class="block text-sm">
-                                                    <input id="inputsqremm{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
+                                                    <input id="inputsqremm{{ $dailyDiurno->SORD }}" name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyDiurno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
                                             <label class="block text-sm">
-                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                <input name="arrayDailyProductions[{{ $dailyDiurno->SORD }}][sqremm]" type="number" value="{{ $dailyDiurno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                             </label>
                                         @endif
                                         @php
@@ -238,6 +248,8 @@
                                     <td class="px-2 py-1 text-xs">Subtotal</td>
                                     <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStorageScrap }}.000</td>
                                     <td class="px-2 py-1 text-xs"></td>
@@ -278,6 +290,14 @@
                                             $nightStoragePlan += $dailyNocturno->SQREQ;
                                         @endphp
                                     </td>
+                                    <!-- Tipo de SNP -->
+                                    <td class="px-3 py-2 text-xs">
+                                        {{ $dailyNocturno->IMSPKT }}
+                                    </td>
+                                    <!-- Cantidad de SNP -->
+                                    <td class="px-3 py-2 text-xs">
+                                        {{ $dailyNocturno->IMBOXQ }}
+                                    </td>
                                     <!-- Cantidad Real -->
                                     <td class="px-2 py-1 text-xs ">
                                         @php
@@ -286,16 +306,16 @@
                                         @if ($dailyNocturno->SID == 'SO')
                                             @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN && $dailyNocturno->SQREQ > 0)
                                                 <label class="block text-sm text-center">
-                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input id="inputsqfin{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
+                                                    <input id="inputsqfin{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
                                             <label class="block text-sm text-center">
-                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqfin]" type="number" value="{{ $realQuantity }}.000" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                             </label>
                                         @endif
                                         @php
@@ -307,16 +327,16 @@
                                         @if ($dailyNocturno->SID == 'SO')
                                             @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN && $dailyNocturno->SQREQ > 0)
                                                 <label class="block text-sm text-center">
-                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                    <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                                 </label>
                                             @else
                                                 <label class="block text-sm text-center">
-                                                    <input id="inputsqremm{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
+                                                    <input id="inputsqremm{{ $dailyNocturno->SORD }}" name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" oninput="getValueInput({{ $dailyNocturno->SORD }})"/>
                                                 </label>
                                             @endif
                                         @else
                                             <label class="block text-sm text-center">
-                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-32 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                                <input name="arrayDailyProductions[{{ $dailyNocturno->SORD }}][sqremm]" type="number" value="{{ $dailyNocturno->SQREMM }}" class="w-16 text-xs text-center dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
                                             </label>
                                         @endif
                                         @php
@@ -399,6 +419,8 @@
                                     <td class="px-2 py-1 text-xs">Subtotal</td>
                                     <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $nightStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $nightStorageReal - $nightStorageScrap}}.000</td>
                                     <td class="px-2 py-1 text-xs">{{ $nightStorageScrap }}.000</td>
                                     <td class="px-2 py-1 text-xs"></td>
@@ -415,6 +437,8 @@
                                     <td class="px-2 py-1 text-xs">Total</td>
                                     <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStoragePlan + $nightStoragePlan }}.000</td>
+                                    <td class="px-2 py-1 text-xs"></td>
+                                    <td class="px-2 py-1 text-xs"></td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStorageReal + $nightStorageReal - $dayStorageScrap - $nightStorageScrap }}.000</td>
                                     <td class="px-2 py-1 text-xs">{{ $dayStorageScrap + $nightStorageScrap }}.000</td>
                                     <td class="px-2 py-1 text-xs"></td>
@@ -474,10 +498,14 @@
         }
 
         function getValueInput($value) {
+
             let inputSqfin = document.getElementById("inputsqfin" + $value).value;
             let inputSqremm = document.getElementById("inputsqremm" + $value).value;
             let inputDate = "date" + $value;
             let inputCancel = "cancel" + $value;
+
+            // console.log(document.getElementById(inputDate).value)
+            // console.log(document.getElementById(inputCancel).value)
 
             if (inputSqfin > 0 || inputSqremm > 0)  {
                 document.getElementById(inputDate).disabled = true;

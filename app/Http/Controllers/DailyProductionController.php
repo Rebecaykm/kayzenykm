@@ -21,7 +21,7 @@ class DailyProductionController extends Controller
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -33,7 +33,7 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -84,7 +84,7 @@ class DailyProductionController extends Controller
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -96,7 +96,7 @@ class DailyProductionController extends Controller
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -173,8 +173,6 @@ class DailyProductionController extends Controller
         } else {
             return redirect()->back()->with('danger', '¡Oh no! Algo salió mal.');
         }
-
-
     }
 
     /**
