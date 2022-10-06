@@ -118,6 +118,17 @@ class registros
             ->get();
         return $res;
     }
+    function cargarestructura($prod)
+    {
+        $res = Structure::query()
+            ->select('Final', 'Componente', 'Activo')
+            ->where('Final', $prod)
+            ->where([
+                ['clase', '!=', '01'],
+            ])
+            ->get();
+        return $res;
+    }
 
     function cargarF1($prod)
     {
@@ -155,6 +166,8 @@ class registros
             $valN = self::Forecast($prod, $dia, '%N%');
             $valPN = self::plan($prod, $dia, '%N%');
             $valFN = self::Firme($prod, $dia, '%N%');
+            $valSD = self::ShopO($prod, $dia, '%D%');
+            $valSN = self::ShopO($prod, $dia, '%N%');
 
             $inF1 += ['F' . $dia . 'D' => $valD];
             $inF1 += ['F' . $dia . 'N' => $valN];
@@ -162,6 +175,8 @@ class registros
             $inF1 += ['P' . $dia . 'N' => $valPN];
             $inF1 += ['Fi' . $dia . 'D' => $valFD];
             $inF1 += ['Fi' . $dia . 'N' => $valFN];
+            $inF1 += ['S' . $dia . 'D' => $valSD];
+            $inF1 += ['S' . $dia . 'N' => $valSN];
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
@@ -190,6 +205,8 @@ class registros
             $tFD = 0;
             $tPN = 0;
             $tFN = 0;
+            $tSD=0;
+            $tSN=0;
             if( $contF1!=0)
             {
                 $F1 = self::cargarF1($prod);
@@ -200,12 +217,16 @@ class registros
                     $valN = self::Forecast($F1s->Final, $hoy, '%N%');
                     $valPN = self::plan($F1s->Final, $dia, '%N%');
                     $valFN = self::Firme($F1s->Final, $dia, '%N%');
+                    $valSD = self::ShopO($prod, $dia, '%D%');
+                    $valSN = self::ShopO($prod, $dia, '%N%');
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
                     $tPD = $valPD + $tPD;
                     $tPN = $valPN + $tPN;
                     $tFD = $valFD + $tFD;
                     $tFN = $valFN + $tFN;
+                    $tSD = $valSD + $tSD;
+                    $tSN = $valSN + $tSN;
                 }
                 $inF1 += ['F' . $dia . 'D' => $valD];
                 $inF1 += ['F' . $dia . 'N' => $valN];
@@ -213,6 +234,8 @@ class registros
                 $inF1 += ['P' . $dia . 'N' => $valPN];
                 $inF1 += ['Fi' . $dia . 'D' => $valFD];
                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
+                $inF1 += ['S' . $dia . 'D' => $valSD];
+                $inF1 += ['S' . $dia . 'N' => $valSN];
 
             }else{
                 $valD = self::Forecast($prod, $dia, '%D%');
@@ -221,6 +244,8 @@ class registros
                 $valN = self::Forecast($prod, $dia, '%N%');
                 $valPN = self::plan($prod, $dia, '%N%');
                 $valFN = self::Firme($prod, $dia, '%N%');
+                $valSD = self::ShopO($prod, $dia, '%D%');
+                $valSN = self::ShopO($prod, $dia, '%N%');
 
                 $inF1 += ['F' . $dia . 'D' => $valD];
                 $inF1 += ['F' . $dia . 'N' => $valN];
@@ -228,6 +253,8 @@ class registros
                 $inF1 += ['P' . $dia . 'N' => $valPN];
                 $inF1 += ['Fi' . $dia . 'D' => $valFD];
                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
+                $inF1 += ['S' . $dia . 'D' => $valSD];
+                $inF1 += ['S' . $dia . 'N' => $valSN];
             }
             $dia = $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;

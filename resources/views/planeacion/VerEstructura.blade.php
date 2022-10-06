@@ -28,10 +28,7 @@
                 </button>
             </div>
         </form>
-
-
-
-    </div>
+        <div class="flex-grow overflow-auto">
     <form action="{{ route('ShowStructure.update') }}" method="post">
         <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
         <div class="container">
@@ -57,7 +54,7 @@
                     include_once '../app/Http/Controllers/registros.php';
                     $obj = new registros();
                 @endphp
-                <div class="flex-grow overflow-auto">
+
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr
@@ -86,7 +83,7 @@
                                     </td>
                                 </tr>
                                 @php
-                                    $cF1 = $obj->cargar($plans->IPROD);
+                                    $cF1 = $obj->cargarestructura($plans->IPROD);
                                 @endphp
                                 @foreach ($cF1 as $registro)
                                     <tr class="text-gray-700 dark:text-gray-400">
@@ -204,7 +201,7 @@
                 </div>
             </div>
     </form>
-
+</div>
     <script>
         function myFunction(xx) {
             console.log(xx, document.getElementById(xx).name);

@@ -92,29 +92,50 @@
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $plans)
                             {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
-                            <tr class="text-gray-700 dark:text-gray-400">
+                            <tr class="text-gray-700 dark:text-gray-400 ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
                                 </td>
-                                <td class="px-2 py-1 text-xs text-center">
+                                <td class="px-2 py-1 text-xs  bg-emerald-100">
                                 </td>
-                                <td class="px-2 py-1 text-xs text-center">
+                                <td class="px-2 py-1 text-xs  bg-emerald-100">
                                 </td>
-                                <td class="px-2 py-1 text-xs text-center ">
-                                    <div class='w-40  border  border-b-4 border-rose-600 '>
-                                        <input value=" Requeriment (Forecast) "
-                                            class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                            disabled />
+                                <td class="px-2 py-1 text-xs  bg-emerald-100">
+
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="Requeriment (Forecast)"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+
+
                                     </div>
-                                    <div class='w-40  border  border-b-4 border-rose-600 '>
-                                        <input value=" Plan  "
-                                            class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                            disabled />
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <label class="block text-sm ">
+
+                                            <input value="Plan"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+
+
                                     </div>
-                                    <div class='w-40  border  border-b-4 border-rose-600 '>
-                                        <input value=" Firme  "
-                                            class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                            disabled />
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <label class="block text-sm ">
+
+                                            <input value="Firme"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+
+
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <label class="block text-sm ">
+
+                                            <input value="Shope Order"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+
+
                                     </div>
                                 </td>
                                 @php
@@ -122,7 +143,7 @@
                                     $datos = $obj->CargarforcastF1($plans->IPROD, $hoy, $dias);
                                 @endphp
                                 @foreach ($datos as $info)
-                                    <td class="px-2 py-1 text-xs text-center  ">
+                                    <td class="px-2 py-1 text-xs text-center bg-emerald-100 ">
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
                                                 <input value={{ $info['F' . $hoy . 'D'] }}
@@ -157,6 +178,19 @@
                                             <label class="block text-sm ">
 
                                                 <input value={{ $info['Fi' . $hoy . 'N'] }}
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value={{ $info['S' . $hoy . 'D'] }}
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                            <label class="block text-sm ">
+
+                                                <input value={{ $info['S' . $hoy . 'N'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
@@ -197,64 +231,96 @@
                                             @endforeach
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center ">
-                                            <div class='w-40  border  border-b-4 border-rose-600 '>
-                                                <input value=" Requeriment (Forecast) "
-                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value="Requeriment (Forecast)"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+
+
                                             </div>
-                                            <div class='w-40  border  border-b-4 border-rose-600 '>
-                                                <input value=" Plan  "
-                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+
+                                                    <input value="Plan"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+
+
                                             </div>
-                                            <div class='w-40  border  border-b-4 border-rose-600 '>
-                                                <input value=" Firme  "
-                                                    class="block w-full text-xs text-center dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+
+                                                    <input value="Firme"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+
+
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+
+                                                    <input value="Shope Order"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
+
+
                                             </div>
 
                                         </td>
                                         @php
                                             $coni = 0;
-                                        $hoy1=$fecha;
+                                            $hoy1 = $fecha;
                                             $datossub = $obj->Cargarforcast($plans->IPROD, $hoy, $dias);
 
                                         @endphp
-                                        @foreach($datossub  as $datossubs)
+                                        @foreach ($datossub as $datossubs)
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{$datossubs['F' . $hoy . 'D']}}
+                                                        <input value={{ $datossubs['F' . $hoy . 'D'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{$datossubs['F' . $hoy . 'N']}}
+                                                        <input value={{ $datossubs['F' . $hoy . 'N'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{$datossubs['P' . $hoy . 'N']}}
+                                                        <input value={{ $datossubs['P' . $hoy . 'D'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{$datossubs['P' . $hoy . 'N']}}
+                                                        <input value={{ $datossubs['P' . $hoy . 'N'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
                                                 <div
-                                                class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{$datossubs['Fi' . $hoy . 'N']}}
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    <input value={{$datossubs['Fi' . $hoy . 'N']}}
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                            </div>
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['Fi' . $hoy . 'D'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['Fi' . $hoy . 'N'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                </div>
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['S' . $hoy . 'D'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['S' . $hoy . 'N'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                </div>
 
                                             </td>
                                             @php
@@ -277,7 +343,7 @@
             </span>
             <!-- Pagination -->
             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                {{ $plan->links() }}
+                {{ $plan->withQueryString()->links() }}
 
             </span>
         </div>
