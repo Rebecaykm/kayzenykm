@@ -6,7 +6,7 @@
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
         <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Estructura del projecto {{ $projecto->CCDESC }}
+            Estructura del projecto
         </h2>
         <form method="get" action="{{ route('Structure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center rounded-lg">

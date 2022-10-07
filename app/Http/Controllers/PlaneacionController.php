@@ -178,7 +178,7 @@ class PlaneacionController extends Controller
 
             }
         }
-        $plan1 = IPB::query()
+        $plan = IPB::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
@@ -193,9 +193,9 @@ class PlaneacionController extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(5);
+                ->simplePaginate(2);
 
-        return view('planeacion.plancomponente', ['plan' => $plan1, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**
