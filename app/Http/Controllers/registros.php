@@ -9,6 +9,7 @@ use App\Models\kFP;
 use App\Models\Fso;
 use App\Models\Fpo;
 use App\Models\MBMr;
+use App\Models\ZCC;
 use App\Models\Structure;
 use Illuminate\Support\Arr;
 
@@ -158,8 +159,6 @@ class registros
             ];
             $tD = 0;
             $tN = 0;
-
-
             $valD = self::Forecast($prod, $dia, '%D%');
             $valPD = self::plan($prod, $dia, '%D%');
             $valFD = self::Firme($prod, $dia, '%D%');
@@ -205,10 +204,9 @@ class registros
             $tFD = 0;
             $tPN = 0;
             $tFN = 0;
-            $tSD=0;
-            $tSN=0;
-            if( $contF1!=0)
-            {
+            $tSD = 0;
+            $tSN = 0;
+            if ($contF1 != 0) {
                 $F1 = self::cargarF1($prod);
                 foreach ($F1 as $F1s) {
                     $valD = self::Forecast($F1s->Final, $hoy, '%D%');
@@ -236,8 +234,7 @@ class registros
                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
                 $inF1 += ['S' . $dia . 'D' => $valSD];
                 $inF1 += ['S' . $dia . 'N' => $valSN];
-
-            }else{
+            } else {
                 $valD = self::Forecast($prod, $dia, '%D%');
                 $valPD = self::plan($prod, $dia, '%D%');
                 $valFD = self::Firme($prod, $dia, '%D%');
@@ -341,6 +338,15 @@ class registros
             ->orderby('BCHLD')
             ->get();
         return $MBMS;
+    }
+    function Projecto($proj)
+    {
+        $PCs = ZCC::query()
+            ->select('CCDESC')
+            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $proj]])
+            ->first();
+
+        return $PCs;
     }
 
     // -----------------------------------------------------------------------------------

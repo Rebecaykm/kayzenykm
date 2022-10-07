@@ -32,7 +32,7 @@ class PlaneacionController extends Controller
         $CP = '';
         $WC = '';
         $this->WCs = ZCC::query()
-            ->select('CCID', 'CCTABL', 'CCCODE','CCDESC')
+            ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
             ->where('CCID', '=', 'CC')
             ->Where('CCTABL', '=', 'SIRF4')
             ->orderBy('CCID', 'ASC')
@@ -61,40 +61,39 @@ class PlaneacionController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
 
-        if($TP !='')
-        {
+        if ($TP != '') {
             $plan = IPB::query()
-            ->select('IPROD', 'ICLAS')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-            ->where([
-                ['IREF04','like','%'.$TP.'%' ],
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
+                ->select('IPROD', 'ICLAS', 'IMBOXQ')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->where([
+                    ['IREF04', 'like', '%' . $TP . '%'],
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
 
-            ])
-            ->where(function ($query) {
-                $query->where('ICLAS ', 'F1');
-            })
-            ->distinct('IPROD')
-            ->simplePaginate(5);
-        }else{
+                ])
+                ->where(function ($query) {
+                    $query->where('ICLAS ', 'F1');
+                })
+                ->distinct('IPROD')
+                ->simplePaginate(5);
+        } else {
             $plan = IPB::query()
-            ->select('IPROD', 'ICLAS')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-            ->where([
-                ['IBUYC', '!=', $CP],
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where(function ($query) {
-                $query->where('ICLAS ', 'F1');
-            })
-            ->distinct('IPROD')
-            ->simplePaginate(5);
+                ->select('IPROD', 'ICLAS')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->where([
+                    ['IBUYC', '!=', $CP],
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                ])
+                ->where(function ($query) {
+                    $query->where('ICLAS ', 'F1');
+                })
+                ->distinct('IPROD')
+                ->simplePaginate(5);
         }
 
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
@@ -136,74 +135,52 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
-        $TP = $request->SeTP;
-        $CP = $request->SePC;
-        $WC = $request->SeWC;
+
+        $variables = $request->all();
+
+        $plan = array_keys($variables);
+
+        dd($variables);
         $fecha = $request->fecha;
         $dias = $request->dias;
 
-
-        $plan = IPB::query()
-            ->select(['IPROD', 'IVEND', 'IVEND', 'IPURC', 'IBUYC', 'ICLAS', 'IMRP', 'WWRKC'])
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-            ->where('PBPBC', '=', $CP)
-            ->where('IID', '!=', 'IZ')
-            ->where('IMPLC', '!=', 'OBSOLETE')
-            ->where('ICLAS ', '=', 'F1')
-            ->distinct('IPROD')
-            ->orderby('IPROD')
-            ->get();
-
-
         foreach ($plan as $plans) {
+            $inp = explode('/', $plans, 3);
 
-            $hoy = date('Ymd', strtotime('now'));
-            $load = date('Ymd', strtotime('now'));
-            $hora = date('His', time());
-            $cont = 0;
-            $fefin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-            while ($cont <= 1) {
-                $part = str_replace(" ", "_", $plans->IPROD);
-                $inpD = $part . "/" . $fecha . "/D";
-                $inpN = $part . "/" . $fecha . "/N";
-                if (isset($request->$inpD) && isset($request->$inpN)) {
-                    $val = $request->$inpD;
-                    $valN = $request->$inpN;
-                    $data = YK006::query()->insert([
-                        'K6PROD' => $plans->IPROD,
-                        'K6WRKC' => $plans->WWRKC,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $hoy,
-                        'K6DSHT' => 'D',
-                        'K6PFQY' => $val,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => '',
+            if (count($inp) >= 3) {
 
-                    ]);
-                    $data = YK006::query()->insert([
-                        'K6PROD' => $plans->IPROD,
-                        'K6WRKC' => $plans->WWRKC,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $hoy,
-                        'K6DSHT' => 'N',
-                        'K6PFQY' => $valN,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => '',
+                $namenA = strtr($inp[0], '_', ' ');
+                 dd($variables, $plan, $namenA, $inp[1], $inp[2]);
+                $hoy = date('Ymd', strtotime('now'));
+                $load = date('Ymd', strtotime('now'));
+                $hora = date('His', time());
+                $cont = 0;
+                $fefin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
 
-                    ]);
-                }
-                $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                $cont++;
+                        $data = YK006::query()->insert([
+                            'K6PROD' => $namenA,
+                            'K6WRKC' => $plans->WWRKC,
+                            'K6SDTE' => $fecha,
+                            'K6EDTE' => $fefin,
+                            'K6DDTE' => $hoy,
+                            'K6DSHT' => 'D',
+                            'K6PFQY' => $val,
+                            'K6CUSR' => 'LXSECOFR',
+                            'K6CCDT' => $load,
+                            'K6CCTM' => $hora,
+                            'K6FIL1' => '',
+                            'K6FIL2' => '',
+
+                        ]);
+
+
+                    $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+
+
+            }else{
+
+
+
             }
         }
     }
