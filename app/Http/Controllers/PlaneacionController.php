@@ -7,11 +7,12 @@ use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
+use App\Models\frt;
 use App\Models\ZCC;
 use App\Models\YK006;
 use App\Models\Structure;
 use Carbon\Carbon;
-
+use Symfony\Component\VarDumper\Caster\FrameStub;
 
 class PlaneacionController extends Controller
 {
@@ -77,7 +78,7 @@ class PlaneacionController extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(5);
+                ->simplePaginate(1);
         } else {
             $plan = IPB::query()
                 ->select('IPROD', 'ICLAS')
@@ -135,54 +136,66 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
+        dd('updated');
+        $TP = $request->SeProject;
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
 
         $variables = $request->all();
-
         $plan = array_keys($variables);
-
-        dd($variables);
-        $fecha = $request->fecha;
-        $dias = $request->dias;
-
+        $data=explode('/', $plan[1], 2);
+        $dias =  $data[1];
+        $fecha =  $data[0];
         foreach ($plan as $plans) {
             $inp = explode('/', $plans, 3);
-
             if (count($inp) >= 3) {
-
                 $namenA = strtr($inp[0], '_', ' ');
-                 dd($variables, $plan, $namenA, $inp[1], $inp[2]);
                 $hoy = date('Ymd', strtotime('now'));
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
-                $cont = 0;
-                $fefin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
+                $WCT= Frt::query()
+                ->select('RWRKC','RPROD')
+                ->where('RPROD', $namenA)
+                ->value('RWRKC');
                         $data = YK006::query()->insert([
                             'K6PROD' => $namenA,
-                            'K6WRKC' => $plans->WWRKC,
+                            'K6WRKC' => $WCT,
                             'K6SDTE' => $fecha,
                             'K6EDTE' => $fefin,
                             'K6DDTE' => $hoy,
                             'K6DSHT' => 'D',
-                            'K6PFQY' => $val,
+                            'K6PFQY' => $request->$plans,
                             'K6CUSR' => 'LXSECOFR',
                             'K6CCDT' => $load,
                             'K6CCTM' => $hora,
                             'K6FIL1' => '',
                             'K6FIL2' => '',
-
                         ]);
-
-
                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-
-
             }else{
-
 
 
             }
         }
+        $plan1 = IPB::query()
+                ->select('IPROD', 'ICLAS', 'IMBOXQ')
+                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
+                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
+                ->where([
+                    ['IREF04', 'like', '%' . $TP . '%'],
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+
+                ])
+                ->where(function ($query) {
+                    $query->where('ICLAS ', 'F1');
+                })
+                ->distinct('IPROD')
+                ->simplePaginate(5);
+
+        return view('planeacion.plancomponente', ['plan' => $plan1, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**

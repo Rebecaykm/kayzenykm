@@ -3,10 +3,11 @@
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
         $projecto = $obj->Projecto($tp);
+        $dias = 2;
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Planeación {{ $projecto->CCDESC }}
+            Planeación {{ $tp }}
         </h2>
 
         <form method="post" action="{{ route('planeacion.create') }}">
@@ -40,14 +41,12 @@
                 </div>
             </div>
         </form>
-
-        <div class="flex-grow overflow-auto">
-            <form action="{{ route('planeacion.update') }}" method="POST">
-
+        <form action="{{ route('planeacion.update') }}" method="post">
+            <div class="flex-grow overflow-auto">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
 
                     <div class="flex justify-center">
-                        @csrf
+
                         <button type="submit"
                             class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                             <span class="mr-2">Actualizar</span>
@@ -59,10 +58,10 @@
                         </button>
                     </div>
                 </div>
-                @csrf
-
-                <input type="hidden" name={{ $fecha.'/'.$dias  }} id="data" value={{ $fecha.'/'.$dias  }}>
-
+                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
+                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr
@@ -77,7 +76,7 @@
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
                                 $hoy = $fecha;
-                                $dias = 2;
+
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $totalD = 0;
                             @endphp
@@ -102,18 +101,21 @@
                                 @php
                                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                     $totalD = $totalD + 1;
+
                                 @endphp
                             @endwhile
                         </tr>
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+
                         @foreach ($plan as $plans)
                             {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
                             <tr class="text-gray-700 dark:text-gray-400 ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
                                     @php
+
                                         $STP = 'STP:' . $plans->IMBOXQ;
                                     @endphp
                                     <div class="w-30 text-xs dark:border-gray-600 dark:bg-gray-700">
@@ -389,19 +391,20 @@
                         @endforeach
                     </tbody>
                 </table>
-            </form>
-        </div>
-        <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
-            </span>
-            <!-- Pagination -->
-            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                {{ $plan->withQueryString()->links() }}
 
-            </span>
-        </div>
+            </div>
+            <div
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                <span class="flex items-center col-span-3">
+                    Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
+                </span>
+                <!-- Pagination -->
+                <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+                    {{ $plan->withQueryString()->links() }}
+
+                </span>
+            </div>
+        </form>
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">

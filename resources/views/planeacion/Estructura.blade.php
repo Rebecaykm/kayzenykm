@@ -8,7 +8,6 @@
         <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Estructura del projecto {{ $projecto->CCDESC }}
         </h2>
-
         <form method="get" action="{{ route('Structure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center rounded-lg">
                 <label class="block text-sm ">
@@ -21,17 +20,14 @@
                         @if ($SEpro != '')
                             <option value={{ $SEpro }} selected="selected">{{ $SEpro }} </option>
                         @endif
-
                         @foreach ($LWK as $Projec)
                             <option value={{ $Projec->CCCODE }}>{{ $Projec->CCCODE }}//{{ $Projec->CCDESC }}
                             </option>
                         @endforeach
                     </select>
                 </label>
-
                 <div class="flex justify-center">
                     <span class="text-gray-700 dark:text-gray-400">
-
                     </span>
                     <button
                         class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
@@ -40,13 +36,8 @@
                 </div>
             </div>
         </form>
-
-
-
         <div class="container">
             <div class="containe mt-4">
-
-
                 <div class="container w-full">
                     <div class="flex flex-col h-screen">
                         <div class="flex-grow overflow-auto h-96">
