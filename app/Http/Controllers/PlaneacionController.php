@@ -78,7 +78,7 @@ class PlaneacionController extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(1);
+                ->simplePaginate(2);
         } else {
             $plan = IPB::query()
                 ->select('IPROD', 'ICLAS')
@@ -136,7 +136,7 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
-        dd('updated');
+
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;

@@ -44,7 +44,7 @@
         <form action="{{ route('planeacion.update') }}" method="post">
             <div class="flex-grow overflow-auto">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-
+                    @csrf
                     <div class="flex justify-center">
 
                         <button type="submit"
@@ -393,18 +393,18 @@
                 </table>
 
             </div>
-            <div
-                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-                <span class="flex items-center col-span-3">
-                    Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
-                </span>
-                <!-- Pagination -->
-                <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                    {{ $plan->withQueryString()->links() }}
 
-                </span>
-            </div>
         </form>
+        <div
+            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+            <span class="flex items-center col-span-3">
+                Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
+            </span>
+            <!-- Pagination -->
+            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+                {{ $plan->withQueryString()->links() }}
+            </span>
+        </div>
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
