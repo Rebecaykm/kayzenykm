@@ -21,7 +21,7 @@ class DailyProductionController extends Controller
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -30,10 +30,11 @@ class DailyProductionController extends Controller
                 ['SOCNO', 'NOT LIKE', '%N%']
             ])
             ->orderBy('SOCNO', 'ASC')
+            ->orderBy('SWRKC', 'ASC')
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -42,6 +43,7 @@ class DailyProductionController extends Controller
                 ['SOCNO', 'LIKE', '%N%']
             ])
             ->orderBy('SOCNO', 'ASC')
+            ->orderBy('SWRKC', 'ASC')
             ->get();
 
         if (strncmp($work, '11', 2) === 0 || strncmp($area, '11', 2) === 0) {
@@ -84,7 +86,7 @@ class DailyProductionController extends Controller
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
         $dailyDiurno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -93,10 +95,11 @@ class DailyProductionController extends Controller
                 ['SOCNO', 'NOT LIKE', '%N%'],
             ])
             ->orderBy('SOCNO', 'ASC')
+            ->orderBy('SWRKC', 'ASC')
             ->get();
 
         $dailyNocturno = Fso::query()
-            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
+            ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
@@ -105,6 +108,7 @@ class DailyProductionController extends Controller
                 ['SOCNO', 'LIKE', '%N%'],
             ])
             ->orderBy('SOCNO', 'ASC')
+            ->orderBy('SWRKC', 'ASC')
             ->get();
 
         if (strncmp($work, '11', 2) === 0 || strncmp($area, '11', 2) === 0) {

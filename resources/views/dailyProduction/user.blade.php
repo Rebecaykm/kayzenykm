@@ -39,124 +39,154 @@
                     @endif
                     <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @php
-                        $realQuantity = 0;
-                        $dayStoragePlan = 0;
-                        $dayStorageReal = 0;
-                        $dayStorageScrap = 0;
-                        $nightStoragePlan = 0;
-                        $nightStorageReal = 0;
-                        $nightStorageScrap = 0;
-                        $inventory = 0;
+                            $realQuantity = 0;
+                            $dayStoragePlan = 0;
+                            $dayStorageReal = 0;
+                            $dayStorageScrap = 0;
+                            $nightStoragePlan = 0;
+                            $nightStorageReal = 0;
+                            $nightStorageScrap = 0;
+                            $inventory = 0;
                         @endphp
                         @foreach ($dailyDiurnos as $key => $dailyDiurno)
-                        <tr>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $num = $key + 1 }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->SWRKC }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                D
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->SPROD }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->SORD }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->SQREQ }}
-                                @php
-                                $dayStoragePlan += $dailyDiurno->SQREQ;
-                                @endphp
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->IMSPKT }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->IMBOXQ }}
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                @php
-                                $realQuantity= $dailyDiurno->SQFIN - $dailyDiurno->SQREMM;
-                                $dayStorageReal += $dailyDiurno->SQFIN;
-                                @endphp
-                                {{ $realQuantity }}.000
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                {{ $dailyDiurno->SQREMM }}
-                                @php
-                                $dayStorageScrap += $dailyDiurno->SQREMM;
-                                @endphp
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
-                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                        Finalizado
-                                    </span>
-                                    @elseif ($dailyDiurno->SQREQ > $dailyDiurno->SQFIN && $dailyDiurno->SID == 'SZ')
-                                    <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        Cancelado
-                                    </span>
+                            <tr>
+                                <!-- Número -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $num = $key + 1 }}
+                                </td>
+                                <!-- Centro de Trabajo -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->SWRKC }}
+                                </td>
+                                <!-- Turno -->
+                                <td class="px-3 py-2 text-xs">
+                                    D
+                                </td>
+                                <!-- Número de Parte -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->SPROD }}
+                                </td>
+                                <!-- Orden de Producción -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->SORD }}
+                                </td>
+                                <!-- Cantidad Planeada -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->SQREQ }}
+                                    @php
+                                        $dayStoragePlan += $dailyDiurno->SQREQ;
+                                    @endphp
+                                </td>
+                                <!-- Tipo de SNP -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->IMSPKT }}
+                                </td>
+                                <!-- Cantidad de SNP -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->IMBOXQ }}
+                                </td>
+                                <!-- Cantidad Real -->
+                                <td class="px-3 py-2 text-xs">
+                                    @php
+                                        $realQuantity= $dailyDiurno->SQFIN - $dailyDiurno->SQREMM;
+                                        $dayStorageReal += $dailyDiurno->SQFIN;
+                                    @endphp
+                                    {{ $realQuantity }}.000
+                                </td>
+                                <!-- Scrap -->
+                                <td class="px-3 py-2 text-xs">
+                                    {{ $dailyDiurno->SQREMM }}
+                                    @php
+                                        $dayStorageScrap += $dailyDiurno->SQREMM;
+                                    @endphp
+                                </td>
+                                <!-- Estado -->
+                                <td class="px-3 py-2 text-xs">
+                                    @if ($dailyDiurno->SID == 'SZ' && $dailyDiurno->SQFIN == 0)
+                                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                            Cancelado
+                                        </span>
+                                    @elseif ($dailyDiurno->SID == 'SZ' && $dailyDiurno->SQFIN != 0)
+                                        <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                            Finalizado
+                                        </span>
+                                    @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'X' && $dailyDiurno->SQFIN != 0)
+                                        <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                            Finalizado
+                                        </span>
+                                    @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'X' && $dailyDiurno->SQFIN == 0)
+                                        <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                            Cancelado
+                                        </span>
+                                    @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'Y')
+                                        <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                            Finalizado
+                                        </span>
                                     @else
-                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                        En Proceso
-                                    </span>
+                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                            En Proceso
+                                        </span>
                                     @endif
-                            </td>
-                            <td class="px-3 py-2 text-xs">
-                                @php
-                                $inventory = $dailyDiurno->IOPB + $dailyDiurno->IRCT - $dailyDiurno->IISS + $dailyDiurno->IADJ;
-                                @endphp
-                                @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                    {{ $inventory }}
-                                    </span>
-                                    @else
-                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                </td>
+                                <!-- Inventario -->
+                                <td class="px-3 py-2 text-xs">
+                                    @php
+                                        $inventory = $dailyDiurno->IOPB + $dailyDiurno->IRCT - $dailyDiurno->IISS + $dailyDiurno->IADJ;
+                                    @endphp
+                                    @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
                                         {{ $inventory }}
-                                    </span>
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                            {{ $inventory }}
+                                        </span>
                                     @endif
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endforeach
                         @if ($countDiurno > 0)
-                        <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs">Subtotal</td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs">{{ $dayStoragePlan }}.000</td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
-                            <td class="px-3 py-2 text-xs">{{ $dayStorageScrap }}.000</td>
-                            <td class="px-3 py-2 text-xs"></td>
-                            <td class="px-3 py-2 text-xs"></td>
-                        </tr>
+                            <tr class="bg-gray-100 font-medium dark:text-gray-200 dark:bg-gray-800">
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">Subtotal</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStoragePlan }}.000</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageReal - $dayStorageScrap }}.000</td>
+                                <td class="px-3 py-2 text-xs">{{ $dayStorageScrap }}.000</td>
+                                <td class="px-3 py-2 text-xs"></td>
+                                <td class="px-3 py-2 text-xs"></td>
+                            </tr>
                         @endif
                         @foreach ($dailyNocturnos as $key => $dailyNocturno)
                         <tr>
+                            <!-- Número -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $num = $num + 1 }}
                             </td>
+                            <!-- Centro de Trabajo -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SWRKC }}
                             </td>
+                            <!-- Turno -->
                             <td class="px-3 py-2 text-xs">
                                 N
                             </td>
+                            <!-- Número de Parte -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SPROD }}
                             </td>
+                            <!-- Orden de Producción -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SORD }}
                             </td>
+                            <!-- Cantidad Planeada -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SQREQ }}
                                 @php
-                                $nightStoragePlan += $dailyNocturno->SQREQ;
+                                    $nightStoragePlan += $dailyNocturno->SQREQ;
                                 @endphp
                             </td>
                             <!-- Tipo de SNP -->
@@ -167,46 +197,63 @@
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->IMBOXQ }}
                             </td>
+                            <!-- Cantidad Real -->
                             <td class="px-3 py-2 text-xs">
                                 @php
-                                $realQuantity= $dailyNocturno->SQFIN - $dailyNocturno->SQREMM;
-                                $nightStorageReal += $dailyNocturno->SQFIN;
+                                    $realQuantity= $dailyNocturno->SQFIN - $dailyNocturno->SQREMM;
+                                    $nightStorageReal += $dailyNocturno->SQFIN;
                                 @endphp
                                 {{ $realQuantity }}.000
                             </td>
+                            <!-- Scrap -->
                             <td class="px-3 py-2 text-xs">
                                 {{ $dailyNocturno->SQREMM }}
                                 @php
-                                $nightStorageScrap += $dailyNocturno->SQREMM;
+                                    $nightStorageScrap += $dailyNocturno->SQREMM;
                                 @endphp
                             </td>
+                            <!-- Estado -->
                             <td class="px-3 py-2 text-xs">
-                                @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
-                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                        Finalizado
-                                    </span>
-                                    @elseif ($dailyNocturno->SQREQ > $dailyNocturno->SQFIN && $dailyNocturno->SID == 'SZ')
+                            @if ($dailyNocturno->SID == 'SZ' && $dailyNocturno->SQFIN == 0)
                                     <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
                                         Cancelado
                                     </span>
-                                    @else
+                                @elseif ($dailyNocturno->SID == 'SZ' && $dailyNocturno->SQFIN != 0)
+                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                        Finalizado
+                                    </span>
+                                @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'X' && $dailyNocturno->SQFIN != 0)
+                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                        Finalizado
+                                    </span>
+                                @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'X' && $dailyNocturno->SQFIN == 0)
+                                    <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                        Cancelado
+                                    </span>
+                                @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'Y')
+                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                        Finalizado
+                                    </span>
+                                @else
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                         En Proceso
                                     </span>
-                                    @endif
+                            @endif
                             </td>
+                            <!-- Inventario -->
                             <td class="px-3 py-2 text-xs">
                                 @php
-                                $inventory = $dailyNocturno->IOPB + $dailyNocturno->IRCT - $dailyNocturno->IISS + $dailyNocturno->IADJ;
+                                    $inventory = $dailyNocturno->IOPB + $dailyNocturno->IRCT - $dailyNocturno->IISS + $dailyNocturno->IADJ;
                                 @endphp
-                                @if ($inventory < 0) <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                    {{ $inventory }}
+                                @if ($inventory < 0)
+                                    <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                        {{ $inventory }}
                                     </span>
-                                    @else
+                                @else
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                         {{ $inventory }}
                                     </span>
-                                    @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach

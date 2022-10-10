@@ -173,19 +173,31 @@
                                     </td>
                                     <!-- Estado -->
                                     <td class="px-2 py-1 text-xs">
-                                        @if ($dailyDiurno->SQREQ <= $dailyDiurno->SQFIN)
+                                    @if ($dailyDiurno->SID == 'SZ' && $dailyDiurno->SQFIN == 0)
+                                            <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                Cancelado
+                                            </span>
+                                        @elseif ($dailyDiurno->SID == 'SZ' && $dailyDiurno->SQFIN != 0)
                                             <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
                                                 Finalizado
                                             </span>
-                                        @elseif ($dailyDiurno->SQREQ > $dailyDiurno->SQFIN && $dailyDiurno->SID == 'SZ')
+                                        @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'X' && $dailyDiurno->SQFIN != 0)
+                                            <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                Finalizado
+                                            </span>
+                                        @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'X' && $dailyDiurno->SQFIN == 0)
                                             <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
                                                 Cancelado
+                                            </span>
+                                        @elseif ($dailyDiurno->SID == 'SO' && $dailyDiurno->SSTAT == 'Y')
+                                            <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                Finalizado
                                             </span>
                                         @else
                                             <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                                 En Proceso
                                             </span>
-                                        @endif
+                                    @endif
                                     </td>
                                     <!-- Inventario -->
                                     <td class="px-2 py-1 text-xs">
@@ -345,18 +357,30 @@
                                     </td>
                                     <!-- Estado -->
                                     <td class="px-2 py-1 text-xs">
-                                        @if ($dailyNocturno->SQREQ <= $dailyNocturno->SQFIN)
-                                            <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                                Finalizado
-                                            </span>
-                                        @elseif ($dailyNocturno->SQREQ > $dailyNocturno->SQFIN && $dailyNocturno->SID == 'SZ')
-                                            <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                                Cancelado
-                                            </span>
-                                        @else
-                                            <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                                En Proceso
-                                            </span>
+                                        @if ($dailyNocturno->SID == 'SZ' && $dailyNocturno->SQFIN == 0)
+                                                <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                    Cancelado
+                                                </span>
+                                            @elseif ($dailyNocturno->SID == 'SZ' && $dailyNocturno->SQFIN != 0)
+                                                <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                    Finalizado
+                                                </span>
+                                            @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'X' && $dailyNocturno->SQFIN != 0)
+                                                <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                    Finalizado
+                                                </span>
+                                            @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'X' && $dailyNocturno->SQFIN == 0)
+                                                <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                                    Cancelado
+                                                </span>
+                                            @elseif ($dailyNocturno->SID == 'SO' && $dailyNocturno->SSTAT == 'Y')
+                                                <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                                    Finalizado
+                                                </span>
+                                            @else
+                                                <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                    En Proceso
+                                                </span>
                                         @endif
                                     </td>
                                     <!-- Inventario -->
