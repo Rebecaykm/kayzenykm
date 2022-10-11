@@ -26,7 +26,7 @@ class Structure extends Controller
                 ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
                 ->where([
                     // ['IREF04','like','%'.$Pr.'%' ],
-                    ['IREF04','=',$Pr ],
+                    ['IREF04', 'like', '%' . $Pr . '%'],
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])

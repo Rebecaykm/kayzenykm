@@ -195,6 +195,8 @@ class registros
             $tFN = 0;
             $tSD = 0;
             $tSN = 0;
+            $reN=0;
+            $reD=0;
             if ($contF1 != 0) {
                 $F1 = self::cargarF1($prod);
                 foreach ($F1 as $F1s) {
@@ -206,6 +208,8 @@ class registros
                     $valFN = self::Firme($F1s->Final, $dia, '%N%');
                     $valSD = self::ShopO($prod, $dia, '%D%');
                     $valSN = self::ShopO($prod, $dia, '%N%');
+
+
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
                     $tPD = $valPD + $tPD;
@@ -255,9 +259,9 @@ class registros
         $res = self::buscar($prod, $sub);
         if ($res == 0) {
             $data = Structure::create([
-                'Final' => $prod,
-                'Componente' => $sub,
-                'Clase' => $clase,
+                'final' => $prod,
+                'componente' => $sub,
+                'clase' => $clase,
                 'Activo' => '1',
             ]);
         }
@@ -441,12 +445,10 @@ class registros
                 ->where('LPROD', '=', $producto)
                 ->where('LSDTE', '=', $fecha)
                 ->where('CLCNO', 'Like', $turno)
-                ->get();
-            dd($MBMS);
-            foreach ($MBMS as $MBMSs) {
-                $ECL = $ECL + $MBMSs->LQORD;
-                dd($ECL);
-            }
+                ->sum('LQORD');
+
+
+            dd($ECL);
         }
 
 
