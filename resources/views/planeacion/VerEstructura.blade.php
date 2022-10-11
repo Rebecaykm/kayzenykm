@@ -59,9 +59,6 @@
                         </button>
                     </div>
                 </div>
-
-
-
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr
@@ -104,7 +101,6 @@
                                             {{ $Finales->Final }}<br>
                                         @endforeach
                                     </td>
-
                                     <td class="px-4 py-3 text-xs text-center ">
                                         {{ $registro->Componente }}
                                     </td>
@@ -156,14 +152,8 @@
                                                     </div>
                                                 </div>
                                             @endif
-
-
-
-
-
                                         </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @endforeach

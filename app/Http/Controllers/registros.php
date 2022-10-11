@@ -19,18 +19,7 @@ date_default_timezone_set('America/Monterrey');
 class registros
 {
 
-    function Forecast($producto, $fecha, $turno)
-    {
 
-        $plan = kmr::query()
-            ->select('MQTY')
-            ->where('MRDTE', '=', $fecha)
-            ->where('MPROD', '=', $producto)
-            ->where('MRCNO', 'like', $turno)
-            ->sum('MQTY');
-
-        return $plan;
-    }
     function contard($producto, $fecha, $turno)
     {
 
@@ -266,9 +255,9 @@ class registros
         $res = self::buscar($prod, $sub);
         if ($res == 0) {
             $data = Structure::create([
-                'final' => $prod,
-                'componente' => $sub,
-                'clase' => $clase,
+                'Final' => $prod,
+                'Componente' => $sub,
+                'Clase' => $clase,
                 'Activo' => '1',
             ]);
         }
@@ -276,9 +265,9 @@ class registros
     function buscar($prod, $sub)
     {
         $data = Structure::query()
-            ->select('final', 'componente')
-            ->where('final', '=', $prod)
-            ->where('componente', '=', $sub)
+            ->select('Final', 'Componente')
+            ->where('Final', '=', $prod)
+            ->where('Componente', '=', $sub)
             ->count();
 
         return $data;
@@ -351,7 +340,18 @@ class registros
 
     // -----------------------------------------------------------------------------------
 
+    function Forecast($producto, $fecha, $turno)
+    {
 
+        $plan = kmr::query()
+            ->select('MQTY')
+            ->where('MRDTE', '=', $fecha)
+            ->where('MPROD', '=', $producto)
+            ->where('MRCNO', 'like', $turno)
+            ->sum('MQTY');
+
+        return $plan;
+    }
 
 
     function plan($pro, $fecha, $turno)

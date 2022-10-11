@@ -58,7 +58,7 @@ class PlaneacionController extends Controller
     {
         $dias = $request->dias ?? '7';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $TP = $request->SeProject;
+        $TP = $request->SeProject ;
         $CP = $request->SePC;
         $WC = $request->SeWC;
 
@@ -96,6 +96,8 @@ class PlaneacionController extends Controller
                 ->distinct('IPROD')
                 ->simplePaginate(5);
         }
+
+        dd($plan);
 
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
@@ -142,11 +144,11 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
         $variables = $request->all();
-        $plan = array_keys($variables);
-        $data=explode('/', $plan[1], 2);
+        $keyes= array_keys($variables);
+        $data=explode('/', $keyes[1], 2);
         $dias =  $data[1];
         $fecha =  $data[0];
-        foreach ($plan as $plans) {
+        foreach ($keyes as $plans) {
             $inp = explode('/', $plans, 3);
             if (count($inp) >= 3) {
                 $namenA = strtr($inp[0], '_', ' ');
@@ -195,7 +197,7 @@ class PlaneacionController extends Controller
                 ->distinct('IPROD')
                 ->simplePaginate(2);
 
-        return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        return view('planeacion.plancomponente', [ 'plan' => $plan,'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**
