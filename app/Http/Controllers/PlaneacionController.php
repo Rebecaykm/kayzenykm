@@ -62,7 +62,7 @@ class PlaneacionController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
 
-        if ($TP != '') {
+
             $plan = IPB::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
@@ -78,26 +78,9 @@ class PlaneacionController extends Controller
                     $query->where('ICLAS ', 'F1');
                 })
                 ->distinct('IPROD')
-                ->simplePaginate(2);
-        } else {
-            $plan = IPB::query()
-                ->select('IPROD', 'ICLAS')
-                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-                ->where([
-                    ['IBUYC', '!=', $CP],
-                    ['IID', '!=', 'IZ'],
-                    ['IMPLC', '!=', 'OBSOLETE'],
-                ])
-                ->where(function ($query) {
-                    $query->where('ICLAS ', 'F1');
-                })
-                ->distinct('IPROD')
-                ->simplePaginate(5);
-        }
+                ->simplePaginate(2)->withQueryString();
 
-        dd($plan);
+
 
         return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
@@ -183,8 +166,6 @@ class PlaneacionController extends Controller
         $plan = IPB::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-                ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-                ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
                 ->where([
                     ['IREF04', 'like', '%' . $TP . '%'],
                     ['IID', '!=', 'IZ'],

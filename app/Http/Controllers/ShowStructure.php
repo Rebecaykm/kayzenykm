@@ -24,8 +24,6 @@ class ShowStructure extends Controller
         $plan = IPB::query()
             ->select('IPROD')
             ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
                 ['IID', '!=', 'IZ'],
@@ -35,7 +33,7 @@ class ShowStructure extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(30);
+            ->get();
 
         return view('planeacion.VerEstructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
@@ -65,8 +63,6 @@ class ShowStructure extends Controller
         $plan = IPB::query()
             ->select('IPROD')
             ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-            ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-            ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
                 ['IID', '!=', 'IZ'],

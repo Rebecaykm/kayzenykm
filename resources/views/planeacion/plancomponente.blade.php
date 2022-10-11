@@ -404,7 +404,7 @@
             </span>
             <!-- Pagination -->
             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                {{ $plan->withQueryString()->links() }}
+                {{ $plan->withQueryString()->appends(['SeProject' => $tp])->links() }}
             </span>
         </div>
         <div
