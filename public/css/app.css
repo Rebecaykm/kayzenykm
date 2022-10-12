@@ -53121,6 +53121,11 @@ video {
   box-shadow: 0 0 0 3px hsla(327.4, 82.9%, 83.9%, 0.45);
 }
 
+.colmde
+  {
+  border-right:solid 1px #000;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

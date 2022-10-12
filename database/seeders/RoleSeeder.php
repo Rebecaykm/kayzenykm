@@ -26,7 +26,9 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'open-orders.index', 'description' => 'Informe de Órdenes Abiertas'])->syncRoles([$adminRole, $userRole]);
         Permission::create(['name' => 'daily-production.index', 'description' => 'Planificación y Progreso Diario de la Producción (Admin)'])->syncRoles([$adminRole, $userRole]);
         Permission::create(['name' => 'daily-production.user', 'description' => 'Planificación y Progreso Diario de la Producción (Usuario)'])->syncRoles([$adminRole, $guestRole]);
-        Permission::create(['name' => 'planeacion.index', 'description' => 'Planning'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'planeacion.index', 'description' => 'Listado de Plan'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'Structure.index', 'description' => 'Listado de Estructura'])->syncRoles([$adminRole, $userRole]);
+        Permission::create(['name' => 'ShowStructure.index', 'description' => 'Muestrar la Estructura'])->syncRoles([$adminRole, $userRole]);
 
         // Permission::create(['name' => 'users.index', 'description' => 'View list of Users'])->syncRoles([$adminRole]);
         // Permission::create(['name' => 'users.create', 'description' => 'Create User'])->syncRoles([$adminRole]);

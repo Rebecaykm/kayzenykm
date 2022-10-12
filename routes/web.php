@@ -61,4 +61,29 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('daily-production', [\App\Http\Controllers\DailyProductionController::class, 'index'])->name('daily-production.index');
     Route::get('daily-production-user', [\App\Http\Controllers\DailyProductionController::class, 'indexUser'])->name('daily-production.user');
     Route::post('daily-production', [\App\Http\Controllers\DailyProductionController::class, 'store'])->name('daily-production.store');
+    Route::get('open-orders', [\App\Http\Controllers\FsoController::class, 'index'])->name('open-orders.index');
+    Route::post('open-orders', [\App\Http\Controllers\FsoController::class, 'store'])->name('open-orders.store');
+
+    /**
+     * Routes planeacion
+     */
+    Route::get('planeacion', [\App\Http\Controllers\PlaneacionController::class, 'index'])->name('planeacion.index');
+    Route::get('planeacion/create', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
+    Route::post('planeacion/create', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
+    Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
+    Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
+
+    /**
+     * Cargar Estructura BOM
+     */
+    Route::get('Structure', [\App\Http\Controllers\Structure::class, 'index'])->name('Structure.index');
+    Route::post('Structure', [\App\Http\Controllers\Structure::class, 'index'])->name('Structure.index');
+
+    /**
+     * ver Estructura BOM
+     */
+    Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('Showtructure.index');
+    Route::post('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.index');
+    Route::post('ShowStructure/update', [\App\Http\Controllers\showStructure::class, 'update'])->name('ShowStructure.update');
+    Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.update');
 });
