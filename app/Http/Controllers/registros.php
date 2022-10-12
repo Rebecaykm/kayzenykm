@@ -125,6 +125,7 @@ class registros
         $res = Structure::query()
             ->select('Final', 'componente')
             ->where('componente', $prod)
+            ->distinct('Final')
             ->get();
         return $res;
     }
@@ -201,24 +202,27 @@ class registros
                 $F1 = self::cargarF1($prod);
                 foreach ($F1 as $F1s) {
                     $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                    $valPD = self::plan($F1s->Final, $dia, '%D%');
-                    $valFD = self::Firme($F1s->Final, $dia, '%D%');
                     $valN = self::Forecast($F1s->Final, $hoy, '%N%');
-                    $valPN = self::plan($F1s->Final, $dia, '%N%');
-                    $valFN = self::Firme($F1s->Final, $dia, '%N%');
-                    $valSD = self::ShopO($prod, $dia, '%D%');
-                    $valSN = self::ShopO($prod, $dia, '%N%');
-
-
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
-                    $tPD = $valPD + $tPD;
-                    $tPN = $valPN + $tPN;
-                    $tFD = $valFD + $tFD;
-                    $tFN = $valFN + $tFN;
-                    $tSD = $valSD + $tSD;
-                    $tSN = $valSN + $tSN;
                 }
+
+                $valPD = self::plan($prod, $dia, '%D%');
+                $valFD = self::Firme($prod, $dia, '%D%');
+                $valPN = self::plan($prod, $dia, '%N%');
+                $valFN = self::Firme($prod, $dia, '%N%');
+                $valSD = self::ShopO($prod, $dia, '%D%');
+                $valSN = self::ShopO($prod, $dia, '%N%');
+                $valD =  $valD +0;
+                $valPD =  $valPD+0;
+                $valFD = $valFD+0;
+                $valN =  $valN+0;
+                $valPN = $valPN +0;
+                $valFN =$valFN  +0;
+                $valSD = $valSD  +0;
+                $valSN =$valSN +0;
+
+
                 $inF1 += ['F' . $dia . 'D' => $valD];
                 $inF1 += ['F' . $dia . 'N' => $valN];
                 $inF1 += ['P' . $dia . 'D' => $valPD];
@@ -228,6 +232,7 @@ class registros
                 $inF1 += ['S' . $dia . 'D' => $valSD];
                 $inF1 += ['S' . $dia . 'N' => $valSN];
             } else {
+
                 $valD = self::Forecast($prod, $dia, '%D%');
                 $valPD = self::plan($prod, $dia, '%D%');
                 $valFD = self::Firme($prod, $dia, '%D%');
@@ -236,6 +241,15 @@ class registros
                 $valFN = self::Firme($prod, $dia, '%N%');
                 $valSD = self::ShopO($prod, $dia, '%D%');
                 $valSN = self::ShopO($prod, $dia, '%N%');
+
+                $valD =  $valD +0;
+                $valPD =  $valPD+0;
+                $valFD = $valFD+0;
+                $valN =  $valN+0;
+                $valPN = $valPN +0;
+                $valFN =$valFN  +0;
+                $valSD = $valSD  +0;
+                $valSN =$valSN +0;
 
                 $inF1 += ['F' . $dia . 'D' => $valD];
                 $inF1 += ['F' . $dia . 'N' => $valN];
@@ -448,7 +462,6 @@ class registros
                 ->sum('LQORD');
 
 
-            dd($ECL);
         }
 
 

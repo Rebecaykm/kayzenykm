@@ -314,7 +314,7 @@
                                         @php
                                             $coni = 0;
                                             $hoy1 = $fecha;
-                                            $datossub = $obj->Cargarforcast($plans->IPROD, $hoy, $dias);
+                                            $datossub = $obj->Cargarforcast($subs['Componente'], $hoy, $dias);
                                         @endphp
                                         @foreach ($datossub as $datossubs)
                                             <td class="px-2 py-1 text-xs text-center  ">
