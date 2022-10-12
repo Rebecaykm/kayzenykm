@@ -50,7 +50,7 @@ class ShowStructure extends Controller
         foreach ($keyre as $chek) {
             $namenA = strtr($chek, '_', ' ');
             Structure::query()
-                ->where('Componente',  $namenA )
+                ->where('Componente',  $namenA)
                 ->update(['Activo' => $request->$chek]);
         }
         $WCs = ZCC::query()

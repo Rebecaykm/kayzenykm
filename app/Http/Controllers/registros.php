@@ -196,8 +196,8 @@ class registros
             $tFN = 0;
             $tSD = 0;
             $tSN = 0;
-            $reN=0;
-            $reD=0;
+            $reN = 0;
+            $reD = 0;
             if ($contF1 != 0) {
                 $F1 = self::cargarF1($prod);
                 foreach ($F1 as $F1s) {
@@ -213,14 +213,14 @@ class registros
                 $valFN = self::Firme($prod, $dia, '%N%');
                 $valSD = self::ShopO($prod, $dia, '%D%');
                 $valSN = self::ShopO($prod, $dia, '%N%');
-                $valD =  $valD +0;
-                $valPD =  $valPD+0;
-                $valFD = $valFD+0;
-                $valN =  $valN+0;
-                $valPN = $valPN +0;
-                $valFN =$valFN  +0;
-                $valSD = $valSD  +0;
-                $valSN =$valSN +0;
+                $valD =  $valD + 0;
+                $valPD =  $valPD + 0;
+                $valFD = $valFD + 0;
+                $valN =  $valN + 0;
+                $valPN = $valPN + 0;
+                $valFN = $valFN  + 0;
+                $valSD = $valSD  + 0;
+                $valSN = $valSN + 0;
 
 
                 $inF1 += ['F' . $dia . 'D' => $valD];
@@ -242,14 +242,14 @@ class registros
                 $valSD = self::ShopO($prod, $dia, '%D%');
                 $valSN = self::ShopO($prod, $dia, '%N%');
 
-                $valD =  $valD +0;
-                $valPD =  $valPD+0;
-                $valFD = $valFD+0;
-                $valN =  $valN+0;
-                $valPN = $valPN +0;
-                $valFN =$valFN  +0;
-                $valSD = $valSD  +0;
-                $valSN =$valSN +0;
+                $valD =  $valD + 0;
+                $valPD =  $valPD + 0;
+                $valFD = $valFD + 0;
+                $valN =  $valN + 0;
+                $valPN = $valPN + 0;
+                $valFN = $valFN  + 0;
+                $valSD = $valSD  + 0;
+                $valSN = $valSN + 0;
 
                 $inF1 += ['F' . $dia . 'D' => $valD];
                 $inF1 += ['F' . $dia . 'N' => $valN];
@@ -460,8 +460,6 @@ class registros
                 ->where('LSDTE', '=', $fecha)
                 ->where('CLCNO', 'Like', $turno)
                 ->sum('LQORD');
-
-
         }
 
 
