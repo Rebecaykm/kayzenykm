@@ -8,6 +8,7 @@ use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
 use App\Models\frt;
+use App\Models\Iim;
 use App\Models\ZCC;
 use App\Models\YK006;
 use App\Models\Structure;
@@ -63,14 +64,12 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
 
-            $plan = IPB::query()
+            $plan = Iim::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
-                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->where([
                     ['IREF04', 'like', '%' . $TP . '%'],
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
-
                 ])
                 ->where(function ($query) {
                     $query->where('ICLAS ', 'F1');

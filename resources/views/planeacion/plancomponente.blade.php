@@ -42,7 +42,7 @@
             </div>
         </form>
         <form action="{{ route('planeacion.update') }}" method="post">
-            <div class="flex-grow overflow-auto">
+            <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-112 xl:h-128">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                     @csrf
                     <div class="flex justify-center">
@@ -62,7 +62,7 @@
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                 <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                <table class="w-full whitespace-no-wrap">
+                <table class="w-full whitespace-no-wrap ">
                     <thead>
                         <tr
                             class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
@@ -108,14 +108,12 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-
                         @foreach ($plan as $plans)
                             {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
-                            <tr class="text-gray-700 dark:text-gray-400 ">
+                            <tr class="text-gray-700 dark:text-gray-400 sticky top-0 text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
                                     @php
-
                                         $STP = 'STP:' . $plans->IMBOXQ;
                                     @endphp
                                     <div class="w-30 text-xs dark:border-gray-600 dark:bg-gray-700">
@@ -136,6 +134,15 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                         <label class="block text-sm ">
+                                            <input value="Requeriment (Parent parts)"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
+
+
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <label class="block text-sm ">
 
                                             <input value="Plan"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -149,8 +156,6 @@
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
-
-
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                         <label class="block text-sm ">
@@ -182,6 +187,20 @@
                                                     disabled />
                                             </label>
 
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value={{ $info['R' . $hoy . 'D'] }}
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+                                            <label class="block text-sm ">
+
+                                                <input value={{ $info['R' . $hoy . 'N'] }}
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
@@ -258,21 +277,32 @@
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center">
                                             {{ $subs['Componente'] }}
+
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center">
-                                            @php
+                                            {{-- @php
                                                 $F1sub = $obj->cargarF1($subs['Componente']);
+
                                             @endphp
                                             @foreach ($F1sub as $F1subs)
-                                                {{ $F1subs->Final }}
+                                                {{ $F1subs['final'] }}
                                                 <br>
-                                            @endforeach
+                                            @endforeach --}}
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center ">
 
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value="Requeriment (Forecast)"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+
+
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value="Requeriment (Parent parts)"
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -314,19 +344,20 @@
                                         @php
                                             $coni = 0;
                                             $hoy1 = $fecha;
-                                            $datossub = $obj->Cargarforcast($subs['Componente'], $hoy, $dias);
+                                            $datossub = $obj->Cargarforcast($subs['Componente'], $hoy1, $dias);
+
                                         @endphp
                                         @foreach ($datossub as $datossubs)
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['F' . $hoy . 'D'] }}
+                                                        <input value={{ $datossubs['F' . $hoy1 . 'D'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['F' . $hoy . 'N'] }}
+                                                        <input value={{ $datossubs['F' . $hoy1 . 'N'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
@@ -334,32 +365,47 @@
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['P' . $hoy . 'D'] }}
+
+                                                        <input value={{ $datossubs['R' . $hoy1 . 'D'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['P' . $hoy . 'N'] }}
+
+                                                        <input value={{ $datossubs['R' . $hoy1 . 'N'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                </div>
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['P' . $hoy1 . 'D'] }}
+                                                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                    <label class="block text-sm ">
+                                                        <input value={{ $datossubs['P' . $hoy1 . 'N'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                 </div>
                                                 @php
                                                     $namenA = strtr($plans->IPROD, ' ', '_');
-                                                    $inD = $namenA . '/' . $hoy . '/D';
-                                                    $inN = $namenA . '/' . $hoy . '/N';
+                                                    $inD = $namenA . '/' . $hoy1 . '/D';
+                                                    $inN = $namenA . '/' . $hoy1 . '/N';
                                                 @endphp
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input id={{ $inD }} name={{ $inD }}
-                                                            value={{ $datossubs['Fi' . $hoy . 'D'] }}
+                                                            value={{ $datossubs['Fi' . $hoy1 . 'D'] }}
                                                             onclick='myFunction(this.id)'
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
                                                         <input id={{ $inN }} name={{ $inN }}
-                                                            value={{ $datossubs['Fi' . $hoy . 'N'] }}
+                                                            value={{ $datossubs['Fi' . $hoy1 . 'N'] }}
                                                             onclick='myFunction(this.id)'
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
@@ -367,12 +413,12 @@
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['S' . $hoy . 'D'] }}
+                                                        <input value={{ $datossubs['S' . $hoy1 . 'D'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{ $datossubs['S' . $hoy . 'N'] }}
+                                                        <input value={{ $datossubs['S' . $hoy1 . 'N'] }}
                                                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
@@ -380,7 +426,7 @@
 
                                             </td>
                                             @php
-                                                $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                                $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
 
                                             @endphp
                                         @endforeach
