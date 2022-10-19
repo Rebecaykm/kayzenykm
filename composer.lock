@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ec1b54717ba32f48615aa82688d6b56",
+    "content-hash": "63202b73941e98e6434db5eab330ac5a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2735,16 +2735,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v1.6.1",
+            "version": "v1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "60dd54f381a7f3441efd947a0a12dec2eeae148e"
+                "reference": "d6e0a337aa2b4453f173179f3e0edb3a9ea94381"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/60dd54f381a7f3441efd947a0a12dec2eeae148e",
-                "reference": "60dd54f381a7f3441efd947a0a12dec2eeae148e",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/d6e0a337aa2b4453f173179f3e0edb3a9ea94381",
+                "reference": "d6e0a337aa2b4453f173179f3e0edb3a9ea94381",
                 "shasum": ""
             },
             "require": {
@@ -2804,9 +2804,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v1.6.1"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v1.6.2"
             },
-            "time": "2022-10-11T06:49:32+00:00"
+            "time": "2022-10-13T14:26:27+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
