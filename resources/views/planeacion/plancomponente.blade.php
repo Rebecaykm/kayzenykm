@@ -42,7 +42,7 @@
             </div>
         </form>
         <form action="{{ route('planeacion.update') }}" method="post">
-            <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-112 xl:h-128">
+            <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-112 xl:h-128 ">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                     @csrf
                     <div class="flex justify-center">
@@ -65,7 +65,7 @@
                 <table class="w-full whitespace-no-wrap ">
                     <thead>
                         <tr
-                            class="text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                            class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
                             <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
                             <th class=" header px-4 py-3 sticky ">
                                 Parte componente
@@ -110,7 +110,7 @@
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $plans)
                             {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
-                            <tr class="text-gray-700 dark:text-gray-400 sticky top-0 text-xs ">
+                            <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $plans->IPROD }}
                                     @php
