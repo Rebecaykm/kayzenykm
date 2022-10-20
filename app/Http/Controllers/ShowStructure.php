@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Iim;
 use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
@@ -21,20 +22,19 @@ class ShowStructure extends Controller
             ->get();
 
 
-        $plan = IPB::query()
+        $plan = Iim::query()
             ->select('IPROD')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
+                ['IPROD','NOT LIKE', '%-830%'],
             ])
             ->where(function ($query) {
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
             ->get();
-
         return view('planeacion.VerEstructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
 

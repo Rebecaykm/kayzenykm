@@ -8,6 +8,7 @@ use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\kFP;
 use App\Models\frt;
+use App\Models\Iim;
 use App\Models\ZCC;
 use App\Models\YK006;
 use App\Models\Structure;
@@ -63,14 +64,12 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
 
 
-            $plan = IPB::query()
+            $plan = Iim::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
-                ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
                 ->where([
                     ['IREF04', 'like', '%' . $TP . '%'],
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
-
                 ])
                 ->where(function ($query) {
                     $query->where('ICLAS ', 'F1');
@@ -126,10 +125,13 @@ class PlaneacionController extends Controller
         $data=explode('/', $keyes[1], 2);
         $dias =  $data[1];
         $fecha =  $data[0];
+
         foreach ($keyes as $plans) {
             $inp = explode('/', $plans, 3);
+
             if (count($inp) >= 3) {
                 $namenA = strtr($inp[0], '_', ' ');
+                $turno =$inp[2];
                 $hoy = date('Ymd', strtotime('now'));
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
@@ -144,7 +146,7 @@ class PlaneacionController extends Controller
                             'K6SDTE' => $fecha,
                             'K6EDTE' => $fefin,
                             'K6DDTE' => $hoy,
-                            'K6DSHT' => 'D',
+                            'K6DSHT' => $turno,
                             'K6PFQY' => $request->$plans,
                             'K6CUSR' => 'LXSECOFR',
                             'K6CCDT' => $load,
@@ -153,9 +155,6 @@ class PlaneacionController extends Controller
                             'K6FIL2' => '',
                         ]);
                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-            }else{
-
-
             }
         }
         $plan = IPB::query()
@@ -172,7 +171,9 @@ class PlaneacionController extends Controller
                 })
                 ->distinct('IPROD')
                 ->simplePaginate(2);
-
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YMP006";
+                // $result = odbc_exec($conn, $query);
         return view('planeacion.plancomponente', [ 'plan' => $plan,'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 

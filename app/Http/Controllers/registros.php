@@ -7,6 +7,7 @@ use App\Models\Fma;
 use App\Models\Ecl;
 use App\Models\kFP;
 use App\Models\Fso;
+use App\Models\Iim;
 use App\Models\Fpo;
 use App\Models\MBMr;
 use App\Models\ZCC;
@@ -18,6 +19,15 @@ date_default_timezone_set('America/Monterrey');
 
 class registros
 {
+    function info($producto)
+    {
+
+        $cond = IIM::query()
+            ->select('ICLAS', 'IMBOXQ','IMPLC')
+            ->where('IPROD', '=', $producto)
+            ->first()->toArray();
+        return $cond;
+    }
 
 
     function contard($producto, $fecha, $turno)
@@ -105,7 +115,8 @@ class registros
                 ['clase', '!=', '01'],
                 ['Activo', '1'],
             ])
-            ->get();
+            ->get()->toArray();
+
         return $res;
     }
     function cargarestructura($prod)
@@ -123,10 +134,10 @@ class registros
     function cargarF1($prod)
     {
         $res = Structure::query()
-            ->select('Final', 'componente')
+            ->select('final','componente')
             ->where('componente', $prod)
-            ->distinct('Final')
-            ->get();
+            ->distinct('final')
+            ->get()->toArray();
         return $res;
     }
     function contcargarF1($prod)
@@ -149,14 +160,28 @@ class registros
             ];
             $tD = 0;
             $tN = 0;
-            $valD = self::Forecast($prod, $dia, '%D%');
-            $valPD = self::plan($prod, $dia, '%D%');
-            $valFD = self::Firme($prod, $dia, '%D%');
-            $valN = self::Forecast($prod, $dia, '%N%');
-            $valPN = self::plan($prod, $dia, '%N%');
-            $valFN = self::Firme($prod, $dia, '%N%');
-            $valSD = self::ShopO($prod, $dia, '%D%');
-            $valSN = self::ShopO($prod, $dia, '%N%');
+            $valD = 0;
+            $valPD = 0;
+            $valFD = 0;
+            $valN = 0;
+            $valPN = 0;
+            $valSD = 0;
+            $valSN = 0;
+            $requiTD=0;
+            $requiTN=0;
+
+
+
+            $valD = self::Forecast($prod, $dia, '%D%')+0;
+            $valPD = self::plan($prod, $dia, '%D%')+0;
+            $valFD = self::Firme($prod, $dia, '%D%')+0;
+            $valN = self::Forecast($prod, $dia, '%N%')+0;
+            $valPN = self::plan($prod, $dia, '%N%')+0;
+            $valFN = self::Firme($prod, $dia, '%N%')+0;
+            $valSD = self::ShopO($prod, $dia, '%D%')+0;
+            $valSN = self::ShopO($prod, $dia, '%N%')+0;
+            $requiTD=self::requerimiento($prod, $dia, '%D%')+0;
+            $requiTN=self::requerimiento($prod, $dia, '%N%')+0;
 
             $inF1 += ['F' . $dia . 'D' => $valD];
             $inF1 += ['F' . $dia . 'N' => $valN];
@@ -166,6 +191,8 @@ class registros
             $inF1 += ['Fi' . $dia . 'N' => $valFN];
             $inF1 += ['S' . $dia . 'D' => $valSD];
             $inF1 += ['S' . $dia . 'N' => $valSN];
+            $inF1 += ['R' . $dia . 'D' => $requiTD];
+            $inF1 += ['R' . $dia . 'N' => $requiTN];
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
@@ -184,7 +211,7 @@ class registros
         $dia = $hoy;
         while ($connt <= $dias) {
             $inF1 = [
-                'sub' => $hoy,
+                'sub' => $dia,
             ];
 
             $contF1 = self::contcargarF1($prod);
@@ -198,13 +225,23 @@ class registros
             $tSN = 0;
             $reN = 0;
             $reD = 0;
+            $requiD=0;
+            $requiN=0;
+            $requiTD=0;
+            $requiTN=0;
             if ($contF1 != 0) {
                 $F1 = self::cargarF1($prod);
                 foreach ($F1 as $F1s) {
-                    $valD = self::Forecast($F1s->Final, $hoy, '%D%');
-                    $valN = self::Forecast($F1s->Final, $hoy, '%N%');
+                    $pF=$F1s['final'];
+                    $valD = self::Forecast( $pF, $dia, '%D%');
+                    $valN = self::Forecast( $pF, $dia, '%N%');
+                    $requiTD=self::requerimiento( $pF, $dia, '%D%');
+                    $requiTN=self::requerimiento( $pF, $dia, '%N%');
                     $tD = $valD + $tD;
                     $tN = $valN + $tN;
+                    $requiD=$requiD+$requiTD;
+                    $requiN=$requiN+$requiTN;
+
                 }
 
                 $valPD = self::plan($prod, $dia, '%D%');
@@ -231,6 +268,9 @@ class registros
                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
                 $inF1 += ['S' . $dia . 'D' => $valSD];
                 $inF1 += ['S' . $dia . 'N' => $valSN];
+                $inF1 += ['R' . $dia . 'D' => $requiD];
+                $inF1 += ['R' . $dia . 'N' => $requiN];
+
             } else {
 
                 $valD = self::Forecast($prod, $dia, '%D%');
@@ -241,6 +281,8 @@ class registros
                 $valFN = self::Firme($prod, $dia, '%N%');
                 $valSD = self::ShopO($prod, $dia, '%D%');
                 $valSN = self::ShopO($prod, $dia, '%N%');
+                $requiTD=self::requerimiento($prod, $dia, '%D%');
+                $requiTN=self::requerimiento($prod, $dia, '%N%');
 
                 $valD =  $valD + 0;
                 $valPD =  $valPD + 0;
@@ -259,10 +301,17 @@ class registros
                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
                 $inF1 += ['S' . $dia . 'D' => $valSD];
                 $inF1 += ['S' . $dia . 'N' => $valSN];
+                $inF1 += ['R' . $dia . 'D' => $requiTD];
+                 $inF1 += ['R' . $dia . 'N' => $requiTN];
+
             }
+
+            array_push($total, $inF1);
+
+
             $dia = $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
-            array_push($total, $inF1);
+
         }
         return $total;
     }
@@ -280,6 +329,7 @@ class registros
             ]);
         }
     }
+
     function buscar($prod, $sub)
     {
         $data = Structure::query()
@@ -320,8 +370,10 @@ class registros
     function Conthijo($prod)
     {
         $ContBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
+            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS', 'IMPLC')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
             ->where('BPROD', '=', $prod)
+            ->where('IMPLC','!=','OBSOLETE')
             ->where(function ($query) {
                 $query->where('BCLAC ', 'M2')
                     ->orwhere('BCLAC ', 'M3')
@@ -367,7 +419,6 @@ class registros
             ->where('MPROD', '=', $producto)
             ->where('MRCNO', 'like', $turno)
             ->sum('MQTY');
-
         return $plan;
     }
 
@@ -404,6 +455,7 @@ class registros
             ->where('SOCNO', 'like', $turno)
             ->where('SDDTE', '=', $fecha)
             ->sum('SQREQ');
+
         return $Fsos;
     }
     function contarfirme($pro, $fecha, $fechafin)
@@ -442,13 +494,15 @@ class registros
 
     function requerimiento($producto, $fecha, $turno)
     {
-
+        $MBMS=0;$RFMA=0;$RKM=0;
         $MBMS = ECL::query()
             ->select('LPROD', 'LQORD', 'LSDTE', 'CLCNO')
-            ->where('LPROD', '=', $producto)
-            ->where('LSDTE', '=', $fecha)
-            ->where('CLCNO', 'Like', $turno)
-            ->count();
+            ->where([
+                ['LPROD', '=', $producto],
+                ['LSDTE', '=', $fecha],
+                ['CLCNO', 'Like', $turno]
+            ])
+            ->count ();
 
         $ECL = 0;
         if ($MBMS == 0) {
@@ -456,14 +510,28 @@ class registros
         } else {
             $MBMS = ECL::query()
                 ->select('LPROD', 'LQORD', 'LSDTE', 'CLCNO')
-                ->where('LPROD', '=', $producto)
-                ->where('LSDTE', '=', $fecha)
-                ->where('CLCNO', 'Like', $turno)
+                ->where([['LPROD', '=', $producto],
+                ['LSDTE', '=', $fecha],
+                ['CLCNO', 'Like', $turno]])
                 ->sum('LQORD');
         }
 
+        $RFMA = FMA::query()
+        ->select('MPROD','MQREQ','MRDTE')
+        ->where([
+            ['MPROD', '=', $producto],
+            ['MRDTE', '=', $fecha],
+        ])
+        ->sum('MQREQ');
 
-
-        return $ECL;
+        $RKMR= KMR::query()
+        ->select('MQTY','MRDTE','MRCNO')
+        ->where([
+            ['MPROD', '=', $producto],
+            ['MRDTE', '=', $fecha],
+        ])
+        ->sum('MQTY');
+            $sumre=$MBMS+$RFMA+$RKMR;
+        return  $sumre ;
     }
 }
