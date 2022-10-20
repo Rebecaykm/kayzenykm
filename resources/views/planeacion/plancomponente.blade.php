@@ -7,7 +7,8 @@
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Planeación {{ $tp }}
+            Planeación {{ $projecto->CCDESC }}
+
         </h2>
 
         <form method="post" action="{{ route('planeacion.create') }}">
@@ -277,17 +278,28 @@
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center">
                                             {{ $subs['Componente'] }}
-
+                                            @php
+                                                $info=$obj->info($subs['Componente']);
+                                            @endphp
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    SNP
+                                                    <input value={{$info['IMBOXQ']}}
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
                                         </td>
+
                                         <td class="px-2 py-1 text-xs text-center">
-                                            {{-- @php
+                                            @php
                                                 $F1sub = $obj->cargarF1($subs['Componente']);
 
                                             @endphp
                                             @foreach ($F1sub as $F1subs)
                                                 {{ $F1subs['final'] }}
                                                 <br>
-                                            @endforeach --}}
+                                            @endforeach
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center ">
 
@@ -391,7 +403,7 @@
                                                     </label>
                                                 </div>
                                                 @php
-                                                    $namenA = strtr($plans->IPROD, ' ', '_');
+                                                    $namenA = strtr($subs['Componente'], ' ', '_');
                                                     $inD = $namenA . '/' . $hoy1 . '/D';
                                                     $inN = $namenA . '/' . $hoy1 . '/N';
                                                 @endphp
