@@ -171,9 +171,9 @@ class PlaneacionController extends Controller
                 })
                 ->distinct('IPROD')
                 ->simplePaginate(2);
-                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-                // $query = "CALL LX834OU.YMP006";
-                // $result = odbc_exec($conn, $query);
+                $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                $query = "CALL LX834OU02.YMP006C";
+                $result = odbc_exec($conn, $query);
         return view('planeacion.plancomponente', [ 'plan' => $plan,'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
