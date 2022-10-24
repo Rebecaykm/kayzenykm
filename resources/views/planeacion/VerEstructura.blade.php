@@ -98,7 +98,7 @@
                                             $Final = $obj->cargarF1($registro->Componente);
                                         @endphp
                                         @foreach ($Final as $Finales)
-                                            {{ $Finales->Final }}<br>
+                                            {{ $Finales['final'] }}<br>
                                         @endforeach
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center ">
