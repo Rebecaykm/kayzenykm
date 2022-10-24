@@ -1,6 +1,6 @@
 <div>
     <div class="flex flex-row gap-x-4 justify-end justify-items-stretch p-2 rounded-lg">
-        <label class="block text-sm ">
+        <!-- <label class="block text-sm ">
             <span class="text-gray-700 dark:text-gray-300 text-xs">Área</span>
             <select wire:model="value" id="area" name="area" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">
                 <option></option>
@@ -10,7 +10,7 @@
                 <option value="14">Pintura</option>
                 <option value="40">Proveedor</option>
             </select>
-        </label>
+        </label> -->
         <label class="block text-sm ">
             <span class="text-gray-700 dark:text-gray-300 text-xs">Centro de Trabajo</span>
             <select id="workCenter" name="workCenter" class="block w-60 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray">

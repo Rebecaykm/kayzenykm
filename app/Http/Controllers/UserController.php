@@ -105,6 +105,7 @@ class UserController extends Controller
         if (!empty($request->role_id)) {
             $user->roles()->sync($request->role_id);
         }
+        $user->departaments()->sync($request->departament);
 
         return redirect()->back()->with('status', 'Usuario actualizado con éxito');
     }

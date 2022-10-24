@@ -57,9 +57,10 @@
                                 <span class="text-gray-700 dark:text-gray-400">
                                     Selecciona un Rol
                                 </span>
+
                                 <select name="role_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" x-model="role">
                                     @foreach ($roles as $key => $role)
-                                        <option value="{{ $role->id }}" @if (!empty($user->roles[$key])) {{ $role->id == $user->roles[$key]->id ? "selected" : "" }} @endif > {{ $user->roles[$key]-->name }} </option>
+                                    <option value="{{ $role->id }}"> {{ $role->name }} </option>
                                     @endforeach
                                 </select>
                             </label>
@@ -69,13 +70,20 @@
                                 Departamentos
                             </span>
                             <div class="flex rounded border-2 border-gray-200 bg-white">
-                                @foreach ($departaments as $key => $departament)
-                                    <label class="flex items-center p-2 dark:text-gray-400">
-                                        <input type="checkbox" value="{{ $departament->id }}" name="departament[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (!empty($user->departaments[$key])) {{ $departament->id == $user->departaments[$key]->id ? "checked" : "" }} @endif/>
-                                        <span class="ml-2">
-                                            {{ $departament->name }}
-                                        </span>
-                                    </label>
+                                @foreach ($departaments as $i => $departament)
+                                <label class="flex items-center p-2 dark:text-gray-400">
+                                    <input type="checkbox" value="{{ $departament->id }}" name="departament[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
+                                    @if (isset($user->departaments))
+                                        @foreach ($user->departaments as $i => $user_departament)
+                                            @if ($user_departament->id == $departament->id)
+                                                {{ "checked" }}
+                                            @endif
+                                        @endforeach
+                                    @endif />
+                                    <span class="ml-2">
+                                        {{ $departament->name }}
+                                    </span>
+                                </label>
                                 @endforeach
                             </div>
                         </div>
