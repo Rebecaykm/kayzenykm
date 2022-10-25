@@ -78,7 +78,6 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        /*
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
@@ -91,23 +90,22 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
-        */
 
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => '192.168.130.7',
-            'port' => '1433',
-            'database' => 'dbTimeClock',
-            'username' => 'sa',
-            'password' => 'Password9',
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => '192.168.130.7',
+        //     'port' => '1433',
+        //     'database' => 'dbTimeClock',
+        //     'username' => 'sa',
+        //     'password' => 'Password9',
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        // ],
 
         /**
-         * FSO
+         * FSO PROTO
          */
         'odbc-connection-lx834f02' => [
             'driver' => 'odbc',
@@ -119,7 +117,7 @@ return [
         ],
 
         /**
-         * LWK
+         * LWK PROTO
          */
         'odbc-connection-lx834fu02' => [
             'driver' => 'odbc',
@@ -129,6 +127,10 @@ return [
             'username' => "LXSECOFR",
             'password' => "LXSECOFR"
         ],
+
+        /**
+         * FSO LIVE
+         */
         'odbc-connection-lx834fu01' => [
             'driver' => 'odbc',
             'dsn' => "Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;",
@@ -137,6 +139,10 @@ return [
             'username' => "LXSECOFR",
             'password' => "LXSECOFR"
         ],
+
+        /**
+         * LWK LIVE
+         */
         'odbc-connection-lx834f01' => [
             'driver' => 'odbc',
             'dsn' => "Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;",
