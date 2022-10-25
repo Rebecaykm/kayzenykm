@@ -33,10 +33,18 @@
                             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Enter the role name" type="text" name="name" value="{{ $role->name }}" />
                         </label>
                     </div>
-                    @foreach ($permissions as $permission)
+                    @foreach ($permissions as $key => $permission)
                     <div class="flex col-span-2 p-2 text-sm">
                         <label class="flex items-center dark:text-gray-400">
-                            <input type="checkbox" value="{{ $permission->id }}" name="permissions[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
+                            <input type="checkbox" value="{{ $permission->id }}" name="permissions[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
+                            @if (isset($role->permissions))
+                                @foreach ($role->permissions as $i => $role_permissions)
+                                    @if ($role_permissions->id == $permission->id)
+                                        {{ "checked" }}
+                                    @endif
+                                @endforeach
+                            @endif
+                            />
                             <span class="ml-2">
                                 {{ $permission->description }}
                             </span>

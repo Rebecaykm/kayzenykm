@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departament;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,9 +31,10 @@ class UserController extends Controller
      */
     public function create()
     {
+        $departaments = Departament::all();
         $roles = Role::all();
 
-        return view('users.create', ['roles' => $roles]);
+        return view('users.create', ['roles' => $roles, 'departaments' => $departaments]);
     }
 
     /**
@@ -54,6 +56,7 @@ class UserController extends Controller
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
         $user->roles()->sync($request->role_id);
+        $user->departaments()->sync($request->departament);
         return redirect('users')->with('success', 'Usuario creado con éxito');
     }
 
@@ -76,9 +79,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $departaments = Departament::all();
         $roles = Role::all();
 
-        return view('users.edit', ['user' => $user, 'roles' => $roles]);
+        return view('users.edit', ['user' => $user, 'roles' => $roles, 'departaments' => $departaments]);
     }
 
     /**
@@ -101,6 +105,7 @@ class UserController extends Controller
         if (!empty($request->role_id)) {
             $user->roles()->sync($request->role_id);
         }
+        $user->departaments()->sync($request->departament);
 
         return redirect()->back()->with('status', 'Usuario actualizado con éxito');
     }

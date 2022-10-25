@@ -62,6 +62,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function departaments()
+    {
+        return $this->belongsToMany('App\Models\Departament');
+    }
+
     /**
      * @param $value
      * @return string|null
