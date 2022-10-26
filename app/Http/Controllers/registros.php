@@ -191,7 +191,7 @@ class registros
             $inF1 += ['Fi' . $dia . 'N' => $valFN];
             $inF1 += ['S' . $dia . 'D' => $valSD];
             $inF1 += ['S' . $dia . 'N' => $valSN];
-            $inF1 += ['R' . $dia . 'D' => $requiTD];
+            $inF1 += ['R' . $dia . 'D' =>  $requiTD];
             $inF1 += ['R' . $dia . 'N' => $requiTN];
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
@@ -532,6 +532,6 @@ class registros
         ])
         ->sum('MQTY');
             $sumre=$MBMS+$RFMA+$RKMR;
-        return  $sumre ;
+        return  $sumre;
     }
 }
