@@ -50,6 +50,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('users', \App\Http\Controllers\UserController::class);
 
     /**
+     * Routes Departament
+     */
+    Route::resource('departaments', \App\Http\Controllers\DepartamentController::class);
+
+    /**
      * Routes Open Orders
      */
     Route::get('open-orders', [\App\Http\Controllers\OpenOrderController::class, 'index'])->name('open-orders.index');

@@ -103,9 +103,9 @@
                     </tbody>
                 </table>
             </div>
-            <div <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
+            <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
-                    Show {{ $users->firstItem() }} - {{ $users->lastItem() }} of {{ $users->total() }}
+                    Mostrando {{ $users->firstItem() }} - {{ $users->lastItem() }} de {{ $users->total() }}
                 </span>
                 <!-- Pagination -->
                 <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
