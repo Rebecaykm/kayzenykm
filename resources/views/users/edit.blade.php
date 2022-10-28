@@ -57,15 +57,21 @@
                                 <span class="text-gray-700 dark:text-gray-400">
                                     Selecciona un Rol
                                 </span>
-
                                 <select name="role_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" x-model="role">
                                     @foreach ($roles as $key => $role)
-                                    <option value="{{ $role->id }}"> {{ $role->name }} </option>
+                                    <option value="{{ $role->id }}"
+                                        @foreach ($user->roles as $user_role)
+                                            @if ($user_role->id == $role->id)
+                                                {{ "selected" }}
+                                            @endif
+                                        @endforeach
+                                    >
+                                    {{ $role->name }} </option>
                                     @endforeach
                                 </select>
                             </label>
                         </div>
-                        <div class="col-span-3">
+                        <div class="grid col-span-3">
                             <span class="text-gray-700 dark:text-gray-400">
                                 Departamentos
                             </span>
