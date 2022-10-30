@@ -125,11 +125,14 @@ class PlaneacionController extends Controller
         $data=explode('/', $keyes[1], 2);
         $dias =  $data[1];
         $fecha =  $data[0];
+        $hoy = date('Ymd', strtotime($fecha));
         foreach ($keyes as $plans) {
             $inp = explode('/', $plans, 3);
+
             if (count($inp) >= 3) {
                 $namenA = strtr($inp[0], '_', ' ');
-                $hoy = date('Ymd', strtotime('now'));
+                $turno =$inp[2];
+
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
@@ -143,7 +146,7 @@ class PlaneacionController extends Controller
                             'K6SDTE' => $fecha,
                             'K6EDTE' => $fefin,
                             'K6DDTE' => $hoy,
-                            'K6DSHT' => 'D',
+                            'K6DSHT' => $turno,
                             'K6PFQY' => $request->$plans,
                             'K6CUSR' => 'LXSECOFR',
                             'K6CCDT' => $load,
@@ -152,11 +155,9 @@ class PlaneacionController extends Controller
                             'K6FIL2' => '',
                         ]);
                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-            }else{
-
-
             }
         }
+
         $plan = IPB::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
@@ -171,7 +172,9 @@ class PlaneacionController extends Controller
                 })
                 ->distinct('IPROD')
                 ->simplePaginate(2);
-
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU02.YMP006C";
+                // $result = odbc_exec($conn, $query);
         return view('planeacion.plancomponente', [ 'plan' => $plan,'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
