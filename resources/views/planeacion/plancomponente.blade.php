@@ -264,9 +264,12 @@
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
                                 $contsub = $obj->contcargar($plans->IPROD);
+
                             @endphp
                             @if ($contsub != 0)
                                 @php
+                                    $hoy = $fecha;
+                                    $datossub = $obj->Cargarforcast($plans->IPROD, $hoy, $dias);
                                     $Sub = $obj->cargar($plans->IPROD);
                                 @endphp
                                 @foreach ($Sub as $subs)
@@ -279,12 +282,12 @@
                                         <td class="px-2 py-1 text-xs text-center">
                                             {{ $subs['Componente'] }}
                                             @php
-                                                $info=$obj->info($subs['Componente']);
+                                                $info = $obj->info($subs['Componente']);
                                             @endphp
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
                                                     SNP
-                                                    <input value={{$info['IMBOXQ']}}
+                                                    <input value={{ $info['IMBOXQ'] }}
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
