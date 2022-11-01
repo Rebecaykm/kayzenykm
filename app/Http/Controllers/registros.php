@@ -204,41 +204,41 @@ class registros
                 $inF1 += ['P' . $dia . 'D' => 0];
             }
             if (array_key_exists('FRDTE', $valPN)) {
-            foreach ($valPN as $valPNs) {
+                foreach ($valPN as $valPNs) {
 
-                if ($valPNs['FRDTE'] == $dia) {
-                    $inF1 += ['P' . $dia . 'N' => $valPNs['FQTY']];
-                } else {
-                    $inF1 += ['P' . $dia . 'N' => 0];
+                    if ($valPNs['FRDTE'] == $dia) {
+                        $inF1 += ['P' . $dia . 'N' => $valPNs['FQTY']];
+                    } else {
+                        $inF1 += ['P' . $dia . 'N' => 0];
+                    }
                 }
+            } else {
+                $inF1 += ['P' . $dia . 'N' => 0];
             }
-        } else {
-            $inF1 += ['P' . $dia . 'N' => 0];
-        }
-        if (array_key_exists('FRDTE', $valFD)) {
-            foreach ($valFD as $valFDs) {
+            if (array_key_exists('FRDTE', $valFD)) {
+                foreach ($valFD as $valFDs) {
 
-                if ($valFDs['FRDTE'] == $dia) {
-                    $inF1 += ['Fi' . $dia . 'D' => $valFDs['FQTY']];
-                } else {
-                    $inF1 += ['Fi' . $dia . 'D' => 0];
+                    if ($valFDs['FRDTE'] == $dia) {
+                        $inF1 += ['Fi' . $dia . 'D' => $valFDs['FQTY']];
+                    } else {
+                        $inF1 += ['Fi' . $dia . 'D' => 0];
+                    }
                 }
+            } else {
+                $inF1 += ['Fi' . $dia . 'D' => 0];
             }
-        } else {
-            $inF1 += ['Fi' . $dia . 'D' => 0];
-        }
-        if (array_key_exists('FRDTE', $valFN)) {
-            foreach ($valFN as $valFNs) {
+            if (array_key_exists('FRDTE', $valFN)) {
+                foreach ($valFN as $valFNs) {
 
-                if ($valFNs['FRDTE'] == $dia) {
-                    $inF1 += ['Fi' . $dia . 'N' => $valFNs['FQTY']];
-                } else {
-                    $inF1 += ['Fi' . $dia . 'N' => 0];
+                    if ($valFNs['FRDTE'] == $dia) {
+                        $inF1 += ['Fi' . $dia . 'N' => $valFNs['FQTY']];
+                    } else {
+                        $inF1 += ['Fi' . $dia . 'N' => 0];
+                    }
                 }
+            } else {
+                $inF1 += ['Fi' . $dia . 'N' => 0];
             }
-        } else {
-            $inF1 += ['Fi' . $dia . 'N' => 0];
-        }
 
 
 
