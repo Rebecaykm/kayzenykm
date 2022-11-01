@@ -3,7 +3,7 @@
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
         $projecto = $obj->Projecto($tp);
-        $dias = 2;
+        $dias = 7;
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -172,6 +172,7 @@
                                 @php
                                     $hoy = $fecha;
                                     $datos = $obj->CargarforcastF1($plans->IPROD, $hoy, $dias);
+
                                 @endphp
                                 @foreach ($datos as $info)
                                     <td class="px-2 py-1 text-xs text-center bg-emerald-100 ">
@@ -192,15 +193,15 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
 
-                                                <input value={{ $info['R' . $hoy . 'D'] }}
+                                                {{-- <input value={{ $info['R' . $hoy . 'D'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                                    disabled /> --}}
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $info['R' . $hoy . 'N'] }}
+                                                {{-- <input value={{ $info['R' . $hoy . 'N'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                                    disabled /> --}}
                                             </label>
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
@@ -241,15 +242,15 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
 
-                                                <input value={{ $info['S' . $hoy . 'D'] }}
+                                                {{-- <input value={{ $info['S' . $hoy . 'D'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                                    disabled /> --}}
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $info['S' . $hoy . 'N'] }}
+                                                {{-- <input value={{ $info['S' . $hoy . 'N'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                                    disabled /> --}}
                                             </label>
 
                                         </div>
@@ -264,7 +265,7 @@
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
                                 $contsub = $obj->contcargar($plans->IPROD);
-
+                                $contsub=0;
                             @endphp
                             @if ($contsub != 0)
                                 @php
