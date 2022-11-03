@@ -192,22 +192,18 @@
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
-{{--
+
                                                 <input value={{ $info['R' . $hoy . 'D'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled /> --}}
-                                                    <input value='-'
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
+
                                             </label>
                                             <label class="block text-sm ">
 
-                                                {{-- <input value={{ $info['R' . $hoy . 'N'] }}
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled /> --}}
-                                                    <input value="-"
+                                                <input value={{ $info['R' . $hoy . 'N'] }}
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
+
                                             </label>
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
@@ -271,7 +267,7 @@
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
                                 $contsub = $obj->contcargar($plans->IPROD);
-                                $contsub=0;
+                                $contsub = 0;
                             @endphp
                             @if ($contsub != 0)
                                 @php

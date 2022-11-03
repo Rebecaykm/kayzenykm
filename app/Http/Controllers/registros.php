@@ -155,6 +155,7 @@ class registros
         $total = array();
         $dia = $hoy;
         $connt = 1;
+
         $valD = self::Forecasttotal($prod, $dia, '%D%', $dias);
         $valPD = self::planTotal($prod, $dias, '%D%', $dias);
         $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
@@ -163,6 +164,9 @@ class registros
         $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
         $valSD = self::ShopOTotal($prod, $dia, '%D%', $dias);
         $valSN = self::ShopOTotal($prod, $dia, '%N%', $dias);
+        $valRD = self::RequeTotal($prod, $dia, '%D%', $dias);
+        $valRN = self::RequeTotal($prod, $dia, '%N%', $dias);
+
 
         while ($connt <= $dias) {
             $inF1 = [
@@ -190,8 +194,9 @@ class registros
             if (array_search($dia, $FdateD) == false) {
                 $inF1 += ['Fi' . $dia . 'D' => 0];
             } else {
-                $inF1 += ['Fi' . $dia . 'D' => $FqtyD[array_search($dia, $MdateD)]];
+                $inF1 += ['Fi' . $dia . 'D' => $FqtyD[array_search($dia, $FdateD)]];
             }
+
             $FdateN = array_column($valFN, 'FRDTE');
             $FqtyN = array_column($valFN, 'FQTY');
             if (array_search($dia, $FdateN) == false) {
@@ -232,6 +237,9 @@ class registros
             } else {
                 $inF1 += ['S' . $dia . 'N' => $SqtyN[array_search($dia, $SdateN)]];
             }
+            $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
+            $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
+
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
@@ -691,5 +699,83 @@ class registros
             ->sum('MQTY');
         $sumre = $MBMS + $RFMA + $RKMR;
         return  $sumre;
+    }
+    function RequeTotal($producto, $fecha, $turno, $dias)
+    {
+        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
+        $dia = $fecha;
+        $connt = 0;
+        $valTotal  = [];
+        $MBMS = ECL::query()
+            ->selectRaw('LSDTE, SUM(LQORD) as Total')
+            ->where([
+                ['LPROD', '=', $producto],
+                ['LSDTE', '>=', $fecha],
+                ['LSDTE', '<=', $totalF],
+                ['CLCNO', 'Like', $turno]
+            ])
+            ->groupBy('LSDTE')
+            ->get()->toarray();
+
+        $RFMA = FMA::query()
+            ->select('MRDTE', 'MQREQ')
+            ->where([
+                ['MPROD', '=', $producto],
+                ['MRDTE', '>=', $fecha],
+                ['MRDTE', '<', $totalF],
+            ])
+            ->get()->toarray();
+        $RKMR = KMR::query()
+            ->select('MQTY', 'MRDTE')
+            ->where([
+                ['MPROD', '=', $producto],
+                ['MRDTE', '>=',$fecha],
+                ['MRDTE', '<', $totalF],
+            ])
+            ->get()->toarray();
+
+        while ($connt < $dias) {
+            $total = 0;
+            $totalf = 0;
+            $totalk = 0;
+            $DMBMS = array_column($MBMS, 'LSDTE');
+            $VMBMS = array_column($MBMS, 'TOTAL');
+            $pos1 = array_search($dia, $DMBMS);
+            if ($pos1 == false) {
+            } else {
+                $total =  $VMBMS[$pos1];
+            }
+
+
+
+
+            $DFMA = array_column($RFMA, 'MRDTE');
+            $VFMA = array_column($RFMA, 'MQREQ');
+           $pos2 = array_search($dia, $DFMA);
+            if ($pos2 == false) {
+            } else {
+                $totalf = $VFMA[$pos2];
+            }
+            $DKMR = array_column($RKMR, 'MRDTE');
+            $VKMR = array_column($RKMR, 'MQTY');
+             $pos3 = array_search($dia,$DKMR );
+            if ($pos3 == false) {
+            } else {
+
+                $totalk = $VKMR[$pos3];
+            }
+
+
+            $dia.'<br>';
+             $total.'/'.$totalf.'/'.$totalk.'<br>';
+            $tt=$total+$totalf+$totalk;
+            $valTotal += [$dia => $tt];
+
+            $dia = date('Ymd', strtotime($dia . '+1 day'));
+            $connt++;
+        }
+
+
+        return $valTotal;
     }
 }
