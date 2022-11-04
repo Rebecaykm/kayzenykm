@@ -181,6 +181,7 @@ class registros
                 $inF1 += ['F' . $dia . 'D' => $val1];
             }
 
+
             $MdateN = array_column($valN, 'MRDTE');
             $Mqty = array_column($valN, 'MQTY');
             if (array_search($dia, $MdateN) == false) {
@@ -230,9 +231,12 @@ class registros
 
             $SdateD = array_column($valSD, 'SDDTE');
             $SqtyD = array_column($valSD, 'SQREQ');
-            if (array_search($dia, $SdateD) == false) {
+
+            if (array_search($dia, array_column($valSD, 'SDDTE')) == false) {
                 // $inF1 += ['S' . $dia . 'D' => 0];
+                dd('entro',$SdateD, $valSD,$inF1);
             } else {
+
                 $val7 = $SqtyD[array_search($dia, $SdateD)] + 0;
                 $inF1 += ['S' . $dia . 'D' => $val7];
             }
@@ -245,6 +249,7 @@ class registros
                 $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
                 $inF1 += ['S' . $dia . 'N' => $val8];
             }
+            dd($inF1,$dia,$valSD,$valSN);
             $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
             $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
 
