@@ -40,14 +40,8 @@ class PlaneacionController extends Controller
             ->orderBy('CCID', 'ASC')
             ->get();
 
-        $this->PCs = IPB::query()
-            ->select('PBID', 'PBPBC', 'PBTYP', 'PBNAM')
-            ->where('PBID', '=', 'PB')
-            ->where('PBTYP', '=', 'P')
-            ->orderBy('PBNAM', 'ASC')
-            ->get();
 
-        return view('planeacion.index', ['LWK' => $this->WCs, 'ipb' => $this->PCs]);
+        return view('planeacion.index', ['LWK' => $this->WCs]);
     }
 
     /**
@@ -62,8 +56,6 @@ class PlaneacionController extends Controller
         $TP = $request->SeProject ;
         $CP = $request->SePC;
         $WC = $request->SeWC;
-
-
             $plan = Iim::query()
                 ->select('IPROD', 'ICLAS', 'IMBOXQ')
                 ->where([
@@ -115,17 +107,16 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
-
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;
-
         $variables = $request->all();
         $keyes= array_keys($variables);
         $data=explode('/', $keyes[1], 2);
         $dias =  $data[1];
         $fecha =  $data[0];
         $hoy = date('Ymd', strtotime($fecha));
+
         foreach ($keyes as $plans) {
             $inp = explode('/', $plans, 3);
 
@@ -189,20 +180,4 @@ class PlaneacionController extends Controller
         //
     }
 
-    // $plan = IPB::query()
-    //     ->select(['IPROD'])
-    //     ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-    //     ->join('LX834F01.FRT', 'LX834F01.FRT.RPROD', '=', 'LX834F01.IIM.IPROD ')
-    //     ->join('LX834F01.LWK', 'LX834F01.FRT.RWRKC', '=', 'LX834F01.LWK.WWRKC ')
-    //     ->where([
-    //         ['LX834F01.IIM.IBUYC', $CP],
-    //         ['IID', '!=', 'IZ'],
-    //         ['IMPLC', '!=', 'OBSOLETE'],
-    //     ])
-    //     ->where(function($query) {
-    //         $query->where('ICLAS ', 'F1');
-    //               })
-    //     ->distinct('IPROD')
-    //     ->orderby('IPROD')
-    //     ->simplePaginate(10);
 }
