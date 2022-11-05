@@ -110,16 +110,17 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        @foreach ($plan as $plans)
-                            {{-- ------------------------------------------------------- $plan variable que viene desde controlador carga finales   ---------------------------------------------------------- --}}
+                        @foreach ($plan as $info)
+
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
-                                    {{ $plans->IPROD }}
+                                    {{ $info['parte'] }}
                                     @php
-                                        $STP = 'STP:' . $plans->IMBOXQ;
+
+                                        // $STP = 'STP:' . $plans->IMBOXQ;
                                     @endphp
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                        {{ $STP }}
+
                                     </div>
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -167,11 +168,10 @@
                                     </div>
                                 </td>
                                 @php
-                                    $hoy = $fecha;
-                                    $datos = $obj->CargarforcastF1($plans->IPROD, $hoy, $dias);
-
+                                    $hoy=$fecha;
+                                    $contdias = 2;
                                 @endphp
-                                @foreach ($datos as $info)
+                                @while ($contdias < $dias)
                                     <td class="px-2 py-1 text-xs text-center bg-emerald-100 ">
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                             <label class="block text-sm ">
@@ -183,10 +183,10 @@
                                                         $valFD = $info['F' . $hoy . 'D'];
                                                     }
 
-                                                    if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                                                    if (array_key_exists('F' . $hoy . 'N', $info) == false) {
                                                         $valFN = '-';
                                                     } else {
-                                                        $valFN = $info['F' . $hoy . 'D'];
+                                                        $valFN = $info['F' . $hoy . 'N'];
                                                     }
                                                     $var = 'R' . $hoy . 'D';
                                                     if (array_key_exists($var, $info) == false) {
@@ -234,8 +234,13 @@
                                                     } else {
                                                         $valSN = $info['S' . $hoy . 'N'];
                                                     }
-                                                    $valRD = $info['R' . $hoy . 'D'];
-                                                    $valRN = $info['R' . $hoy . 'N'];
+
+
+
+                                                    // $valRD = $info['R' . $hoy . 'D'];
+                                                    // $valRN = $info['R' . $hoy . 'N'];
+                                                    $valRD = 0;
+                                                    $valRN =0;
 
                                                 @endphp
                                                 <input value={{ $valFD }}
@@ -282,7 +287,7 @@
 
                                         </div>
                                         @php
-                                            $namenA = strtr($plans->IPROD, ' ', '_');
+                                            $namenA = strtr($info['parte'], ' ', '_');
                                             $inD = $namenA . '/' . $hoy . '/D';
                                             $inN = $namenA . '/' . $hoy . '/N';
                                         @endphp
@@ -290,7 +295,7 @@
                                             <label class="block text-sm ">
 
                                                 <input id={{ $inD }} name={{ $inD }}
-                                                    value={{ $valFiN }} onclick='myFunction(this.id)'
+                                                    value={{ $valFiD }} onclick='myFunction(this.id)'
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
@@ -321,7 +326,7 @@
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
 
                                     @endphp
-                                @endforeach
+                                @endwhile
 
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
@@ -485,19 +490,19 @@
                                                 } else {
                                                     $valSNH = $datossubs['S' . $hoy1 . 'N'];
                                                 }
-                                                $vaRDH =  $datossubs['R' . $hoy1 . 'D'];
-                                                $vaRNH =  $datossubs['R' . $hoy1 . 'N'];
+                                                $vaRDH = $datossubs['R' . $hoy1 . 'D'];
+                                                $vaRNH = $datossubs['R' . $hoy1 . 'N'];
                                             @endphp
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{  $valFDH}}
+                                                        <input value={{ $valFDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{ $valFNH}}
+                                                        <input value={{ $valFNH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
@@ -520,12 +525,12 @@
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
-                                                        <input value={{ $valPDH  }}
+                                                        <input value={{ $valPDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{$valPNH }}
+                                                        <input value={{ $valPNH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
@@ -539,14 +544,12 @@
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input id={{ $inD }} name={{ $inD }}
-                                                            value={{ $valFiDH }}
-                                                            onclick='myFunction(this.id)'
+                                                            value={{ $valFiDH }} onclick='myFunction(this.id)'
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
                                                         <input id={{ $inN }} name={{ $inN }}
-                                                            value={{ $valFiNH }}
-                                                            onclick='myFunction(this.id)'
+                                                            value={{ $valFiNH }} onclick='myFunction(this.id)'
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
@@ -558,7 +561,7 @@
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
-                                                        <input value={{ $valSNH  }}
+                                                        <input value={{ $valSNH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
