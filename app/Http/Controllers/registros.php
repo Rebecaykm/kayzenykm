@@ -149,115 +149,7 @@ class registros
             ->count();
         return $res;
     }
-    function CargarforcastF1($prod, $hoy, $dias)
-    {
 
-        $inF1 = array();
-        $total = array();
-        $dia = $hoy;
-        $connt = 1;
-
-        $valD = self::Forecasttotal($prod, $dia, '%D%', $dias);
-        $valPD = self::planTotal($prod, $dias, '%D%', $dias);
-        $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
-        $valN = self::Forecasttotal($prod, $dia, '%N%', $dias);
-        $valPN = self::planTotal($prod, $dia, '%N', $dias);
-        $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
-        $valSD = self::ShopOTotal($prod, $dia, '%D%', $dias);
-        $valSN = self::ShopOTotal($prod, $dia, '%N%', $dias);
-        $valRD = self::RequeTotal($prod, $dia, '%D%', $dias);
-        $valRN = self::RequeTotal($prod, $dia, '%N%', $dias);
-
-
-        while ($connt <= $dias) {
-            $inF1 = [
-                'Dia' => $dia,
-            ];
-            $MdateD = array_column($valD, 'MRDTE');
-            $Mqty = array_column($valD, 'MQTY');
-            if (array_search($dia, $MdateD) == false) {
-                // $inF1 += ['F' . $dia . 'D' => 0];
-            } else {
-                $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
-                $inF1 += ['F' . $dia . 'D' => $val1];
-            }
-
-            $MdateN = array_column($valN, 'MRDTE');
-            $Mqty = array_column($valN, 'MQTY');
-            if (array_search($dia, $MdateN) == false) {
-                // $inF1 += ['F' . $dia . 'N' => 0];
-            } else {
-                $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
-                $inF1 += ['F' . $dia . 'N' => $val2];
-            }
-
-
-            $FdateD = array_column($valFD, 'FRDTE');
-            $FqtyD = array_column($valFD, 'FQTY');
-            if (array_search($dia, $FdateD) == false) {
-                //  $inF1 += ['Fi' . $dia . 'D' => 0];
-            } else {
-                $val3 = $FqtyD[array_search($dia, $FdateD)] + 0;
-                $inF1 += ['Fi' . $dia . 'D' => $val3];
-            }
-
-            $FdateN = array_column($valFN, 'FRDTE');
-            $FqtyN = array_column($valFN, 'FQTY');
-            if (array_search($dia, $FdateN) == false) {
-                // $inF1 += ['Fi' . $dia . 'N' => 0];
-            } else {
-                $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
-                $inF1 += ['Fi' . $dia . 'N' => $val4];
-            }
-
-            $PdateD = array_column($valPD, 'FRDTE');
-            $PqtyD = array_column($valPD, 'FQTY');
-            if (array_search($dia, $PdateD) == false) {
-                //  $inF1 += ['P' . $dia . 'D' => 0];
-            } else {
-                $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
-                $inF1 += ['P' . $dia . 'D' => $val5];
-            }
-
-
-            $PdateN = array_column($valPN, 'FRDTE');
-            $PqtyN = array_column($valPN, 'FQTY');
-            if (array_search($dia, $PdateN) == false) {
-                // $inF1 += ['P' . $dia . 'N' => 0];
-            } else {
-                $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
-                $inF1 += ['P' . $dia . 'N' => $val6];
-            }
-
-            $SdateD = array_column($valSD, 'SDDTE');
-            $SqtyD = array_column($valSD, 'SQREQ');
-            if (is_int(array_search($dia, $SdateD))) {
-
-                // $inF1 += ['S' . $dia . 'D' => 0];
-
-                $val7 = $SqtyD[array_search($dia, $SdateD)] + 0;
-                $inF1 += ['S' . $dia . 'D' => $val7];
-            }
-
-            $SdateN = array_column($valSN, 'SDDTE');
-            $SqtyN = array_column($valSN, 'SQREQ');
-            if (array_search($dia, $SdateN) == false) {
-                // $inF1 += ['S' . $dia . 'N' => 0];
-            } else {
-                $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
-                $inF1 += ['S' . $dia . 'N' => $val8];
-            }
-            $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
-            $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
-
-
-            $dia = date('Ymd', strtotime($dia . '+1 day'));
-            $connt++;
-            array_push($total, $inF1);
-        }
-
-        return $total;
-    }
 
     function Cargarforcast($prod1, $hoy, $dias)
     {
@@ -286,6 +178,7 @@ class registros
                 $contF1 = self::contcargarF1($prod);
 
                 if ($contF1 > 1) {
+                    $padres='';
                     $tD = 0;
                     $tN = 0;
                     $requiN = 0;
@@ -293,6 +186,7 @@ class registros
                     $F1 = self::cargarF1($prod);
                     foreach ($F1 as $F1s) {
                         $pF = $F1s['final'];
+                        $padres=$padres.$pF.',';
                         $valD = self::Forecast($pF, $dia, '%D%');
                         $valN = self::Forecast($pF, $dia, '%N%');
                         $requiTD = self::requerimiento($pF, $dia, '%D%');
@@ -312,21 +206,19 @@ class registros
                 } else {
                     $MdateD = array_column($valD, 'MRDTE');
                     $Mqty = array_column($valD, 'MQTY');
-                    if (array_search($dia, $MdateD) == false) {
-                        // $inF1 += ['F' . $dia . 'D' => 0];
-                    } else {
+                    if (is_int(array_search($dia, $MdateD))){
                         $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                         $inF1 += ['F' . $dia . 'D' => $val1];
                     }
 
                     $MdateN = array_column($valN, 'MRDTE');
                     $Mqty = array_column($valN, 'MQTY');
-                    if (array_search($dia, $MdateN) == false) {
-                        // $inF1 += ['F' . $dia . 'N' => 0];
-                    } else {
+                    if (is_int(array_search($dia, $MdateN) )) {
                         $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
                         $inF1 += ['F' . $dia . 'N' => $val2];
                     }
+
+
                     $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
                     $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
 
@@ -334,9 +226,7 @@ class registros
 
                 $FdateD = array_column($valFD, 'FRDTE');
                 $FqtyD = array_column($valFD, 'FQTY');
-                if (array_search($dia, $FdateD) == false) {
-                    // $inF1 += ['Fi' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $FdateD) )) {
                     $val3 = $FqtyD[array_search($dia, $FdateD)] + 0;
                     $inF1 += ['Fi' . $dia . 'D' => $val3];
                 }
@@ -344,9 +234,8 @@ class registros
 
                 $FdateN = array_column($valFN, 'FRDTE');
                 $FqtyN = array_column($valFN, 'FQTY');
-                if (array_search($dia, $FdateN) == false) {
-                    // $inF1 += ['Fi' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $FdateN) )) {
+
                     $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
                     $inF1 += ['Fi' . $dia . 'N' => $val4];
                 }
@@ -354,36 +243,32 @@ class registros
 
                 $PdateD = array_column($valPD, 'FRDTE');
                 $PqtyD = array_column($valPD, 'FQTY');
-                if (array_search($dia, $PdateD) == false) {
-                    // $inF1 += ['P' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $PdateD) )) {
+
                     $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
                     $inF1 += ['P' . $dia . 'D' => $val5];
                 }
 
                 $PdateN = array_column($valPN, 'FRDTE');
                 $PqtyN = array_column($valPN, 'FQTY');
-                if (array_search($dia, $PdateN) == false) {
-                    // $inF1 += ['P' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $PdateN) )) {
+
                     $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
                     $inF1 += ['P' . $dia . 'N' => $val6];
                 }
 
                 $SdateD = array_column($valSD, 'SDDTE');
                 $SqtyD = array_column($valSD, 'SQREQ');
-                if (array_search($dia, $SdateD) == false) {
-                    // $inF1 += ['S' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $SdateD))) {
+
                     $val7 = $SqtyD[array_search($dia, $SdateD)] + 0;
                     $inF1 += ['S' . $dia . 'D' => $val7];
                 }
 
                 $SdateN = array_column($valSN, 'SDDTE');
                 $SqtyN = array_column($valSN, 'SQREQ');
-                if (array_search($dia, $SdateN) == false) {
-                    // $inF1 += ['S' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $SdateN) )) {
+
                     $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
                     $inF1 += ['S' . $dia . 'N' => $val8];
                 }

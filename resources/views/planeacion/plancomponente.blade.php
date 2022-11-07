@@ -3,31 +3,35 @@
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
         $projecto = $obj->Projecto($tp);
-        $dias = 7;
+        $dias = 6;
     @endphp
-    <div class="xl:container lg:container md:container sm:container grid px-6 py-4 mx-auto gap-y-2">
+    <div class="xl:container lg:container md:container sm:container grid px-6  mx-auto ">
+        <form method="post" action="{{ route('planeacion.create') }}">
 
-        <div class="w-full overflow-hidden rounded-lg p-2">
-            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Planeación {{ $projecto->CCDESC }}
-            </h2>
-
-            <form method="post" action="{{ route('planeacion.create') }}">
+            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                    Planeación {{ $projecto->CCDESC }}
+                </h2>
                 @csrf
-                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                <label class="block text-sm ">
+                {{-- <label class="block text-sm ">
                     <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
                     <input id="dias" name="dias" type="number" max="7" min="1"
                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                </label>
-                <label class="block text-sm ">
-                    <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
-                    <input id="fecha" name="fecha" type="date"
-                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                </label>
+                </label> --}}
                 <div class="flex justify-center">
+
+                    <label class="block text-sm ">
+                        <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                        <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                        <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                        <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
+                        <input id="fecha" name="fecha" type="date"
+                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                    </label>
+
+                </div>
+                <div class="flex justify-center">
+
                     <button type="submit"
                         class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         <span class="mr-2">Search</span>
@@ -38,28 +42,27 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
+
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+        <form action="{{ route('planeacion.update') }}" method="post">
+            <div class="flex flex-row gap-x-4  items-center p-2 rounded-lg">
+                @csrf
+                <div class="flex justify-center">
 
-
-        <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-112 xl:h-128 ">
-            <form action="{{ route('planeacion.update') }}" method="post">
-                <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-                    @csrf
-                    <div class="flex justify-center">
-
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
-                            <span class="mr-2">Actualizar</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                        </button>
-                    </div>
+                    <button type="submit"
+                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+                        <span class="mr-2">Actualizar</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
+            <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
@@ -78,9 +81,9 @@
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
                                 $hoy = $fecha;
-
-                                $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $totalD = 0;
+                                $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+
                             @endphp
                             @while ($hoy != $fin)
                                 <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -111,7 +114,6 @@
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $info)
-
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $info['parte'] }}
@@ -168,8 +170,8 @@
                                     </div>
                                 </td>
                                 @php
-                                    $hoy=$fecha;
-                                    $contdias = 2;
+                                    $hoy = $fecha;
+                                    $contdias = 0;
                                 @endphp
                                 @while ($contdias < $dias)
                                     <td class="px-2 py-1 text-xs text-center bg-emerald-100 ">
@@ -235,12 +237,10 @@
                                                         $valSN = $info['S' . $hoy . 'N'];
                                                     }
 
-
-
                                                     // $valRD = $info['R' . $hoy . 'D'];
                                                     // $valRN = $info['R' . $hoy . 'N'];
                                                     $valRD = 0;
-                                                    $valRN =0;
+                                                    $valRN = 0;
 
                                                 @endphp
                                                 <input value={{ $valFD }}
@@ -324,20 +324,20 @@
                                     </td>
                                     @php
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-
+                                        $contdias++;
                                     @endphp
                                 @endwhile
 
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
-                                $contsub = $obj->contcargar($plans->IPROD);
+                                $contsub = $obj->contcargar($info['parte']);
 
                             @endphp
                             @if ($contsub != 0)
                                 @php
                                     $hoy = $fecha;
-                                    $datossub = $obj->Cargarforcast($plans->IPROD, $hoy, $dias);
+                                    $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
 
                                     // $Sub = $obj->cargar($plans->IPROD);
 
@@ -353,12 +353,12 @@
                                         <td class="px-2 py-1 text-xs text-center">
                                             {{ $datossubs['sub'] }}
                                             @php
-                                                $info = $obj->info($datossubs['sub']);
+                                                $infoP = $obj->info($datossubs['sub']);
                                             @endphp
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
                                                     SNP
-                                                    <input value={{ $info['IMBOXQ'] }}
+                                                    <input value={{ $infoP['IMBOXQ'] }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -366,14 +366,13 @@
                                         </td>
 
                                         <td class="px-2 py-1 text-xs text-center">
-                                            {{-- @php
-                                                $F1sub = $obj->cargarF1($subs['sub']);
-
+                                            @php
+                                                $F1sub = $obj->cargarF1($datossubs['sub']);
                                             @endphp
                                             @foreach ($F1sub as $F1subs)
                                                 {{ $F1subs['final'] }}
                                                 <br>
-                                            @endforeach --}}
+                                            @endforeach
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center ">
 
@@ -428,7 +427,7 @@
 
                                         </td>
                                         @php
-                                            $coni = 1;
+                                            $coni = 0;
                                             $hoy1 = $fecha;
                                         @endphp
                                         @while ($coni < $dias)
@@ -579,10 +578,11 @@
                         @endforeach
                     </tbody>
                 </table>
-            </form>
-        </div>
-        <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+
+            </div>
+        </form>
+        {{-- <div
+            class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
 
@@ -593,8 +593,8 @@
             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                 {{ $plan->withQueryString()->appends(['SeProject' => $tp])->links() }}
             </span>
-        </div>
-        <div
+        </div> --}}
+        {{-- <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
                 Y - TEC KEYLEX MÉXICO
@@ -607,7 +607,7 @@
                     </ul>
                 </nav>
             </span>
-        </div>
+        </div> --}}
     </div>
     <script>
         function myFunction(xx) {

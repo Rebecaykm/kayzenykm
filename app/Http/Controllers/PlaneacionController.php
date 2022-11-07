@@ -89,8 +89,9 @@ class PlaneacionController extends Controller
 
             $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
             $inF1 += [$WCss->IPROD =>  $datos];
-        }
 
+        }
+            dd($inF1);
 
         return view('planeacion.plancomponente', ['plan' => $inF1, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
@@ -350,24 +351,24 @@ class PlaneacionController extends Controller
         $valSN = self::ShopOTotal($prod, $dia, '%N%', $dias);
         $valRD = self::RequeTotal($prod, $dia, '%D%', $dias);
         $valRN = self::RequeTotal($prod, $dia, '%N%', $dias);
+
         $inF1 +=['parte'=>$prod];
 
         while ($connt <= $dias) {
 
+
             $MdateD = array_column($valD, 'MRDTE');
             $Mqty = array_column($valD, 'MQTY');
-            if (array_search($dia, $MdateD) == false) {
-                // $inF1 += ['F' . $dia . 'D' => 0];
-            } else {
+            if (is_int(array_search($dia, $MdateD)) ) {
+
                 $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                 $inF1 += ['F' . $dia . 'D' => $val1];
             }
 
             $MdateN = array_column($valN, 'MRDTE');
             $Mqty = array_column($valN, 'MQTY');
-            if (array_search($dia, $MdateN) == false) {
-                // $inF1 += ['F' . $dia . 'N' => 0];
-            } else {
+            if (is_int(array_search($dia, $MdateN))) {
+
                 $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
                 $inF1 += ['F' . $dia . 'N' => $val2];
             }
@@ -375,27 +376,24 @@ class PlaneacionController extends Controller
 
             $FdateD = array_column($valFD, 'FRDTE');
             $FqtyD = array_column($valFD, 'FQTY');
-            if (array_search($dia, $FdateD) == false) {
-                //  $inF1 += ['Fi' . $dia . 'D' => 0];
-            } else {
+            if (is_int(array_search($dia, $FdateD))) {
+
                 $val3 = $FqtyD[array_search($dia, $FdateD)] + 0;
                 $inF1 += ['Fi' . $dia . 'D' => $val3];
             }
 
             $FdateN = array_column($valFN, 'FRDTE');
             $FqtyN = array_column($valFN, 'FQTY');
-            if (array_search($dia, $FdateN) == false) {
-                // $inF1 += ['Fi' . $dia . 'N' => 0];
-            } else {
+            if (is_int(array_search($dia, $FdateN))) {
+
                 $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
                 $inF1 += ['Fi' . $dia . 'N' => $val4];
             }
 
             $PdateD = array_column($valPD, 'FRDTE');
             $PqtyD = array_column($valPD, 'FQTY');
-            if (array_search($dia, $PdateD) == false) {
-                //  $inF1 += ['P' . $dia . 'D' => 0];
-            } else {
+            if (is_int(array_search($dia, $PdateD))) {
+
                 $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
                 $inF1 += ['P' . $dia . 'D' => $val5];
             }
@@ -403,18 +401,16 @@ class PlaneacionController extends Controller
 
             $PdateN = array_column($valPN, 'FRDTE');
             $PqtyN = array_column($valPN, 'FQTY');
-            if (array_search($dia, $PdateN) == false) {
-                // $inF1 += ['P' . $dia . 'N' => 0];
-            } else {
+            if (is_int(array_search($dia, $PdateN)))
+            {
                 $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
                 $inF1 += ['P' . $dia . 'N' => $val6];
             }
 
             $SdateD = array_column($valSD, 'SDDTE');
             $SqtyD = array_column($valSD, 'SQREQ');
-            if (is_int(array_search($dia, $SdateD))) {
 
-                // $inF1 += ['S' . $dia . 'D' => 0];
+            if (is_int(array_search($dia, $SdateD))) {
 
                 $val7 = $SqtyD[array_search($dia, $SdateD)] + 0;
                 $inF1 += ['S' . $dia . 'D' => $val7];
@@ -422,22 +418,33 @@ class PlaneacionController extends Controller
 
             $SdateN = array_column($valSN, 'SDDTE');
             $SqtyN = array_column($valSN, 'SQREQ');
-            if (array_search($dia, $SdateN) == false) {
-                // $inF1 += ['S' . $dia . 'N' => 0];
-            } else {
+            if (is_int(array_search($dia, $SdateN))) {
+
                 $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
                 $inF1 += ['S' . $dia . 'N' => $val8];
             }
+
             $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
             $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
+
 
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
 
+
         }
+        $contsub = self::contcargar($prod);
+            if($contsub !=0)
+            {
+                $datossub = self::Cargarforcast($prod,$hoy, $dias);
+                $inF1 += ['hijos'.$prod =>  $datossub];
+
+            }
+
 
         return $inF1;
+
     }
 
     function Cargarforcast($prod1, $hoy, $dias)
@@ -467,6 +474,7 @@ class PlaneacionController extends Controller
                 $contF1 = self::contcargarF1($prod);
 
                 if ($contF1 > 1) {
+                    $padres='';
                     $tD = 0;
                     $tN = 0;
                     $requiN = 0;
@@ -474,6 +482,7 @@ class PlaneacionController extends Controller
                     $F1 = self::cargarF1($prod);
                     foreach ($F1 as $F1s) {
                         $pF = $F1s['final'];
+                        $padres=$padres.$pF.',';
                         $valD = self::Forecast($pF, $dia, '%D%');
                         $valN = self::Forecast($pF, $dia, '%N%');
                         $requiTD = self::requerimiento($pF, $dia, '%D%');
@@ -488,33 +497,32 @@ class PlaneacionController extends Controller
                     $inF1 += ['F' . $dia . 'N' => $valN];
                     $inF1 += ['R' . $dia . 'D' => $requiD];
                     $inF1 += ['R' . $dia . 'N' => $requiN];
+
+
                 } else {
                     $MdateD = array_column($valD, 'MRDTE');
                     $Mqty = array_column($valD, 'MQTY');
-                    if (array_search($dia, $MdateD) == false) {
-                        // $inF1 += ['F' . $dia . 'D' => 0];
-                    } else {
+                    if (is_int(array_search($dia, $MdateD))){
                         $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                         $inF1 += ['F' . $dia . 'D' => $val1];
                     }
 
                     $MdateN = array_column($valN, 'MRDTE');
                     $Mqty = array_column($valN, 'MQTY');
-                    if (array_search($dia, $MdateN) == false) {
-                        // $inF1 += ['F' . $dia . 'N' => 0];
-                    } else {
+                    if (is_int(array_search($dia, $MdateN) )) {
                         $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
                         $inF1 += ['F' . $dia . 'N' => $val2];
                     }
+
+
                     $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
                     $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
+
                 }
 
                 $FdateD = array_column($valFD, 'FRDTE');
                 $FqtyD = array_column($valFD, 'FQTY');
-                if (array_search($dia, $FdateD) == false) {
-                    // $inF1 += ['Fi' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $FdateD) )) {
                     $val3 = $FqtyD[array_search($dia, $FdateD)] + 0;
                     $inF1 += ['Fi' . $dia . 'D' => $val3];
                 }
@@ -522,9 +530,8 @@ class PlaneacionController extends Controller
 
                 $FdateN = array_column($valFN, 'FRDTE');
                 $FqtyN = array_column($valFN, 'FQTY');
-                if (array_search($dia, $FdateN) == false) {
-                    // $inF1 += ['Fi' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $FdateN) )) {
+
                     $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
                     $inF1 += ['Fi' . $dia . 'N' => $val4];
                 }
@@ -532,200 +539,44 @@ class PlaneacionController extends Controller
 
                 $PdateD = array_column($valPD, 'FRDTE');
                 $PqtyD = array_column($valPD, 'FQTY');
-                if (array_search($dia, $PdateD) == false) {
-                    // $inF1 += ['P' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $PdateD) )) {
+
                     $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
                     $inF1 += ['P' . $dia . 'D' => $val5];
                 }
 
                 $PdateN = array_column($valPN, 'FRDTE');
                 $PqtyN = array_column($valPN, 'FQTY');
-                if (array_search($dia, $PdateN) == false) {
-                    // $inF1 += ['P' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $PdateN) )) {
+
                     $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
                     $inF1 += ['P' . $dia . 'N' => $val6];
                 }
 
                 $SdateD = array_column($valSD, 'SDDTE');
                 $SqtyD = array_column($valSD, 'SQREQ');
-                if (array_search($dia, $SdateD) == false) {
-                    // $inF1 += ['S' . $dia . 'D' => 0];
-                } else {
+                if (is_int(array_search($dia, $SdateD))) {
+
                     $val7 = $SqtyD[array_search($dia, $SdateD)] + 0;
                     $inF1 += ['S' . $dia . 'D' => $val7];
                 }
 
                 $SdateN = array_column($valSN, 'SDDTE');
                 $SqtyN = array_column($valSN, 'SQREQ');
-                if (array_search($dia, $SdateN) == false) {
-                    // $inF1 += ['S' . $dia . 'N' => 0];
-                } else {
+                if (is_int(array_search($dia, $SdateN) )) {
+
                     $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
                     $inF1 += ['S' . $dia . 'N' => $val8];
                 }
                 $dia = $dia = date('Ymd', strtotime($dia . '+1 day'));
                 $connt++;
             }
-
             array_push($total, $inF1);
         }
 
         return $total;
     }
-    // function Cargarforcastold($prod1, $hoy, $dias)
-    // {
-    //     $Sub = self::cargar($prod1);
 
-
-    //     $inF1 = array();
-    //     $total = array();
-
-
-    //     foreach ($Sub as $subs) {
-
-    //         $prod = $subs['Componente'];
-    //         $inF1 = [
-    //             'sub' => $prod,
-    //         ];
-    //         $dia = $hoy;
-    //         $connt = 1;
-
-    //         while ($connt <= $dias) {
-    //             $contF1 = self::contcargarF1($prod);
-    //             $tD = 0;
-    //             $tN = 0;
-    //             $tPD = 0;
-    //             $tFD = 0;
-    //             $tPN = 0;
-    //             $tFN = 0;
-    //             $tSD = 0;
-    //             $tSN = 0;
-    //             $reN = 0;
-    //             $reD = 0;
-    //             $requiD = 0;
-    //             $requiN = 0;
-    //             $requiTD = 0;
-    //             $requiTN = 0;
-
-    //             if ($contF1 != 0) {
-    //                 $F1 = self::cargarF1($prod);
-    //                 foreach ($F1 as $F1s) {
-    //                     $pF = $F1s['final'];
-    //                     $valD = self::Forecast($pF, $dia, '%D%');
-    //                     $valN = self::Forecast($pF, $dia, '%N%');
-    //                     $requiTD = self::requerimiento($pF, $dia, '%D%');
-    //                     $requiTN = self::requerimiento($pF, $dia, '%N%');
-    //                     $tD = $valD + $tD;
-    //                     $tN = $valN + $tN;
-    //                     $requiD = $requiD + $requiTD;
-    //                     $requiN = $requiN + $requiTN;
-    //                 }
-    //                 $contvalD = self::contplanyfirme($prod,  '20221117', '%D%');
-    //                 if ($contvalD == 0) {
-    //                     $valPD = 0;
-    //                     $valFD = 0;
-    //                     $valPN = 0;
-    //                     $valFN = 0;
-    //                 } else {
-
-    //                     $valD = self::planyfirme($prod,  '20221117', '%D%');
-
-    //                     if ($valD['FTYPE'] == 'P') {
-    //                         $valPD = $valD['TOTAL'];
-    //                         $valFD = 0;
-    //                     } else {
-    //                         $valPD = 0;
-    //                         $valFD = $valD['TOTAL'];
-    //                     }
-    //                 }
-    //                 $contvalD = self::contplanyfirme($prod,  $dia, '%N%');
-    //                 if ($contvalD == 0) {
-    //                     $valPD = 0;
-    //                     $valFD = 0;
-    //                     $valPN = 0;
-    //                     $valFN = 0;
-    //                 } else {
-    //                     $valD = self::planyfirme($prod,  $dia, '%N%');
-    //                     if ($valD['FTYPE'] == 'P') {
-    //                         $valPD = $valD['TOTAL'];
-    //                         $valFD = 0;
-    //                     } else {
-    //                         $valPD = 0;
-    //                         $valFD = $valD['TOTAL'];
-    //                     }
-    //                 }
-    //                 $valSD = self::ShopO($prod, $dia, '%D%');
-    //                 $valSN = self::ShopO($prod, $dia, '%N%');
-    //                 $valPD =  $valPD + 0;
-    //                 $valFD = $valFD + 0;
-    //                 $valN =  $valN + 0;
-    //                 $valPN = $valPN + 0;
-    //                 $valFN = $valFN  + 0;
-    //                 $valSD = $valSD  + 0;
-    //                 $valSN = $valSN + 0;
-
-
-    //                 $inF1 += ['F' . $dia . 'D' => $valD];
-    //                 $inF1 += ['F' . $dia . 'N' => $valN];
-    //                 $inF1 += ['P' . $dia . 'D' => $valPD];
-    //                 $inF1 += ['P' . $dia . 'N' => $valPN];
-    //                 $inF1 += ['Fi' . $dia . 'D' => $valFD];
-    //                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
-    //                 $inF1 += ['S' . $dia . 'D' => $valSD];
-    //                 $inF1 += ['S' . $dia . 'N' => $valSN];
-    //                 $inF1 += ['R' . $dia . 'D' => $requiD];
-    //                 $inF1 += ['R' . $dia . 'N' => $requiN];
-    //             } else {
-    //                 $valD = self::contplanyfirme($prod,  $dia, '%D%');
-    //                 dd($valD);
-    //                 if ($valD == null) {
-    //                     dd('es nulo', $valD);
-    //                 } else {
-    //                     dd('es nulo');
-    //                 }
-    //                 $valD = self::Forecast($prod, $dia, '%D%');
-    //                 $valPD = self::plan($prod, $dia, '%D%');
-    //                 $valFD = self::Firme($prod, $dia, '%D%');
-    //                 $valN = self::Forecast($prod, $dia, '%N%');
-    //                 $valPN = self::plan($prod, $dia, '%N%');
-    //                 $valFN = self::Firme($prod, $dia, '%N%');
-    //                 $valSD = self::ShopO($prod, $dia, '%D%');
-    //                 $valSN = self::ShopO($prod, $dia, '%N%');
-    //                 $requiTD = self::requerimiento($prod, $dia, '%D%');
-    //                 $requiTN = self::requerimiento($prod, $dia, '%N%');
-
-    //                 $valD =  $valD + 0;
-    //                 $valPD =  $valPD + 0;
-    //                 $valFD = $valFD + 0;
-    //                 $valN =  $valN + 0;
-    //                 $valPN = $valPN + 0;
-    //                 $valFN = $valFN  + 0;
-    //                 $valSD = $valSD  + 0;
-    //                 $valSN = $valSN + 0;
-
-    //                 $inF1 += ['F' . $dia . 'D' => $valD];
-    //                 $inF1 += ['F' . $dia . 'N' => $valN];
-    //                 $inF1 += ['P' . $dia . 'D' => $valPD];
-    //                 $inF1 += ['P' . $dia . 'N' => $valPN];
-    //                 $inF1 += ['Fi' . $dia . 'D' => $valFD];
-    //                 $inF1 += ['Fi' . $dia . 'N' => $valFN];
-    //                 $inF1 += ['S' . $dia . 'D' => $valSD];
-    //                 $inF1 += ['S' . $dia . 'N' => $valSN];
-    //                 $inF1 += ['R' . $dia . 'D' => $requiTD];
-    //                 $inF1 += ['R' . $dia . 'N' => $requiTN];
-    //             }
-
-
-    //             $dia = $dia = date('Ymd', strtotime($dia . '+1 day'));
-    //             $connt++;
-    //         }
-    //         array_push($total, $inF1);
-    //     }
-    //     dd($total);
-    //     return $total;
-    // }
 
     // ---------------------------------guardar estructuras de BOM----------------------------------------------
     function guardar($prod, $sub, $clase)
