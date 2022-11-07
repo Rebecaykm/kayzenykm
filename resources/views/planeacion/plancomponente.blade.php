@@ -46,6 +46,19 @@
                 </div>
             </div>
         </form>
+        <div
+            class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+            <span class="flex items-center col-span-3">
+                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+
+
+                Show {{ $plantotal->firstItem() }} - {{ $plantotal->lastItem() }}
+            </span>
+            <!-- Pagination -->
+            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+                {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
+            </span>
+        </div>
         <form action="{{ route('planeacion.update') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-2 rounded-lg">
                 @csrf
@@ -215,12 +228,12 @@
                                                     }
 
                                                     if (array_key_exists('Fi' . $hoy . 'D', $info) == false) {
-                                                        $valFiD = '-';
+                                                        $valFiD = 0;
                                                     } else {
                                                         $valFiD = $info['Fi' . $hoy . 'D'];
                                                     }
                                                     if (array_key_exists('Fi' . $hoy . 'N', $info) == false) {
-                                                        $valFiN = '-';
+                                                        $valFiN = 0;
                                                     } else {
                                                         $valFiN = $info['Fi' . $hoy . 'N'];
                                                     }
@@ -332,15 +345,15 @@
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
                                 $contsub = $obj->contcargar($info['parte']);
-
+                                $hijos='hijos'.$info['parte'];
                             @endphp
-                            @if ($contsub != 0)
+                            @if (array_key_exists($hijos,$info))
                                 @php
                                     $hoy = $fecha;
-                                    $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
+                                    // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
 
                                     // $Sub = $obj->cargar($plans->IPROD);
-
+                                    $datossub=$info[$hijos]
                                 @endphp
                                 @foreach ($datossub as $datossubs)
                                     @php
@@ -468,12 +481,12 @@
                                                 }
 
                                                 if (array_key_exists('Fi' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valFiDH = '-';
+                                                    $valFiDH = 0;
                                                 } else {
                                                     $valFiDh = $datossubs['Fi' . $hoy1 . 'D'];
                                                 }
                                                 if (array_key_exists('Fi' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valFiNH = '-';
+                                                    $valFiNH = 0;
                                                 } else {
                                                     $valFiNH = $datossubs['Fi' . $hoy1 . 'N'];
                                                 }
@@ -581,19 +594,7 @@
 
             </div>
         </form>
-        {{-- <div
-            class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
 
-
-                Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
-            </span>
-            <!-- Pagination -->
-            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                {{ $plan->withQueryString()->appends(['SeProject' => $tp])->links() }}
-            </span>
-        </div> --}}
         {{-- <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">

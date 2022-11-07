@@ -64,7 +64,7 @@ class PlaneacionController extends Controller
     public function create(Request $request)
     {
 
-        $inF1=array();
+        $inF1 = array();
         $dias = $request->dias ?? '7';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
@@ -81,19 +81,15 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(10)->withQueryString();
+            ->simplePaginate(1)->withQueryString();
         $total = array();
-
         foreach ($plan as $WCss) {
-
-
             $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
             $inF1 += [$WCss->IPROD =>  $datos];
-
         }
-            dd($inF1);
 
-        return view('planeacion.plancomponente', ['plan' => $inF1, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+
+        return view('planeacion.plancomponente', ['plan' => $inF1, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
 
@@ -132,6 +128,7 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
+        $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;
@@ -161,7 +158,7 @@ class PlaneacionController extends Controller
                     'K6WRKC' => $WCT,
                     'K6SDTE' => $fecha,
                     'K6EDTE' => $fefin,
-                    'K6DDTE' => $hoy,
+                    'K6DDTE' => $inp[1],
                     'K6DSHT' => $turno,
                     'K6PFQY' => $request->$plans,
                     'K6CUSR' => 'LXSECOFR',
@@ -173,25 +170,41 @@ class PlaneacionController extends Controller
                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
             }
         }
-
-        $plan = IPB::query()
+        $plan = Iim::query()
             ->select('IPROD', 'ICLAS', 'IMBOXQ')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
             ->where([
                 ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
-
             ])
             ->where(function ($query) {
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(2);
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU02.YMP006C";
-        // $result = odbc_exec($conn, $query);
-        return view('planeacion.plancomponente', ['plan' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+            ->simplePaginate(1)->withQueryString();
+        $total = array();
+        foreach ($plan as $WCss) {
+            $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
+            $inF1 += [$WCss->IPROD =>  $datos];
+        }
+        // $plan = IPB::query()
+        //     ->select('IPROD', 'ICLAS', 'IMBOXQ')
+        //     ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
+        //     ->where([
+        //         ['IREF04', 'like', '%' . $TP . '%'],
+        //         ['IID', '!=', 'IZ'],
+        //         ['IMPLC', '!=', 'OBSOLETE'],
+
+        //     ])
+        //     ->where(function ($query) {
+        //         $query->where('ICLAS ', 'F1');
+        //     })
+        //     ->distinct('IPROD')
+        //     ->simplePaginate(2);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YMP006C";
+        $result = odbc_exec($conn, $query);
+        return view('planeacion.plancomponente', ['plan' => $inF1,'plantotal'=>$plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**
@@ -352,14 +365,14 @@ class PlaneacionController extends Controller
         $valRD = self::RequeTotal($prod, $dia, '%D%', $dias);
         $valRN = self::RequeTotal($prod, $dia, '%N%', $dias);
 
-        $inF1 +=['parte'=>$prod];
+        $inF1 += ['parte' => $prod];
 
         while ($connt <= $dias) {
 
 
             $MdateD = array_column($valD, 'MRDTE');
             $Mqty = array_column($valD, 'MQTY');
-            if (is_int(array_search($dia, $MdateD)) ) {
+            if (is_int(array_search($dia, $MdateD))) {
 
                 $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                 $inF1 += ['F' . $dia . 'D' => $val1];
@@ -401,8 +414,7 @@ class PlaneacionController extends Controller
 
             $PdateN = array_column($valPN, 'FRDTE');
             $PqtyN = array_column($valPN, 'FQTY');
-            if (is_int(array_search($dia, $PdateN)))
-            {
+            if (is_int(array_search($dia, $PdateN))) {
                 $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
                 $inF1 += ['P' . $dia . 'N' => $val6];
             }
@@ -431,20 +443,15 @@ class PlaneacionController extends Controller
 
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
-
-
         }
         $contsub = self::contcargar($prod);
-            if($contsub !=0)
-            {
-                $datossub = self::Cargarforcast($prod,$hoy, $dias);
-                $inF1 += ['hijos'.$prod =>  $datossub];
-
-            }
+        if ($contsub != 0) {
+            $datossub = self::Cargarforcast($prod, $hoy, $dias);
+            $inF1 += ['hijos' . $prod =>  $datossub];
+        }
 
 
         return $inF1;
-
     }
 
     function Cargarforcast($prod1, $hoy, $dias)
@@ -474,7 +481,7 @@ class PlaneacionController extends Controller
                 $contF1 = self::contcargarF1($prod);
 
                 if ($contF1 > 1) {
-                    $padres='';
+                    $padres = '';
                     $tD = 0;
                     $tN = 0;
                     $requiN = 0;
@@ -482,7 +489,7 @@ class PlaneacionController extends Controller
                     $F1 = self::cargarF1($prod);
                     foreach ($F1 as $F1s) {
                         $pF = $F1s['final'];
-                        $padres=$padres.$pF.',';
+                        $padres = $padres . $pF . ',';
                         $valD = self::Forecast($pF, $dia, '%D%');
                         $valN = self::Forecast($pF, $dia, '%N%');
                         $requiTD = self::requerimiento($pF, $dia, '%D%');
@@ -497,19 +504,17 @@ class PlaneacionController extends Controller
                     $inF1 += ['F' . $dia . 'N' => $valN];
                     $inF1 += ['R' . $dia . 'D' => $requiD];
                     $inF1 += ['R' . $dia . 'N' => $requiN];
-
-
                 } else {
                     $MdateD = array_column($valD, 'MRDTE');
                     $Mqty = array_column($valD, 'MQTY');
-                    if (is_int(array_search($dia, $MdateD))){
+                    if (is_int(array_search($dia, $MdateD))) {
                         $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                         $inF1 += ['F' . $dia . 'D' => $val1];
                     }
 
                     $MdateN = array_column($valN, 'MRDTE');
                     $Mqty = array_column($valN, 'MQTY');
-                    if (is_int(array_search($dia, $MdateN) )) {
+                    if (is_int(array_search($dia, $MdateN))) {
                         $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
                         $inF1 += ['F' . $dia . 'N' => $val2];
                     }
@@ -517,12 +522,11 @@ class PlaneacionController extends Controller
 
                     $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
                     $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
-
                 }
 
                 $FdateD = array_column($valFD, 'FRDTE');
                 $FqtyD = array_column($valFD, 'FQTY');
-                if (is_int(array_search($dia, $FdateD) )) {
+                if (is_int(array_search($dia, $FdateD))) {
                     $val3 = $FqtyD[array_search($dia, $FdateD)] + 0;
                     $inF1 += ['Fi' . $dia . 'D' => $val3];
                 }
@@ -530,7 +534,7 @@ class PlaneacionController extends Controller
 
                 $FdateN = array_column($valFN, 'FRDTE');
                 $FqtyN = array_column($valFN, 'FQTY');
-                if (is_int(array_search($dia, $FdateN) )) {
+                if (is_int(array_search($dia, $FdateN))) {
 
                     $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
                     $inF1 += ['Fi' . $dia . 'N' => $val4];
@@ -539,7 +543,7 @@ class PlaneacionController extends Controller
 
                 $PdateD = array_column($valPD, 'FRDTE');
                 $PqtyD = array_column($valPD, 'FQTY');
-                if (is_int(array_search($dia, $PdateD) )) {
+                if (is_int(array_search($dia, $PdateD))) {
 
                     $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
                     $inF1 += ['P' . $dia . 'D' => $val5];
@@ -547,7 +551,7 @@ class PlaneacionController extends Controller
 
                 $PdateN = array_column($valPN, 'FRDTE');
                 $PqtyN = array_column($valPN, 'FQTY');
-                if (is_int(array_search($dia, $PdateN) )) {
+                if (is_int(array_search($dia, $PdateN))) {
 
                     $val6 = $PqtyN[array_search($dia, $PdateN)] + 0;
                     $inF1 += ['P' . $dia . 'N' => $val6];
@@ -563,7 +567,7 @@ class PlaneacionController extends Controller
 
                 $SdateN = array_column($valSN, 'SDDTE');
                 $SqtyN = array_column($valSN, 'SQREQ');
-                if (is_int(array_search($dia, $SdateN) )) {
+                if (is_int(array_search($dia, $SdateN))) {
 
                     $val8 = $SqtyN[array_search($dia, $SdateN)] + 0;
                     $inF1 += ['S' . $dia . 'N' => $val8];
@@ -847,19 +851,17 @@ class PlaneacionController extends Controller
             ])
             ->count();
 
-        $ECL = 0;
-        if ($MBMS == 0) {
-            $ECL = 0;
-        } else {
-            $MBMS = ECL::query()
-                ->select('LPROD', 'LQORD', 'LSDTE', 'CLCNO')
-                ->where([
-                    ['LPROD', '=', $producto],
-                    ['LSDTE', '=', $fecha],
-                    ['CLCNO', 'Like', $turno]
-                ])
-                ->sum('LQORD');
-        }
+
+
+        $MBMS = ECL::query()
+            ->select('LPROD', 'LQORD', 'LSDTE', 'CLCNO')
+            ->where([
+                ['LPROD', '=', $producto],
+                ['LSDTE', '=', $fecha],
+                ['CLCNO', 'Like', $turno]
+            ])
+            ->sum('LQORD');
+
 
         $RFMA = FMA::query()
             ->select('MPROD', 'MQREQ', 'MRDTE')
@@ -920,22 +922,22 @@ class PlaneacionController extends Controller
             $DMBMS = array_column($MBMS, 'LSDTE');
             $VMBMS = array_column($MBMS, 'TOTAL');
             $pos1 = array_search($dia, $DMBMS);
-            if ($pos1 == false) {
-            } else {
+            if (is_int($pos1)) {
+
                 $total =  $VMBMS[$pos1];
             }
             $DFMA = array_column($RFMA, 'MRDTE');
             $VFMA = array_column($RFMA, 'MQREQ');
             $pos2 = array_search($dia, $DFMA);
-            if ($pos2 == false) {
-            } else {
+            if (is_int($pos2)) {
+
                 $totalf = $VFMA[$pos2];
             }
             $DKMR = array_column($RKMR, 'MRDTE');
             $VKMR = array_column($RKMR, 'MQTY');
             $pos3 = array_search($dia, $DKMR);
-            if ($pos3 == false) {
-            } else {
+            if (is_int($pos3)) {
+
 
                 $totalk = $VKMR[$pos3];
             }
@@ -947,6 +949,7 @@ class PlaneacionController extends Controller
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
         }
+
 
 
         return $valTotal;
