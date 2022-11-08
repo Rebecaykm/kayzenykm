@@ -153,23 +153,28 @@ class PlaneacionController extends Controller
                     ->select('RWRKC', 'RPROD')
                     ->where('RPROD', $namenA)
                     ->value('RWRKC');
-                $data = YK006::query()->insert([
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $inp[1],
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $hora,
-                    'K6FIL1' => '',
-                    'K6FIL2' => '',
-                ]);
+                    if($request->$plans!=0)
+                    {
+                        $data = YK006::query()->insert([
+                            'K6PROD' => $namenA,
+                            'K6WRKC' => $WCT,
+                            'K6SDTE' => $fecha,
+                            'K6EDTE' => $fefin,
+                            'K6DDTE' => $inp[1],
+                            'K6DSHT' => $turno,
+                            'K6PFQY' => $request->$plans,
+                            'K6CUSR' => 'LXSECOFR',
+                            'K6CCDT' => $load,
+                            'K6CCTM' => $hora,
+                            'K6FIL1' => '',
+                            'K6FIL2' => '',
+                        ]);
+                    }
+
                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
             }
         }
+
         $plan = Iim::query()
             ->select('IPROD', 'ICLAS', 'IMBOXQ')
             ->where([
@@ -435,6 +440,8 @@ class PlaneacionController extends Controller
         if ($contsub != 0) {
             $datossub = self::Cargarforcast($prod, $hoy, $dias);
             $inF1 += ['hijos' . $prod =>  $datossub];
+
+
         }
 
 
@@ -446,6 +453,7 @@ class PlaneacionController extends Controller
         $Sub = self::cargar($prod1);
         $inF1 = array();
         $total = array();
+
         foreach ($Sub as $subs) {
             $prod = $subs['Componente'];
             $inF1 = [
@@ -458,6 +466,7 @@ class PlaneacionController extends Controller
             $valRD = self::RequeTotalh($prod1, $dia, '%D%', $dias);
             $valRN = self::RequeTotalh($prod1, $dia, '%N%', $dias);
             $valPD = self::planTotal($prod, $dia, '%D%', $dias);
+
             $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
             $valPN = self::planTotal($prod, $dia, '%N%', $dias);
             $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
@@ -689,30 +698,8 @@ class PlaneacionController extends Controller
             ->get()->toarray();
         return $plan;
     }
-    function planyfirme($pro, $fecha, $turno)
-    {
 
-        $kfps = kFP::query()
-            ->select('FTYPE')
-            ->where('FPROD', '=', $pro)
-            ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '=', $fecha)
-            ->selectRaw("SUM(FQTY) as total")
-            ->groupby('FTYPE')->first()->toarray();
-        return $kfps;
-    }
-    function contplanyfirme($pro, $fecha, $turno)
-    {
 
-        $kfps = kFP::query()
-            ->select('FTYPE')
-            ->where('FPROD', '=', $pro)
-            ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '=',  $fecha)
-            ->selectRaw("SUM(FQTY) as total")
-            ->groupby('FTYPE')->count();
-        return $kfps;
-    }
 
     function plan($pro, $fecha, $turno)
     {

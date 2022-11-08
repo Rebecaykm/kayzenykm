@@ -127,11 +127,11 @@
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $info['parte'] }}
                                     @php
+                                        $infoP = $obj->info( $info['parte']);
 
-                                        // $STP = 'STP:' . $plans->IMBOXQ;
                                     @endphp
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-
+                                        {{ $infoP['IMBOXQ'] }}
                                     </div>
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -249,7 +249,6 @@
                                                     $valRD = $info['R' . $hoy . 'D'];
                                                     $valRN = $info['R' . $hoy . 'N'];
 
-
                                                 @endphp
                                                 <input value={{ $valFD }}
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -340,15 +339,15 @@
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
                                 $contsub = $obj->contcargar($info['parte']);
-                                $hijos='hijos'.$info['parte'];
+                                $hijos = 'hijos' . $info['parte'];
                             @endphp
-                            @if (array_key_exists($hijos,$info))
+                            @if (array_key_exists($hijos, $info))
                                 @php
                                     $hoy = $fecha;
                                     // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
 
                                     // $Sub = $obj->cargar($plans->IPROD);
-                                    $datossub=$info[$hijos];
+                                    $datossub = $info[$hijos];
 
                                 @endphp
 
