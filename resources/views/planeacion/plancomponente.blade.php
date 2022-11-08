@@ -13,7 +13,11 @@
                     Planeación {{ $projecto->CCDESC }}
                 </h2>
                 @csrf
-
+                <label class="block text-sm ">
+                    <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
+                    <input id="dias" name="dias" type="number" max="7" min="1"
+                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                </label>
                 <div class="flex justify-center">
 
                     <label class="block text-sm ">
