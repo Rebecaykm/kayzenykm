@@ -5,7 +5,7 @@
         $projecto = $obj->Projecto($tp);
         $dias = 6;
     @endphp
-    <div class="xl:container lg:container md:container sm:container grid px-6  mx-auto ">
+    <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <form method="post" action="{{ route('planeacion.create') }}">
 
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
@@ -13,11 +13,7 @@
                     Planeación {{ $projecto->CCDESC }}
                 </h2>
                 @csrf
-                {{-- <label class="block text-sm ">
-                    <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
-                    <input id="dias" name="dias" type="number" max="7" min="1"
-                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                </label> --}}
+
                 <div class="flex justify-center">
 
                     <label class="block text-sm ">
@@ -250,10 +246,9 @@
                                                         $valSN = $info['S' . $hoy . 'N'];
                                                     }
 
-                                                    // $valRD = $info['R' . $hoy . 'D'];
-                                                    // $valRN = $info['R' . $hoy . 'N'];
-                                                    $valRD = 0;
-                                                    $valRN = 0;
+                                                    $valRD = $info['R' . $hoy . 'D'];
+                                                    $valRN = $info['R' . $hoy . 'N'];
+
 
                                                 @endphp
                                                 <input value={{ $valFD }}
@@ -353,8 +348,10 @@
                                     // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
 
                                     // $Sub = $obj->cargar($plans->IPROD);
-                                    $datossub=$info[$hijos]
+                                    $datossub=$info[$hijos];
+
                                 @endphp
+
                                 @foreach ($datossub as $datossubs)
                                     @php
                                         $hoy = $fecha;
@@ -367,6 +364,7 @@
                                             {{ $datossubs['sub'] }}
                                             @php
                                                 $infoP = $obj->info($datossubs['sub']);
+
                                             @endphp
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                 <label class="block text-sm ">
@@ -445,19 +443,19 @@
                                         @endphp
                                         @while ($coni < $dias)
                                             @php
-                                                if (array_key_exists('F' . $hoy . 'D', $datossubs) == false) {
+                                                if (array_key_exists('F' . $hoy1 . 'D', $datossubs) == false) {
                                                     $valFDH = '-';
                                                 } else {
                                                     $valFDH = $datossubs['F' . $hoy1 . 'D'];
                                                 }
 
-                                                if (array_key_exists('F' . $hoy1 . 'D', $datossubs) == false) {
+                                                if (array_key_exists('F' . $hoy1 . 'N', $datossubs) == false) {
                                                     $valFNH = '-';
                                                 } else {
-                                                    $valFNH = $datossubs['F' . $hoy1 . 'D'];
+                                                    $valFNH = $datossubs['F' . $hoy1 . 'N'];
                                                 }
                                                 $var = 'R' . $hoy . 'D';
-                                                if (array_key_exists($var, $datossubs) == false) {
+                                                if (array_key_exists('R' . $hoy1 . 'D', $datossubs) == false) {
                                                     $valRDH = '-';
                                                 } else {
                                                     $valRDH = $datossubs['R' . $hoy1 . 'D'];
@@ -466,7 +464,7 @@
                                                 if (array_key_exists('R' . $hoy1 . 'N', $datossubs) == false) {
                                                     $valRNH = '-';
                                                 } else {
-                                                    $vaRNH = $datossubs['R' . $hoy1 . 'N'];
+                                                    $valRNH = $datossubs['R' . $hoy1 . 'N'];
                                                 }
 
                                                 if (array_key_exists('P' . $hoy1 . 'D', $datossubs) == false) {
@@ -502,8 +500,7 @@
                                                 } else {
                                                     $valSNH = $datossubs['S' . $hoy1 . 'N'];
                                                 }
-                                                $vaRDH = $datossubs['R' . $hoy1 . 'D'];
-                                                $vaRNH = $datossubs['R' . $hoy1 . 'N'];
+
                                             @endphp
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
@@ -523,13 +520,13 @@
                                                     class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                                                     <label class="block text-sm ">
 
-                                                        <input value={{ $vaRDH }}
+                                                        <input value={{ $valRDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>
                                                     <label class="block text-sm ">
 
-                                                        <input value={{ $vaRNH }}
+                                                        <input value={{ $valRNH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             disabled />
                                                     </label>

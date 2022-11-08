@@ -163,10 +163,10 @@ class registros
             ];
             $dia = $hoy;
             $connt = 1;
-            $valD = self::Forecasttotal($prod1, $dia, '%D%', $dias);
-            $valN = self::Forecasttotal($prod1, $dia, '%N%', $dias);
-            $valRD = self::RequeTotal($prod1, $dia, '%D%', $dias);
-            $valRN = self::RequeTotal($prod1, $dia, '%N%', $dias);
+            $valD = self::Forecasttotal($prod, $dia, '%D%', $dias);
+            $valN = self::Forecasttotal($prod, $dia, '%N%', $dias);
+            $valRD = self::RequeTotal($prod, $dia, '%D%', $dias);
+            $valRN = self::RequeTotal($prod, $dia, '%N%', $dias);
             $valPD = self::planTotal($prod, $dias, '%D%', $dias);
             $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
             $valPN = self::planTotal($prod, $dia, '%N', $dias);

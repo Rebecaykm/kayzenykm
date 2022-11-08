@@ -81,7 +81,7 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(1)->withQueryString();
+            ->simplePaginate(3)->withQueryString();
         $total = array();
         foreach ($plan as $WCss) {
             $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
@@ -181,30 +181,16 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(1)->withQueryString();
+            ->simplePaginate(3)->withQueryString();
         $total = array();
         foreach ($plan as $WCss) {
             $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
             $inF1 += [$WCss->IPROD =>  $datos];
         }
-        // $plan = IPB::query()
-        //     ->select('IPROD', 'ICLAS', 'IMBOXQ')
-        //     ->join('LX834F01.IIM', 'LX834F01.IIM.IBUYC', '=', 'LX834F02.IPB.PBPBC')
-        //     ->where([
-        //         ['IREF04', 'like', '%' . $TP . '%'],
-        //         ['IID', '!=', 'IZ'],
-        //         ['IMPLC', '!=', 'OBSOLETE'],
-
-        //     ])
-        //     ->where(function ($query) {
-        //         $query->where('ICLAS ', 'F1');
-        //     })
-        //     ->distinct('IPROD')
-        //     ->simplePaginate(2);
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
-        return view('planeacion.plancomponente', ['plan' => $inF1,'plantotal'=>$plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        return view('planeacion.plancomponente', ['plan' => $inF1, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**
@@ -355,10 +341,11 @@ class PlaneacionController extends Controller
         $connt = 1;
 
         $valD = self::Forecasttotal($prod, $dia, '%D%', $dias);
-        $valPD = self::planTotal($prod, $dias, '%D%', $dias);
+        $valPD = self::planTotal($prod, $dia, '%D%', $dias);
         $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
         $valN = self::Forecasttotal($prod, $dia, '%N%', $dias);
-        $valPN = self::planTotal($prod, $dia, '%N', $dias);
+
+        $valPN = self::planTotal($prod, $dia, '%N%', $dias);
         $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
         $valSD = self::ShopOTotal($prod, $dia, '%D%', $dias);
         $valSN = self::ShopOTotal($prod, $dia, '%N%', $dias);
@@ -468,11 +455,11 @@ class PlaneacionController extends Controller
             $connt = 1;
             $valD = self::Forecasttotal($prod1, $dia, '%D%', $dias);
             $valN = self::Forecasttotal($prod1, $dia, '%N%', $dias);
-            $valRD = self::RequeTotal($prod1, $dia, '%D%', $dias);
-            $valRN = self::RequeTotal($prod1, $dia, '%N%', $dias);
-            $valPD = self::planTotal($prod, $dias, '%D%', $dias);
+            $valRD = self::RequeTotalh($prod1, $dia, '%D%', $dias);
+            $valRN = self::RequeTotalh($prod1, $dia, '%N%', $dias);
+            $valPD = self::planTotal($prod, $dia, '%D%', $dias);
             $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
-            $valPN = self::planTotal($prod, $dia, '%N', $dias);
+            $valPN = self::planTotal($prod, $dia, '%N%', $dias);
             $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
             $valSD = self::ShopOTotal($prod, $dia, '%D%', $dias);
             $valSN = self::ShopOTotal($prod, $dia, '%N%', $dias);
@@ -507,6 +494,7 @@ class PlaneacionController extends Controller
                 } else {
                     $MdateD = array_column($valD, 'MRDTE');
                     $Mqty = array_column($valD, 'MQTY');
+
                     if (is_int(array_search($dia, $MdateD))) {
                         $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
                         $inF1 += ['F' . $dia . 'D' => $val1];
@@ -518,8 +506,6 @@ class PlaneacionController extends Controller
                         $val2 = $Mqty[array_search($dia, $MdateN)] + 0;
                         $inF1 += ['F' . $dia . 'N' => $val2];
                     }
-
-
                     $inF1 += ['R' . $dia . 'D' => $valRD[$dia]];
                     $inF1 += ['R' . $dia . 'N' => $valRN[$dia]];
                 }
@@ -539,6 +525,8 @@ class PlaneacionController extends Controller
                     $val4 = $FqtyN[array_search($dia,  $FdateN)] + 0;
                     $inF1 += ['Fi' . $dia . 'N' => $val4];
                 }
+
+
 
 
                 $PdateD = array_column($valPD, 'FRDTE');
@@ -740,15 +728,19 @@ class PlaneacionController extends Controller
     }
     function planTotal($pro, $fecha, $turno, $dias)
     {
+
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
         $kfps = kFP::query()
             ->select('FRDTE', 'FQTY')
-            ->where('FPROD', '=', $pro)
-            ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $totalF)
-            ->where('FTYPE', '=', 'P')
+            ->where([
+                ['FPROD', '=', $pro],
+                ['FPCNO', 'like',  $turno],
+                ['FRDTE', '>=', $fecha],
+                ['FRDTE', '<=', $totalF],
+                ['FTYPE', '=', 'P']
+            ])
             ->get()->toarray();
+
 
         return $kfps;
     }
@@ -862,20 +854,21 @@ class PlaneacionController extends Controller
             ])
             ->sum('LQORD');
 
-
-        $RFMA = FMA::query()
-            ->select('MPROD', 'MQREQ', 'MRDTE')
-            ->where([
-                ['MPROD', '=', $producto],
-                ['MRDTE', '=', $fecha],
-            ])
-            ->sum('MQREQ');
-
+        if ($turno == '%D%') {
+            $RFMA = FMA::query()
+                ->select('MPROD', 'MQREQ', 'MRDTE')
+                ->where([
+                    ['MPROD', '=', $producto],
+                    ['MRDTE', '=', $fecha],
+                ])
+                ->sum('MQREQ');
+        }
         $RKMR = KMR::query()
             ->select('MQTY', 'MRDTE', 'MRCNO')
             ->where([
                 ['MPROD', '=', $producto],
                 ['MRDTE', '=', $fecha],
+                ['MRCNO', 'Like', $turno]
             ])
             ->sum('MQTY');
         $sumre = $MBMS + $RFMA + $RKMR;
@@ -897,22 +890,27 @@ class PlaneacionController extends Controller
             ])
             ->groupBy('LSDTE')
             ->get()->toarray();
+        if ($turno == '%D%') {
+            $RFMA = FMA::query()
+                ->selectRaw('MRDTE, SUM(MQREQ) as Total')
+                ->where([
+                    ['MPROD', '=', $producto],
+                    ['MRDTE', '>=', $fecha],
+                    ['MRDTE', '<', $totalF],
+                ])
+                ->groupBy('MRDTE')
+                ->get()->toarray();
+        }
 
-        $RFMA = FMA::query()
-            ->select('MRDTE', 'MQREQ')
-            ->where([
-                ['MPROD', '=', $producto],
-                ['MRDTE', '>=', $fecha],
-                ['MRDTE', '<', $totalF],
-            ])
-            ->get()->toarray();
         $RKMR = KMR::query()
-            ->select('MQTY', 'MRDTE')
+            ->selectRaw('SUM(MQTY) as Total, MRDTE')
             ->where([
                 ['MPROD', '=', $producto],
                 ['MRDTE', '>=', $fecha],
                 ['MRDTE', '<', $totalF],
+                ['MRCNO', 'Like', $turno]
             ])
+            ->groupBy('MRDTE')
             ->get()->toarray();
 
         while ($connt < $dias) {
@@ -921,28 +919,29 @@ class PlaneacionController extends Controller
             $totalk = 0;
             $DMBMS = array_column($MBMS, 'LSDTE');
             $VMBMS = array_column($MBMS, 'TOTAL');
-            $pos1 = array_search($dia, $DMBMS);
-            if (is_int($pos1)) {
 
-                $total =  $VMBMS[$pos1];
+            if (is_int(array_search($dia, $DMBMS))) {
+
+                $total =  $VMBMS[array_search($dia, $DMBMS)];
             }
-            $DFMA = array_column($RFMA, 'MRDTE');
-            $VFMA = array_column($RFMA, 'MQREQ');
-            $pos2 = array_search($dia, $DFMA);
-            if (is_int($pos2)) {
 
-                $totalf = $VFMA[$pos2];
+            if ($turno == '%D%') {
+
+                $DFMA = array_column($RFMA, 'MRDTE');
+                $VFMA = array_column($RFMA, 'TOTAL');
+                if (is_int(array_search($dia, $DFMA))) {
+                    $totalf = $VFMA[array_search($dia, $DFMA)];
+                }
             }
             $DKMR = array_column($RKMR, 'MRDTE');
-            $VKMR = array_column($RKMR, 'MQTY');
-            $pos3 = array_search($dia, $DKMR);
-            if (is_int($pos3)) {
+            $VKMR = array_column($RKMR, 'TOTAL');
+
+            if (is_int(array_search($dia, $DKMR))) {
 
 
-                $totalk = $VKMR[$pos3];
+                $totalk = $VKMR[array_search($dia, $DKMR)];
             }
-            $dia . '<br>';
-            $total . '/' . $totalf . '/' . $totalk . '<br>';
+
             $tt = $total + $totalf + $totalk;
             $valTotal += [$dia => $tt];
 
@@ -951,6 +950,81 @@ class PlaneacionController extends Controller
         }
 
 
+
+        return $valTotal;
+    }
+    function RequeTotalh($producto, $fecha, $turno, $dias)
+    {
+        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
+        $dia = $fecha;
+        $connt = 0;
+        $valTotal  = [];
+        $MBMS = ECL::query()
+            ->selectRaw('LSDTE, SUM(LQORD) as Total')
+            ->where([
+                ['LPROD', '=', $producto],
+                ['LSDTE', '>=', $fecha],
+                ['LSDTE', '<=', $totalF],
+                ['CLCNO', 'Like', $turno]
+            ])
+            ->groupBy('LSDTE')
+            ->get()->toarray();
+        if ($turno == '%D%') {
+            $RFMA = FMA::query()
+                ->selectRaw('MRDTE, SUM(MQREQ) as Total')
+                ->where([
+                    ['MPROD', '=', $producto],
+                    ['MRDTE', '>=', $fecha],
+                    ['MRDTE', '<=', $totalF],
+                ])
+                ->groupBy('MRDTE')
+                ->get()->toarray();
+        }
+        $RKMR = KMR::query()
+            ->selectRaw('SUM(MQTY) as Total,MRDTE')
+            ->where([
+                ['MPROD', '=', $producto],
+                ['MRDTE', '>=', $fecha],
+                ['MRDTE', '<=', $totalF],
+                ['MRCNO', 'Like', $turno]
+            ])->groupBy('MRDTE')
+            ->get()->toarray();
+
+        while ($connt < $dias) {
+            $total = 0;
+            $totalf = 0;
+            $totalk = 0;
+            $DMBMS = array_column($MBMS, 'LSDTE');
+            $VMBMS = array_column($MBMS, 'TOTAL');
+
+            if (is_int(array_search($dia, $DMBMS))) {
+
+                $total =  $VMBMS[array_search($dia, $DMBMS)];
+            }
+            if ($turno == '%D%') {
+                $DFMA = array_column($RFMA, 'MRDTE');
+                $VFMA = array_column($RFMA, 'TOTAL');
+                if (is_int(array_search($dia, $DFMA))) {
+
+                    $totalf = $VFMA[array_search($dia, $DFMA)];
+                }
+            }
+            $DKMR = array_column($RKMR, 'MRDTE');
+            $VKMR = array_column($RKMR, 'TOTAL');
+
+            if (is_int(array_search($dia, $DKMR))) {
+
+
+                $totalk = $VKMR[array_search($dia, $DKMR)];
+            }
+            $dia . '<br>';
+
+            $tt = $total + $totalf + $totalk;
+            $valTotal += [$dia => $tt];
+
+            $dia = date('Ymd', strtotime($dia . '+1 day'));
+            $connt++;
+        }
 
         return $valTotal;
     }
