@@ -3,7 +3,7 @@
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
         $projecto = $obj->Projecto($tp);
-        $dias = 6;
+        // $dias = ;
     @endphp
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <form method="post" action="{{ route('planeacion.create') }}">
@@ -131,7 +131,7 @@
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $info['parte'] }}
                                     @php
-                                        $infoP = $obj->info( $info['parte']);
+                                        $infoP = $obj->info($info['parte']);
 
                                     @endphp
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
@@ -307,12 +307,14 @@
 
                                                 <input id={{ $inD }} name={{ $inD }}
                                                     value={{ $valFiD }} onclick='myFunction(this.id)'
+                                                    type="number"
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input id={{ $inD }} name={{ $inN }}
                                                     value={{ $valFiN }} onclick='myFunction(this.id)'
+                                                    type="number"
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
@@ -557,11 +559,13 @@
                                                     <label class="block text-sm ">
                                                         <input id={{ $inD }} name={{ $inD }}
                                                             value={{ $valFiDH }} onclick='myFunction(this.id)'
+                                                            type="number"
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
                                                         <input id={{ $inN }} name={{ $inN }}
                                                             value={{ $valFiNH }} onclick='myFunction(this.id)'
+                                                            type="number"
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
@@ -595,7 +599,7 @@
             </div>
         </form>
 
-        {{-- <div
+        <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
                 Y - TEC KEYLEX MÉXICO
@@ -608,7 +612,7 @@
                     </ul>
                 </nav>
             </span>
-        </div> --}}
+        </div>
     </div>
     <script>
         function myFunction(xx) {

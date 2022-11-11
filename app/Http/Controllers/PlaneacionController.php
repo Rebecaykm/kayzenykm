@@ -10,7 +10,7 @@ use App\Models\kFP;
 use App\Models\frt;
 use App\Models\Iim;
 use App\Models\ZCC;
-
+use App\Models\LOGSUP;
 use App\Models\Fma;
 use App\Models\Ecl;
 use App\Models\MBMr;
@@ -156,6 +156,20 @@ class PlaneacionController extends Controller
                     if($request->$plans!=0)
                     {
                         $data = YK006::query()->insert([
+                            'K6PROD' => $namenA,
+                            'K6WRKC' => $WCT,
+                            'K6SDTE' => $fecha,
+                            'K6EDTE' => $fefin,
+                            'K6DDTE' => $inp[1],
+                            'K6DSHT' => $turno,
+                            'K6PFQY' => $request->$plans,
+                            'K6CUSR' => 'LXSECOFR',
+                            'K6CCDT' => $load,
+                            'K6CCTM' => $hora,
+                            'K6FIL1' => '',
+                            'K6FIL2' => '',
+                        ]);
+                        $data = LOGSUP::query()->insert([
                             'K6PROD' => $namenA,
                             'K6WRKC' => $WCT,
                             'K6SDTE' => $fecha,

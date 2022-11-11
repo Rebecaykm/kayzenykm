@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
 use App\Models\Structure;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ShowStructure extends Controller
 {
+
+    public function export(){
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
     public function index(Request $request)
     {
         $Pr =  $request->SeProject ?? '*';
@@ -74,4 +82,5 @@ class ShowStructure extends Controller
             ->simplePaginate(30);
         return view('planeacion.VerEstructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro'  => $Pr]);
     }
+
 }

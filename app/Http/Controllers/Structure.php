@@ -34,6 +34,19 @@ class Structure extends Controller
             })
             ->distinct('IPROD')
             ->simplePaginate(30);
+
+
+
+
+
+
+
+
+
+
+
+
+
         return view('planeacion.Estructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
 }

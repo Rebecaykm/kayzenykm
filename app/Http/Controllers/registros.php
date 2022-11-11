@@ -316,7 +316,7 @@ class registros
             $a[$i][1] = $hijos->BCLAC;
             $Chijo = self::Conthijo($hijos->BCHLD);
             if ($Chijo != 0) {
-                $b = self::buscarF1($hijos->BCHLD);
+                $b = self::buscarF1($hijos->BCLAC);
                 $i = count($a);
                 foreach ($b as $bs) {
                     $j = 0;
@@ -336,7 +336,7 @@ class registros
     function Conthijo($prod)
     {
         $ContBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS', 'IMPLC')
+            ->select('BPROD')
             ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
             ->where('BPROD', '=', $prod)
             ->where('IMPLC', '!=', 'OBSOLETE')
@@ -352,7 +352,7 @@ class registros
     function Hijo($prod)
     {
         $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
+            ->select('BCHLD', 'BCLAC')
             ->where('BPROD', '=', $prod)
             ->where(function ($query) {
                 $query->where('BCLAC ', 'M2')
