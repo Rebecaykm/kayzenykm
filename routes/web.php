@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('planeacion/create', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
     Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
     Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
+    Route::get('planeacion/export', [\App\Http\Controllers\PlaneacionController::class, 'export'])->name('planeacion.export');
 
     /**
      * Cargar Estructura BOM
@@ -84,4 +85,5 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.index');
     Route::post('ShowStructure/update', [\App\Http\Controllers\showStructure::class, 'update'])->name('ShowStructure.update');
     Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.update');
+    Route::get('ShowStructure/export', [\App\Http\Controllers\showStructure::class, 'export'])->name('ShowStructure.export');
 });

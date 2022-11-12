@@ -5,12 +5,13 @@
         $projecto = $obj->Projecto($SEpro);
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            BOM el projecto
 
-        </h2>
         <form method="get" action="{{ route('ShowStructure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                    BOM el projecto  {{ $projecto->CCDESC}}
+
+                </h2>
                 <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">
                         Selecciona el Projecto
@@ -19,7 +20,7 @@
                         class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray">
                         <option value=''>---Select---</option>
                         @if ($SEpro != '')
-                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} </option>
+                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{ $projecto->CCDESC}}</option>
                         @endif
 
                         @foreach ($LWK as $Projec)
@@ -30,9 +31,7 @@
                 </label>
 
                 <div class="flex justify-center">
-                    <span class="text-gray-700 dark:text-gray-400">
 
-                    </span>
                     <button
                         class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Procesar
@@ -40,7 +39,22 @@
                 </div>
             </div>
         </form>
+
         <div class="flex-grow overflow-auto">
+
+
+
+                <form method="get" action="{{ route('ShowStructure.export') }}">
+                    <div class="flex  justify-end">
+                        <span class="text-gray-700 dark:text-gray-400">
+                            <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
+                        </span>
+                        <button
+                            class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            Reporte Excel
+                        </button>
+                    </div>
+                </form>
             <form action="{{ route('ShowStructure.update') }}" method="post">
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
 
@@ -74,10 +88,10 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @foreach ($plan as $plans)
+                        @foreach ($total as $plans)
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-4 py-3 text-xs text-center bg-teal-300">
-                                    {{ $plans->IPROD }}
+                                    {{ $plans['final'] }}
                                 </td>
                                 <td class="px-4 py-3 text-xs text-center">
                                 </td>
@@ -86,30 +100,30 @@
                                 <td class='px-4 py-3 text-xs text-center'>
                                 </td>
                             </tr>
-                            @php
+                            {{-- @php
                                 $cF1 = $obj->cargarestructura($plans->IPROD);
-                            @endphp
-                            @foreach ($cF1 as $registro)
+                            @endphp --}}
+                            @foreach ($plans['hijos']  as $registro)
                                 <tr class="text-gray-700 dark:text-gray-400">
                                     <td class="px-4 py-3 text-xs text-center">
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
                                         @php
-                                            $Final = $obj->cargarF1($registro->Componente);
+                                            $Final = $obj->cargarF1($registro['Componente']);
                                         @endphp
                                         @foreach ($Final as $Finales)
                                             {{ $Finales['final'] }}<br>
                                         @endforeach
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center ">
-                                        {{ $registro->Componente }}
+                                        {{ $registro['Componente'] }}
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
                                         <div class="flex justify-center">
                                             @php
-                                                $namenA = strtr($registro->Componente, ' ', '_');
+                                                $namenA = strtr($registro['Componente'], ' ', '_');
                                             @endphp
-                                            @if ($registro->Activo != 0)
+                                            @if ($registro['Activo'] != 0)
                                                 <div class="mt-4 text-sm">
                                                     <div class="mt-2">
                                                         <div class="mt-2">

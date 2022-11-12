@@ -34,6 +34,77 @@ class Structure extends Controller
             })
             ->distinct('IPROD')
             ->simplePaginate(30);
+
         return view('planeacion.Estructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
+
+
+    function buscarF1($prod)
+    {
+        $a = array(array());
+        $i = count($a);
+        $hijo = self::Hijo($prod);
+        foreach ($hijo as $hijos) {
+            $a[$i][0] = $hijos->BCHLD;
+            $a[$i][1] = $hijos->BCLAC;
+            $Chijo = self::Conthijo($hijos->BCHLD);
+            if ($Chijo != 0) {
+                $b = self::buscarF1($hijos->BCHLD);
+                $i = count($a);
+                foreach ($b as $bs) {
+                    $j = 0;
+                    foreach ($bs as $valor) {
+                        $a[$i][$j] = $valor;
+                        $j++;
+                    }
+                    $i++;
+                }
+            }
+            $i++;
+        }
+
+
+        return $a;
+    }
+    function Conthijo($prod)
+    {
+        $ContBMS = MBMr::query()
+            ->select('BPROD')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
+            ->where('BPROD', '=', $prod)
+            ->where('IMPLC', '!=', 'OBSOLETE')
+            ->where(function ($query) {
+                $query->where('BCLAC ', 'M2')
+                    ->orwhere('BCLAC ', 'M3')
+                    ->orwhere('BCLAC ', '01')
+                    ->orwhere('BCLAC ', 'M4');
+            })
+            ->count();
+        return $ContBMS;
+    }
+    function Hijo($prod)
+    {
+        $MBMS = MBMr::query()
+            ->select('BCHLD', 'BCLAC')
+            ->where('BPROD', '=', $prod)
+            ->where(function ($query) {
+                $query->where('BCLAC ', 'M2')
+                    ->orwhere('BCLAC ', 'M3')
+                    ->orwhere('BCLAC ', '01')
+                    ->orwhere('BCLAC ', 'M4');
+            })
+            ->orderby('BCHLD')
+            ->get();
+        return $MBMS;
+    }
+    function Projecto($proj)
+    {
+        $PCs = ZCC::query()
+            ->select('CCDESC')
+            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $proj]])
+            ->first();
+
+        return $PCs;
+    }
+
 }
