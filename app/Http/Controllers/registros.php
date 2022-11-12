@@ -306,6 +306,7 @@ class registros
 
         return $data;
     }
+
     function buscarF1($prod)
     {
         $a = array(array());
@@ -316,7 +317,7 @@ class registros
             $a[$i][1] = $hijos->BCLAC;
             $Chijo = self::Conthijo($hijos->BCHLD);
             if ($Chijo != 0) {
-                $b = self::buscarF1($hijos->BCLAC);
+                $b = self::buscarF1($hijos->BCHLD);
                 $i = count($a);
                 foreach ($b as $bs) {
                     $j = 0;

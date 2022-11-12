@@ -14,13 +14,13 @@ use App\Models\LOGSUP;
 use App\Models\Fma;
 use App\Models\Ecl;
 use App\Models\MBMr;
-
 use App\Models\Fso;
-
 use App\Models\YK006;
 use App\Models\Structure;
 use Carbon\Carbon;
 use registros;
+use App\Exports\PlanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
@@ -65,13 +65,13 @@ class PlaneacionController extends Controller
     {
 
         $inF1 = array();
-        $dias = $request->dias ?? '7';
+        $dias = $request->dias ?? '5';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;
         $plan = Iim::query()
-            ->select('IPROD', 'ICLAS', 'IMBOXQ')
+            ->select('IPROD')
             ->where([
                 ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
@@ -81,7 +81,7 @@ class PlaneacionController extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->simplePaginate(3)->withQueryString();
+            ->simplePaginate(5)->withQueryString();
         $total = array();
         foreach ($plan as $WCss) {
             $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
@@ -91,7 +91,12 @@ class PlaneacionController extends Controller
 
         return view('planeacion.plancomponente', ['plan' => $inF1, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
-
+    public function export(Request $request)
+    {
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
+        return Excel::download(new PlanExport($fecha,$fechaFin ), 'Planeacion.xlsx');
+    }
 
     public function store(Request $request)
     {
@@ -148,7 +153,8 @@ class PlaneacionController extends Controller
 
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
+
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias-1 . ' day'));
                 $WCT = Frt::query()
                     ->select('RWRKC', 'RPROD')
                     ->where('RPROD', $namenA)
@@ -363,7 +369,6 @@ class PlaneacionController extends Controller
         $valPD = self::planTotal($prod, $dia, '%D%', $dias);
         $valFD = self::FirmeTotal($prod, $dia, '%D%', $dias);
         $valN = self::Forecasttotal($prod, $dia, '%N%', $dias);
-
         $valPN = self::planTotal($prod, $dia, '%N%', $dias);
         $valFN = self::FirmeTotal($prod, $dia, '%N%', $dias);
         $valSD = self::ShopOTotal($prod, $dia, '%D%', $dias);

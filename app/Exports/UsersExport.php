@@ -2,20 +2,57 @@
 
 namespace App\Exports;
 
-use App\Http\Controllers\Structure;
-use App\User;
-use DB;
-use Maatwebsite\Excel\Concerns\FromCollection;
+
+use App\Models\Iim;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class UsersExport implements FromView
 {
+    private $id; // declaras la propiedad
 
-    public function view(): view
+    public function __construct( $id)
     {
-        return view('exports.invoices', [
-            'invoices' => Invoice::all()
+        $this->id = $id; // asignas el valor inyectado a la propiedad
+    }
+    public function view(): View
+    {
+        $Pr =  $this->id;
+        $plan = Iim::query()
+            ->select('IPROD')
+            ->where([
+                ['IREF04', 'like', '%' . $Pr . '%'],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+                ['IPROD', 'NOT LIKE', '%-830%'],
+            ])
+            ->where(function ($query) {
+                $query->where('ICLAS ', 'F1');
+            })
+            ->distinct('IPROD')
+            ->get()->toarray();
+        return view('planeacion.RepEstructura', [
+            'plan' => $plan
         ]);
     }
 }
+// class UsersExport implements FromView
+// {
+//     /**
+//      * @return \Illuminate\Support\Collection
+//      */
+//     public function headings(): array
+//     {
+//         return [
+//             'final',
+//             'componente',
+//             'clase',
+//             'Activo'
+//         ];
+//     }
+
+//     public function view(): view
+//     {
+//         return view();
+//     }
+// }

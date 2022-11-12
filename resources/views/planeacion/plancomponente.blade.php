@@ -13,7 +13,7 @@
                     Planeación {{ $projecto->CCDESC }}
                 </h2>
                 @csrf
-                <label class="block text-sm ">
+                <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
                     <input id="dias" name="dias" type="number" max="7" min="1"
                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
@@ -46,19 +46,46 @@
                 </div>
             </div>
         </form>
-        <div
-            class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+
+        <form method="get" action="{{ route('planeacion.export') }}">
+            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                <div class="flex justify-center">
+                    {{-- <span class="text-gray-700 dark:text-gray-400">
+                        <input type="hidden" name="Fecha" id="Fecha" value={{ $fecha  }}>
+                    </span> --}}
+                    <div class="flex justify-center m-2">
+
+                        <label class="block text-sm ">
+                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
+                            <input id="fecha" name="fecha" type="date"
+                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        </label>
+
+                    </div>
+                    <div class="flex justify-center m-2">
+
+                        <label class="block text-sm ">
+                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha Fin</span>
+                            <input id="fechaFin" name="fechaFin" type="date"
+                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        </label>
+
+                    </div>
+                    <button
+                    class="flex items-center justify-between px-4  text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                    Reporte Excel
+                    </button>
+                </div>
+            </div>
+        </form>
 
 
-                Show {{ $plantotal->firstItem() }} - {{ $plantotal->lastItem() }}
-            </span>
-            <!-- Pagination -->
-            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-                {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
-            </span>
-        </div>
         <form action="{{ route('planeacion.update') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-2 rounded-lg">
                 @csrf
@@ -307,14 +334,14 @@
 
                                                 <input id={{ $inD }} name={{ $inD }}
                                                     value={{ $valFiD }} onclick='myFunction(this.id)'
-                                                    type="number"
+                                                    type="number" min="0"
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input id={{ $inD }} name={{ $inN }}
                                                     value={{ $valFiN }} onclick='myFunction(this.id)'
-                                                    type="number"
+                                                    type="number" min="0"
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
 
@@ -559,13 +586,13 @@
                                                     <label class="block text-sm ">
                                                         <input id={{ $inD }} name={{ $inD }}
                                                             value={{ $valFiDH }} onclick='myFunction(this.id)'
-                                                            type="number"
+                                                            type="number" min="0"
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                     <label class="block text-sm ">
                                                         <input id={{ $inN }} name={{ $inN }}
                                                             value={{ $valFiNH }} onclick='myFunction(this.id)'
-                                                            type="number"
+                                                            type="number" min="0"
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                     </label>
                                                 </div>
@@ -598,7 +625,17 @@
 
             </div>
         </form>
-
+        <div
+        class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase  dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+        <span class="flex items-center col-span-3">
+            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+            Show {{ $plantotal->firstItem() }} - {{ $plantotal->lastItem() }}
+        </span>
+        <!-- Pagination -->
+        <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+            {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
+        </span>
+    </div>
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
