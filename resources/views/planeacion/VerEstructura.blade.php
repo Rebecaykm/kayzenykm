@@ -2,14 +2,22 @@
     @php
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
-        $projecto = $obj->Projecto($SEpro);
+
+        if($SEpro=='*')
+        {
+            $nombre='*'  ;
+        } else
+        {
+            $projecto = $obj->Projecto($SEpro);
+            $nombre= $projecto->CCDESC;
+        }
     @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
 
         <form method="get" action="{{ route('ShowStructure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    BOM el projecto  {{ $projecto->CCDESC}}
+                    BOM del projecto {{$nombre}}
 
                 </h2>
                 <label class="block mt-4 text-sm">
@@ -20,7 +28,7 @@
                         class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray">
                         <option value=''>---Select---</option>
                         @if ($SEpro != '')
-                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{ $projecto->CCDESC}}</option>
+                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{$nombre}}</option>
                         @endif
 
                         @foreach ($LWK as $Projec)
