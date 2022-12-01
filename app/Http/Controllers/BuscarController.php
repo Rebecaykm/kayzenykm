@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LWK;
-use App\Models\IPB;
+use App\Models\ZCC;
 use App\Models\KMR;
 use App\Models\kFP;
 use App\Models\frt;
 use App\Models\Iim;
-use App\Models\ZCC;
 use App\Models\LOGSUP;
 use App\Models\Fma;
 use App\Models\Ecl;
@@ -22,24 +20,19 @@ use registros;
 use App\Exports\PlanExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-
-use Symfony\Component\VarDumper\Caster\FrameStub;
-
-class PlaneacionController extends Controller
+class BuscarController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
-
-    public $plan = null;
     public function index(Request $request)
     {
-
-        $dias = $request->NP ?? '*';
-        $fecha = $request->Seproject ?? '*';
-        $plan = '';
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $plan = array();
+        $NP = '*';
         $TP = 'NO';
         $CP = '';
         $WC = '';
@@ -50,10 +43,7 @@ class PlaneacionController extends Controller
             ->orderBy('CCID', 'ASC')
             ->get();
 
-
-
-
-        return view('planeacion.index', ['LWK' => $this->WCs]);
+        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $plan]);
     }
 
     /**
@@ -64,41 +54,33 @@ class PlaneacionController extends Controller
     public function create(Request $request)
     {
 
-        $inF1 = array();
-        $inF2 = array();
         $dias = $request->dias ?? '5';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $TP = $request->SeProject;
-        $CP = $request->SePC;
-        $WC = $request->SeWC;
-        $plan = Iim::query()
-            ->select('IPROD')
-            ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where(function ($query) {
-                $query->where('ICLAS ', 'F1');
-            })
-            ->where( 'IPROD', 'Not like', '%-SOR%')
-            ->distinct('IPROD')
-            ->simplePaginate(10)->withQueryString();
-        foreach ($plan as $WCss) {
-            $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
-            $inF1 += [$WCss->IPROD =>  $datos];
-        }
-        return view('planeacion.plancomponente', ['plan' => $inF1, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
-    }
-    public function export(Request $request)
-    {
-        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
-        return Excel::download(new PlanExport($fecha, $fechaFin), 'Planeacion.xlsx');
+        $NP = $request->NP ?? 'x';
+        $plan = '';
+        $TP = $request->SeProject ?? 'NO';
+        $inF1 = array();
+        $this->WCs = ZCC::query()
+            ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
+            ->where('CCID', '=', 'CC')
+            ->Where('CCTABL', '=', 'SIRF4')
+            ->orderBy('CCID', 'ASC')
+            ->get();
+
+        $datos = self::CargarforcastF1($NP, $fecha, $dias);
+        $inF1 += [$NP =>  $datos];
+        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
+        //
     }
 
     /**
@@ -109,7 +91,6 @@ class PlaneacionController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -132,6 +113,12 @@ class PlaneacionController extends Controller
      */
     public function update(Request $request)
     {
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $NP = $request->NP ?? 'x';
+        $plan = '';
+        $TP = $request->SeProject ?? 'NO';
+        $inF1 = array();
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -192,27 +179,19 @@ class PlaneacionController extends Controller
                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
             }
         }
-        $plan = Iim::query()
-        ->select('IPROD')
-        ->where([
-            ['IREF04', 'like', '%' . $TP . '%'],
-            ['IID', '!=', 'IZ'],
-            ['IMPLC', '!=', 'OBSOLETE'],
-        ])
-        ->where(function ($query) {
-            $query->where('ICLAS ', 'F1');
-        })
-        ->where( 'IPROD', 'Not like', '%-SOR%')
-        ->distinct('IPROD')
-        ->simplePaginate(10)->withQueryString();
-        foreach ($plan as $WCss) {
-            $datos = self::CargarforcastF1($WCss->IPROD, $fecha, $dias);
-            $inF1 += [$WCss->IPROD =>  $datos];
-        }
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
-        $result = odbc_exec($conn, $query);
-        return view('planeacion.plancomponente', ['plan' => $inF1, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU02.YMP006C";
+        // $result = odbc_exec($conn, $query);
+        $datos = self::CargarforcastF1($NP, $fecha, $dias);
+        $inF1 += [$NP =>  $datos];
+        $this->WCs = ZCC::query()
+            ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
+            ->where('CCID', '=', 'CC')
+            ->Where('CCTABL', '=', 'SIRF4')
+            ->orderBy('CCID', 'ASC')
+            ->get();
+        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
     }
 
     /**
@@ -224,132 +203,6 @@ class PlaneacionController extends Controller
     public function destroy($id)
     {
         //
-    }
-    function info($producto)
-    {
-        $cond = IIM::query()
-            ->select('ICLAS', 'IMBOXQ', 'IMPLC')
-            ->where('IPROD', '=', $producto)
-            ->first()->toArray();
-        return $cond;
-    }
-
-
-    function contard($producto, $fecha, $turno)
-    {
-
-        $cond = kmr::query()
-            ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
-            ->where('MRDTE', '=', $fecha)
-            ->where('MPROD', '=', $producto)
-            ->where('MRCNO', 'like', $turno)
-            ->count();
-        return $cond;
-    }
-
-
-    function contar($producto, $fecha, $fechafin)
-    {
-        $WCs = kmr::query()
-            ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $fechafin)
-            ->where('MPROD', '=', $producto)
-            ->count();
-        return $WCs;
-    }
-    function padre($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BDDIS', '>=', '9900000')
-            ->get();
-        return $MBMS;
-    }
-    function padrecon($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BDDIS', '=', '99999999')
-            ->count();
-        return $MBMS;
-    }
-    function F1($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BCLAS', '=', 'F1')
-            ->get();
-
-        return $MBMS;
-    }
-    function contarF1($pro)
-    {
-        $MBMS = MBMr::query()
-            ->select('BPROD')
-            ->where('BCHLD', '=', $pro)
-            ->where('BCLAS', '=', 'F1')
-            ->where('BDDIS', '>=', '99999997')
-            ->count();
-        return $MBMS;
-    }
-    //---------------------------------------Buscar estructuras ------------------------------------------------------
-    function contcargar($prod)
-    {
-        $res = Structure::query()
-            ->select('Final')
-            ->where('Final', $prod)
-            ->where('clase', '!=', '01')
-            ->count();
-        return $res;
-    }
-    function cargar($prod)
-    {
-        $res = Structure::query()
-            ->select('Final', 'Componente', 'Activo')
-            ->where('Final', $prod)
-            ->where([
-                ['clase', '!=', '01'],
-                ['Activo', '1'],
-            ])
-            ->get()->toArray();
-
-        return $res;
-    }
-    function cargarestructura($prod)
-    {
-        $res = Structure::query()
-            ->select('Final', 'Componente', 'Activo')
-            ->where('Final', $prod)
-            ->where([
-                ['clase', '!=', '01'],
-            ])
-            ->get();
-        return $res;
-    }
-
-    function cargarF1($prod)
-    {
-        $res = Structure::query()
-            ->select('final', 'componente')
-            ->where('componente', $prod)
-            ->distinct('final')
-            ->get()->toArray();
-        return $res;
-    }
-    function contcargarF1($prod)
-    {
-        $res = Structure::query()
-            ->select('Final', 'componente')
-            ->where('componente', $prod)
-            ->count();
-        return $res;
     }
     function CargarforcastF1($prod, $hoy, $dias)
     {
@@ -560,99 +413,6 @@ class PlaneacionController extends Controller
         return $total;
     }
 
-
-    // ---------------------------------guardar estructuras de BOM----------------------------------------------
-    function guardar($prod, $sub, $clase)
-    {
-        $res = self::buscar($prod, $sub);
-        if ($res == 0) {
-            $data = Structure::create([
-                'final' => $prod,
-                'componente' => $sub,
-                'clase' => $clase,
-                'Activo' => '1',
-            ]);
-        }
-    }
-
-    function buscar($prod, $sub)
-    {
-        $data = Structure::query()
-            ->select('Final', 'Componente')
-            ->where('Final', '=', $prod)
-            ->where('Componente', '=', $sub)
-            ->count();
-
-        return $data;
-    }
-    function buscarF1($prod)
-    {
-        $a = array(array());
-        $i = count($a);
-        $hijo = self::Hijo($prod);
-        foreach ($hijo as $hijos) {
-            $a[$i][0] = $hijos->BCHLD;
-            $a[$i][1] = $hijos->BCLAC;
-            $Chijo = self::Conthijo($hijos->BCHLD);
-            if ($Chijo != 0) {
-                $b = self::buscarF1($hijos->BCHLD);
-                $i = count($a);
-                foreach ($b as $bs) {
-                    $j = 0;
-                    foreach ($bs as $valor) {
-                        $a[$i][$j] = $valor;
-                        $j++;
-                    }
-                    $i++;
-                }
-            }
-            $i++;
-        }
-        return $a;
-    }
-    function Conthijo($prod)
-    {
-        $ContBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS', 'IMPLC')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
-            ->where('BPROD', '=', $prod)
-            ->where('IMPLC', '!=', 'OBSOLETE')
-            ->where(function ($query) {
-                $query->where('BCLAC ', 'M2')
-                    ->orwhere('BCLAC ', 'M3')
-                    ->orwhere('BCLAC ', '01')
-                    ->orwhere('BCLAC ', 'M4');
-            })
-            ->count();
-        return $ContBMS;
-    }
-    function Hijo($prod)
-    {
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BPROD', '=', $prod)
-            ->where(function ($query) {
-                $query->where('BCLAC ', 'M2')
-                    ->orwhere('BCLAC ', 'M3')
-                    ->orwhere('BCLAC ', '01')
-                    ->orwhere('BCLAC ', 'M4');
-            })
-            ->orderby('BCHLD')
-            ->get();
-        return $MBMS;
-    }
-    function Projecto($proj)
-    {
-        $PCs = ZCC::query()
-            ->select('CCDESC')
-            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $proj]])
-            ->first();
-
-        return $PCs;
-    }
-
-    // -----------------------------------------------------------------------------------
-
     function Forecast($producto, $fecha, $turno,$dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
@@ -681,31 +441,6 @@ class PlaneacionController extends Controller
             ->get()->toarray();
         return $plan;
     }
-    function Forecasttodos($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $plan = kmr::query()
-            ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $totalF)
-            ->whereraw('(' . $producto . ')')
-            // ->where('MRCNO', 'like', $turno)
-            ->get()->toarray();
-
-        return $plan;
-    }
-
-    function plan($pro, $fecha, $turno)
-    {
-        $kfps = kFP::query()
-            ->select('FQTY')
-            ->where('FPROD', '=', $pro)
-            ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '=', $fecha)
-            ->where('FTYPE', '=', 'P')
-            ->sum('FQTY');
-        return $kfps;
-    }
     function planTotal($pro, $fecha, $turno, $dias)
     {
 
@@ -723,34 +458,6 @@ class PlaneacionController extends Controller
 
         return $kfps;
     }
-
-    function FirmeTotal($pro, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
-            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->where('FPROD', '=', $pro)
-            // ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $totalF)
-            ->where('FTYPE', '=', 'F')
-            ->get()->toarray();
-
-        return $kfps;
-    }
-
-    function ShopO($pro, $fecha, $turno)
-    {
-        $Fsos = Fso::query()
-            ->select('SQREQ')
-            ->where('SPROD', '=', $pro)
-            ->where('SOCNO', 'like', $turno)
-            ->where('SDDTE', '=', $fecha)
-            ->sum('SQREQ');
-
-        return $Fsos;
-    }
-
     function ShopOTotal($pro, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
@@ -764,160 +471,31 @@ class PlaneacionController extends Controller
 
         return $Fsos;
     }
-    function contarfirme($pro, $fecha, $fechafin)
+    function contcargar($prod)
     {
-        $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
-            ->where('FPROD', '=', $pro)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $fechafin)
-            ->where('FTYPE', '=', 'F')
+        $res = Structure::query()
+            ->select('Final')
+            ->where('Final', $prod)
+            ->where('clase', '!=', '01')
             ->count();
-        return $kfps;
+        return $res;
     }
-    function contarplan($pro, $fecha, $fechafin)
+    function cargarF1($prod)
     {
-        $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
-            ->where('FPROD', '=', $pro)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $fechafin)
-            ->where('FTYPE', '=', 'P')
+        $res = Structure::query()
+            ->select('final', 'componente')
+            ->where('componente', $prod)
+            ->distinct('final')
+            ->get()->toArray();
+        return $res;
+    }
+    function contcargarF1($prod)
+    {
+        $res = Structure::query()
+            ->select('Final', 'componente')
+            ->where('componente', $prod)
             ->count();
-        return $kfps;
-    }
-
-    function contarShopO($pro, $fecha, $fechafin)
-    {
-        $Fsos = Fso::query()
-            ->select('SQREQ')
-            ->where('SPROD', '=', $pro)
-            ->where('SDDTE', '>=', $fecha)
-            ->where('SDDTE', '<=', $fechafin)
-            ->count();
-        return $Fsos;
-    }
-
-    function requerimiento($Lproducto, $Mproducto, $fecha, $turno)
-    {
-        $MBMS = 0;
-        $RFMA = 0;
-        $RKM = 0;
-
-        if ($turno == '%D%') {
-            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-            $query = "SELECT TECL,TF,TKMR,T.LPROD as prod FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
-            from LX834F01.ECL
-            where  (" . $Lproducto . "  ) and LSDTE = '" . $fecha . "'
-            AND CLCNO LIKE '" . $turno . "'
-            GROUP BY LSDTE,LPROD ) T
-            FULL OUTER JOIN (
-            select sum(MQREQ) AS TF,MRDTE AS fecha,mPROD
-            from LX834F01.FMA where  (" . $Mproducto . ")
-             and mRDTE ='" . $fecha . "'
-             GROUP BY  MRDTE,mPROD
-             ) D  ON T.LPROD=D.mPROD
-            full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
-            FROM LX834F01.KMR
-            WHERE MRDTE='" . $fecha . "'
-            AND  (" . $Mproducto . ")
-            AND MRCNO LIKE '" . $turno . "'
-            GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD";
-
-            $result = odbc_exec($conn, $query);
-
-            $sumre =  odbc_result($result, 'TECL') + odbc_result($result, 'TF') + odbc_result($result, 'TKMR') + 0;
-        } else {
-            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-            $query = "SELECT TECL,TKMR,T.LPROD as prod FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
-            from LX834F01.ECL
-            where  (" . $Lproducto . "  )
-            and LSDTE = '" . $fecha . "'
-            AND CLCNO LIKE '" . $turno . "'
-            GROUP BY LSDTE,LPROD ) T
-            full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
-            FROM LX834F01.KMR
-            WHERE MRDTE='" . $fecha . "'
-            AND  (" . $Mproducto . ")
-            AND MRCNO LIKE '" . $turno . "'
-            GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD";
-            $result = odbc_exec($conn, $query);
-            $sumre =  odbc_result($result, 'TECL') + odbc_result($result, 'TKMR') + 0;
-        }
-
-
-        return  $sumre;
-    }
-    function RequeTotal($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $dia = $fecha;
-        $connt = 0;
-        $valTotal  = [];
-        $MBMS = ECL::query()
-            ->selectRaw('LSDTE, SUM(LQORD) as Total')
-            ->where([
-                ['LPROD', '=', $producto],
-                ['LSDTE', '>=', $fecha],
-                ['LSDTE', '<=', $totalF],
-                ['CLCNO', 'Like', $turno]
-            ])
-            ->groupBy('LSDTE')
-            ->get()->toarray();
-        if ($turno == '%D%') {
-            $RFMA = FMA::query()
-                ->selectRaw('MRDTE, SUM(MQREQ) as Total')
-                ->where([
-                    ['MPROD', '=', $producto],
-                    ['MRDTE', '>=', $fecha],
-                    ['MRDTE', '<', $totalF],
-                ])
-                ->groupBy('MRDTE')
-                ->get()->toarray();
-        }
-
-        $RKMR = KMR::query()
-            ->selectRaw('SUM(MQTY) as Total, MRDTE')
-            ->where([
-                ['MPROD', '=', $producto],
-                ['MRDTE', '>=', $fecha],
-                ['MRDTE', '<', $totalF],
-                ['MRCNO', 'Like', $turno]
-            ])
-            ->groupBy('MRDTE')
-            ->get()->toarray();
-
-        while ($connt < $dias) {
-            $total = 0;
-            $totalf = 0;
-            $totalk = 0;
-            $DMBMS = array_column($MBMS, 'LSDTE');
-            $VMBMS = array_column($MBMS, 'TOTAL');
-
-            if (is_int(array_search($dia, $DMBMS))) {
-
-                $total =  $VMBMS[array_search($dia, $DMBMS)];
-            }
-
-            if ($turno == '%D%') {
-
-                $DFMA = array_column($RFMA, 'MRDTE');
-                $VFMA = array_column($RFMA, 'TOTAL');
-                if (is_int(array_search($dia, $DFMA))) {
-                    $totalf = $VFMA[array_search($dia, $DFMA)];
-                }
-            }
-            $DKMR = array_column($RKMR, 'MRDTE');
-            $VKMR = array_column($RKMR, 'TOTAL');
-            if (is_int(array_search($dia, $DKMR))) {
-                $totalk = $VKMR[array_search($dia, $DKMR)];
-            }
-            $tt = $total + $totalf + $totalk;
-            $valTotal += [$dia => $tt];
-            $dia = date('Ymd', strtotime($dia . '+1 day'));
-            $connt++;
-        }
-        return $valTotal;
+        return $res;
     }
     function RequeTotalh($producto, $fecha, $turno, $dias)
     {
@@ -1018,18 +596,70 @@ class PlaneacionController extends Controller
             $dia = date('Ymd', strtotime($dia . '+1 day'));
             $connt++;
         }
+
         return $valTotal;
     }
+    function requerimiento($Lproducto, $Mproducto, $fecha, $turno)
+    {
+        $MBMS = 0;
+        $RFMA = 0;
+        $RKM = 0;
 
-    // function Firme($pro, $fecha, $turno)
-    // {
-    //     $kfps = kFP::query()
-    //         ->select('FQTY')
-    //         ->where('FPROD', '=', $pro)
-    //         ->where('FPCNO', 'like', $turno)
-    //         ->where('FRDTE', '=', $fecha)
-    //         ->where('FTYPE', '=', 'F')
-    //         ->sum('FQTY');
-    //     return $kfps;
-    // }
+        if ($turno == '%D%') {
+            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+            $query = "SELECT TECL,TF,TKMR,T.LPROD as prod FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
+            from LX834F01.ECL
+            where  (" . $Lproducto . "  ) and LSDTE = '" . $fecha . "'
+            AND CLCNO LIKE '" . $turno . "'
+            GROUP BY LSDTE,LPROD ) T
+            FULL OUTER JOIN (
+            select sum(MQREQ) AS TF,MRDTE AS fecha,mPROD
+            from LX834F01.FMA where  (" . $Mproducto . ")
+             and mRDTE ='" . $fecha . "'
+             GROUP BY  MRDTE,mPROD
+             ) D  ON T.LPROD=D.mPROD
+            full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
+            FROM LX834F01.KMR
+            WHERE MRDTE='" . $fecha . "'
+            AND  (" . $Mproducto . ")
+            AND MRCNO LIKE '" . $turno . "'
+            GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD";
+
+            $result = odbc_exec($conn, $query);
+
+            $sumre =  odbc_result($result, 'TECL') + odbc_result($result, 'TF') + odbc_result($result, 'TKMR') + 0;
+        } else {
+            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+            $query = "SELECT TECL,TKMR,T.LPROD as prod FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
+            from LX834F01.ECL
+            where  (" . $Lproducto . "  )
+            and LSDTE = '" . $fecha . "'
+            AND CLCNO LIKE '" . $turno . "'
+            GROUP BY LSDTE,LPROD ) T
+            full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
+            FROM LX834F01.KMR
+            WHERE MRDTE='" . $fecha . "'
+            AND  (" . $Mproducto . ")
+            AND MRCNO LIKE '" . $turno . "'
+            GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD";
+            $result = odbc_exec($conn, $query);
+            $sumre =  odbc_result($result, 'TECL') + odbc_result($result, 'TKMR') + 0;
+        }
+
+
+        return  $sumre;
+    }
+    function cargar($prod)
+    {
+        $res = Structure::query()
+            ->select('Final', 'Componente', 'Activo')
+            ->where('Final', $prod)
+            ->where([
+                ['clase', '!=', '01'],
+                ['Activo', '1'],
+            ])
+            ->get()->toArray();
+
+        return $res;
+    }
 }

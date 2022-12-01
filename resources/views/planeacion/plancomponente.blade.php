@@ -8,7 +8,7 @@
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <form method="post" action="{{ route('planeacion.create') }}">
 
-            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     Planeación {{ $projecto->CCDESC }}
                 </h2>
@@ -48,7 +48,7 @@
         </form>
 
         <form method="get" action="{{ route('planeacion.export') }}">
-            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 <div class="flex justify-center">
                     {{-- <span class="text-gray-700 dark:text-gray-400">
                         <input type="hidden" name="Fecha" id="Fecha" value={{ $fecha  }}>
@@ -87,10 +87,9 @@
 
 
         <form action="{{ route('planeacion.update') }}" method="post">
-            <div class="flex flex-row gap-x-4  items-center p-2 rounded-lg">
+            <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
-
                     <button type="submit"
                         class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                         <span class="mr-2">Actualizar</span>
@@ -133,13 +132,14 @@
                                     <div class='w-full'>
                                         {{ date('l', strtotime($hoy)) }}
                                     </div>
-                                    <div
-                                        class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg border-0 bg-inherit">
-                                        <label class="block w-1/2 text-sm border-0 bg-inherit ">
-                                            <span class="block  text-xs  form-input ">Dia</span>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label
+                                            class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                            Dia
                                         </label>
-                                        <label class="block  w-1/2 text-sm  border-0 bg-inherit">
-                                            <span class="block  text-xs form-input bg-inherit">Noche</span>
+                                        <label
+                                            class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                            Noche
                                         </label>
                                     </div>
                                 </th>
@@ -157,12 +157,12 @@
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $info['parte'] }}
-                                    @php
+                                    {{-- @php
                                         $infoP = $obj->info($info['parte']);
 
-                                    @endphp
+                                    @endphp --}}
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                        {{ $infoP['IMBOXQ'] }}
+                                        {{-- {{ $infoP['IMBOXQ'] }} --}}
                                     </div>
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -170,21 +170,21 @@
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="Requeriment (Forecast)"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="Requeriment (Parent parts)"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
 
                                             <input value="Plan"
@@ -192,7 +192,7 @@
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
 
                                             <input value="Firme"
@@ -200,7 +200,7 @@
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
 
                                             <input value="Shope Order"
@@ -214,8 +214,8 @@
                                     $contdias = 0;
                                 @endphp
                                 @while ($contdias < $dias)
-                                    <td class="px-2 py-1 text-xs text-center bg-emerald-100 ">
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                    <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
                                                 @php
 
@@ -276,9 +276,10 @@
                                                     } else {
                                                         $valSN = $info['S' . $hoy . 'N'];
                                                     }
-
-                                                    $valRD = $info['R' . $hoy . 'D'];
-                                                    $valRN = $info['R' . $hoy . 'N'];
+                                                    // $valRD = $info['R' . $hoy . 'D'];
+                                                    // $valRN = $info['R' . $hoy . 'N'];
+                                                    $valRD=0;
+                                                    $valRN=0;
 
                                                 @endphp
                                                 <input value={{ $valFD }}
@@ -293,7 +294,7 @@
                                             </label>
 
                                         </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valRD }}
@@ -309,7 +310,7 @@
 
                                             </label>
                                         </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valPD }}
@@ -329,7 +330,7 @@
                                             $inD = $namenA . '/' . $hoy . '/D';
                                             $inN = $namenA . '/' . $hoy . '/N';
                                         @endphp
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
                                                 <input id={{ $inD }} name={{ $inD }}
@@ -346,7 +347,7 @@
                                             </label>
 
                                         </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valSD }}
@@ -395,17 +396,17 @@
                                         <td class="px-2 py-1 text-xs text-center">
                                             {{ $datossubs['sub'] }}
                                             @php
-                                                $infoP = $obj->info($datossubs['sub']);
+                                                // $infoP = $obj->info($datossubs['sub']);
 
                                             @endphp
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     SNP
                                                     <input value={{ $infoP['IMBOXQ'] }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                         </td>
 
                                         <td class="px-2 py-1 text-xs text-center">
@@ -419,7 +420,7 @@
                                         </td>
                                         <td class="px-2 py-1 text-xs text-center ">
 
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value="Requeriment (Forecast)"
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -428,7 +429,7 @@
 
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value="Requeriment (Parent parts)"
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -437,7 +438,7 @@
 
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
 
                                                     <input value="Plan"
@@ -447,7 +448,7 @@
 
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
 
                                                     <input value="Firme"
@@ -457,7 +458,7 @@
 
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
 
                                                     <input value="Shope Order"
@@ -536,7 +537,7 @@
                                             @endphp
                                             <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
-                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input value={{ $valFDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -549,7 +550,7 @@
                                                     </label>
                                                 </div>
                                                 <div
-                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
 
                                                         <input value={{ $valRDH }}
@@ -564,7 +565,7 @@
                                                     </label>
                                                 </div>
                                                 <div
-                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input value={{ $valPDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -582,7 +583,7 @@
                                                     $inN = $namenA . '/' . $hoy1 . '/N';
                                                 @endphp
                                                 <div
-                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input id={{ $inD }} name={{ $inD }}
                                                             value={{ $valFiDH }} onclick='myFunction(this.id)'
@@ -597,7 +598,7 @@
                                                     </label>
                                                 </div>
                                                 <div
-                                                    class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
                                                         <input value={{ $valSDH }}
                                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -635,7 +636,7 @@
         <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
             {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
         </span>
-    </div>
+         </div>
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">

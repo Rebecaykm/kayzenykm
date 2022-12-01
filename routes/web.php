@@ -79,6 +79,13 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('Structure', [\App\Http\Controllers\Structure::class, 'index'])->name('Structure.index');
 
     /**
+     * Cargar Buscar
+     */
+    Route::get('Buscar', [\App\Http\Controllers\BuscarController::class, 'index'])->name('Buscar.index');
+    Route::post('Buscar', [\App\Http\Controllers\BuscarController::class, 'index'])->name('Buscar.index');
+    Route::post('Buscar/search', [\App\Http\Controllers\BuscarController::class, 'create'])->name('Buscar.create');
+    Route::post('Buscar/update', [\App\Http\Controllers\BuscarController::class, 'update'])->name('Buscar.update');
+    /**
      * ver Estructura BOM
      */
     Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('Showtructure.index');
