@@ -1,24 +1,11 @@
 <x-app-layout title="Plan">
-    @php
-        include_once '../app/Http/Controllers/registros.php';
-        $obj = new registros();
 
-        if($SEpro=='*')
-        {
-            $nombre='*'  ;
-        } else
-        {
-            $projecto = $obj->Projecto($SEpro);
-            $nombre= $projecto->CCDESC;
-        }
-    @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
 
         <form method="get" action="{{ route('ShowStructure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     BOM del projecto {{$nombre}}
-
                 </h2>
                 <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">
@@ -30,16 +17,13 @@
                         @if ($SEpro != '')
                             <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{$nombre}}</option>
                         @endif
-
                         @foreach ($LWK as $Projec)
                             <option value={{ $Projec->CCCODE }}>{{ $Projec->CCCODE }}//{{ $Projec->CCDESC }}
                             </option>
                         @endforeach
                     </select>
                 </label>
-
                 <div class="flex justify-center">
-
                     <button
                         class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Procesar
@@ -49,9 +33,6 @@
         </form>
 
         <div class="flex-grow overflow-auto">
-
-
-
                 <form method="get" action="{{ route('ShowStructure.export') }}">
                     <div class="flex  justify-end">
                         <span class="text-gray-700 dark:text-gray-400">
@@ -65,9 +46,7 @@
                 </form>
             <form action="{{ route('ShowStructure.update') }}" method="post">
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
-
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-
                     <div class="flex justify-center">
                         @csrf
                         <button type="submit"
@@ -96,12 +75,17 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+
                         @foreach ($total as $plans)
+                        @php
+                       dd( $plans,$total);
+                     @endphp
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-4 py-3 text-xs text-center bg-teal-300">
                                     {{ $plans['final'] }}
                                 </td>
                                 <td class="px-4 py-3 text-xs text-center">
+
                                 </td>
                                 <td class="px-4 py-3 text-xs text-center">
                                 </td>
@@ -116,12 +100,12 @@
                                     <td class="px-4 py-3 text-xs text-center">
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
-                                        @php
+                                        {{-- @php
                                             $Final = $obj->cargarF1($registro['Componente']);
                                         @endphp
                                         @foreach ($Final as $Finales)
                                             {{ $Finales['final'] }}<br>
-                                        @endforeach
+                                        @endforeach --}}
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center ">
                                         {{ $registro['Componente'] }}

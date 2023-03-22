@@ -176,7 +176,6 @@ class registros
 
             while ($connt <= $dias) {
                 $contF1 = self::contcargarF1($prod);
-
                 if ($contF1 > 1) {
                     $padres='';
                     $tD = 0;
@@ -315,6 +314,10 @@ class registros
         foreach ($hijo as $hijos) {
             $a[$i][0] = $hijos->BCHLD;
             $a[$i][1] = $hijos->BCLAC;
+           if($hijos->BCHLD='BDTS28B0V -3                       ')
+           {
+            dd($hijos->BCHLD);
+           }
             $Chijo = self::Conthijo($hijos->BCHLD);
             if ($Chijo != 0) {
                 $b = self::buscarF1($hijos->BCHLD);

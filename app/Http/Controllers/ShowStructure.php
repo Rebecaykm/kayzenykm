@@ -42,6 +42,7 @@ class ShowStructure extends Controller
             ->distinct('IPROD')
             ->get()->toarray();
             $totestructura= array();
+
             foreach($plan as $plans )
             {
                 $inf=self::cargarestructura($plans['IPROD']);
@@ -49,7 +50,16 @@ class ShowStructure extends Controller
             }
 
 
-        return view('planeacion.VerEstructura', ['plan' => $plan,'total'=>$totestructura, 'LWK' => $WCs, 'SEpro' => $Pr]);
+
+            $PCs = ZCC::query()
+            ->select('CCDESC')
+            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $Pr]])
+            ->first();
+            $nombre= $PCs->CCDESC ?? '';
+
+
+
+        return view('planeacion.VerEstructura', ['nombre'=>$nombre, 'plan' => $plan,'total'=>$totestructura, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
     function cargarestructura($prod)
     {
@@ -62,8 +72,26 @@ class ShowStructure extends Controller
                 ['clase', '!=', '01'],
             ])
             ->get()->toarray();
-            $in+=['hijos'=>$res];
+        dd($res );
+            foreach( $res as $comp1)
+            {
+                $hijos=[];
+                $res1 = Structure::query()
+                ->select('final')
+                ->where('componente',  $comp1['Componente'])
+                ->distinct('final')
+                ->get();
+                $padres='';
+                foreach($res1 as $final)
+                {
 
+                    $padres=$final->final.' \n '.$padres;
+                }
+
+                array_push($hijos, $padres );
+                array_push($hijos,$comp1['Componente']);
+                $in+=[ $hijos];
+            }
         return $in;
     }
 

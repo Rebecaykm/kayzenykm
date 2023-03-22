@@ -57,6 +57,10 @@
                                 </thead>
                                 <tbody
                                     class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                                    @php
+                                        dd('parap');
+                                    @endphp
+
                                     @foreach ($plan as $plans)
                                         <tr class="text-gray-700 dark:text-gray-400">
                                             <td class="px-4 py-3 text-xs text-center ">
@@ -84,11 +88,13 @@
                                                     @if ($i == 1)
                                                         @php
                                                             $sub = $valor;
+
                                                         @endphp
                                                         <td class="px-4 py-3 text-xs text-center">
                                                         </td>
                                                         <td class="px-4 py-3 text-xs text-center">
                                                             {{ $valor }}
+
                                                         </td>
                                                     @else
                                                         @php

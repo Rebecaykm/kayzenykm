@@ -6,6 +6,7 @@ use App\Models\Iim;
 use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
+use App\Models\mbmr;
 
 class Structure extends Controller
 {
@@ -27,7 +28,7 @@ class Structure extends Controller
                 ['IREF04', 'like', '%' . $Pr . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
-                ['IPROD','NOT LIKE', '%-830%'],
+                ['IPROD', 'NOT LIKE', '%-830%'],
             ])
             ->where(function ($query) {
                 $query->where('ICLAS ', 'F1');
@@ -35,18 +36,38 @@ class Structure extends Controller
             ->distinct('IPROD')
             ->simplePaginate(30);
 
+        if ($Pr != '*') {
+            foreach ($plan as $plans) {
+
+                if($plans->IPROD=="BDTS28B0XF                         "){
+                    $cF1 = self::buscarF1($plans->IPROD);
+                    dd( $cF1);
+                    dd('hola');
+                }
+
+            }
+        }
+
         return view('planeacion.Estructura', ['plan' => $plan, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
+
 
 
     function buscarF1($prod)
     {
         $a = array(array());
+        $temparr=array(array());
         $i = count($a);
         $hijo = self::Hijo($prod);
-        foreach ($hijo as $hijos) {
+        foreach ($hijo as $hijos)
+        {
             $a[$i][0] = $hijos->BCHLD;
             $a[$i][1] = $hijos->BCLAC;
+            $i++;
+            $tem=$i;
+            $temparr=$a;
+
+
             $Chijo = self::Conthijo($hijos->BCHLD);
             if ($Chijo != 0) {
                 $b = self::buscarF1($hijos->BCHLD);
@@ -55,11 +76,19 @@ class Structure extends Controller
                     $j = 0;
                     foreach ($bs as $valor) {
                         $a[$i][$j] = $valor;
+
                         $j++;
                     }
+
                     $i++;
                 }
+                if($hijos->BCHLD=='BDTS28BB0                          ')
+                    {
+                     dd($a,$i,$tem,$temparr);
+                    }
+
             }
+
             $i++;
         }
 
@@ -84,6 +113,7 @@ class Structure extends Controller
     }
     function Hijo($prod)
     {
+
         $MBMS = MBMr::query()
             ->select('BCHLD', 'BCLAC')
             ->where('BPROD', '=', $prod)
@@ -95,6 +125,7 @@ class Structure extends Controller
             })
             ->orderby('BCHLD')
             ->get();
+
         return $MBMS;
     }
     function Projecto($proj)
@@ -106,5 +137,4 @@ class Structure extends Controller
 
         return $PCs;
     }
-
 }
