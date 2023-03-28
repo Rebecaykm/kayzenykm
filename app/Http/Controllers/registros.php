@@ -286,7 +286,7 @@ class registros
     {
         $res = self::buscar($prod, $sub);
         if ($res == 0) {
-            $data = Structure::create([
+            $data = Structure::updateorcreate([
                 'final' => $prod,
                 'componente' => $sub,
                 'clase' => $clase,

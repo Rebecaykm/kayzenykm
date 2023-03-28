@@ -5,7 +5,7 @@
         <form method="get" action="{{ route('ShowStructure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    BOM del projecto {{$nombre}}
+                    BOM del projecto {{ $nombre }}
                 </h2>
                 <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">
@@ -15,7 +15,8 @@
                         class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray">
                         <option value=''>---Select---</option>
                         @if ($SEpro != '')
-                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{$nombre}}</option>
+                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }}
+                                /{{ $nombre }}</option>
                         @endif
                         @foreach ($LWK as $Projec)
                             <option value={{ $Projec->CCCODE }}>{{ $Projec->CCCODE }}//{{ $Projec->CCDESC }}
@@ -33,17 +34,17 @@
         </form>
 
         <div class="flex-grow overflow-auto">
-                <form method="get" action="{{ route('ShowStructure.export') }}">
-                    <div class="flex  justify-end">
-                        <span class="text-gray-700 dark:text-gray-400">
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
-                        </span>
-                        <button
-                            class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            Reporte Excel
-                        </button>
-                    </div>
-                </form>
+            <form method="get" action="{{ route('ShowStructure.export') }}">
+                <div class="flex  justify-end">
+                    <span class="text-gray-700 dark:text-gray-400">
+                        <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
+                    </span>
+                    <button
+                        class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                        Reporte Excel
+                    </button>
+                </div>
+            </form>
             <form action="{{ route('ShowStructure.update') }}" method="post">
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
@@ -76,36 +77,27 @@
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 
-                        @foreach ($total as $plans)
-                        @php
-                       dd( $plans,$total);
-                     @endphp
+                        @foreach ($total as $n)
+                            @php
+                                $finalp = $n[0];
+
+                            @endphp
                             <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3 text-xs text-center bg-teal-300">
-                                    {{ $plans['final'] }}
+                                <td class="px-4 py-3 text-xs text-center ">
+                                    {{ $finalp[0] }}
                                 </td>
                                 <td class="px-4 py-3 text-xs text-center">
 
                                 </td>
-                                <td class="px-4 py-3 text-xs text-center">
-                                </td>
-                                <td class='px-4 py-3 text-xs text-center'>
+                                <td class='px-4 py-3 text-xs text-center <'>
                                 </td>
                             </tr>
-                            {{-- @php
-                                $cF1 = $obj->cargarestructura($plans->IPROD);
-                            @endphp --}}
-                            @foreach ($plans['hijos']  as $registro)
+
+                            @foreach ($n[1] as $registro)
                                 <tr class="text-gray-700 dark:text-gray-400">
                                     <td class="px-4 py-3 text-xs text-center">
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
-                                        {{-- @php
-                                            $Final = $obj->cargarF1($registro['Componente']);
-                                        @endphp
-                                        @foreach ($Final as $Finales)
-                                            {{ $Finales['final'] }}<br>
-                                        @endforeach --}}
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center ">
                                         {{ $registro['Componente'] }}
@@ -173,30 +165,30 @@
 
             </form>
             <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
 
-            {{-- <span class="flex items-center col-span-3">
+                {{-- <span class="flex items-center col-span-3">
                 Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
             </span>
             <!-- Pagination -->
             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                 {{ $plan->withQueryString()->links() }}
             </span> --}}
-        </div>
-        <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                Y - TEC KEYLEX MÉXICO
-            </span>
-            <span class="col-span-2"></span>
+            </div>
+            <div
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                <span class="flex items-center col-span-3">
+                    Y - TEC KEYLEX MÉXICO
+                </span>
+                <span class="col-span-2"></span>
 
-            <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                <nav aria-label="Table navigation">
-                    <ul class="inline-flex items-center">
-                    </ul>
-                </nav>
-            </span>
-        </div>
+                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                    <nav aria-label="Table navigation">
+                        <ul class="inline-flex items-center">
+                        </ul>
+                    </nav>
+                </span>
+            </div>
         </div>
 
         <script>
