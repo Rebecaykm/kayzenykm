@@ -28,7 +28,7 @@ class ShowStructure extends Controller
             ->get();
 
 
-            $plan = Iim::query()
+        $plan = Iim::query()
             ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
@@ -49,20 +49,41 @@ class ShowStructure extends Controller
         $tot = [];
         if ($Pr != '*') {
             $fin = [];
-            $cF1 = [];
             $BOM = [];
-
             foreach ($plan as $plans) {
-                $num = [];
-                $par = [];
-                array_push($par, $plans->IPROD, $plans->ICLAS);
-                array_push($cF1, $par);
-                // $cF1 += self::buscarF1($plans->IPROD, $plans->IPROD);
-                // array_push($fin, $cF1);
-                array_push($num, $par);
+                $cF1 = [];
+                $padre = [];
+                $junt = [];
                 $BOM = MStructure::where('final', $plans->IPROD)->get()->toarray();
-                array_push($num, $BOM);
-                array_push($tot, $num);
+                array_push($padre, $plans->IPROD, $plans->ICLAS);
+                array_push($junt, $padre);
+                if (count($BOM) > 1) {
+                    foreach ($BOM as $comp1) {
+                        $par = [];
+                        $pad = '';
+                        $res1 = MStructure::query()
+                            ->select('final')
+                            ->where('componente',  $comp1['Componente'])->where('clase', '!=', '01')
+                            ->distinct('final')
+                            ->get()->toarray();
+                        if (count($res1) > 1) {
+
+                            foreach ($res1 as $padres) {
+                                $pad = $pad . ',' . $padres['final'];
+                            }
+                        }else{
+                           $pad=$plans->IPROD;
+                        }
+
+                        array_push($par, $pad, $comp1['Componente'],  $comp1['Clase'],$comp1['Activo']);
+                        array_push($cF1, $par);
+                    }
+                    array_push($junt, $cF1);
+                }
+
+
+
+                array_push($tot, $junt);
             }
         }
 
@@ -89,7 +110,6 @@ class ShowStructure extends Controller
                 ->get();
             $padres = '';
             foreach ($res1 as $final) {
-
                 $padres = $final->final . ' \n ' . $padres;
             }
 

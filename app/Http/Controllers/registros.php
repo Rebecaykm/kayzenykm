@@ -12,7 +12,7 @@ use App\Models\Iim;
 use App\Models\Fpo;
 use App\Models\MBMr;
 use App\Models\ZCC;
-use App\Models\Structure;
+use App\Models\MStructure;
 use Illuminate\Support\Arr;
 
 date_default_timezone_set('America/Monterrey');
@@ -134,7 +134,7 @@ class registros
 
     function cargarF1($prod)
     {
-        $res = Structure::query()
+        $res = MStructure::query()
             ->select('final', 'componente')
             ->where('componente', $prod)
             ->distinct('final')
@@ -143,7 +143,7 @@ class registros
     }
     function contcargarF1($prod)
     {
-        $res = Structure::query()
+        $res = MStructure::query()
             ->select('Final', 'componente')
             ->where('componente', $prod)
             ->count();

@@ -33,8 +33,7 @@ class Structure extends Controller
             ->where(function ($query) {
                 $query->where('ICLAS ', 'F1');
             })
-            ->distinct('IPROD')
-            ->get();
+            ->distinct('IPROD')-get();
             $tot = [];
         if ($Pr != '*') {
             $fin = [];
@@ -71,7 +70,6 @@ class Structure extends Controller
             ]);
         }
     }
-
     function buscar($prod, $sub)
     {
         $data = MStructure::query()
@@ -82,7 +80,6 @@ class Structure extends Controller
 
         return $data;
     }
-
     function buscarF1($prod, $final)
     {
         $a = array(array());
@@ -127,7 +124,6 @@ class Structure extends Controller
     }
     function Hijo($prod)
     {
-
         $MBMS = MBMr::query()
             ->select('BCHLD', 'BCLAC')
             ->where('BPROD', '=', $prod)

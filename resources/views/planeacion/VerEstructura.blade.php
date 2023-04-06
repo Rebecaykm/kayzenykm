@@ -78,82 +78,88 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 
                         @foreach ($total as $n)
+
                             @php
-                                $finalp = $n[0];
-
+                            $finalp=$n[0]
                             @endphp
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3 text-xs text-center ">
-                                    {{ $finalp[0] }}
-                                </td>
-                                <td class="px-4 py-3 text-xs text-center">
-
-                                </td>
-                                <td class='px-4 py-3 text-xs text-center <'>
-                                </td>
-                            </tr>
-
-                            @foreach ($n[1] as $registro)
                                 <tr class="text-gray-700 dark:text-gray-400">
-                                    <td class="px-4 py-3 text-xs text-center">
-                                    </td>
-                                    <td class="px-4 py-3 text-xs text-center">
-                                    </td>
                                     <td class="px-4 py-3 text-xs text-center ">
-                                        {{ $registro['Componente'] }}
+                                        {{ $finalp[0] }}/  {{ $finalp[1] }}
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
-                                        <div class="flex justify-center">
-                                            @php
-                                                $namenA = strtr($registro['Componente'], ' ', '_');
-                                            @endphp
-                                            @if ($registro['Activo'] != 0)
-                                                <div class="mt-4 text-sm">
-                                                    <div class="mt-2">
-                                                        <div class="mt-2">
-                                                            <label
-                                                                class="inline-flex items-center text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="1" checked />
-                                                                <span class="ml-2">Planear</span>
-                                                            </label>
-                                                            <label
-                                                                class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="0" />
-                                                                <span class="ml-2">No Planear</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="mt-4 text-sm">
-                                                    <div class="mt-2">
-                                                        <div class="mt-2">
-                                                            <label
-                                                                class="inline-flex items-center text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="1" />
-                                                                <span class="ml-2">Planear</span>
-                                                            </label>
-                                                            <label
-                                                                class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="0" checked />
-                                                                <span class="ml-2">No Planear</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
+                                    </td>
+                                    <td class='px-4 py-3 text-xs text-center <'>
+                                    </td>
+                                    <td class='px-4 py-3 text-xs text-center <'>
                                     </td>
                                 </tr>
-                            @endforeach
+
+
+                            @if (isset($n[1]))
+                            @foreach ($n[1] as $com)
+                            <tr class="text-gray-700 dark:text-gray-400">
+                                <td class="px-4 py-3 text-xs text-center">
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center">
+                                    {{ $com[0] }}
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center ">
+                                    {{ $com[1] }}
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center">
+                                    <div class="flex justify-center">
+                                         @php
+                                        $namenA = strtr($com[1], ' ', '_');
+                                    @endphp
+                                    @if ($com[3] != 0)
+                                        <div class="mt-4 text-sm">
+                                            <div class="mt-2">
+                                                <div class="mt-2">
+                                                    <label
+                                                        class="inline-flex items-center text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="1" checked />
+                                                        <span class="ml-2">Planear</span>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="0" />
+                                                        <span class="ml-2">No Planear</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="mt-4 text-sm">
+                                            <div class="mt-2">
+                                                <div class="mt-2">
+                                                    <label
+                                                        class="inline-flex items-center text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="1" />
+                                                        <span class="ml-2">Planear</span>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="0" checked />
+                                                        <span class="ml-2">No Planear</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                            @endif
+
                         @endforeach
                     </tbody>
                 </table>

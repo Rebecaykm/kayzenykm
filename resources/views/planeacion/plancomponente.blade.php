@@ -1,16 +1,15 @@
 <x-app-layout title="Plan">
-    @php
+    {{-- @php
         include_once '../app/Http/Controllers/registros.php';
         $obj = new registros();
         $projecto = $obj->Projecto($tp);
         // $dias = ;
-    @endphp
+    @endphp --}}
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <form method="post" action="{{ route('planeacion.create') }}">
-
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    Planeación {{ $projecto->CCDESC }}
+                    Planeación
                 </h2>
                 @csrf
                 <label class="block mt-4 text-sm">
@@ -19,7 +18,6 @@
                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                 </label>
                 <div class="flex justify-center">
-
                     <label class="block text-sm ">
                         <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                         <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
@@ -28,10 +26,8 @@
                         <input id="fecha" name="fecha" type="date"
                             class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                     </label>
-
                 </div>
                 <div class="flex justify-center">
-
                     <button type="submit"
                         class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         <span class="mr-2">Search</span>
@@ -42,7 +38,6 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-
                 </div>
             </div>
         </form>
@@ -54,7 +49,6 @@
                         <input type="hidden" name="Fecha" id="Fecha" value={{ $fecha  }}>
                     </span> --}}
                     <div class="flex justify-center m-2">
-
                         <label class="block text-sm ">
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
@@ -63,10 +57,8 @@
                             <input id="fecha" name="fecha" type="date"
                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                         </label>
-
                     </div>
                     <div class="flex justify-center m-2">
-
                         <label class="block text-sm ">
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
@@ -75,7 +67,6 @@
                             <input id="fechaFin" name="fechaFin" type="date"
                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                         </label>
-
                     </div>
                     <button
                     class="flex items-center justify-between px-4  text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
@@ -122,7 +113,6 @@
                                 $hoy = $fecha;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-
                             @endphp
                             @while ($hoy != $fin)
                                 <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -154,6 +144,9 @@
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($plan as $info)
+                        @php
+                            dd($plan)
+                        @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     {{ $info['parte'] }}
