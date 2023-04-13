@@ -53,7 +53,7 @@
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
+                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicialf</span>
                             <input id="fecha" name="fecha" type="date"
                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                         </label>
@@ -69,8 +69,8 @@
                         </label>
                     </div>
                     <button
-                    class="flex items-center justify-between px-4  text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                    Reporte Excel
+                        class="flex items-center justify-between px-4  text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                        Reporte Excel
                     </button>
                 </div>
             </div>
@@ -143,19 +143,15 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        @foreach ($plan as $info)
-                        @php
-                            dd($plan)
-                        @endphp
+                        @foreach ($plan as $info1)
+                            @php
+                                $info = $info1['padre'];
+
+                            @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
-                                    {{ $info['parte'] }}
-                                    {{-- @php
-                                        $infoP = $obj->info($info['parte']);
-
-                                    @endphp --}}
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                        {{-- {{ $infoP['IMBOXQ'] }} --}}
+                                        {{ $info['parte'] }}
                                     </div>
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -179,7 +175,6 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
-
                                             <input value="Plan"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
@@ -187,7 +182,6 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
-
                                             <input value="Firme"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
@@ -195,7 +189,6 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
-
                                             <input value="Shope Order"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
@@ -211,7 +204,6 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
                                                 @php
-
                                                     if (array_key_exists('F' . $hoy . 'D', $info) == false) {
                                                         $valFD = '-';
                                                     } else {
@@ -271,8 +263,8 @@
                                                     }
                                                     // $valRD = $info['R' . $hoy . 'D'];
                                                     // $valRN = $info['R' . $hoy . 'N'];
-                                                    $valRD=0;
-                                                    $valRN=0;
+                                                    $valRD = 0;
+                                                    $valRN = 0;
 
                                                 @endphp
                                                 <input value={{ $valFD }}
@@ -365,170 +357,169 @@
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
-                                $contsub = $obj->contcargar($info['parte']);
-                                $hijos = 'hijos' . $info['parte'];
+                                // $contsub = $obj->contcargar($info['parte']);
+                                // $hijos = 'hijos' . $info['parte'];
                             @endphp
-                            @if (array_key_exists($hijos, $info))
+                            {{-- @if (array_key_exists($hijos, $info)) --}}
+                            @php
+                                // $hoy = $fecha;
+                                // // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
+
+                                // // $Sub = $obj->cargar($plans->IPROD);
+                                $datossub = $info1['hijos'];
+
+
+                            @endphp
+
+                            @foreach ($datossub as $datossubs)
                                 @php
                                     $hoy = $fecha;
-                                    // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
-
-                                    // $Sub = $obj->cargar($plans->IPROD);
-                                    $datossub = $info[$hijos];
 
                                 @endphp
-
-                                @foreach ($datossub as $datossubs)
-                                    @php
-                                        $hoy = $fecha;
-
-                                    @endphp
-                                    <tr class="text-gray-700 dark:text-gray-400 ">
-                                        <td class="px-2 py-1 text-xs text-center ">
-                                        </td>
-                                        <td class="px-2 py-1 text-xs text-center">
-                                            {{ $datossubs['sub'] }}
-                                            @php
-                                                // $infoP = $obj->info($datossubs['sub']);
-
-                                            @endphp
-                                            {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    SNP
-                                                    <input value={{ $infoP['IMBOXQ'] }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                            </div> --}}
-                                        </td>
-
-                                        <td class="px-2 py-1 text-xs text-center">
-                                            @php
-                                                $F1sub = $obj->cargarF1($datossubs['sub']);
-                                            @endphp
-                                            @foreach ($F1sub as $F1subs)
-                                                {{ $F1subs['final'] }}
-                                                <br>
-                                            @endforeach
-                                        </td>
-                                        <td class="px-2 py-1 text-xs text-center ">
-
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value="Requeriment (Forecast)"
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-
-
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value="Requeriment (Parent parts)"
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-
-
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-
-                                                    <input value="Plan"
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-
-
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-
-                                                    <input value="Firme"
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-
-
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-
-                                                    <input value="Shope Order"
-                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-
-
-                                            </div>
-
-                                        </td>
+                                <tr class="text-gray-700 dark:text-gray-400 ">
+                                    <td class="px-2 py-1 text-xs text-center ">
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        {{ $datossubs['sub'] }}
                                         @php
-                                            $coni = 0;
-                                            $hoy1 = $fecha;
+                                            // $infoP = $obj->info($datossubs['sub']);
                                         @endphp
-                                        @while ($coni < $dias)
-                                            @php
-                                                if (array_key_exists('F' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valFDH = '-';
-                                                } else {
-                                                    $valFDH = $datossubs['F' . $hoy1 . 'D'];
-                                                }
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            {{-- <label class="block text-sm ">
+                                                SNP
+                                                <input value={{ $infoP['IMBOXQ'] }}
+                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label> --}}
+                                        </div>
+                                    </td>
 
-                                                if (array_key_exists('F' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valFNH = '-';
-                                                } else {
-                                                    $valFNH = $datossubs['F' . $hoy1 . 'N'];
-                                                }
-                                                $var = 'R' . $hoy . 'D';
-                                                if (array_key_exists('R' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valRDH = '-';
-                                                } else {
-                                                    $valRDH = $datossubs['R' . $hoy1 . 'D'];
-                                                }
+                                    <td class="px-2 py-1 text-xs text-center">
+                                        @php
+                                            // $F1sub = $obj->cargarF1($datossubs['sub']);
+                                        @endphp
+                                        {{-- @foreach ($F1sub as $F1subs)
+                                            {{ $F1subs['final'] }}
+                                            <br>
+                                        @endforeach --}}
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center ">
 
-                                                if (array_key_exists('R' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valRNH = '-';
-                                                } else {
-                                                    $valRNH = $datossubs['R' . $hoy1 . 'N'];
-                                                }
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="Requeriment (Forecast)"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
 
-                                                if (array_key_exists('P' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valPDH = '-';
-                                                } else {
-                                                    $valPDH = $datossubs['P' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('P' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valPNH = '-';
-                                                } else {
-                                                    $valPNH = $datossubs['P' . $hoy1 . 'N'];
-                                                }
 
-                                                if (array_key_exists('Fi' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valFiDH = 0;
-                                                } else {
-                                                    $valFiDh = $datossubs['Fi' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('Fi' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valFiNH = 0;
-                                                } else {
-                                                    $valFiNH = $datossubs['Fi' . $hoy1 . 'N'];
-                                                }
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="Requeriment (Parent parts)"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
 
-                                                if (array_key_exists('S' . $hoy1 . 'D', $datossubs) == false) {
-                                                    $valSDH = '-';
-                                                } else {
-                                                    $valSDH = $datossubs['S' . $hoy1 . 'D'];
-                                                }
 
-                                                if (array_key_exists('S' . $hoy1 . 'N', $datossubs) == false) {
-                                                    $valSNH = '-';
-                                                } else {
-                                                    $valSNH = $datossubs['S' . $hoy1 . 'N'];
-                                                }
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
 
-                                            @endphp
-                                            <td class="px-2 py-1 text-xs text-center  ">
+                                                <input value="Plan"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="Firme"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="Shope Order"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+
+                                    </td>
+                                    @php
+                                        $coni = 0;
+                                        $hoy1 = $fecha;
+                                    @endphp
+                                     @while ($coni < $dias)
+                                    @php
+                                        if (array_key_exists('F' . $hoy1 . 'D', $datossubs) == false) {
+                                            $valFDH = '-';
+                                        } else {
+                                            $valFDH = $datossubs['F' . $hoy1 . 'D'];
+                                        }
+
+                                        if (array_key_exists('F' . $hoy1 . 'N', $datossubs) == false) {
+                                            $valFNH = '-';
+                                        } else {
+                                            $valFNH = $datossubs['F' . $hoy1 . 'N'];
+                                        }
+                                        $var = 'R' . $hoy . 'D';
+                                        if (array_key_exists('R' . $hoy1 . 'D', $datossubs) == false) {
+                                            $valRDH = '-';
+                                        } else {
+                                            $valRDH = $datossubs['R' . $hoy1 . 'D'];
+                                        }
+
+                                        if (array_key_exists('R' . $hoy1 . 'N', $datossubs) == false) {
+                                            $valRNH = '-';
+                                        } else {
+                                            $valRNH = $datossubs['R' . $hoy1 . 'N'];
+                                        }
+
+                                        if (array_key_exists('P' . $hoy1 . 'D', $datossubs) == false) {
+                                            $valPDH = '-';
+                                        } else {
+                                            $valPDH = $datossubs['P' . $hoy1 . 'D'];
+                                        }
+                                        if (array_key_exists('P' . $hoy1 . 'N', $datossubs) == false) {
+                                            $valPNH = '-';
+                                        } else {
+                                            $valPNH = $datossubs['P' . $hoy1 . 'N'];
+                                        }
+
+                                        if (array_key_exists('Fi' . $hoy1 . 'D', $datossubs) == false) {
+                                            $valFiDH = 0;
+                                        } else {
+                                            $valFiDh = $datossubs['Fi' . $hoy1 . 'D'];
+                                        }
+                                        if (array_key_exists('Fi' . $hoy1 . 'N', $datossubs) == false) {
+                                            $valFiNH = 0;
+                                        } else {
+                                            $valFiNH = $datossubs['Fi' . $hoy1 . 'N'];
+                                        }
+
+                                        if (array_key_exists('S' . $hoy1 . 'D', $datossubs) == false) {
+                                            $valSDH = '-';
+                                        } else {
+                                            $valSDH = $datossubs['S' . $hoy1 . 'D'];
+                                        }
+
+                                        if (array_key_exists('S' . $hoy1 . 'N', $datossubs) == false) {
+                                            $valSNH = '-';
+                                        } else {
+                                            $valSNH = $datossubs['S' . $hoy1 . 'N'];
+                                        }
+                                    @endphp
+                                    <td class="px-2 py-1 text-xs text-center  ">
                                                 <div
                                                     class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                     <label class="block text-sm ">
@@ -605,31 +596,31 @@
                                                 </div>
 
                                             </td>
-                                            @php
-                                                $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
-                                                $coni++;
-                                            @endphp
-                                        @endwhile
-                                    </tr>
-                                @endforeach
-                            @endif
+                                    @php
+                                        $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
+                                        $coni++;
+                                    @endphp
+                                    @endwhile
+                                </tr>
+                            @endforeach
+                            {{-- @endif --}}
                         @endforeach
                     </tbody>
                 </table>
 
             </div>
         </form>
-        <div
-        class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase  dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-        <span class="flex items-center col-span-3">
-            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-            Show {{ $plantotal->firstItem() }} - {{ $plantotal->lastItem() }}
-        </span>
-        <!-- Pagination -->
-        <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
-            {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
-        </span>
-         </div>
+        {{-- <div
+            class="grid px-4 text-xs font-semibold tracking-wide text-gray-500 uppercase  dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+            <span class="flex items-center col-span-3">
+                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                Show {{ $plantotal->firstItem() }} - {{ $plantotal->lastItem() }}
+            </span>
+            <!-- Pagination -->
+            <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
+                {{ $plantotal->withQueryString()->appends(['SeProject' => $tp])->links() }}
+            </span>
+        </div> --}}
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
             <span class="flex items-center col-span-3">
