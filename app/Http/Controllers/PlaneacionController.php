@@ -79,20 +79,29 @@ class PlaneacionController extends Controller
             ->where('IPROD', 'Not like', '%-SOR%')
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
-            ->simplepaginate(3);
+            ->get()->toArray();
 
         $datos = self::CargarforcastF1($plan1, $fecha, $dias);
+        $currentPage = 1;
+        $perPage = 2;
 
-        // $currentPage = 1;
-        // $perPage = 2;
+        $currentElements = array_slice($datos, $perPage * ($currentPage - 1), $perPage);
+        $res = new LengthAwarePaginator($currentElements, count($datos), $perPage, $currentPage, ['path' => url('/planeacion/create')]);
+        // $res = new Paginator($datos, 2);
+        // $res = self::paginate($currentElements, $perPage, $currentPage);
+        $currentPage = $request->page;
 
-        // $currentElements = array_slice($datos, $perPage * ($currentPage - 1), $perPage);
-        $res = new Paginator($datos, 10);
-        // $res = new Paginator($currentElements, $perPage, $currentPage);
 
-        return view('planeacion.plancomponente', ['res' => $res, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        $res = new LengthAwarePaginator($currentElements, count($datos), $perPage, $currentPage);
+
+        return view('planeacion.plancomponente', ['res' => $datos , 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
-
+    public function paginate($items, $perPage = 2, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
     public function export(Request $request)
     {
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
@@ -145,22 +154,27 @@ class PlaneacionController extends Controller
         $data = explode('/', $keyes[1], 2);
         $dias =  $data[1];
         $fecha =  $data[0];
-        $hoy = date('Ymd', strtotime($fecha));
 
+        $hoy = date('Ymd', strtotime($fecha));
+        $datas = [];
+        $datasql = [];
         foreach ($keyes as $plans) {
-            $inp = explode('/', $plans, 3);
+            $dfa = [];
+
+
+            $inp = explode('/', $plans, 4);
             if (count($inp) >= 3) {
+                $WCT = $inp[3];
+
+
                 $namenA = strtr($inp[0], '_', ' ');
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                $WCT = Frt::query()
-                    ->select('RWRKC', 'RPROD')
-                    ->where('RPROD', $namenA)
-                    ->value('RWRKC');
                 if ($request->$plans != 0) {
-                    $data = YK006::query()->insert([
+
+                    $dfa = [
                         'K6PROD' => $namenA,
                         'K6WRKC' => $WCT,
                         'K6SDTE' => $fecha,
@@ -172,49 +186,36 @@ class PlaneacionController extends Controller
                         'K6CCDT' => $load,
                         'K6CCTM' => $hora,
                         'K6FIL1' => '',
-                        'K6FIL2' => '',
-                    ]);
-                    $data = LOGSUP::query()->insert([
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $inp[1],
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => '',
-                    ]);
+                        'K6FIL2' => ''
+                    ];
+
+                    array_push($datas, $dfa);
                 }
 
                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
             }
         }
+        $data = YK006::query()->insert($datas);
+        $data = LOGSUP::query()->insert($datas);
 
         // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         // $query = "CALL LX834OU02.YMP006C";
         // $result = odbc_exec($conn, $query);
 
         $plan = Iim::query()
-            ->select('IPROD')
-            ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('IPROD', 'Not like', '%-SOR%')
-            ->where('ICLAS ', 'F1')
-            ->distinct('IPROD')
-            ->simplePaginate(1);
-
+        ->select('IPROD')
+        ->where([
+            ['IREF04', 'like', '%' . $TP . '%'],
+            ['IID', '!=', 'IZ'],
+            ['IMPLC', '!=', 'OBSOLETE'],
+        ])
+        ->where('IPROD', 'Not like', '%-SOR%')
+        ->where('ICLAS', 'F1')
+        ->distinct('IPROD')
+        ->get()->toArray();
         $datos = self::CargarforcastF1($plan, $fecha, $dias);
 
-
-
-        return view('planeacion.plancomponente', ['plan' => $datos, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        return view('planeacion.plancomponente', ['res' => $datos, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
     }
 
     /**
@@ -356,94 +357,74 @@ class PlaneacionController extends Controller
     }
     function CargarforcastF1($prods, $hoy, $dias)
     {
-        $total = array();
+        $totalpa = array();
+        $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+        $finaArra = array_column($prods, 'IPROD');
+        $finales = implode("' OR  MPROD='",   $finaArra);
+        $finaleskfp = implode("' OR  FPROD='",   $finaArra);
+        $valfinales = kmr::query() //forecast
+            ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
+            ->where('MRDTE', '>=', $hoy)
+            ->where('MRDTE', '<=',  $totalF)
+            ->whereraw("(MPROD='" . $finales  . "')")
+            ->get()->toarray();
+
+        $valPDp  = kFP::query() //plan
+            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
+            ->whereraw("(FPROD='" .   $finaleskfp  . "')")
+            ->where([
+                ['FRDTE', '>=', $hoy],
+                ['FRDTE', '<=', $totalF],
+            ])
+            ->get()->toarray();
 
         foreach ($prods as $prod) {
-            $contsub = self::contcargar($prod->IPROD);
+            $contsub = self::contcargar($prod['IPROD']);
             if ($contsub != 0) {
                 $inF1 = array();
                 $padre = [];
                 $dia = $hoy;
                 $connt = 1;
                 $i = 0;
-                $totalF = date('Ymd', strtotime($dia . '+' . $dias . ' day'));
-                $valDp  = kmr::query()
-                    ->select('MRDTE', 'MQTY', 'MRCNO')
-                    ->where('MRDTE', '>=', $dia)
-                    ->where('MRDTE', '<=',  $totalF)
-                    ->where('MPROD', '=', $prod->IPROD)
-                    ->get()->toarray();
-
-                if (count($valDp) != 0) {
-                    $MdateD = array_column($valDp, 'MRDTE');
-                    $Mqty = array_column($valDp, 'MQTY');
-                    $mturno = array_column($valDp, 'MRCNO');
-                }
-
-                $valPDp = self::planTotal($prod->IPROD, $dia, '%D%', $dias);
-                $valPDp  = kFP::query()
-                    ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-                    ->where([
-                        ['FPROD', '=', $prod->IPROD],
-                        ['FRDTE', '>=', $dia],
-                        ['FRDTE', '<=', $totalF],
-                    ])
-                    ->get()->toarray();
-
-                if (count($valPDp) != 0) {
-                    $PdateD = array_column($valPDp, 'FRDTE');
-                    $PqtyD = array_column($valPDp, 'FQTY');
-                    $PturD = array_column($valPDp, 'FPCNO');
-                    $PtypeD = array_column($valPDp, 'FTYPE');
-                }
-                $padre += ['parte' => $prod->IPROD];
-                while ($connt <= $dias) {
-                    $i++;
-                    if (count($valDp) != 0) {
-                        if (is_int(array_search($dia, $MdateD))) {
-                            $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
-                            $valt = substr($mturno[array_search($dia, $MdateD)], 4, 1);
-                            $padre += ['F' . $dia . $valt => $val1];
-                            unset($MdateD[array_search($dia, $MdateD)]);
-                            if (is_int(array_search($dia, $MdateD))) {
-                                $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
-                                $valt = substr($mturno[array_search($dia, $MdateD)], 4, 1);
-                                $padre += ['F' . $dia . $valt => $val1];
-                                // $inF1 += ['F' . $dia . 'D' => $val1];
-                            }
+                $planpadre = [];
+                $forcastp = [];
+                $padre  += ['parte' => $prod['IPROD']];
+                if (count($valfinales) > 0) {
+                    foreach ($valfinales  as $reg4) {
+                        if ($reg4['MPROD'] == $prod['IPROD']) {
+                            $dia = $reg4['MRDTE'];
+                            $turno =  $reg4['MRCNO'];
+                            $total = $reg4['MQTY'] + 0;
+                            $valt = substr($turno, 4, 1);
+                            $forcastp  += ['For' . $dia . $valt => $total];
                         }
                     }
-                    if (count($valPDp) != 0) {
-                        if (is_int(array_search($dia, $PdateD))) {
-                            $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
-                            $valtp = substr($PturD[array_search($dia, $PdateD)], 4, 1);
-                            $padre += ['P' . $dia .  $valtp => $val5];
-                            unset($PdateD[array_search($dia, $PdateD)]);
-                            if (is_int(array_search($dia, $PdateD))) {
-                                $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
-                                $valtp = substr($PturD[array_search($dia, $PdateD)], 4, 1);
-                                $padre += [$PtypeD[array_search($dia, $PdateD)] . $dia .  $valtp => $val5];
-                            }
-                        }
-                    }
-                    $dia = date('Ymd', strtotime($dia . '+1 day'));
-                    $connt++;
                 }
 
-                $inF1 += ['padre' => $padre];
 
-                $datossub = self::Cargarforcast($prod->IPROD, $hoy, $dias, $valDp);
+                if (count($valPDp) > 0) {
+                    foreach ($valPDp  as $reg6) {
+                        if ($reg6['FPROD'] == $prod['IPROD']) {
+                            $dia = $reg6['FRDTE'];
+                            $turno =  $reg6['FPCNO'];
+                            $tipo =  $reg6['FTYPE'];
+                            $total = $reg6['FQTY'] + 0;
+                            $valt = substr($turno, 4, 1);
+                            $planpadre += [$tipo . $dia . $valt => $total];
+                        }
+                    }
+                }
+                $padre  += $forcastp;
+                $padre  +=  $planpadre;
 
+                $inF1 += ['padre' =>  $padre];
+
+                $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
                 $inF1 += ['hijos' =>  $datossub];
-
-
-                array_push($total, $inF1);
+                array_push($totalpa, $inF1);
             }
         }
-
-
-
-        return   $total;
+        return   $totalpa;
     }
 
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
@@ -452,15 +433,11 @@ class PlaneacionController extends Controller
         $inF1 = array();
         $total = array();
         $i = 0;
-
-        //
-        $numpa = [];
-
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $sub1 = array_column($Sub, 'Componente');
-
-
         $cadsubsPlan = implode("' OR  FPROD='",  $sub1);
+        $cadsubswrk = implode("' OR  RPROD='",  $sub1);
+        $Qa = implode("' OR  IPROD='",  $sub1);
 
         $valPD = kFP::query()
             ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
@@ -480,30 +457,30 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-        $fir = [];
 
+        $cond = IIM::query()
+            ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
+            ->whereraw("(IPROD='" . $Qa  . "')")
+            ->get()->toArray();
 
-        if (count($valDp) != 0) {
-            foreach ($valDp as $firme) {
-                $dia =  $firme['MRDTE'];
-                $turno =  $firme['MRCNO'];
-                $total =  $firme['MQTY'] + 0;
-                $valt = substr($turno, 4, 1);
-                $fir += ['For' . $dia . $valt =>  $total];
-            }
-        }
+        $WCT = Frt::query()
+            ->select('RWRKC', 'RPROD')
+            ->whereraw("(RPROD='" .  $cadsubswrk  . "')")
+            ->get()->toarray();
+        $prowk = array_column($WCT, 'RPROD');
+        $prowrok = array_column($WCT, 'RWRKC');
+        $prodcqa = array_column($cond, 'IPROD');
+        $pqa = array_column($cond, 'IMBOXQ');
+        $minba = array_column($cond, 'IMIN');
         $sepa = [];
 
         foreach ($sub1 as $subs) {
             $contF1 = self::contcargarF1($subs);
 
-            $valD = [];
-            $forcas = [];
             if ($contF1 > 1) {
-
                 $F1 = self::cargarF1($subs);
                 $padres1 = array_column($F1, 'final');
-                $texpadre = implode(',' . PHP_EOL, $padres1);
+                $texpadre = implode(',' . ' <br> ', $padres1);
                 $cadsubs = implode("' OR  MPROD='",  $padres1);
                 $cadsubsL = implode("' OR  LPROD='",  $padres1);
             } else {
@@ -545,6 +522,7 @@ class PlaneacionController extends Controller
 
             if (count($RKMR) > 0) {
 
+
                 foreach ($RKMR as $reg) {
                     $dia =  $reg['MRDTE'];
                     $turno =  $reg['MRCNO'];
@@ -567,18 +545,15 @@ class PlaneacionController extends Controller
 
             if (count($RFMA) > 0) {
                 foreach ($RFMA  as $reg2) {
-
-
                     $dia =  $reg2['MRDTE'];
                     $total =  $reg2['TOTAL'] + 0;
-
                     $forcast += ['FMA' . $dia . 'D' => $total];
                 }
             }
 
 
             $numpar = [];
-            $numpaplan = $fir;
+            $numpaplan =  $valDp;
             foreach ($valPD as $reg3) {
                 if ($reg3['FPROD'] == $subs) {
                     $dia =  $reg3['FRDTE'];
@@ -589,7 +564,6 @@ class PlaneacionController extends Controller
                     $numpaplan += [$tipo . $dia . $valt => $total];
                 }
             }
-            $numpashop = [];
             foreach ($valSD as $reg4) {
                 if ($reg4['SPROD'] == $subs) {
                     $dia =  $reg4['SDDTE'];
@@ -600,349 +574,15 @@ class PlaneacionController extends Controller
                 }
             }
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast];
+            $pos = array_search($subs, $prodcqa);
+            $poskwr = array_search($subs,   $prowk);
+
+            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast, 'Qty' => $pqa[$pos], 'minbal' => $minba[$pos], 'wrk' => $prowrok[$poskwr]];
             $sepa += [$subs => $numpar];
         }
-
-
         return    $sepa;
     }
-    // function RequeTotalh($producto, $final, $fecha,  $dias, $valDp)
-    // {
-    //     $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-    //     $dia = $fecha;
-    //     $connt = 0;
-    //     $valTotal  = [];
-    //     $valPD = kFP::query()
-    //         ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-    //         ->where([
-    //             ['FPROD', '=', $final],
-    //             // ['FPCNO', 'like',  $turno],
-    //             ['FRDTE', '>=', $fecha],
-    //             ['FRDTE', '<=', $totalF],
-    //             // ['FTYPE', '=', 'P']
-    //         ])
-    //         ->get()->toarray();
-    //     $valSD = Fso::query()
-    //         ->select('SDDTE', 'SQREQ', 'SOCNO')
-    //         ->where('SPROD', '=', $final)
-    //         ->where('SDDTE', '>=', $fecha)
-    //         ->where('SDDTE', '<=', $totalF)
-    //         ->get()->toarray();
-    //     $MBMS = ECL::query()
-    //         ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO ')
-    //         ->where([
-    //             ['LPROD', '=', $producto],
-    //             ['LSDTE', '>=', $fecha],
-    //             ['LSDTE', '<=', $totalF],
-    //             // ['CLCNO', 'Like', $turno]
-    //         ])
-    //         ->groupBy('LSDTE', 'CLCNO')
-    //         ->get()->toarray();
-    //     $RFMA = FMA::query()
-    //         ->selectRaw('MRDTE, SUM(MQREQ) as Total')
-    //         ->where([
-    //             ['MPROD', '=', $producto],
-    //             ['MRDTE', '>=', $fecha],
-    //             ['MRDTE', '<=', $totalF],
-    //         ])
-    //         ->groupBy('MRDTE')
-    //         ->get()->toarray();
-    //     $RKMR = KMR::query()
-    //         ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO')
-    //         ->where([
-    //             ['MPROD', '=', $producto],
-    //             ['MRDTE', '>=', $fecha],
-    //             ['MRDTE', '<=', $totalF],
-    //         ])->groupBy('MRDTE', 'MRCNO')
-    //         ->get()->toarray();
-    //     $contF1 = self::contcargarF1($final);
-    //     $valD = [];
-    //     if ($contF1 > 1) {
-    //         $F1 = self::cargarF1($final);
-    //         $padres1 = array_column($F1, 'final');
-    //         $texpadre = implode(',' . PHP_EOL, $padres1);
-    //         // $cade = implode("' OR  MPROD='", $padres1);
-    //         // $cade1 = implode("' OR  LPROD='", $padres1);
-    //         // $requiN = '';
-    //         // $requiD = '';
-    //         // $requiD = $requiD . "  LPROD= '" .  $cade1 . "'";
-    //         // $requiN = $requiN . " MPROD= '" .  $cade . "'";
-    //         // $valD  = kmr::query()
-    //         //     ->select('MQTY', 'MRDTE', 'MRCNO')
-    //         //     ->where('MRDTE', '>=', $fecha)
-    //         //     ->where('MRDTE', '<=', $totalF)
-    //         //     ->whereraw('(' . $requiN . ')')
-    //         //     ->get()->toarray();
-    //         // $FdateD = array_column($valD, 'MRDTE');
-    //         // $FturnoD = array_column($valD, 'MRCNO');
-    //         // $FQTyD = array_column($valD, 'MQTY');
-    //         // $requiTDp = self::requerimiento($padres1, $requiD, $requiN, $dia, '%D%', $totalF);
-    //     } else {
-    //         $texpadre = $producto;
-    //     }
-    //     $total = 0;
-    //     $totalf = 0;
-    //     $totalk = 0;
-    //     $totalN = 0;
-    //     $totalkN = 0;
-    //     while ($connt < $dias) {
-    //         if (count($valDp) != 0) {
-    //             if (count($valDp) != 0) {
-    //                 $MdateD = array_column($valDp, 'MRDTE');
-    //                 $Mqty = array_column($valDp, 'MQTY');
-    //                 $mturno = array_column($valDp, 'MRCNO');
-    //             }
-    //             if (is_int(array_search($dia, $MdateD))) {
-    //                 $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
-    //                 $valt = substr($mturno[array_search($dia, $MdateD)], 4, 1);
-    //                 $valTotal  += ['F' . $dia . $valt => $val1];
-    //                 unset($MdateD[array_search($dia, $MdateD)]);
-    //                 if (is_int(array_search($dia, $MdateD))) {
-    //                     $val1 = $Mqty[array_search($dia, $MdateD)] + 0;
-    //                     $valt = substr($mturno[array_search($dia, $MdateD)], 4, 1);
-    //                     $valTotal  += ['F' . $dia . $valt => $val1];
-    //                 }
-    //             }
-    //         }
-    //         $DMBMS = array_column($MBMS, 'LSDTE');
-    //         $VMBMS = array_column($MBMS, 'TOTAL');
-    //         $TurnoS = array_column($MBMS, 'CLCNO');
-    //         if (is_int(array_search($dia, $DMBMS))) {
-    //             $valtp = substr($TurnoS[array_search($dia, $DMBMS)], 4, 1);
-    //             if ($valtp == 'D') {
-    //                 $total = $total + $VMBMS[array_search($dia, $DMBMS)];
-    //             } else {
-    //                 $totalN = $totalN + $VMBMS[array_search($dia, $DMBMS)];
-    //             }
-    //             unset($DMBMS[array_search($dia, $DMBMS)]);
-    //             if (is_int(array_search($dia, $DMBMS))) {
-    //                 $valtp = substr($TurnoS[array_search($dia, $DMBMS)], 4, 1);
-    //                 if ($valtp == 'D') {
-    //                     $total = $total + $VMBMS[array_search($dia, $DMBMS)];
-    //                 } else {
-    //                     $totalN = $totalN + $VMBMS[array_search($dia, $DMBMS)];
-    //                 }
-    //             }
-    //         }
-    //         $DFMA = array_column($RFMA, 'MRDTE');
-    //         $VFMA = array_column($RFMA, 'TOTAL');
-    //         if (is_int(array_search($dia, $DFMA))) {
-    //             $totalf = $totalf + $VFMA[array_search($dia, $DFMA)];
-    //         }
 
-    //         $DKMR = array_column($RKMR, 'MRDTE');
-    //         $VKMR = array_column($RKMR, 'TOTAL');
-    //         $TurnoK = array_column($RKMR, 'MRCNO');
-    //         if (is_int(array_search($dia, $DKMR))) {
-    //             $valtp = substr($TurnoK[array_search($dia,  $DKMR)], 4, 1);
-    //             if ($valtp == 'D') {
-    //                 $totalk = $totalk + $VKMR[array_search($dia, $DKMR)];
-    //             } else {
-    //                 $totalkN = $totalkN + $VKMR[array_search($dia, $DKMR)];
-    //             }
-    //             unset($DKMR[array_search($dia,  $DKMR)]);
-    //             if (is_int(array_search($dia, $DKMR))) {
-    //                 $valtp = substr($TurnoK[array_search($dia,  $DKMR)], 4, 1);
-    //                 $totalkN =  $totalkN + $VKMR[array_search($dia, $DKMR)];
-    //             }
-    //         }
-    //         if (count($valPD) > 0) {
-    //             $PdateD = array_column($valPD, 'FRDTE');
-    //             $PqtyD = array_column($valPD, 'FQTY');
-    //             $PturD = array_column($valPD, 'FPCNO');
-    //             $PtypeD = array_column($valPD, 'FTYPE');
-    //             if (is_int(array_search($dia, $PdateD))) {
-    //                 $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
-    //                 $valtpp = substr($PturD[array_search($dia, $PdateD)], 4, 1);
-    //                 $valTotal += ['P' . $dia .  $valtpp => $val5];
-    //                 unset($PdateD[array_search($dia, $PdateD)]);
-    //                 if (is_int(array_search($dia, $PdateD))) {
-    //                     $val5 = $PqtyD[array_search($dia, $PdateD)] + 0;
-    //                     $valtpp = substr($PturD[array_search($dia, $PdateD)], 4, 1);
-    //                     $valTotal += [$PtypeD[array_search($dia, $PdateD)] . $dia .  $valtpp => $val5];
-    //                 }
-    //             }
-    //         }
-    //         if (count($valSD) > 0) {
-    //             $SdateD = array_column($valSD, 'SDDTE');
-    //             $SqtyD = array_column($valSD, 'SQREQ');
-    //             $SturD = array_column($valSD, 'SOCNO');
-    //             $val7D = 0;
-    //             $val7N = 0;
-    //             while (is_int(array_search($dia, $SdateD))) {
-    //                 $valtp = substr($SturD[array_search($dia, $SdateD)], 4, 1);
-    //                 if ($valtp == 'D') {
-    //                     $val7D = $SqtyD[array_search($dia, $SdateD)] + $val7D;
-    //                 } else {
-    //                     $val7N = $SqtyD[array_search($dia, $SdateD)] + $val7N;
-    //                 }
-    //                 unset($SdateD[array_search($dia,  $SdateD)]);
-    //             }
-    //             if ($val7N != 0) {
-    //                 $valTotal += ['S' . $dia . 'N'  => $val7N];
-    //             }
-    //             if ($val7D != 0) {
-    //                 $valTotal += ['S' . $dia . 'D'  => $val7D];
-    //             }
-    //         }
-
-    //         $ttN = $totalN  + $totalkN;
-
-    //         $tt = $total + $totalf + $totalk;
-    //         if ($tt != 0) {
-    //             $valTotal += ['R' . $dia . 'D' => $tt];
-    //         }
-    //         if ($ttN != 0) {
-    //             $valTotal += ['R' . $dia . 'N' => $ttN];
-    //         }
-    //         $total = 0;
-    //         $totalf = 0;
-    //         $totalk = 0;
-    //         $totalN = 0;
-    //         $totalkN = 0;
-    //         $dia = date('Ymd', strtotime($dia . '+1 day'));
-    //         $connt++;
-    //     }
-    //     $valTotal += ['padres' => $texpadre];
-    //     return $valTotal;
-    // }
-    // function requerimiento($padres, $Lproducto, $Mproducto, $fecha, $fechafin)
-    // {
-    //     $MBMS = 0;
-    //     $RFMA = 0;
-    //     $RKM = 0;
-    //     $tot = [];
-    //     $diat = [];
-    //     $diaN = [];
-    //     $tot = [];
-    //     // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-
-    //     $qryecl = ECL::query()
-    //         ->select('LQORD', 'LSDTE', 'LPROD')
-    //         ->where('CLCNO', 'LIKE', '"%D%"')
-    //         ->where([['LSDTE', '>=', $fecha], ['LSDTE', '<=', $fecha]])
-    //         ->wherein('LPROD', $padres)
-    //         ->SUM('LQORD')
-    //         ->count();
-    //     $qryfma = fma::query()
-    //         ->select('MQREQ', 'MRDTE', 'MPROD')
-    //         ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //         ->wherein('MPROD', $padres)
-    //         ->SUM('MQREQ')
-    //         ->count();
-    //     $qrykmr = KMR::query()
-    //         ->select('MQTY', 'MRDTE', 'MPROD')
-    //         ->where('MRCNO', 'LIKE', '"%D%"')
-    //         ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //         ->wherein('MPROD', $padres)
-    //         ->SUM('MQTY')
-    //         ->count();
-
-    //     $qryeclN = ECL::query()
-    //         ->select('LQORD', 'LSDTE', 'LPROD')
-    //         ->where('CLCNO', 'LIKE', '"%N%"')
-    //         ->where([['LSDTE', '>=', $fecha], ['LSDTE', '<=', $fecha]])
-    //         ->wherein('LPROD', $padres)
-    //         ->SUM('LQORD')
-    //         ->count();
-    //     $qrykmrN = KMR::query()
-    //         ->select('MQTY', 'MRDTE', 'MPROD')
-    //         ->where('MRCNO', 'LIKE', '"%N%"')
-    //         ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //         ->wherein('MPROD', $padres)
-    //         ->SUM('MQTY')
-    //         ->count();
-
-    //     if ($qrykmr != 0 || $qryfma != 0 || $qryecl != 0 || $qryecl != 0 || $qryeclN != 0) {
-    //         $qryecl = ECL::query()
-    //             ->select('LQORD', 'LSDTE', 'LPROD')
-    //             ->where('CLCNO', 'LIKE', '"%D%"')
-    //             ->where([['LSDTE', '>=', $fecha], ['LSDTE', '<=', $fecha]])
-    //             ->wherein('LPROD', $padres)
-    //             ->SUM('LQORD')
-    //             ->get();
-    //         $qryfma = fma::query()
-    //             ->select('MQREQ', 'MRDTE', 'MPROD')
-    //             ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //             ->wherein('MPROD', $padres)
-    //             ->SUM('MQREQ')
-    //             ->get();
-    //         $qrykmr = KMR::query()
-    //             ->select('MQTY', 'MRDTE', 'MPROD')
-    //             ->where('MRCNO', 'LIKE', '"%D%"')
-    //             ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //             ->wherein('MPROD', $padres)
-    //             ->SUM('MQTY')
-    //             ->get();
-
-    //         $qryeclN = ECL::query()
-    //             ->select('LQORD', 'LSDTE', 'LPROD')
-    //             ->where('CLCNO', 'LIKE', '"%N%"')
-    //             ->where([['LSDTE', '>=', $fecha], ['LSDTE', '<=', $fecha]])
-    //             ->wherein('LPROD', $padres)
-    //             ->SUM('LQORD')
-    //             ->get();
-    //         $qrykmrN = KMR::query()
-    //             ->select('MQTY', 'MRDTE', 'MPROD')
-    //             ->where('MRCNO', 'LIKE', '"%N%"')
-    //             ->where([['MRDTE', '>=', $fecha], ['MRDTE', '<=', $fecha]])
-    //             ->wherein('MPROD', $padres)
-    //             ->SUM('MQTY')
-    //             ->get();
-    //         dd('hoa', $qrykmr, $qryfma, $qryecl, $fecha, $fechafin, $qryeclN, $qryeclN);
-    //     }
-
-
-    //     $query = "SELECT sum(TECL) AS TECL ,sum(TF) AS TF ,sum(TKMR) AS TKMR,T.LSDTE FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
-    //         from LX834F01.ECL
-    //         where  (" . $Lproducto . "  ) and (LSDTE >= '" . $fecha . "' and LSDTE <= '" . $fechafin . "')
-    //         AND CLCNO LIKE '%D%'
-    //         GROUP BY LSDTE,LPROD ) T
-    //         FULL OUTER JOIN (
-    //         select sum(MQREQ) AS TF,MRDTE AS fecha,mPROD
-    //         from LX834F01.FMA where  (" . $Mproducto . ")
-    //         and (MRDTE >='" . $fecha . "' and MRDTE <='" . $fechafin . "' )
-    //         GROUP BY  MRDTE,mPROD
-    //         ) D  ON T.LPROD=D.mPRODñ
-    //         full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
-    //         FROM LX834F01.KMR
-    //         WHERE (MRDTE >='" . $fecha . "' and MRDTE <='" . $fechafin . "' )
-    //         AND  (" . $Mproducto . ")
-    //         AND MRCNO LIKE  '%D%'
-    //         GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD GROUP BY T.LSDTE";
-    //     // $result = odbc_exec($conn, $query);
-    //     $tot = [];
-    //     // if (odbc_num_rows($result)>0) {
-    //     //     $diat += odbc_result($result, 'TECL');
-    //     //     $diat += odbc_result($result, 'TF');
-    //     //     $diat += odbc_result($result, 'TKMR');
-    //     //     $diat += odbc_result($result, 'LSDTE');
-    //     // }
-
-    //     $query1 = "SELECT sum(TECL) AS TECL ,sum(TKMR) AS TKMR,T.LSDTE FROM (select sum(LQORD)AS TECL, LSDTE,LPROD
-    //         from LX834F01.ECL
-    //         where  (" . $Lproducto . "  )
-    //         and (LSDTE >= '" . $fecha . "' and LSDTE <= '" . $fechafin . "')
-    //         AND CLCNO LIKE '%N%'
-    //         GROUP BY LSDTE,LPROD ) T
-    //         full OUTER JOIN (SELECT sum(MQTY) AS TKMR,MRDTE AS fecha,MPROD
-    //         FROM LX834F01.KMR
-    //         WHERE (MRDTE >='" . $fecha . "' and MRDTE <='" . $fechafin . "' )
-    //         AND  (" . $Mproducto . ")
-    //         AND MRCNO LIKE '%N%'
-    //         GROUP BY  MRDTE,MPROD) K ON K.MPROD=T.LPROD GROUP BY T.LSDTE";
-    //     // $result1 = odbc_exec($conn, $query1);
-
-
-    //     // if (odbc_num_rows($result1)>0) {
-    //     //     $diaN += odbc_result($result, 'TECL');
-    //     //     $diaN += odbc_result($result, 'TKMR');
-    //     //     $diaN += odbc_result($result, 'LSDTE');
-    //     // }
-
-    //     return  $tot;
-    // }
     // ---------------------------------guardar estructuras de BOM----------------------------------------------
     function guardar($prod, $sub, $clase)
     {
@@ -1022,235 +662,5 @@ class PlaneacionController extends Controller
             ->orderby('BCHLD')
             ->get();
         return $MBMS;
-    }
-    function Projecto($proj)
-    {
-        $PCs = ZCC::query()
-            ->select('CCDESC')
-            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $proj]])
-            ->first();
-
-        return $PCs;
-    }
-
-    // -----------------------------------------------------------------------------------
-
-    function Forecast($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $plan = kmr::query()
-            ->select('MQTY', 'MRDTE', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $totalF)
-            ->whereraw('(' . $producto . ')')
-            // ->where('MRCNO', 'like', $turno)
-            // ->groupby('MRDTE','MRCNO')
-            ->get()->toarray();
-        // ->sum('MQTY');
-        return $plan;
-    }
-    function ForecastTOTAL($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-
-
-        $plan = kmr::query()
-            ->select('MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $totalF)
-            ->where('MPROD', '=', $producto)
-            // ->where('MRCNO', 'like', $turno)
-            ->get()->toarray();
-
-        return $plan;
-    }
-    function Forecasttodos($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $plan = kmr::query()
-            ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $totalF)
-            ->whereraw('(' . $producto . ')')
-            // ->where('MRCNO', 'like', $turno)
-            ->get()->toarray();
-
-        return $plan;
-    }
-
-    function plan($pro, $fecha, $turno)
-    {
-        $kfps = kFP::query()
-            ->select('FQTY')
-            ->where('FPROD', '=', $pro)
-            ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '=', $fecha)
-            ->where('FTYPE', '=', 'P')
-            ->sum('FQTY');
-        return $kfps;
-    }
-    function planTotal($pro, $fecha, $turno, $dias)
-    {
-
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
-            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->where([
-                ['FPROD', '=', $pro],
-                // ['FPCNO', 'like',  $turno],
-                ['FRDTE', '>=', $fecha],
-                ['FRDTE', '<=', $totalF],
-                // ['FTYPE', '=', 'P']
-            ])
-            ->get()->toarray();
-
-        return $kfps;
-    }
-
-    function FirmeTotal($pro, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
-            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->where('FPROD', '=', $pro)
-            // ->where('FPCNO', 'like', $turno)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $totalF)
-            ->where('FTYPE', '=', 'F')
-            ->get()->toarray();
-
-        return $kfps;
-    }
-
-    function ShopO($pro, $fecha, $turno)
-    {
-        $Fsos = Fso::query()
-            ->select('SQREQ')
-            ->where('SPROD', '=', $pro)
-            ->where('SOCNO', 'like', $turno)
-            ->where('SDDTE', '=', $fecha)
-            ->sum('SQREQ');
-
-        return $Fsos;
-    }
-
-    function ShopOTotal($pro, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $Fsos = Fso::query()
-            ->select('SDDTE', 'SQREQ', 'SOCNO')
-            ->where('SPROD', '=', $pro)
-            // ->where('SOCNO', 'like', $turno)
-            ->where('SDDTE', '>=', $fecha)
-            ->where('SDDTE', '<=', $totalF)
-            ->get()->toarray();
-
-        return $Fsos;
-    }
-    function contarfirme($pro, $fecha, $fechafin)
-    {
-        $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
-            ->where('FPROD', '=', $pro)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $fechafin)
-            ->where('FTYPE', '=', 'F')
-            ->count();
-        return $kfps;
-    }
-    function contarplan($pro, $fecha, $fechafin)
-    {
-        $kfps = kFP::query()
-            ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
-            ->where('FPROD', '=', $pro)
-            ->where('FRDTE', '>=', $fecha)
-            ->where('FRDTE', '<=', $fechafin)
-            ->where('FTYPE', '=', 'P')
-            ->count();
-        return $kfps;
-    }
-
-    function contarShopO($pro, $fecha, $fechafin)
-    {
-        $Fsos = Fso::query()
-            ->select('SQREQ')
-            ->where('SPROD', '=', $pro)
-            ->where('SDDTE', '>=', $fecha)
-            ->where('SDDTE', '<=', $fechafin)
-            ->count();
-        return $Fsos;
-    }
-
-
-    function RequeTotal($producto, $fecha, $turno, $dias)
-    {
-        $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $dia = $fecha;
-        $connt = 0;
-        $valTotal  = [];
-        $MBMS = ECL::query()
-            ->selectRaw('LSDTE, SUM(LQORD) as Total')
-            ->where([
-                ['LPROD', '=', $producto],
-                ['LSDTE', '>=', $fecha],
-                ['LSDTE', '<=', $totalF],
-                ['CLCNO', 'Like', $turno]
-            ])
-            ->groupBy('LSDTE')
-            ->get()->toarray();
-        if ($turno == '%D%') {
-            $RFMA = FMA::query()
-                ->selectRaw('MRDTE, SUM(MQREQ) as Total')
-                ->where([
-                    ['MPROD', '=', $producto],
-                    ['MRDTE', '>=', $fecha],
-                    ['MRDTE', '<', $totalF],
-                ])
-                ->groupBy('MRDTE')
-                ->get()->toarray();
-        }
-
-        $RKMR = KMR::query()
-            ->selectRaw('SUM(MQTY) as Total, MRDTE')
-            ->where([
-                ['MPROD', '=', $producto],
-                ['MRDTE', '>=', $fecha],
-                ['MRDTE', '<', $totalF],
-                ['MRCNO', 'Like', $turno]
-            ])
-            ->groupBy('MRDTE')
-            ->get()->toarray();
-
-        while ($connt < $dias) {
-            $total = 0;
-            $totalf = 0;
-            $totalk = 0;
-            $DMBMS = array_column($MBMS, 'LSDTE');
-            $VMBMS = array_column($MBMS, 'TOTAL');
-
-            if (is_int(array_search($dia, $DMBMS))) {
-
-                $total =  $VMBMS[array_search($dia, $DMBMS)];
-            }
-
-            if ($turno == '%D%') {
-
-                $DFMA = array_column($RFMA, 'MRDTE');
-                $VFMA = array_column($RFMA, 'TOTAL');
-                if (is_int(array_search($dia, $DFMA))) {
-                    $totalf = $VFMA[array_search($dia, $DFMA)];
-                }
-            }
-            $DKMR = array_column($RKMR, 'MRDTE');
-            $VKMR = array_column($RKMR, 'TOTAL');
-            if (is_int(array_search($dia, $DKMR))) {
-                $totalk = $VKMR[array_search($dia, $DKMR)];
-            }
-            $tt = $total + $totalf + $totalk;
-            $valTotal += [$dia => $tt];
-            $dia = date('Ymd', strtotime($dia . '+1 day'));
-            $connt++;
-        }
-        return $valTotal;
     }
 }
