@@ -149,7 +149,6 @@
                                 @php
                                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                     $totalD = $totalD + 1;
-
                                 @endphp
                             @endwhile
                         </tr>
@@ -313,23 +312,11 @@
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
-                                // $contsub = $obj->contcargar($info['parte']);
-                                // $hijos = 'hijos' . $info['parte'];
-                            @endphp
-                            {{-- @if (array_key_exists($hijos, $info)) --}}
-                            @php
-                                // $hoy = $fecha;
-                                // // $datossub = $obj->Cargarforcast($info['parte'], $hoy, $dias);
-
-                                // // $Sub = $obj->cargar($plans->IPROD);
                                 $datossub = $info1['hijos'];
-
                             @endphp
-
                             @foreach ($datossub as $datossubs)
                                 @php
                                     $hoy = $fecha;
-
                                 @endphp
                                 <tr class="text-gray-700 dark:text-gray-400 ">
                                     <td class="px-2 py-1 text-xs text-center ">
@@ -340,13 +327,7 @@
                                             $wctpar = 'wrk' . $datossubs['wrk'];
                                         @endphp
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            {{-- <label class="block text-sm ">
-                                                SNP
-                                                <input value='{{  $wctpar }}' name='{{  $wctpar  }}'
-                                                    id='{{ $wctpar  }}'
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label> --}}
+
                                             SNP: {{ $datossubs['Qty'] }} <br>
                                             Wrkcente: {{ $datossubs['wrk'] }}<br>
                                             Min balance: {{ $datossubs['minbal'] }}
@@ -355,7 +336,7 @@
 
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
-                                        echo $datossubs['padres']
+                                        echo $datossubs['padres'];
                                         @endphp
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
@@ -429,21 +410,25 @@
                                             $re = 0;
                                             $valRDH = 0;
                                             $valRNH = 0;
+
                                             if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $forcast['FMA' . $hoy1 . 'D'];
+                                                $valRDH = $valRDH+ $forcast['FMA' . $hoy1 . 'D'];
                                             }
-                                            if (array_key_exists('KMR' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $forcast['KMR' . $hoy1 . 'D'];
+                                            if (array_key_exists('kmr' . $hoy1 . 'D', $forcast) == true) {
+                                                $valRDH = $valRDH+$forcast['kmr' . $hoy1 . 'D'];
                                             }
                                             if (array_key_exists('ecl' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $forcast['ecl' . $hoy1 . 'D'];
+                                                $valRDH = $valRDH+$forcast['ecl' . $hoy1 . 'D'];
                                             }
-                                            if (array_key_exists('KMR' . $hoy1 . 'N', $forcast) == true) {
-                                                $valRNH = $forcast['KMR' . $hoy1 . 'N'];
+                                            if (array_key_exists('kmr' . $hoy1 . 'N', $forcast) == true) {
+                                                $valRNH = $valRNH +$forcast['kmr' . $hoy1 . 'N'];
                                             }
                                             if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
-                                                $valRNH = $forcast['ecl' . $hoy1 . 'N'];
+                                                $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
                                             }
+
+
+                                            // dd(  $datossubs, $plan,$forcast,$valRNH, $valRDH );
                                             if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
                                                 $valPDH = '0';
                                             } else {
@@ -527,13 +512,13 @@
                                                     <input id={{ $inD }} name={{ $inD }}
                                                         value={{ $valFiDH }} onclick='myFunction(this.id)'
                                                         type="number" min="0"
-                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input " />
+                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input " />
                                                 </label>
                                                 <label class="block text-sm ">
                                                     <input id={{ $inN }} name={{ $inN }}
                                                         value={{ $valFiNH }} onclick='myFunction(this.id)'
                                                         type="number" min="0"
-                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-gray form-input  " />
+                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  " />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">

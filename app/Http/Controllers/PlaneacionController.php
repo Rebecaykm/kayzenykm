@@ -198,9 +198,9 @@ class PlaneacionController extends Controller
         $data = YK006::query()->insert($datas);
         $data = LOGSUP::query()->insert($datas);
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU02.YMP006C";
-        // $result = odbc_exec($conn, $query);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YMP006C";
+        $result = odbc_exec($conn, $query);
 
         $plan = Iim::query()
         ->select('IPROD')
