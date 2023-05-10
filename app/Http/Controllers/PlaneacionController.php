@@ -158,6 +158,7 @@ class PlaneacionController extends Controller
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datasql = [];
+        $CONT=0;
         foreach ($keyes as $plans) {
             $dfa = [];
 
@@ -165,8 +166,6 @@ class PlaneacionController extends Controller
             $inp = explode('/', $plans, 4);
             if (count($inp) >= 3) {
                 $WCT = $inp[3];
-
-
                 $namenA = strtr($inp[0], '_', ' ');
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
@@ -192,11 +191,24 @@ class PlaneacionController extends Controller
                     array_push($datas, $dfa);
                 }
 
-                $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+
             }
+            if($CONT=100)
+            {
+                $data = YK006::query()->insert($datas);
+                $data = LOGSUP::query()->insert($datas);
+
+                $datas=[];
+                $CONT=0;
+            }
+            $CONT=$CONT+1;
+
         }
-        $data = YK006::query()->insert($datas);
-        $data = LOGSUP::query()->insert($datas);
+
+            $data = YK006::query()->insert($datas);
+            $data = LOGSUP::query()->insert($datas);
+
+
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YMP006C";
