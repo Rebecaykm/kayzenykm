@@ -6,7 +6,7 @@ use App\Models\Iim;
 use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
-use App\Models\Structure;
+use App\Models\MStructure;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -29,7 +29,7 @@ class ShowStructure extends Controller
 
 
         $plan = Iim::query()
-            ->select('IPROD')
+            ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
                 ['IID', '!=', 'IZ'],
@@ -40,30 +40,83 @@ class ShowStructure extends Controller
                 $query->where('ICLAS ', 'F1');
             })
             ->distinct('IPROD')
-            ->get()->toarray();
-            $totestructura= array();
-            foreach($plan as $plans )
-            {
-                $inf=self::cargarestructura($plans['IPROD']);
-                array_push( $totestructura,$inf);
+            ->get();
+        $PCs = ZCC::query()
+            ->select('CCDESC')
+            ->where([['CCID', '=', 'CC'], ['CCTABL', '=', 'SIRF4'], ['CCCODE', '=', $Pr]])
+            ->first();
+        $nombre = $PCs->CCDESC ?? '';
+        $tot = [];
+        if ($Pr != '*') {
+            $fin = [];
+            $BOM = [];
+            foreach ($plan as $plans) {
+                $cF1 = [];
+                $padre = [];
+                $junt = [];
+                $BOM = MStructure::where('final', $plans->IPROD)->get()->toarray();
+                array_push($padre, $plans->IPROD, $plans->ICLAS);
+                array_push($junt, $padre);
+                if (count($BOM) > 1) {
+                    foreach ($BOM as $comp1) {
+                        $par = [];
+                        $pad = '';
+                        $res1 = MStructure::query()
+                            ->select('final')
+                            ->where('componente',  $comp1['Componente'])->where('clase', '!=', '01')
+                            ->distinct('final')
+                            ->get()->toarray();
+                        if (count($res1) > 1) {
+
+                            foreach ($res1 as $padres) {
+                                $pad = $pad . ',' . $padres['final'];
+                            }
+                        }else{
+                           $pad=$plans->IPROD;
+                        }
+
+                        array_push($par, $pad, $comp1['Componente'],  $comp1['Clase'],$comp1['Activo']);
+                        array_push($cF1, $par);
+                    }
+                    array_push($junt, $cF1);
+                }
+
+
+
+                array_push($tot, $junt);
             }
+        }
 
 
-        return view('planeacion.VerEstructura', ['plan' => $plan,'total'=>$totestructura, 'LWK' => $WCs, 'SEpro' => $Pr]);
+        return view('planeacion.VerEstructura', ['nombre' => $nombre, 'plan' => $plan, 'total' => $tot, 'LWK' => $WCs, 'SEpro' => $Pr]);
     }
     function cargarestructura($prod)
     {
-        $in=array();
-        $in=['final'=>$prod];
-        $res = Structure::query()
+        $in = array();
+        $in = ['final' => $prod];
+        $res = MStructure::query()
             ->select('Final', 'Componente', 'Activo')
             ->where('Final', $prod)
             ->where([
                 ['clase', '!=', '01'],
             ])
             ->get()->toarray();
-            $in+=['hijos'=>$res];
+        foreach ($res as $comp1) {
+            $hijos = [];
+            $res1 = MStructure::query()
+                ->select('final')
+                ->where('componente',  $comp1['Componente'])
+                ->distinct('final')
+                ->get();
+            $padres = '';
+            foreach ($res1 as $final) {
+                $padres = $final->final . ' \n ' . $padres;
+            }
 
+            array_push($hijos, $padres);
+            array_push($hijos, $comp1['Componente']);
+            $in += [$hijos];
+        }
         return $in;
     }
 
@@ -76,7 +129,7 @@ class ShowStructure extends Controller
         foreach ($keyre as $chek) {
 
             $namenA = strtr($chek, '_', ' ');
-            Structure::query()
+            MStructure::query()
                 ->where('Componente',  $namenA)
                 ->update(['Activo' => $request->$chek]);
         }
@@ -99,18 +152,17 @@ class ShowStructure extends Controller
             })
             ->distinct('IPROD')
             ->get();
-            $totestructura= array();
-            foreach($plan as $plans )
-            {
-                $inf=self::cargarestructura($plans['IPROD']);
-                array_push( $totestructura,$inf);
-            }
+        $totestructura = array();
+        foreach ($plan as $plans) {
+            $inf = self::cargarestructura($plans['IPROD']);
+            array_push($totestructura, $inf);
+        }
 
-        return view('planeacion.VerEstructura', ['plan' => $plan,'total'=>$totestructura, 'LWK' => $WCs, 'SEpro'  => $Pr]);
+        return view('planeacion.VerEstructura', ['plan' => $plan, 'total' => $totestructura, 'LWK' => $WCs, 'SEpro'  => $Pr]);
     }
     public function export(Request $request)
     {
         $Pr =  $request->SeProject ?? '*';
-        return Excel::download(new UsersExport($Pr), 'Estructura'.$Pr.'.xlsx');
+        return Excel::download(new UsersExport($Pr), 'Estructura' . $Pr . '.xlsx');
     }
 }

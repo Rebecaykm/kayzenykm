@@ -36,14 +36,14 @@ class BuscarController extends Controller
         $TP = 'NO';
         $CP = '';
         $WC = '';
-        $this->WCs = ZCC::query()
+        $WCs = ZCC::query()
             ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
             ->where('CCID', '=', 'CC')
             ->Where('CCTABL', '=', 'SIRF4')
             ->orderBy('CCID', 'ASC')
             ->get();
 
-        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $plan]);
+        return view('planeacion.buscar', ['LWK' => $WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $plan]);
     }
 
     /**
@@ -60,7 +60,7 @@ class BuscarController extends Controller
         $plan = '';
         $TP = $request->SeProject ?? 'NO';
         $inF1 = array();
-        $this->WCs = ZCC::query()
+        $WCs = ZCC::query()
             ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
             ->where('CCID', '=', 'CC')
             ->Where('CCTABL', '=', 'SIRF4')
@@ -69,7 +69,7 @@ class BuscarController extends Controller
 
         $datos = self::CargarforcastF1($NP, $fecha, $dias);
         $inF1 += [$NP =>  $datos];
-        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
+        return view('planeacion.buscar', ['LWK' => $WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
     }
 
     /**
@@ -185,13 +185,13 @@ class BuscarController extends Controller
         // $result = odbc_exec($conn, $query);
         $datos = self::CargarforcastF1($NP, $fecha, $dias);
         $inF1 += [$NP =>  $datos];
-        $this->WCs = ZCC::query()
+        $WCs = ZCC::query()
             ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
             ->where('CCID', '=', 'CC')
             ->Where('CCTABL', '=', 'SIRF4')
             ->orderBy('CCID', 'ASC')
             ->get();
-        return view('planeacion.buscar', ['LWK' => $this->WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
+        return view('planeacion.buscar', ['LWK' => $WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
     }
 
     /**
@@ -430,8 +430,6 @@ class BuscarController extends Controller
     function ForecastTOTAL($producto, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-
-
         $plan = kmr::query()
             ->select('MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $fecha)

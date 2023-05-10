@@ -11,7 +11,7 @@ class Fso extends Model
     use HasFactory;
 
     protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F02.FSO';
+    protected $table = 'LX834F01.FSO';
 
     protected $fillable = [
         'SWRKC',

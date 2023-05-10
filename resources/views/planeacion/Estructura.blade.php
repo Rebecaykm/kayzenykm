@@ -1,9 +1,5 @@
 <x-app-layout title="Plan">
-    @php
-        include_once '../app/Http/Controllers/registros.php';
-        $obj = new registros();
-        $projecto = $obj->Projecto($SEpro);
-    @endphp
+
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
         <h2 class=" text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Estructura del projecto
@@ -49,72 +45,46 @@
                                         <th class=" header px-4 py-3 sticky ">
                                             Componentes
                                         </th>
-                                        <th class=" header px-4 py-3 sticky colmde">
-                                            Planeacion
-                                        </th>
+
                                     </tr>
                                 </thead>
                                 </thead>
                                 <tbody
                                     class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                                    @foreach ($plan as $plans)
+                                    @foreach ($cF1 as $n)
+                                    @php
+                                        $finalp=$n[0];
+
+                                    @endphp
                                         <tr class="text-gray-700 dark:text-gray-400">
                                             <td class="px-4 py-3 text-xs text-center ">
-                                                {{ $plans->IPROD }}
+                                                {{$finalp[0] }}
                                             </td>
                                             <td class="px-4 py-3 text-xs text-center">
+
                                             </td>
                                             <td class='px-4 py-3 text-xs text-center <'>
                                             </td>
                                         </tr>
-                                        {{-- forecast --}}
-                                        @php
-                                            $cF1 = $obj->buscarF1($plans->IPROD);
-                                            $prod = $plans->IPROD;
-                                            $sub = '';
-                                            $clase = '';
-                                        @endphp
-                                        @foreach ($cF1 as $registro)
-                                            @php
-                                                $i = 1;
-                                            @endphp
-                                            <tr class="text-gray-700 dark:text-gray-400">
+                                            @foreach ( $n[1] as $com)
 
-                                                @foreach ($registro as $valor)
-                                                    @if ($i == 1)
-                                                        @php
-                                                            $sub = $valor;
-                                                        @endphp
-                                                        <td class="px-4 py-3 text-xs text-center">
-                                                        </td>
-                                                        <td class="px-4 py-3 text-xs text-center">
-                                                            {{ $valor }}
-                                                        </td>
-                                                    @else
-                                                        @php
-                                                            $clase = $valor;
-                                                        @endphp
-                                                        @if ($clase != '01')
-                                                            @php
-                                                                $obj->guardar($prod, $sub, $clase);
-                                                            @endphp
-                                                        @endif
-                                                        <td class="px-4 py-3 text-xs text-center">
-                                                            {{ $valor }}
-                                                        </td>
-                                                    @endif
-                                                    @php
-                                                        $i++;
-                                                    @endphp
-                                                @endforeach
+                                            <tr class="text-gray-700 dark:text-gray-400">
+                                                <td class="px-4 py-3 text-xs text-center ">
+                                                </td>
+                                                <td class="px-4 py-3 text-xs text-center">
+                                                    {{ $com['Componente'] }}
+                                                </td>
+                                                <td class='px-4 py-3 text-xs text-center <'>
+                                                </td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
+
                                     @endforeach
                                 </tbody>
                             </table>
 
                         </div>
-                        <div
+                        {{-- <div
                             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
 
                             <span class="flex items-center col-span-3">
@@ -124,7 +94,7 @@
                             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                                 {{ $plan->withQueryString()->links() }}
                             </span>
-                        </div>
+                        </div> --}}
                         <div
                             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                             <span class="flex items-center col-span-3">

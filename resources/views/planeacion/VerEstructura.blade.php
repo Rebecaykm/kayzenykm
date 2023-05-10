@@ -1,24 +1,11 @@
 <x-app-layout title="Plan">
-    @php
-        include_once '../app/Http/Controllers/registros.php';
-        $obj = new registros();
 
-        if($SEpro=='*')
-        {
-            $nombre='*'  ;
-        } else
-        {
-            $projecto = $obj->Projecto($SEpro);
-            $nombre= $projecto->CCDESC;
-        }
-    @endphp
     <div class=" xl:container lg:container md:container sm:container grid px-6 mx-auto gap-y-2">
 
         <form method="get" action="{{ route('ShowStructure.index') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    BOM del projecto {{$nombre}}
-
+                    BOM del projecto {{ $nombre }}
                 </h2>
                 <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">
@@ -28,18 +15,16 @@
                         class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray">
                         <option value=''>---Select---</option>
                         @if ($SEpro != '')
-                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }} /{{$nombre}}</option>
+                            <option value={{ $SEpro }} selected="selected">{{ $SEpro }}
+                                /{{ $nombre }}</option>
                         @endif
-
                         @foreach ($LWK as $Projec)
                             <option value={{ $Projec->CCCODE }}>{{ $Projec->CCCODE }}//{{ $Projec->CCDESC }}
                             </option>
                         @endforeach
                     </select>
                 </label>
-
                 <div class="flex justify-center">
-
                     <button
                         class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                         Procesar
@@ -49,25 +34,20 @@
         </form>
 
         <div class="flex-grow overflow-auto">
-
-
-
-                <form method="get" action="{{ route('ShowStructure.export') }}">
-                    <div class="flex  justify-end">
-                        <span class="text-gray-700 dark:text-gray-400">
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
-                        </span>
-                        <button
-                            class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            Reporte Excel
-                        </button>
-                    </div>
-                </form>
+            <form method="get" action="{{ route('ShowStructure.export') }}">
+                <div class="flex  justify-end">
+                    <span class="text-gray-700 dark:text-gray-400">
+                        <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
+                    </span>
+                    <button
+                        class="flex items-center justify-between px-4 py-4 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                        Reporte Excel
+                    </button>
+                </div>
+            </form>
             <form action="{{ route('ShowStructure.update') }}" method="post">
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $SEpro }}>
-
                 <div class="flex flex-row gap-x-4 justify-end items-center p-2 rounded-lg">
-
                     <div class="flex justify-center">
                         @csrf
                         <button type="submit"
@@ -96,88 +76,90 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @foreach ($total as $plans)
-                            <tr class="text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3 text-xs text-center bg-teal-300">
-                                    {{ $plans['final'] }}
-                                </td>
-                                <td class="px-4 py-3 text-xs text-center">
-                                </td>
-                                <td class="px-4 py-3 text-xs text-center">
-                                </td>
-                                <td class='px-4 py-3 text-xs text-center'>
-                                </td>
-                            </tr>
-                            {{-- @php
-                                $cF1 = $obj->cargarestructura($plans->IPROD);
-                            @endphp --}}
-                            @foreach ($plans['hijos']  as $registro)
+
+                        @foreach ($total as $n)
+
+                            @php
+                            $finalp=$n[0]
+                            @endphp
                                 <tr class="text-gray-700 dark:text-gray-400">
-                                    <td class="px-4 py-3 text-xs text-center">
-                                    </td>
-                                    <td class="px-4 py-3 text-xs text-center">
-                                        @php
-                                            $Final = $obj->cargarF1($registro['Componente']);
-                                        @endphp
-                                        @foreach ($Final as $Finales)
-                                            {{ $Finales['final'] }}<br>
-                                        @endforeach
-                                    </td>
                                     <td class="px-4 py-3 text-xs text-center ">
-                                        {{ $registro['Componente'] }}
+                                        {{ $finalp[0] }}/  {{ $finalp[1] }}
                                     </td>
                                     <td class="px-4 py-3 text-xs text-center">
-                                        <div class="flex justify-center">
-                                            @php
-                                                $namenA = strtr($registro['Componente'], ' ', '_');
-                                            @endphp
-                                            @if ($registro['Activo'] != 0)
-                                                <div class="mt-4 text-sm">
-                                                    <div class="mt-2">
-                                                        <div class="mt-2">
-                                                            <label
-                                                                class="inline-flex items-center text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="1" checked />
-                                                                <span class="ml-2">Planear</span>
-                                                            </label>
-                                                            <label
-                                                                class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="0" />
-                                                                <span class="ml-2">No Planear</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="mt-4 text-sm">
-                                                    <div class="mt-2">
-                                                        <div class="mt-2">
-                                                            <label
-                                                                class="inline-flex items-center text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="1" />
-                                                                <span class="ml-2">Planear</span>
-                                                            </label>
-                                                            <label
-                                                                class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
-                                                                <input type="radio"
-                                                                    class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
-                                                                    name={{ $namenA }} value="0" checked />
-                                                                <span class="ml-2">No Planear</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
+                                    </td>
+                                    <td class='px-4 py-3 text-xs text-center <'>
+                                    </td>
+                                    <td class='px-4 py-3 text-xs text-center <'>
                                     </td>
                                 </tr>
-                            @endforeach
+
+
+                            @if (isset($n[1]))
+                            @foreach ($n[1] as $com)
+                            <tr class="text-gray-700 dark:text-gray-400">
+                                <td class="px-4 py-3 text-xs text-center">
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center">
+                                    {{ $com[0] }}
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center ">
+                                    {{ $com[1] }}
+                                </td>
+                                <td class="px-4 py-3 text-xs text-center">
+                                    <div class="flex justify-center">
+                                         @php
+                                        $namenA = strtr($com[1], ' ', '_');
+                                    @endphp
+                                    @if ($com[3] != 0)
+                                        <div class="mt-4 text-sm">
+                                            <div class="mt-2">
+                                                <div class="mt-2">
+                                                    <label
+                                                        class="inline-flex items-center text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="1" checked />
+                                                        <span class="ml-2">Planear</span>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="0" />
+                                                        <span class="ml-2">No Planear</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="mt-4 text-sm">
+                                            <div class="mt-2">
+                                                <div class="mt-2">
+                                                    <label
+                                                        class="inline-flex items-center text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="1" />
+                                                        <span class="ml-2">Planear</span>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
+                                                        <input type="radio"
+                                                            class="text-emerald-600 form-radio focus:border-emerald-400 focus:outline-none focus:shadow-outline-emerald dark:focus:shadow-outline-gray"
+                                                            name={{ $namenA }} value="0" checked />
+                                                        <span class="ml-2">No Planear</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                            @endif
+
                         @endforeach
                     </tbody>
                 </table>
@@ -189,30 +171,30 @@
 
             </form>
             <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
 
-            {{-- <span class="flex items-center col-span-3">
+                {{-- <span class="flex items-center col-span-3">
                 Show {{ $plan->firstItem() }} - {{ $plan->lastItem() }}
             </span>
             <!-- Pagination -->
             <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                 {{ $plan->withQueryString()->links() }}
             </span> --}}
-        </div>
-        <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                Y - TEC KEYLEX MÉXICO
-            </span>
-            <span class="col-span-2"></span>
+            </div>
+            <div
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                <span class="flex items-center col-span-3">
+                    Y - TEC KEYLEX MÉXICO
+                </span>
+                <span class="col-span-2"></span>
 
-            <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                <nav aria-label="Table navigation">
-                    <ul class="inline-flex items-center">
-                    </ul>
-                </nav>
-            </span>
-        </div>
+                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                    <nav aria-label="Table navigation">
+                        <ul class="inline-flex items-center">
+                        </ul>
+                    </nav>
+                </span>
+            </div>
         </div>
 
         <script>

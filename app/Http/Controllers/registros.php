@@ -12,7 +12,7 @@ use App\Models\Iim;
 use App\Models\Fpo;
 use App\Models\MBMr;
 use App\Models\ZCC;
-use App\Models\Structure;
+use App\Models\MStructure;
 use Illuminate\Support\Arr;
 
 date_default_timezone_set('America/Monterrey');
@@ -134,7 +134,7 @@ class registros
 
     function cargarF1($prod)
     {
-        $res = Structure::query()
+        $res = MStructure::query()
             ->select('final', 'componente')
             ->where('componente', $prod)
             ->distinct('final')
@@ -143,7 +143,7 @@ class registros
     }
     function contcargarF1($prod)
     {
-        $res = Structure::query()
+        $res = MStructure::query()
             ->select('Final', 'componente')
             ->where('componente', $prod)
             ->count();
@@ -176,7 +176,6 @@ class registros
 
             while ($connt <= $dias) {
                 $contF1 = self::contcargarF1($prod);
-
                 if ($contF1 > 1) {
                     $padres='';
                     $tD = 0;
@@ -287,7 +286,7 @@ class registros
     {
         $res = self::buscar($prod, $sub);
         if ($res == 0) {
-            $data = Structure::create([
+            $data = Structure::updateorcreate([
                 'final' => $prod,
                 'componente' => $sub,
                 'clase' => $clase,
@@ -315,6 +314,10 @@ class registros
         foreach ($hijo as $hijos) {
             $a[$i][0] = $hijos->BCHLD;
             $a[$i][1] = $hijos->BCLAC;
+           if($hijos->BCHLD='BDTS28B0V -3                       ')
+           {
+            dd($hijos->BCHLD);
+           }
             $Chijo = self::Conthijo($hijos->BCHLD);
             if ($Chijo != 0) {
                 $b = self::buscarF1($hijos->BCHLD);
