@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class LOGSUP extends Model
 {
     use HasFactory;
-    protected $table = 'logs_update_plan';
+    protected $table = '_logs_update_plan';
     protected $fillable = [
         'K6PROD',
         'K6WRKC',

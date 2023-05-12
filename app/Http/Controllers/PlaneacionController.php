@@ -161,7 +161,7 @@ class PlaneacionController extends Controller
         $CONT=0;
         foreach ($keyes as $plans) {
             $dfa = [];
-
+            $dfasql = [];
 
             $inp = explode('/', $plans, 4);
             if (count($inp) >= 3) {
@@ -171,7 +171,10 @@ class PlaneacionController extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                if ($request->$plans != 0) {
+                $fechasql =   date('Ymd',strtotime( $inp[1]));
+
+
+                if($request->$plans != 0) {
 
                     $dfa = [
                         'K6PROD' => $namenA,
@@ -187,16 +190,32 @@ class PlaneacionController extends Controller
                         'K6FIL1' => '',
                         'K6FIL2' => ''
                     ];
-
+                    $dfasql = [
+                        'K6PROD' => $namenA,
+                        'K6WRKC' => $WCT,
+                        'K6SDTE' => $fecha,
+                        'K6EDTE' => $fefin,
+                        'K6DDTE' => $fechasql ,
+                        'K6DSHT' => $turno,
+                        'K6PFQY' => $request->$plans,
+                        'K6CUSR' => 'LXSECOFR',
+                        'K6CCDT' => $load,
+                        'K6CCTM' => $hora,
+                        'K6FIL1' => '',
+                        'K6FIL2' => ''
+                    ];
+                    array_push($datasql, $dfasql);
                     array_push($datas, $dfa);
                 }
 
 
             }
-            if($CONT=100)
+            if($CONT==100)
             {
-                $data = YK006::query()->insert($datas);
-                $data = LOGSUP::query()->insert($datas);
+
+                 $indata = YK006::query()->insert($datas);
+
+                $insql = LOGSUP::query()->insert($datasql);
 
                 $datas=[];
                 $CONT=0;
@@ -205,8 +224,8 @@ class PlaneacionController extends Controller
 
         }
 
-            $data = YK006::query()->insert($datas);
-            $data = LOGSUP::query()->insert($datas);
+            $indata = YK006::query()->insert($datas);
+            $indatasql = LOGSUP::query()->insert($datasql);
 
 
 
