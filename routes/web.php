@@ -93,4 +93,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('ShowStructure/update', [\App\Http\Controllers\showStructure::class, 'update'])->name('ShowStructure.update');
     Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.update');
     Route::get('ShowStructure/export', [\App\Http\Controllers\showStructure::class, 'export'])->name('ShowStructure.export');
+    /**
+     * etiquetas
+     */
+
+     Route::get('label_printer', [\App\Http\Controllers\Label_printer::class, 'index'])->name('Label_printer.index');
 });
