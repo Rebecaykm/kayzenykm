@@ -104,9 +104,11 @@ class PlaneacionController extends Controller
     }
     public function export(Request $request)
     {
-        dd($request->all);
+        dd($request->fecha, $request->fechaFin );
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
+
+
         return Excel::download(new PlanExport($fecha, $fechaFin), 'Planeacion.xlsx');
     }
 
