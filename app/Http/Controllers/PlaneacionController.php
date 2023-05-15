@@ -104,8 +104,11 @@ class PlaneacionController extends Controller
     }
     public function export(Request $request)
     {
+
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
+
+
         return Excel::download(new PlanExport($fecha, $fechaFin), 'Planeacion.xlsx');
     }
 
@@ -170,6 +173,7 @@ class PlaneacionController extends Controller
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
+                $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql =   date('Ymd',strtotime( $inp[1]));
 
@@ -200,7 +204,7 @@ class PlaneacionController extends Controller
                         'K6PFQY' => $request->$plans,
                         'K6CUSR' => 'LXSECOFR',
                         'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
+                        'K6CCTM' => $horasql,
                         'K6FIL1' => '',
                         'K6FIL2' => ''
                     ];

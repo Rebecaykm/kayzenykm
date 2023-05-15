@@ -40,8 +40,8 @@ class PlanExport implements FromView
                 'K6FIL2'
             )
             ->where([
-                ['K6CCDT', '>=', $FechaCam],
-                ['K6CCDT', '<=', $FechaFinCam],
+                ['K6DDTE', '>=', $FechaCam],
+                ['K6DDTE', '<=', $FechaFinCam],
             ])
             ->get()->toarray();
 
