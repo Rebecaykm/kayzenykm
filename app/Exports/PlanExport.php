@@ -40,11 +40,11 @@ class PlanExport implements FromView
                 'K6FIL2'
             )
             ->where([
-                ['K6CCDT', '>=', $FechaCam],
-                ['K6CCDT', '<=', $FechaFinCam],
+                ['K6DDTE', '>=', $FechaCam],
+                ['K6DDTE', '<=', $FechaFinCam],
             ])
-            ->get()->toarray();
-                dd( $plan);
+            ->unique('K6DDT','K6DSHT')->get()->toarray();
+            DD($plan );
 
         return view('planeacion.RepPlan', [
             'plan' => $plan
