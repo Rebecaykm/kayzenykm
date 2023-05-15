@@ -169,7 +169,8 @@ class PlaneacionController extends Controller
                 $namenA = strtr($inp[0], '_', ' ');
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
-                $hora = date('H:i:s', time());
+                $hora = date('His', time());
+                $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql =   date('Ymd',strtotime( $inp[1]));
 
@@ -200,7 +201,7 @@ class PlaneacionController extends Controller
                         'K6PFQY' => $request->$plans,
                         'K6CUSR' => 'LXSECOFR',
                         'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
+                        'K6CCTM' => $horasql,
                         'K6FIL1' => '',
                         'K6FIL2' => ''
                     ];
