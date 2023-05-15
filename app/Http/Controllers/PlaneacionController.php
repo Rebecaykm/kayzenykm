@@ -169,7 +169,7 @@ class PlaneacionController extends Controller
                 $namenA = strtr($inp[0], '_', ' ');
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
-                $hora = date('His', time());
+                $hora = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql =   date('Ymd',strtotime( $inp[1]));
 
