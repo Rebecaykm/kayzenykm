@@ -43,7 +43,7 @@ class PlanExport implements FromView
                 ['K6DDTE', '>=', $FechaCam],
                 ['K6DDTE', '<=', $FechaFinCam],
             ])
-            ->unique('K6DDT','K6DSHT')->get()->toarray();
+            ->orderby('K6CCDT')->unique(['K6DDT','K6DSHT'],"unique_planeacion")->get()->toarray();
             DD($plan );
 
         return view('planeacion.RepPlan', [
