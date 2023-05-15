@@ -33,7 +33,7 @@ class Structure extends Controller
             ->where(function ($query) {
                 $query->where('ICLAS ', 'F1');
             })
-            ->distinct('IPROD')-get();
+            ->distinct('IPROD')->get();
             $tot = [];
         if ($Pr != '*') {
             $fin = [];
