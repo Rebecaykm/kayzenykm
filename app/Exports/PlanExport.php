@@ -44,7 +44,7 @@ class PlanExport implements FromView
                 ['K6CCDT', '<=', $FechaFinCam],
             ])
             ->get()->toarray();
-
+                dd( $plan);
 
         return view('planeacion.RepPlan', [
             'plan' => $plan

@@ -104,7 +104,7 @@ class PlaneacionController extends Controller
     }
     public function export(Request $request)
     {
-        dd($request->fecha, $request->fechaFin );
+
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
 
