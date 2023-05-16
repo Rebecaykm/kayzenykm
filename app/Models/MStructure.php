@@ -24,6 +24,7 @@ class MStructure extends Model
      */
     public function fromDateTime($value)
     {
+        //dddf
         return Carbon::parse(parent::fromDateTime($value))->format('Y-m-d H:i:s');
     }
 }
