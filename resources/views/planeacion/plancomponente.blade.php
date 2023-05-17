@@ -6,7 +6,7 @@
         // $dias = ;
     @endphp --}}
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
-              <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <form method="post" action="{{ route('planeacion.create') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -106,10 +106,14 @@
                 </div>
             </div>
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
-                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
+                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
+                    value={{ $fecha . '/' . $dias }}>
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                 <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
+
                 <table class="w-full whitespace-no-wrap ">
                     <thead>
                         <tr
@@ -155,6 +159,7 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+
                         @foreach ($res as $info1)
                             @php
 
@@ -336,7 +341,7 @@
 
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
-                                        echo $datossubs['padres'];
+                                            echo $datossubs['padres'];
                                         @endphp
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
@@ -412,21 +417,20 @@
                                             $valRNH = 0;
 
                                             if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH+ $forcast['FMA' . $hoy1 . 'D'];
+                                                $valRDH = $valRDH + $forcast['FMA' . $hoy1 . 'D'];
                                             }
                                             if (array_key_exists('kmr' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH+$forcast['kmr' . $hoy1 . 'D'];
+                                                $valRDH = $valRDH + $forcast['kmr' . $hoy1 . 'D'];
                                             }
                                             if (array_key_exists('ecl' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH+$forcast['ecl' . $hoy1 . 'D'];
+                                                $valRDH = $valRDH + $forcast['ecl' . $hoy1 . 'D'];
                                             }
                                             if (array_key_exists('kmr' . $hoy1 . 'N', $forcast) == true) {
-                                                $valRNH = $valRNH +$forcast['kmr' . $hoy1 . 'N'];
+                                                $valRNH = $valRNH + $forcast['kmr' . $hoy1 . 'N'];
                                             }
                                             if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
                                                 $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
                                             }
-
 
                                             // dd(  $datossubs, $plan,$forcast,$valRNH, $valRDH );
                                             if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
@@ -549,25 +553,107 @@
 
             </div>
         </form>
-        <div
-            class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span class="flex items-center col-span-3">
-                Y - TEC KEYLEX MÉXICO
-            </span>
-            <span class="col-span-2"></span>
-            {{-- {{ $res->setPath('/planeacion/create') }} --}}
-            <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                <nav aria-label="Table navigation">
-                    <ul class="inline-flex items-center">
-                    </ul>
-                </nav>
-            </span>
+
+        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+            <form method="post" action="{{ route('planeacion.siguiente') }}">
+                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                    @csrf
+                    <div class="flex justify-center">
+                        <label class="block mt-4 text-sm">
+                            <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
+                            value={{ $fecha . '/' . $dias }}>
+                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                            <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                            <input type="hidden" name="paginate" id="paginate" value={{ $pagina - 1 }}>
+                            <input type="hidden" name="fechad" id="data" value={{ $fecha }}>
+                            <input type="hidden" name="dias" id="data" value={{ $dias }}>
+                        </label>
+                    </div>
+                    <div class="flex justify-center">
+                        @if ($pagina != 0)
+                            <button type="submit"
+                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                                <span class="mr-2">Anterior</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </form>
+            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400 text-xs">Página</span>
+                    <p class="text-blue-600">{{ $pagina }} de {{ $tpag }} </p>
+                </label>
+            </div>
+            <form method="post" action="{{ route('planeacion.siguiente') }}">
+                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                    @csrf
+                    <div class="flex justify-center">
+                        <label class="block mt-4 text-sm">
+                            <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
+                            value={{ $fecha . '/' . $dias }}>
+                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                            <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                            <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
+                            <input type="hidden" name="fechad" id="data" value={{ $fecha }}>
+                            <input type="hidden" name="dias" id="data" value={{ $dias }}>
+                        </label>
+                    </div>
+                    <div class="flex justify-center">
+                        @if ($pagina != $tpag)
+                            <button type="submit"
+                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                                <span class="mr-2">Siguiente</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                        @else
+                            <button type="submit"
+                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue disabled:opacity-75"
+                                disabled="true">
+                                <span class="mr-2">Siguiente</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </form>
+            <div
+                class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+                <span class="flex items-center col-span-3">
+                    Y - TEC KEYLEX MÉXICO
+                </span>
+                <span class="col-span-2"></span>
+                {{-- {{ $res->setPath('/planeacion/create') }} --}}
+                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                    <nav aria-label="Table navigation">
+                        <ul class="inline-flex items-center">
+                        </ul>
+                    </nav>
+                </span>
+            </div>
         </div>
-    </div>
-    <script>
-        function myFunction(xx) {
-            console.log(xx, document.getElementById(xx).id);
-        }
-    </script>
+        <script>
+            function myFunction(xx) {
+                console.log(xx, document.getElementById(xx).id);
+            }
+        </script>
 
 </x-app-layout>
