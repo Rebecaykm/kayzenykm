@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
     Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
     Route::get('planeacion/export', [\App\Http\Controllers\PlaneacionController::class, 'export'])->name('planeacion.export');
-
+    Route::post('planeacion/siguiente', [\App\Http\Controllers\PlaneacionController::class, 'siguiente'])->name('planeacion.siguiente');
     /**
      * Cargar Estructura BOM
      */

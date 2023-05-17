@@ -101,6 +101,7 @@ class Structure extends Controller
             }
             $a[$i][0] = $hijos->BCHLD;
             $a[$i][1] = $hijos->BCLAC;
+
             self::guardar($final, $hijos->BCHLD,  $hijos->BCLAC);
             $i++;
         }

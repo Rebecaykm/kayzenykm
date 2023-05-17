@@ -24,6 +24,7 @@ use App\Exports\PlanExport;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Input;
 
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
@@ -60,6 +61,9 @@ class PlaneacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function create(Request $request)
     {
         $inF1 = array();
@@ -81,26 +85,44 @@ class PlaneacionController extends Controller
             ->distinct('IPROD')
             ->get()->toArray();
 
-        $datos = self::CargarforcastF1($plan1, $fecha, $dias);
-        $currentPage = 1;
-        $perPage = 2;
+        $padres = array_chunk($plan1, 10);
+        $total = count($padres);
+        $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
 
-        $currentElements = array_slice($datos, $perPage * ($currentPage - 1), $perPage);
-        $res = new LengthAwarePaginator($currentElements, count($datos), $perPage, $currentPage, ['path' => url('/planeacion/create')]);
-        // $res = new Paginator($datos, 2);
-        // $res = self::paginate($currentElements, $perPage, $currentPage);
-        $currentPage = $request->page;
-
-
-        $res = new LengthAwarePaginator($currentElements, count($datos), $perPage, $currentPage);
-
-        return view('planeacion.plancomponente', ['res' => $datos , 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = implode("' OR  IPROD='",      $partsrev);
+        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' =>  $cadepar, 'pagina' => 0, 'tpag' => $total]);
     }
-    public function paginate($items, $perPage = 2, $page = null, $options = [])
+
+
+    public function siguiente(Request $request)
     {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+
+        $inF1 = array();
+        $inF2 = array();
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $TP = $request->SeProject;
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
+        $plan1 = Iim::query()
+            ->select('IPROD')
+            ->where([
+                ['IREF04', 'like', '%' . $TP . '%'],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where('IPROD', 'Not like', '%-SOR%')
+            ->whereraw("(IPROD='" . $request->nextp . "')")
+            ->where('ICLAS', 'F1')
+            ->distinct('IPROD')
+            ->get()->toArray();
+        $padres = array_chunk($plan1, 10);
+        $total = count($padres);
+        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
     public function export(Request $request)
     {
@@ -161,7 +183,7 @@ class PlaneacionController extends Controller
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datasql = [];
-        $CONT=0;
+        $CONT = 0;
         foreach ($keyes as $plans) {
             $dfa = [];
             $dfasql = [];
@@ -175,10 +197,10 @@ class PlaneacionController extends Controller
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                $fechasql =   date('Ymd',strtotime( $inp[1]));
+                $fechasql =   date('Ymd', strtotime($inp[1]));
 
 
-                if($request->$plans != 0) {
+                if ($request->$plans != 0) {
 
                     $dfa = [
                         'K6PROD' => $namenA,
@@ -199,7 +221,7 @@ class PlaneacionController extends Controller
                         'K6WRKC' => $WCT,
                         'K6SDTE' => $fecha,
                         'K6EDTE' => $fefin,
-                        'K6DDTE' => $fechasql ,
+                        'K6DDTE' => $fechasql,
                         'K6DSHT' => $turno,
                         'K6PFQY' => $request->$plans,
                         'K6CUSR' => 'LXSECOFR',
@@ -211,25 +233,21 @@ class PlaneacionController extends Controller
                     array_push($datasql, $dfasql);
                     array_push($datas, $dfa);
                 }
-
-
             }
-            if($CONT==100)
-            {
+            if ($CONT == 10) {
 
-                 $indata = YK006::query()->insert($datas);
+                $indata = YK006::query()->insert($datas);
 
                 $insql = LOGSUP::query()->insert($datasql);
 
-                $datas=[];
-                $CONT=0;
+                $datas = [];
+                $CONT = 0;
             }
-            $CONT=$CONT+1;
-
+            $CONT = $CONT + 1;
         }
 
-            $indata = YK006::query()->insert($datas);
-            $indatasql = LOGSUP::query()->insert($datasql);
+        $indata = YK006::query()->insert($datas);
+        $indatasql = LOGSUP::query()->insert($datasql);
 
 
 
@@ -237,7 +255,7 @@ class PlaneacionController extends Controller
         $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
 
-        $plan = Iim::query()
+        $plan1 = Iim::query()
         ->select('IPROD')
         ->where([
             ['IREF04', 'like', '%' . $TP . '%'],
@@ -245,12 +263,16 @@ class PlaneacionController extends Controller
             ['IMPLC', '!=', 'OBSOLETE'],
         ])
         ->where('IPROD', 'Not like', '%-SOR%')
+        ->whereraw("(IPROD='" . $request->nextp . "')")
         ->where('ICLAS', 'F1')
         ->distinct('IPROD')
         ->get()->toArray();
-        $datos = self::CargarforcastF1($plan, $fecha, $dias);
-
-        return view('planeacion.plancomponente', ['res' => $datos, 'plantotal' => $plan, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias]);
+    $padres = array_chunk($plan1, 10);
+    $total = count($padres);
+    $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+    $partsrev = array_column($plan1, 'IPROD');
+    $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+    return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     /**
