@@ -214,7 +214,7 @@ class PlaneacionController extends Controller
 
 
             }
-            if($CONT==100)
+            if($CONT==10)
             {
 
                  $indata = YK006::query()->insert($datas);
