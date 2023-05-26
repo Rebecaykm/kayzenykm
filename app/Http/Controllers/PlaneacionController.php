@@ -21,6 +21,7 @@ use App\Models\MStructure;
 use Carbon\Carbon;
 use registros;
 use App\Exports\PlanExport;
+use App\Exports\PlanFinalExport;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -98,6 +99,7 @@ class PlaneacionController extends Controller
     public function siguiente(Request $request)
     {
 
+
         $inF1 = array();
         $inF2 = array();
         $dias = $request->dias ?? '5';
@@ -113,16 +115,17 @@ class PlaneacionController extends Controller
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->where('IPROD', 'Not like', '%-SOR%')
-            ->whereraw("(IPROD='" . $request->nextp . "')")
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+
+        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $request->dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
     public function export(Request $request)
     {
@@ -132,6 +135,23 @@ class PlaneacionController extends Controller
 
 
         return Excel::download(new PlanExport($fecha, $fechaFin), 'Planeacion.xlsx');
+    }
+    public function exportfinal(Request $request)
+    {
+        $inF1 = array();
+        $inF2 = array();
+        $dias = $request->dias ?? '5';
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
+        $TP = $request->SeProject;
+
+
+
+
+        return Excel::download(new PlanFinalExport($fecha,  $dias,$TP), 'Planeacionfinal.xlsx');
+
+
+
     }
 
     public function store(Request $request)
@@ -256,23 +276,23 @@ class PlaneacionController extends Controller
         $result = odbc_exec($conn, $query);
 
         $plan1 = Iim::query()
-        ->select('IPROD')
-        ->where([
-            ['IREF04', 'like', '%' . $TP . '%'],
-            ['IID', '!=', 'IZ'],
-            ['IMPLC', '!=', 'OBSOLETE'],
-        ])
-        ->where('IPROD', 'Not like', '%-SOR%')
-        ->whereraw("(IPROD='" . $request->nextp . "')")
-        ->where('ICLAS', 'F1')
-        ->distinct('IPROD')
-        ->get()->toArray();
-    $padres = array_chunk($plan1, 10);
-    $total = count($padres);
-    $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-    $partsrev = array_column($plan1, 'IPROD');
-    $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
-    return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+            ->select('IPROD')
+            ->where([
+                ['IREF04', 'like', '%' . $TP . '%'],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where('IPROD', 'Not like', '%-SOR%')
+            ->whereraw("(IPROD='" . $request->nextp . "')")
+            ->where('ICLAS', 'F1')
+            ->distinct('IPROD')
+            ->get()->toArray();
+        $padres = array_chunk($plan1, 10);
+        $total = count($padres);
+        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     /**
@@ -444,6 +464,8 @@ class PlaneacionController extends Controller
                 $connt = 1;
                 $i = 0;
                 $planpadre = [];
+                $totalP = 0;
+                $tPlan = 0;
                 $forcastp = [];
                 $padre  += ['parte' => $prod['IPROD']];
                 if (count($valfinales) > 0) {
@@ -454,11 +476,12 @@ class PlaneacionController extends Controller
                             $total = $reg4['MQTY'] + 0;
                             $valt = substr($turno, 4, 1);
                             $forcastp  += ['For' . $dia . $valt => $total];
+                            $totalP = $totalP + $total;
                         }
                     }
                 }
 
-
+                $padre  += ['total' => $totalP];
                 if (count($valPDp) > 0) {
                     foreach ($valPDp  as $reg6) {
                         if ($reg6['FPROD'] == $prod['IPROD']) {
@@ -468,12 +491,15 @@ class PlaneacionController extends Controller
                             $total = $reg6['FQTY'] + 0;
                             $valt = substr($turno, 4, 1);
                             $planpadre += [$tipo . $dia . $valt => $total];
+                            $tPlan = $tPlan + $total;
                         }
                     }
                 }
+                $padre  += ['tPlan' => $tPlan];
+
                 $padre  += $forcastp;
                 $padre  +=  $planpadre;
-
+                // dd( $padre);
                 $inF1 += ['padre' =>  $padre];
 
                 $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
@@ -504,6 +530,13 @@ class PlaneacionController extends Controller
                 ['FRDTE', '<=', $totalF],
             ])
             ->get()->toarray();
+//             dd($prod1);
+// if($prod1=='BDTS50070')
+// {
+//     dd($valPD);
+
+// }
+
 
         $cadsubssh = implode("' OR  SPROD='",  $sub1);
         $valSD = Fso::query()
@@ -575,8 +608,9 @@ class PlaneacionController extends Controller
                 ->get()->toarray();
 
             $forcast = [];
-
-
+            $Tshop = 0;
+            $Tplan = 0;
+            $Tfirme = 0;
             if (count($RKMR) > 0) {
 
 
@@ -619,6 +653,11 @@ class PlaneacionController extends Controller
                     $total =  $reg3['FQTY'] + 0;
                     $valt = substr($turno, 4, 1);
                     $numpaplan += [$tipo . $dia . $valt => $total];
+                    if ($tipo == 'P') {
+                        $Tplan = $Tplan + $total;
+                    } else {
+                        $Tfirme = $Tfirme + $total;
+                    }
                 }
             }
             foreach ($valSD as $reg4) {
@@ -628,17 +667,20 @@ class PlaneacionController extends Controller
                     $total =  $reg4['SQREQ'] + 0;
                     $valt = substr($turno, 4, 1);
                     $numpaplan += ['S' . $dia . $valt => $total];
+                    $Tshop =   $Tshop + $total;
                 }
             }
 
             $pos = array_search($subs, $prodcqa);
             $poskwr = array_search($subs,   $prowk);
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast, 'Qty' => $pqa[$pos], 'minbal' => $minba[$pos], 'wrk' => $prowrok[$poskwr]];
+            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast, 'Qty' => $pqa[$pos], 'minbal' => $minba[$pos], 'wrk' => $prowrok[$poskwr], 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme];
             $sepa += [$subs => $numpar];
         }
         return    $sepa;
     }
+
+
 
     // ---------------------------------guardar estructuras de BOM----------------------------------------------
     function guardar($prod, $sub, $clase)

@@ -51,23 +51,3 @@ class PlanExport implements FromView
         ]);
     }
 }
-// class UsersExport implements FromView
-// {
-//     /**
-//      * @return \Illuminate\Support\Collection
-//      */
-//     public function headings(): array
-//     {
-//         return [
-//             'final',
-//             'componente',
-//             'clase',
-//             'Activo'
-//         ];
-//     }
-
-//     public function view(): view
-//     {
-//         return view();
-//     }
-// }

@@ -44,6 +44,44 @@
                     </div>
                 </div>
             </form>
+            <form method="get" action="{{ route('planeacion.exportfinal') }}">
+                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                      Reporte de  Planeación
+                    </h2>
+
+                    <label class="block mt-4 text-sm">
+                        <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
+                        <input id="dias" name="dias" type="number" max="7" min="1"
+                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                    </label>
+
+                    <div class="flex justify-center">
+                        <label class="block mt-4 text-sm">
+                            <input type="hidden" name="SeProject" id="SeProject" value="{{ $tp }}">
+                            <input type="hidden" name="SePC" id="SePC" value="{{ $cp }}">
+                            <input type="hidden" name="SeWC" id="SeWC" value="{{ $wc }}">
+                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
+                            <input id="fecha" name="fecha" type="date"
+                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        </label>
+                    </div>
+                    <div class="flex justify-center">
+                        <button type="submit"
+                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            <span class="mr-2">Search</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
 
             <form method="get" action="{{ route('planeacion.export') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -125,7 +163,11 @@
                             <th class=" header px-4 py-3 sticky ">
                                 Parte <br> Finales
                             </th>
+
                             <th class=" header px-4 py-3 sticky "></th>
+                            <th class=" header px-4 py-3 sticky ">
+                                Parte <br> Total
+                            </th>
                             @php
                                 $hoy = $fecha;
                                 $totalD = 0;
@@ -191,6 +233,23 @@
                                                 disabled />
                                         </label>
                                     </div>
+
+                                </td>
+                                <td class="px-2 py-1 text-xs  bg-emerald-100">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="{{$info['total']}}"
+                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="{{$info['tPlan']}}"
+                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
                                 </td>
                                 @php
                                     $hoy = $fecha;
@@ -228,44 +287,29 @@
 
                                                 @endphp
                                                 <input value={{ $valFD }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valFN }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
 
                                         </div>
-                                        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
 
-                                                <input value={{ $valRD }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-
-                                            </label>
-                                            <label class="block text-sm ">
-
-                                                <input value={{ $valRN }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-
-                                            </label>
-                                        </div> --}}
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valPD }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
                                             <label class="block text-sm ">
 
                                                 <input value={{ $valPN }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
 
@@ -275,38 +319,7 @@
                                             $inD = $namenA . '/' . $hoy . '/D';
                                             $inN = $namenA . '/' . $hoy . '/N';
                                         @endphp
-                                        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
 
-                                                <input id={{ $inD }} name={{ $inD }}
-                                                    value={{ $valFiD }} onclick='myFunction(this.id)'
-                                                    type="number" min="0"
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-                                            <label class="block text-sm ">
-
-                                                <input id={{ $inD }} name={{ $inN }}
-                                                    value={{ $valFiN }} onclick='myFunction(this.id)'
-                                                    type="number" min="0"
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-
-                                        </div> --}}
-                                        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-
-                                                <input value={{ $valSD }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                            <label class="block text-sm ">
-
-                                                <input value={{ $valSN }}
-                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-
-                                        </div> --}}
                                     </td>
                                     @php
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
@@ -341,7 +354,10 @@
 
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
-                                            echo $datossubs['padres'];
+
+                                            $forcast = $datossubs['forcast'];
+                                            $totalplan = array_sum($forcast);
+
                                         @endphp
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
@@ -372,23 +388,61 @@
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-
                                                 <input value="Firme"
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
 
 
+
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-
                                                 <input value="Shope Order"
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
+                                        </div>
 
+                                    </td>
+                                    {{-- totales --}}
+                                    <td class="px-2 py-1 text-xs text-center ">
 
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input  value="{{$info['total']}}"
+                                                    class="block w-20 text-xs form-input   "
+                                                    disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="{{ $totalplan }}"
+                                                    class="block w-20 text-xs form-input"
+                                                    disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="{{ $datossubs['Tplan'] }}"
+                                                    class="block w-20 text-xs form-input"
+                                                    disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="{{ $datossubs['Tfirme'] }}"
+                                                    class="block w-20 text-xs form-input"
+                                                    disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="{{ $datossubs['Tshop'] }}"
+                                                    class="block w-20 text-xs  form-input"
+                                                    disabled />
+                                            </label>
                                         </div>
 
                                     </td>
@@ -396,7 +450,7 @@
                                         $coni = 0;
                                         $hoy1 = $fecha;
                                         $plan = $datossubs['plan'];
-                                        $forcast = $datossubs['forcast'];
+
                                     @endphp
                                     @while ($coni < $dias)
                                         @php
@@ -446,7 +500,7 @@
                                             if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
                                                 $valFiDH = $valPDH;
                                             } else {
-                                                $valFiDh = $plan['F' . $hoy1 . 'D'];
+                                                $valFiDH = $plan['F' . $hoy1 . 'D'];
                                             }
                                             if (array_key_exists('F' . $hoy1 . 'N', $plan) == false) {
                                                 $valFiNH = $valPNH;
@@ -465,6 +519,8 @@
                                             } else {
                                                 $valSNH = $plan['S' . $hoy1 . 'N'];
                                             }
+
+
                                         @endphp
                                         <td class="px-2 py-1 text-xs text-center  ">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -479,9 +535,9 @@
                                                         disabled />
                                                 </label>
                                             </div>
+
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
-
                                                     <input value={{ $valRDH }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
@@ -510,25 +566,26 @@
                                                 $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
                                                 $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
                                             @endphp
+
                                             <div
-                                                class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
+                                                class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
+                                                <label class="block text-sm border-teal-400  outline-pink-500">
                                                     <input id={{ $inD }} name={{ $inD }}
                                                         value={{ $valFiDH }} onclick='myFunction(this.id)'
                                                         type="number" min="0"
-                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input " />
+                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  border-rose-600" />
                                                 </label>
-                                                <label class="block text-sm ">
+                                                   <label class="block text-sm border-teal-400  outline-pink-500 ">
                                                     <input id={{ $inN }} name={{ $inN }}
                                                         value={{ $valFiNH }} onclick='myFunction(this.id)'
                                                         type="number" min="0"
-                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  " />
+                                                        class=" block w-20 text-xs form-input  " />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valSDH }}
-                                                        class="block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        class="block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input border-rose-600"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
@@ -561,13 +618,13 @@
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
                             <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
-                            value={{ $fecha . '/' . $dias }}>
+                                value={{ $fecha . '/' . $dias }}>
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
                             <input type="hidden" name="paginate" id="paginate" value={{ $pagina - 1 }}>
-                            <input type="hidden" name="fechad" id="data" value={{ $fecha }}>
+                            <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
                             <input type="hidden" name="dias" id="data" value={{ $dias }}>
                         </label>
                     </div>
@@ -599,13 +656,13 @@
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
                             <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
-                            value={{ $fecha . '/' . $dias }}>
+                                value={{ $fecha . '/' . $dias }}>
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
                             <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
-                            <input type="hidden" name="fechad" id="data" value={{ $fecha }}>
+                            <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
                             <input type="hidden" name="dias" id="data" value={{ $dias }}>
                         </label>
                     </div>
