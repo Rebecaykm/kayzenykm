@@ -122,7 +122,7 @@ class registros
     }
     function cargarestructura($prod)
     {
-        $res = Structure::query()
+        $res = Mstructure::query()
             ->select('Final', 'Componente', 'Activo')
             ->where('Final', $prod)
             ->where([

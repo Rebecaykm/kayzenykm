@@ -87,6 +87,7 @@ class PlaneacionController extends Controller
             ->get()->toArray();
 
         $padres = array_chunk($plan1, 10);
+
         $total = count($padres);
         $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
 
@@ -119,10 +120,12 @@ class PlaneacionController extends Controller
             ->distinct('IPROD')
             ->get()->toArray();
         $padres = array_chunk($plan1, 10);
-        $total = count($padres);
+        $partsrev = array_column($plan1, 'IPROD');
+
+        $total = count($padres)-1;
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
 
-        $partsrev = array_column($plan1, 'IPROD');
+
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
 
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $request->dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);

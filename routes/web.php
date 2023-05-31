@@ -94,4 +94,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('ShowStructure/update', [\App\Http\Controllers\showStructure::class, 'update'])->name('ShowStructure.update');
     Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.update');
     Route::get('ShowStructure/export', [\App\Http\Controllers\showStructure::class, 'export'])->name('ShowStructure.export');
+  /**
+     * ver Estructura livewird
+     */
+    Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
+
+
 });

@@ -44,6 +44,7 @@
                     </div>
                 </div>
             </form>
+
             <form method="get" action="{{ route('planeacion.exportfinal') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -207,6 +208,8 @@
 
                                 $info = $info1['padre'];
 
+
+
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
@@ -342,7 +345,10 @@
                                     <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>
                                         @php
+
+                                            $item = strtr($datossubs['sub'], ' ', '_');
                                             $wctpar = 'wrk' . $datossubs['wrk'];
+
                                         @endphp
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
 
@@ -357,8 +363,9 @@
 
                                             $forcast = $datossubs['forcast'];
                                             $totalplan = array_sum($forcast);
-
+                                                echo $datossubs['padres'];
                                         @endphp
+
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
 
@@ -432,14 +439,14 @@
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-                                                <input value="{{ $datossubs['Tfirme'] }}"
+                                                <input id="{{ $item}}" value="{{ $datossubs['Tfirme'] }}"
                                                     class="block w-20 text-xs form-input"
                                                     disabled />
                                             </label>
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-                                                <input value="{{ $datossubs['Tshop'] }}"
+                                                <input  name="{{ $item}}" value="{{ $datossubs['Tshop'] }}"
                                                     class="block w-20 text-xs  form-input"
                                                     disabled />
                                             </label>
@@ -565,19 +572,20 @@
                                                 $namenA = strtr($datossubs['sub'], ' ', '_');
                                                 $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
                                                 $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
+                                                $namep=$datossubs['sub'];
                                             @endphp
 
                                             <div
-                                                class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
+                                                class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-indigo-500/100 ">
                                                 <label class="block text-sm border-teal-400  outline-pink-500">
                                                     <input id={{ $inD }} name={{ $inD }}
-                                                        value={{ $valFiDH }} onclick='myFunction(this.id)'
+                                                        value={{ $valFiDH }}  onchange="myFunction(this.id,'<?php echo  $item?>' )"
                                                         type="number" min="0"
                                                         class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  border-rose-600" />
                                                 </label>
                                                    <label class="block text-sm border-teal-400  outline-pink-500 ">
                                                     <input id={{ $inN }} name={{ $inN }}
-                                                        value={{ $valFiNH }} onclick='myFunction(this.id)'
+                                                        value={{ $valFiNH }}  onchange="myFunction(this.id,'<?php echo  $item ?>' )"
                                                         type="number" min="0"
                                                         class=" block w-20 text-xs form-input  " />
                                                 </label>
@@ -708,8 +716,15 @@
             </div>
         </div>
         <script>
-            function myFunction(xx) {
-                console.log(xx, document.getElementById(xx).id);
+            function myFunction(xx,padre) {
+                //  console.log(xx, padre);
+                // console.log(padre, document.getElementById(padre).value);
+                var valpadre1=parseInt(document.getElementById(padre).value) +parseInt(document.getElementById(document.getElementById(xx).id).value);
+                // console.log( valpadre1);
+                document.getElementById(padre).value=valpadre1;
+                var campo = document.getElementById(document.getElementById(xx).id);
+                campo.style.color="#217FF0";
+                document.getElementById(padre).style.color="#F08221 ";
             }
         </script>
 
