@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('planeacion/create', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.create');
     Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
     Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
+    Route::post('planeacion/updatef1', [\App\Http\Controllers\PlaneacionController::class, 'updateF1'])->name('planeacion.updatef1');
     Route::get('planeacion/export', [\App\Http\Controllers\PlaneacionController::class, 'export'])->name('planeacion.export');
     Route::get('planeacion/exportfinal', [\App\Http\Controllers\PlaneacionController::class, 'exportfinal'])->name('planeacion.exportfinal');
     Route::post('planeacion/siguiente', [\App\Http\Controllers\PlaneacionController::class, 'siguiente'])->name('planeacion.siguiente');

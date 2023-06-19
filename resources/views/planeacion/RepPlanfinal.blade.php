@@ -17,7 +17,6 @@
             <th rowspan="2">
                 Parte <br> Finales
             </th>
-
             <th  rowspan="2"></th>
             <th  rowspan="2">
                 Parte <br> Total
@@ -26,7 +25,6 @@
                 $hoy = $fecha;
                 $totalD = 0;
                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-
             @endphp
             @while ($hoy != $fin)
                 <th aling="center"  colspan="2">

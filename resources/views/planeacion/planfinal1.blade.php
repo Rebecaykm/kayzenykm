@@ -129,12 +129,12 @@
         </div>
 
 
-        <form action="{{ route('planeacion.update') }}" method="post">
+        <form action="{{ route('planeacion.updatef1') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
                     <button type="submit"
-                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green" >
+                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                         <span class="mr-2">Actualizar</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
@@ -150,7 +150,7 @@
                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Aplicar cambios </label>
                 </div> --}}
 
-                
+
             </div>
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
@@ -181,6 +181,7 @@
                                 $hoy = $fecha;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+
                             @endphp
                             @while ($hoy != $fin)
                                 <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -215,12 +216,14 @@
                             @php
 
                                 $info = $info1['padre'];
+                                $padre=$info['parte'];
 
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                        {{ $info['parte'] }}
+                                        {{ $padre}}<br>
+                                       WRKcenter {{$info['WRC']}}
                                     </div>
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -260,10 +263,7 @@
                                         </label>
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label class="block text-sm ">@php
-
-                                        @endphp
-
+                                        <label class="block text-sm ">
                                             <input value="{{ $info['tPlan'] }}"
                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                 disabled />
@@ -271,7 +271,7 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
-                                            <input value="{{$info['tfirme'] }}"
+                                            <input value="{{ $info['tfirme'] }}"
                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                 disabled />
                                         </label>
@@ -300,29 +300,38 @@
                                                         $valFN = $info['For' . $hoy . 'N'];
                                                     }
                                                     if (array_key_exists('P' . $hoy . 'D', $info) == false) {
-                                                        $valPD = '-';
+                                                        $valPD = '0';
                                                     } else {
                                                         $valPD = $info['P' . $hoy . 'D'];
                                                     }
                                                     if (array_key_exists('P' . $hoy . 'N', $info) == false) {
-                                                        $valPN = '-';
+                                                        $valPN = '0';
                                                     } else {
                                                         $valPN = $info['P' . $hoy . 'N'];
                                                     }
                                                     if (array_key_exists('F' . $hoy . 'D', $info) == false) {
-                                                        $valFiD = '-';
+                                                        $valFiD =  $valPD;
                                                     } else {
                                                         $valFiD = $info['F' . $hoy . 'D'];
                                                     }
                                                     if (array_key_exists('F' . $hoy . 'N', $info) == false) {
-                                                        $valFiN = '-';
+                                                        $valFiN =  $valPN;
                                                     } else {
                                                         $valFiN = $info['F' . $hoy . 'N'];
                                                     }
                                                     $valRD = 0;
                                                     $valRN = 0;
 
-                                                @endphp
+
+
+
+
+
+   $namenA = strtr($padre, ' ', '_');
+       $inD = $namenA . '/' . $hoy . '/D/'.$info['WRC'];
+       $inN = $namenA . '/' . $hoy . '/N/'.$info['WRC'];
+
+   @endphp
                                                 <input value={{ $valFD }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
@@ -352,25 +361,23 @@
 
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valFiD }}
+                                                <input
+                                                id={{ $inD }} name={{ $inD }} value={{ $valFiD}}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                                     />
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valFiN }}
+                                                <input id={{ $inN }} name={{ $inN }} value={{ $valFiN }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
+                                              />
                                             </label>
 
                                         </div>
-                                        @php
-                                            $namenA = strtr($info['parte'], ' ', '_');
-                                            $inD = $namenA . '/' . $hoy . '/D';
-                                            $inN = $namenA . '/' . $hoy . '/N';
-                                        @endphp
+
 
                                     </td>
                                     @php
@@ -381,7 +388,7 @@
 
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
-                           
+
                             {{-- @endif --}}
                         @endforeach
                     </tbody>
@@ -487,30 +494,30 @@
             </div>
         </div>
         <script>
-            function myFunction(xx, padre, fecha, dias, WRC,VALOR) {
-                 console.log(VALOR);
+            function myFunction(xx, padre, fecha, dias, WRC, VALOR) {
+                console.log(VALOR);
                 // console.log(padre, document.getElementById(padre).value);
-            //      cont = 0;
-            //     var d = 0;
-            //     var n = 0;
-            //     var idinputd = '';
-            //     var idinputN = '';
-            //     var cadfecha = new String(fecha);
-            //     var year=cadfecha[0]+cadfecha[1]+cadfecha[2]+cadfecha[3];
-            //     var mes=cadfecha[4]+cadfecha[5]
-            //     var dia=cadfecha[6]+cadfecha[7];
-            //     var fechac=new Date( year+'/'+mes+'/'+dia);
-            //      diasin=parseInt(dias);
-            //     console.log(cont,diasin+1,cont+1);
-            // for(cont=0;cont < diasin;cont++)
-            //     {
-            //         fecha1=fechac.setDate(fechac.getDate() + parseInt(1));
-            //       console.log(fecha1.format('YYYY-MM-DD'));
-            //         // idinputd=padre + '/' +fechanc + '/D/' + WRC;
-            //         // idinputn=padre + '/' +fechanc + '/N/' + WRC;
-            //         // console.log(idinput, idinputn)
+                //      cont = 0;
+                //     var d = 0;
+                //     var n = 0;
+                //     var idinputd = '';
+                //     var idinputN = '';
+                //     var cadfecha = new String(fecha);
+                //     var year=cadfecha[0]+cadfecha[1]+cadfecha[2]+cadfecha[3];
+                //     var mes=cadfecha[4]+cadfecha[5]
+                //     var dia=cadfecha[6]+cadfecha[7];
+                //     var fechac=new Date( year+'/'+mes+'/'+dia);
+                //      diasin=parseInt(dias);
+                //     console.log(cont,diasin+1,cont+1);
+                // for(cont=0;cont < diasin;cont++)
+                //     {
+                //         fecha1=fechac.setDate(fechac.getDate() + parseInt(1));
+                //       console.log(fecha1.format('YYYY-MM-DD'));
+                //         // idinputd=padre + '/' +fechanc + '/D/' + WRC;
+                //         // idinputn=padre + '/' +fechanc + '/N/' + WRC;
+                //         // console.log(idinput, idinputn)
 
-            //     }
+                //     }
 
                 // var valpadre1 = parseInt(document.getElementById(padre).value) + parseInt(document.getElementById(document
                 //     .getElementById(xx).id).value);

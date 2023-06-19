@@ -198,6 +198,115 @@ class PlaneacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateF1(Request $request)
+    {
+
+        $inF1 = array();
+        $TP = $request->SeProject;
+        $CP = $request->SePC;
+        $tipo = $request->tipo;
+        $WC = $request->SeWC;
+        $variables = $request->all();
+
+        $keyes = array_keys($variables);
+        $data = explode('/', $keyes[1], 2);
+        $dias =  $data[1];
+        $fecha =  $data[0];
+
+        $hoy = date('Ymd', strtotime($fecha));
+        $datas = [];
+        $datasql = [];
+        $CONT = 0;
+        foreach ($keyes as $plans) {
+            $dfa = [];
+            $dfasql = [];
+
+            $inp = explode('/', $plans, 4);
+            if (count($inp) >= 3) {
+                $WCT = $inp[3];
+                $namenA = strtr($inp[0], '_', ' ');
+                $turno = $inp[2];
+                $load = date('Ymd', strtotime('now'));
+                $hora = date('His', time());
+                $horasql = date('H:i:s', time());
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fechasql =   date('Ymd', strtotime($inp[1]));
+
+
+                if ($request->$plans != 0) {
+
+                    $dfa = [
+                        'K6PROD' => $namenA,
+                        'K6WRKC' => $WCT,
+                        'K6SDTE' => $fecha,
+                        'K6EDTE' => $fefin,
+                        'K6DDTE' => $inp[1],
+                        'K6DSHT' => $turno,
+                        'K6PFQY' => $request->$plans,
+                        'K6CUSR' => 'LXSECOFR',
+                        'K6CCDT' => $load,
+                        'K6CCTM' => $hora,
+                        'K6FIL1' => '',
+                        'K6FIL2' => ''
+                    ];
+                    $dfasql = [
+                        'K6PROD' => $namenA,
+                        'K6WRKC' => $WCT,
+                        'K6SDTE' => $fecha,
+                        'K6EDTE' => $fefin,
+                        'K6DDTE' => $fechasql,
+                        'K6DSHT' => $turno,
+                        'K6PFQY' => $request->$plans,
+                        'K6CUSR' => 'LXSECOFR',
+                        'K6CCDT' => $load,
+                        'K6CCTM' => $horasql,
+                        'K6FIL1' => '',
+                        'K6FIL2' => ''
+                    ];
+                    array_push($datasql, $dfasql);
+                    array_push($datas, $dfa);
+                }
+            }
+            if ($CONT == 5) {
+
+                $indata = YK006::query()->insert($datas);
+
+                $insql = LOGSUP::query()->insert($datasql);
+
+                $datas = [];
+                $datasql=[];
+                $CONT = 0;
+            }
+            $CONT = $CONT + 1;
+        }
+
+        $indata = YK006::query()->insert($datas);
+        $indatasql = LOGSUP::query()->insert($datasql);
+
+
+
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YMP006C";
+        $result = odbc_exec($conn, $query);
+
+        $plan1 = Iim::query()
+            ->select('IPROD')
+            ->where([
+                ['IREF04', 'like', '%' . $TP . '%'],
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where('IPROD', 'Not like', '%-SOR%')
+            ->whereraw("(IPROD='" . $request->nextp . "')")
+            ->where('ICLAS', 'F1')
+            ->distinct('IPROD')
+            ->get()->toArray();
+        
+        $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+        return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' =>0]);
+    }
     public function update(Request $request)
     {
 
@@ -274,6 +383,7 @@ class PlaneacionController extends Controller
                 $insql = LOGSUP::query()->insert($datasql);
 
                 $datas = [];
+                $datasql=[];
                 $CONT = 0;
             }
             $CONT = $CONT + 1;
@@ -284,9 +394,9 @@ class PlaneacionController extends Controller
 
 
 
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
-        $result = odbc_exec($conn, $query);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU02.YMP006C";
+        // $result = odbc_exec($conn, $query);
 
         $plan1 = Iim::query()
             ->select('IPROD')
@@ -539,6 +649,7 @@ class PlaneacionController extends Controller
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $finaArra = array_column($prods, 'IPROD');
         $finales = implode("' OR  MPROD='",   $finaArra);
+        $finaleswrk = implode("' OR  RPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
         $valfinales = kmr::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
@@ -548,7 +659,12 @@ class PlaneacionController extends Controller
             ->whereraw("(MPROD='" . $finales  . "')")
             ->get()->toarray();
 
-
+            $WCT = Frt::query()
+            ->select('RWRKC', 'RPROD')
+            ->whereraw("(RPROD='" . $finaleswrk. "')")
+            ->get()->toarray();
+            $prowk = array_column($WCT, 'RPROD');
+            $wk = array_column($WCT, 'RWRKC');
         $valPDp  = kFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
@@ -609,6 +725,9 @@ class PlaneacionController extends Controller
                 }
                 $padre  += ['tPlan' => $tPlan];
                 $padre  += ['tfirme' => $tfirme];
+                $poskwr = array_search($prod['IPROD'],   $prowk);
+                $padre+=['WRC'=>  $wk [ $poskwr]];
+
 
                 $padre  += $forcastp;
                 $padre  +=  $planpadre;
@@ -747,8 +866,6 @@ class PlaneacionController extends Controller
             // if (count($MBMS) > 0) {
             //     $total = 0;
             //     foreach ($MBMS as $reg1) {
-
-
             //         $dia =  $reg1['LSDTE'];
             //         $turno =  $reg1['CLCNO'];
             //         $total =  $reg1['TOTAL'] + 0;
