@@ -1,23 +1,4 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style>
-    #cell {
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.cell {
-    background-color: #000000;
-    color: #ffffff;
-}
-
-tr td {
-    background-color: #ffffff;
-}
-
-tr > td {
-    border-bottom: 1px solid #000000;
-}
-    </style>
 
 
 @php
@@ -95,12 +76,12 @@ tr > td {
 
             @endphp
             <tr >
-                <td rowspan="2">
+                <td rowspan="3">
                     {{ $info['parte'] }}
                 </td>
-                <td rowspan="2">
+                <td rowspan="3">
                 </td>
-                <td rowspan="2">
+                <td rowspan="3">
                 </td>
                 <td>
                     Forecast
@@ -171,7 +152,44 @@ tr > td {
                     $contdias = 0;
                 @endphp
             </tr>
-            @php
+            <tr >
+                <td>
+                    Firme
+                </td>
+                <td>
+                    {{ $info['tPlan'] }}
+                </td>
+                @while ($contdias < $dias)
+                    @php
+                        if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                            $valPD = '-';
+                        } else {
+                            $valPD = $info['F' . $hoy . 'D'];
+                        }
+                        if (array_key_exists('F' . $hoy . 'N', $info) == false) {
+                            $valPN = '-';
+                        } else {
+                            $valPN = $info['F' . $hoy . 'N'];
+                        }
+                    @endphp
+                    <td>
+                        {{ $valPD }}
+                    </td>
+                    <td>
+                        {{ $valPN }}
+                    </td>
+                    @php
+                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                        $contdias++;
+                    @endphp
+                @endwhile
+
+                @php
+                    $hoy = $fecha;
+                    $contdias = 0;
+                @endphp
+            </tr>
+            {{-- @php
 
                 $datossub = $info1['hijos'];
 
@@ -324,7 +342,7 @@ tr > td {
 
                 </tr>
 
-            @endforeach
+            @endforeach --}}
 
 
 

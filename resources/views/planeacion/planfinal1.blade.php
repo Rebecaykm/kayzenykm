@@ -13,10 +13,14 @@
                         Planeación
                     </h2>
                     @csrf
+                    <label class="block mt-4 text-sm">
+                        <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
+                        <input id="dias" name="dias" type="number" max="8" min="1"
+                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                    </label>
 
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
-                            <input type="hidden" name="Planeacion" id="Planeacion" value='2'>
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
@@ -47,7 +51,11 @@
                         Reporte de Planeación
                     </h2>
 
-
+                    <label class="block mt-4 text-sm">
+                        <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
+                        <input id="dias" name="dias" type="number" max="9" min="1"
+                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                    </label>
 
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
@@ -142,7 +150,7 @@
                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Aplicar cambios </label>
                 </div> --}}
 
-
+                
             </div>
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
@@ -163,9 +171,6 @@
                             </th>
                             <th class=" header px-4 py-3 sticky ">
                                 Parte <br> Finales
-                            </th>
-                            <th class=" header px-4 py-3 sticky ">
-                                Partes <br> Padres
                             </th>
 
                             <th class=" header px-4 py-3 sticky "></th>
@@ -217,8 +222,6 @@
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                         {{ $info['parte'] }}
                                     </div>
-                                </td>
-                                <td class="px-2 py-1 text-xs  bg-emerald-100">
                                 </td>
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
                                 </td>
@@ -378,305 +381,7 @@
 
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
-                            @php
-                                $datossub = $info1['hijos'];
-                            @endphp
-                            @foreach ($datossub as $datossubs)
-                                @php
-
-                                    $hoy = $fecha;
-                                @endphp
-                                <tr class="text-gray-700 dark:text-gray-400 ">
-                                    <td class="px-2 py-1 text-xs text-center ">
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center">
-                                        {{ $datossubs['sub'] }}<br>
-                                        @php
-
-                                            $item = strtr($datossubs['sub'], ' ', '_');
-                                            $wctpar = 'wrk' . $datossubs['wrk'];
-
-                                        @endphp
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-
-                                            SNP: {{ $datossubs['Qty'] }} <br>
-                                            Wrkcente: {{ $datossubs['wrk'] }}<br>
-                                            Min balance: {{ $datossubs['minbal'] }}
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 py-1 text-xs text-center">
-                                        @php
-
-                                            $forcast = $datossubs['forcast'];
-                                            $totalplan = array_sum($forcast);
-                                            echo $datossubs['padres'];
-                                        @endphp
-
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center">
-                                        @php
-
-                                           echo $datossubs['KMRpadres'];
-                                        @endphp
-
-                                    </td>
-
-                                    <td class="px-2 py-1 text-xs text-center ">
-
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="Requeriment (Forecast)"
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="Requeriment (Parent parts)"
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-
-                                                <input value="Plan"
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-
-
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="Firme"
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-
-
-
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="Shope Order"
-                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                        </div>
-
-                                    </td>
-                                    {{-- totales --}}
-                                    <td class="px-2 py-1 text-xs text-center ">
-
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="{{ $info['total'] }}"
-                                                    class="block w-20 text-xs form-input   " disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="{{ $totalplan }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-
-                                                <input value="{{ $datossubs['Tplan'] }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input id="{{ $item }}" value="{{ $datossubs['Tfirme'] }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input name="{{ $item }}" value="{{ $datossubs['Tshop'] }}"
-                                                    class="block w-20 text-xs  form-input" disabled />
-                                            </label>
-                                        </div>
-
-                                    </td>
-                                    @php
-                                        $coni = 0;
-                                        $hoy1 = $fecha;
-                                        $plan = $datossubs['plan'];
-// dd($plan);
-                                    @endphp
-                                    @while ($coni < $dias)
-                                        @php
-                                            if (array_key_exists('For' . $hoy1 . 'D', $plan) == false) {
-                                                $valFDH = '-';
-                                            } else {
-                                                $valFDH = $plan['For' . $hoy1 . 'D'];
-                                            }
-
-                                            if (array_key_exists('For' . $hoy1 . 'N', $plan) == false) {
-                                                $valFNH = '-';
-                                            } else {
-                                                $valFNH = $plan['For' . $hoy1 . 'N'];
-                                            }
-                                            $var = 'R' . $hoy . 'D';
-                                            $re = 0;
-                                            $valRDH = 0;
-                                            $valRNH = 0;
-
-                                            if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH + $forcast['FMA' . $hoy1 . 'D'];
-                                            }
-                                            if (array_key_exists('kmr' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH + $forcast['kmr' . $hoy1 . 'D'];
-                                            }
-                                            if (array_key_exists('ecl' . $hoy1 . 'D', $forcast) == true) {
-                                                $valRDH = $valRDH + $forcast['ecl' . $hoy1 . 'D'];
-                                            }
-                                            if (array_key_exists('kmr' . $hoy1 . 'N', $forcast) == true) {
-                                                $valRNH = $valRNH + $forcast['kmr' . $hoy1 . 'N'];
-                                            }
-                                            if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
-                                                $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
-                                            }
-
-                                            // dd(  $datossubs, $plan,$forcast,$valRNH, $valRDH );
-                                            if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
-                                                $valPDH = '0';
-                                            } else {
-                                                $valPDH = $plan['P' . $hoy1 . 'D'];
-                                            }
-                                            if (array_key_exists('P' . $hoy1 . 'N', $plan) == false) {
-                                                $valPNH = '0';
-                                            } else {
-                                                $valPNH = $plan['P' . $hoy1 . 'N'];
-                                            }
-                                            if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
-                                                $valFiDH = $valPDH;
-                                            } else {
-                                                $valFiDH = $plan['F' . $hoy1 . 'D'];
-                                            }
-                                            if (array_key_exists('F' . $hoy1 . 'N', $plan) == false) {
-                                                $valFiNH = $valPNH;
-                                            } else {
-                                                $valFiNH = $plan['F' . $hoy1 . 'N'];
-                                            }
-
-                                            if (array_key_exists('S' . $hoy1 . 'D', $plan) == false) {
-                                                $valSDH = '-';
-                                            } else {
-                                                $valSDH = $plan['S' . $hoy1 . 'D'];
-                                            }
-
-                                            if (array_key_exists('S' . $hoy1 . 'N', $plan) == false) {
-                                                $valSNH = '-';
-                                            } else {
-                                                $valSNH = $plan['S' . $hoy1 . 'N'];
-                                            }
-
-                                            if (array_key_exists('KMRS' . $hoy1 . 'D', $plan) == false) {
-                                                $valKMRsd = '-';
-                                            } else {
-                                                $valKMRsd = $plan['KMRS' . $hoy1 . 'D'];
-                                            }
-
-                                            if (array_key_exists('KMRS' . $hoy1 . 'N', $plan) == false) {
-                                                $valMKMRsn = '-';
-                                            } else {
-                                                $valMKMRsn= $plan['KMRS' . $hoy1 . 'N'];
-                                            }
-
-
-                                        @endphp
-                                        <td class="px-2 py-1 text-xs text-center  ">
-
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valRDH }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                                <label class="block text-sm ">
-
-                                                    <input value={{ $valRNH }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valKMRsd }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valMKMRsn }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                            </div>
-
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valPDH }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valPNH }}
-                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                            </div>
-                                            @php
-                                                $namenA = strtr($datossubs['sub'], ' ', '_');
-                                                $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
-                                                $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
-                                                $WRCj = $datossubs['wrk'];
-                                                $namep = $datossubs['sub'];
-                                            @endphp
-
-                                            <div
-                                                class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-indigo-500/100 ">
-                                                <label class="block text-sm border-teal-400  outline-pink-500">
-                                                    <input id={{ $inD }} name={{ $inD }}
-                                                        value={{ $valFiDH }}
-                                                        onchange="myFunction(this.id,'<?php echo $namenA; ?>','<?php echo $hoy1; ?>','<?php echo $dias; ?>', '<?php echo $WRCj; ?>',this.value)"
-                                                        type="number" min="0"
-                                                        class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  border-rose-600" />
-                                                </label>
-                                                <label class="block text-sm border-teal-400  outline-pink-500 ">
-                                                    <input id={{ $inN }} name={{ $inN }}
-                                                        value={{ $valFiNH }}
-                                                        onchange="myFunction(this.id,'<?php echo $namenA; ?>','<?php echo $hoy1; ?>','<?php echo $dias; ?>','<?php echo $WRCj; ?>',this.value)"
-                                                        type="number" min="0"
-                                                        class=" block w-20 text-xs form-input  " />
-                                                </label>
-                                            </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valSDH }}
-                                                        class="block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input border-rose-600"
-                                                        disabled />
-                                                </label>
-                                                <label class="block text-sm ">
-                                                    <input value={{ $valSNH }}
-                                                        class="block w-20 text-xs dark:border--600 dark:bg-blue-700 focus:border-green-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        disabled />
-                                                </label>
-                                            </div>
-
-                                        </td>
-                                        @php
-                                            $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
-                                            $coni++;
-                                        @endphp
-                                    @endwhile
-                                </tr>
-                            @endforeach
+                           
                             {{-- @endif --}}
                         @endforeach
                     </tbody>

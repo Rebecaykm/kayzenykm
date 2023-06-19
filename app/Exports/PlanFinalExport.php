@@ -70,7 +70,7 @@ class PlanFinalExport implements FromView
         $valfinales = kmr::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
-            ->where('MRDTE', '<=',  $totalF)
+            ->where('MRDTE', '<',  $totalF)
             ->whereraw("(MPROD='" . $finales  . "')")
             ->get()->toarray();
 
@@ -79,7 +79,7 @@ class PlanFinalExport implements FromView
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
             ->where([
                 ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<=', $totalF],
+                ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
 
@@ -103,7 +103,7 @@ class PlanFinalExport implements FromView
             ->whereraw("(FPROD='" .  $cadsubsPlan . "')")
             ->where([
                 ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<=', $totalF],
+                ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
 
@@ -113,7 +113,7 @@ class PlanFinalExport implements FromView
             ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
             ->whereraw("(SPROD='" .  $cadsubssh  . "')")
             ->where('SDDTE', '>=', $hoy)
-            ->where('SDDTE', '<=', $totalF)
+            ->where('SDDTE', '<', $totalF)
             ->get()->toarray();
 
         $cadsubswrk = implode("' OR  RPROD='", $subcompo);

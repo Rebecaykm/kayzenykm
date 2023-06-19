@@ -17,7 +17,9 @@
         "laravel/tinker": "^2.0",
         "livewire/livewire": "^2.12",
         "maatwebsite/excel": "^3.1",
+        "mike42/escpos-php": "^2.2",
         "opcodesio/log-viewer": "^1.6",
+        "php-aidc/label-printer": "^0.4.0",
         "psr/simple-cache": "2.0",
         "spatie/laravel-permission": "^5.5",
         "yoramdelangen/laravel-pdo-odbc": "^1.1"
@@ -66,4 +68,5 @@
             "@php artisan key:generate --ansi"
         ]
     }
+
 }

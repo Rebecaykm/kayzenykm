@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da55ab788bd316af4fc47b9077a5655e",
+    "content-hash": "5c25d88dde3baeed00ebf6b7851cc27d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2687,6 +2687,65 @@
             "time": "2022-12-02T22:17:43+00:00"
         },
         {
+            "name": "mike42/escpos-php",
+            "version": "v2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mike42/escpos-php.git",
+                "reference": "e5496cf819b048b11877117bd14a9cea4fb17c03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mike42/escpos-php/zipball/e5496cf819b048b11877117bd14a9cea4fb17c03",
+                "reference": "e5496cf819b048b11877117bd14a9cea4fb17c03",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^5.3",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "suggest": {
+                "ext-gd": "Used for image printing if present.",
+                "ext-imagick": "Will be used for image printing if present. Required for PDF printing or use of custom fonts.",
+                "guzzlehttp/guzzle": "Allows the use of the ApiConnector to send print jobs over HTTP."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mike42\\": "src/Mike42"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Billington",
+                    "email": "michael.billington@gmail.com"
+                }
+            ],
+            "description": "PHP receipt printer library for use with ESC/POS-compatible thermal and impact printers",
+            "homepage": "https://github.com/mike42/escpos-php",
+            "keywords": [
+                "ESC-POS",
+                "driver",
+                "escpos",
+                "print",
+                "receipt"
+            ],
+            "support": {
+                "issues": "https://github.com/mike42/escpos-php/issues",
+                "source": "https://github.com/mike42/escpos-php/tree/v2.2"
+            },
+            "time": "2019-10-05T05:59:00+00:00"
+        },
+        {
             "name": "mobiledetect/mobiledetectlib",
             "version": "2.8.41",
             "source": {
@@ -3441,6 +3500,72 @@
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
             "time": "2022-06-14T06:56:20+00:00"
+        },
+        {
+            "name": "php-aidc/label-printer",
+            "version": "v0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-aidc/label-printer.git",
+                "reference": "2b48302e97e82802b9f5a87f3425fefddc034ed6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-aidc/label-printer/zipball/2b48302e97e82802b9f5a87f3425fefddc034ed6",
+                "reference": "2b48302e97e82802b9f5a87f3425fefddc034ed6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "myclabs/php-enum": "^1.7",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~7.5"
+            },
+            "suggest": {
+                "ext-imagick": "Required to print unsupported image formats, PDF and text with custom fonts."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpAidc\\LabelPrinter\\": "src/",
+                    "PhpAidc\\LabelPrinter\\Tests\\Unit\\": "tests/Unit/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JhaoDa",
+                    "email": "jhaoda@gmail.com"
+                }
+            ],
+            "description": "Easily create and print labels on various label printers",
+            "homepage": "https://github.com/php-aidc/label-printer",
+            "keywords": [
+                "DirectProtocol",
+                "Fingerprint",
+                "Honeywell",
+                "Intermec",
+                "TSPL",
+                "TSPL2",
+                "aidc",
+                "barcode",
+                "label",
+                "pos",
+                "print",
+                "printer",
+                "tsc",
+                "wms"
+            ],
+            "support": {
+                "issues": "https://github.com/php-aidc/label-printer/issues",
+                "source": "https://github.com/php-aidc/label-printer/tree/v0.4"
+            },
+            "time": "2021-11-17T13:36:27+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
