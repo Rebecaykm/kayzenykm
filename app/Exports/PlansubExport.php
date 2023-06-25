@@ -18,7 +18,7 @@ use App\Models\YK006;
 use App\Models\MStructure;
 use Illuminate\Contracts\View\View;
 
-class PlanFinalExport implements FromView
+class PlansubExport implements FromView
 {
     private $id; // declaras la propiedad
     private $fecha;
@@ -61,10 +61,9 @@ class PlanFinalExport implements FromView
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
         $cadfinal = [];
         foreach ($prods as $prod) {
-            // $contsub = self::contcargar($prod['IPROD']);
-            // if ($contsub != 0) {
+
                 array_push($cadfinal, $prod['IPROD']);
-            // }
+
         }
         $finales = implode("' OR  MPROD='",  $cadfinal);
         $valfinales = kmr::query() //forecast
@@ -264,25 +263,24 @@ class PlanFinalExport implements FromView
                 //     ->groupBy('MPROD', 'MRDTE')
                 //     ->get()->toarray();
 
-                // $RKMR = KMR::query()
-                //     ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-                //     ->whereraw("(MPROD='" .  $cadsubs . "')")
-                //     ->where([
-                //         ['MRDTE', '>=', $hoy],
-                //         ['MRDTE', '<=', $totalF],
-                //     ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-                //     ->get()->toarray();
+                $RKMR = KMR::query()
+                    ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+                    ->whereraw("(MPROD='" .  $cadsubs . "')")
+                    ->where([
+                        ['MRDTE', '>=', $hoy],
+                        ['MRDTE', '<=', $totalF],
+                    ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+                    ->get()->toarray();
                 $forcast = [];
-
-                // if (count($RKMR) > 0) {
-                //     foreach ($RKMR as $reg) {
-                //         $dia =  $reg['MRDTE'];
-                //         $turno =  $reg['MRCNO'];
-                //         $total =  $reg['TOTAL'] + 0;
-                //         $valt = substr($turno, 4, 1);
-                //         $forcast  += ['kmr' . $dia . $valt => $total];
-                //     }
-                // }
+                if (count($RKMR) > 0) {
+                    foreach ($RKMR as $reg) {
+                        $dia =  $reg['MRDTE'];
+                        $turno =  $reg['MRCNO'];
+                        $total =  $reg['TOTAL'] + 0;
+                        $valt = substr($turno, 4, 1);
+                        $forcast  += ['kmr' . $dia . $valt => $total];
+                    }
+                }
                 // if (count($MBMS) > 0) {
                 //     foreach ($MBMS as $reg1) {
 
@@ -321,7 +319,7 @@ class PlanFinalExport implements FromView
             'fecha' => $fecha
         ];
 
-        return view('planeacion.RepPlanfinal', [
+        return view('planeacion.RepSubfinal', [
             'general' => $general
         ]);
     }
