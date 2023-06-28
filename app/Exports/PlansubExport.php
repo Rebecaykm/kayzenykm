@@ -11,6 +11,7 @@ use App\Models\Iim;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
 use App\Models\Fma;
+use App\Models\YMCOM;
 use App\Models\Ecl;
 use App\Models\MBMr;
 use App\Models\Fso;
@@ -209,6 +210,14 @@ class PlansubExport implements FromView
                 $pos = array_search($prod, $pqa);
                 $poskwr = array_search($prod,  $prowrok);
                 if ($contF1 > 1) {
+                    $KMRPARENT = YMCOM::query()
+                    ->select('MCCPRO', 'MCFPRO')
+                    ->whereraw("(MCCPRO='" .   $subcompo[$key]. "')")
+                    ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4' or MCFCLS='F1' ")
+                    ->get()->toarray();
+
+
+
                     $F1 = self::cargarF1($subcompo[$key]);
                     $padres1 = array_column($F1, 'final');
                     $texpadre = implode(',' . ' <br> ', $padres1);
