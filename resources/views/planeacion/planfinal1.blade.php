@@ -177,24 +177,27 @@
                                 $diasjava = '';
                             @endphp
                             @while ($hoy != $fin)
-                                <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
-                                    <div class='W-full'>
-                                        {{ date('Ymd', strtotime($hoy)) }}
-                                    </div>
-                                    <div class='w-full'>
-                                        {{ date('l', strtotime($hoy)) }}
-                                    </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label
-                                            class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                            Dia
-                                        </label>
-                                        <label
-                                            class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                            Noche
-                                        </label>
-                                    </div>
-                                </th>
+                            @if (date("w", strtotime($hoy))!=0 ||date("w", strtotime($hoy))!=6)
+                            <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
+                                <div class='W-full'>
+                                    {{ date('Ymd', strtotime($hoy)) }}
+                                </div>
+                                <div class='w-full'>
+                                    {{ date('l', strtotime($hoy)) }}
+                                </div>
+                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <label
+                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        Dia
+                                    </label>
+                                    <label
+                                        class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        Noche
+                                    </label>
+                                </div>
+                            </th>
+                            @endif
+
 
                                 @php
                                     $diasjava = $hoy . '/' . $diasjava;
@@ -256,110 +259,113 @@
 
                                 @endphp
                                 @while ($contdias < $dias)
-                                    <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                @php
+                                @if ($contdias!=6 || $contdias!=7)
+                                <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            @php
 
-                                                    if (array_key_exists('For' . $hoy . 'D', $info) == false) {
-                                                        $valFD = '-';
-                                                    } else {
-                                                        $valFD = $info['For' . $hoy . 'D'];
-                                                    }
+                                                if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                                                    $valFD = '-';
+                                                } else {
+                                                    $valFD = $info['For' . $hoy . 'D'];
+                                                }
 
-                                                    if (array_key_exists('For' . $hoy . 'N', $info) == false) {
-                                                        $valFN = '-';
-                                                    } else {
-                                                        $valFN = $info['For' . $hoy . 'N'];
-                                                    }
-                                                    if (array_key_exists('P' . $hoy . 'D', $info) == false) {
-                                                        $valPD = '0';
-                                                    } else {
-                                                        $valPD = $info['P' . $hoy . 'D'];
-                                                    }
-                                                    if (array_key_exists('P' . $hoy . 'N', $info) == false) {
-                                                        $valPN = '0';
-                                                    } else {
-                                                        $valPN = $info['P' . $hoy . 'N'];
-                                                    }
-                                                    if (array_key_exists('F' . $hoy . 'D', $info) == false) {
-                                                        $valFiD = $valPD;
-                                                    } else {
-                                                        $valFiD = $info['F' . $hoy . 'D'];
-                                                    }
-                                                    if (array_key_exists('F' . $hoy . 'N', $info) == false) {
-                                                        $valFiN = $valPN;
-                                                    } else {
-                                                        $valFiN = $info['F' . $hoy . 'N'];
-                                                    }
-                                                    if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
-                                                        $valeclD = '-';
-                                                    } else {
-                                                        $valeclD = $info['ecl' . $hoy . 'D'];
-                                                    }
-                                                    if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
-                                                        $valeclN = '-';
-                                                    } else {
-                                                        $valeclN = $info['ecl' . $hoy . 'N'];
-                                                    }
-                                                    $valRD = 0;
-                                                    $valRN = 0;
+                                                if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                                                    $valFN = '-';
+                                                } else {
+                                                    $valFN = $info['For' . $hoy . 'N'];
+                                                }
+                                                if (array_key_exists('P' . $hoy . 'D', $info) == false) {
+                                                    $valPD = '0';
+                                                } else {
+                                                    $valPD = $info['P' . $hoy . 'D'];
+                                                }
+                                                if (array_key_exists('P' . $hoy . 'N', $info) == false) {
+                                                    $valPN = '0';
+                                                } else {
+                                                    $valPN = $info['P' . $hoy . 'N'];
+                                                }
+                                                if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                                                    $valFiD = $valPD;
+                                                } else {
+                                                    $valFiD = $info['F' . $hoy . 'D'];
+                                                }
+                                                if (array_key_exists('F' . $hoy . 'N', $info) == false) {
+                                                    $valFiN = $valPN;
+                                                } else {
+                                                    $valFiN = $info['F' . $hoy . 'N'];
+                                                }
+                                                if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                                    $valeclD = '-';
+                                                } else {
+                                                    $valeclD = $info['ecl' . $hoy . 'D'];
+                                                }
+                                                if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                                    $valeclN = '-';
+                                                } else {
+                                                    $valeclN = $info['ecl' . $hoy . 'N'];
+                                                }
+                                                $valRD = 0;
+                                                $valRN = 0;
 
-                                                    $namenA = strtr($padre, ' ', '_');
+                                                $namenA = strtr($padre, ' ', '_');
 
-                                                    $workcen = $info['WRC'];
-                                                    $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
-                                                    $inN = $namenA . '/' . $hoy . '/N/' . $info['WRC'];
+                                                $workcen = $info['WRC'];
+                                                $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
+                                                $inN = $namenA . '/' . $hoy . '/N/' . $info['WRC'];
 
-                                                @endphp
-                                                <input value={{ $valFD }}
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                            <label class="block text-sm ">
+                                            @endphp
+                                            <input value={{ $valFD }}
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
+                                        <label class="block text-sm ">
 
-                                                <input value={{ $valFN }}
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
+                                            <input value={{ $valFN }}
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
 
-                                        </div>
+                                    </div>
 
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
 
-                                                <input value='{{ $valeclD }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
-                                            <label class="block text-sm ">
+                                            <input value='{{ $valeclD }}'
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
+                                        <label class="block text-sm ">
 
-                                                <input value='{{ $valeclN }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                    disabled />
-                                            </label>
+                                            <input value='{{ $valeclN }}'
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
 
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
 
-                                            <label class="block text-sm ">
+                                        <label class="block text-sm ">
 
-                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                    value='{{ $valFiD }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-                                            <label class="block text-sm ">
+                                            <input id='{{ $inD }}' name='{{ $inD }}'
+                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                value='{{ $valFiD }}'
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
+                                        <label class="block text-sm ">
 
-                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                    value='{{ $valFiN }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
+                                            <input id='{{ $inN }}' name='{{ $inN }}'
+                                                value='{{ $valFiN }}'
+                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                        </label>
 
-                                        </div>
+                                    </div>
 
 
-                                    </td>
+                                </td>
+                                @endif
+
 
                                     @php
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
