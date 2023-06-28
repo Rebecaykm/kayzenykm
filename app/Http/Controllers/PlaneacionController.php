@@ -729,11 +729,13 @@ class PlaneacionController extends Controller
             }
             if (count($MBMS) > 0) {
                     foreach ($MBMS as $reg1) {
+                        if ($reg1['LPROD'] == $prod['IPROD']) {
                         $dia =  $reg1['LSDTE'];
                         $turno =  $reg1['CLCNO'];
                         $total =  $reg1['TOTAL'] + 0;
                         $valt = substr($turno, 4, 1);
                         $forcastp += ['ecl' . $dia . $valt => $total];
+                        }
                     }
                 }
 
