@@ -178,6 +178,7 @@
                             @endphp
                             @while ($hoy != $fin)
                             @if (date("w", strtotime($hoy))!=0 ||date("w", strtotime($hoy))!=6)
+
                             <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
                                 <div class='W-full'>
                                     {{ date('Ymd', strtotime($hoy)) }}
@@ -188,7 +189,7 @@
                                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                     <label
                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                        Dia
+                                        Diax
                                     </label>
                                     <label
                                         class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
