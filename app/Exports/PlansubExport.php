@@ -47,7 +47,8 @@ class PlansubExport implements FromView
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            // ->where('IPROD', 'Not like', '%-SOR%')
+            ->where('IPROD', 'Not like', '%-830%')
+            ->where('IPROD', 'Not like', '%-SOR%')
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -213,7 +214,7 @@ class PlansubExport implements FromView
                     $KMRPARENT = YMCOM::query()
                     ->select('MCCPRO', 'MCFPRO')
                     ->whereraw("(MCCPRO='" .   $subcompo[$key]. "')")
-                    ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4' or MCFCLS='F1' ")
+                    ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4'  ")
                     ->get()->toarray();
 
 

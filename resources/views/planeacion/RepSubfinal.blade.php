@@ -31,9 +31,7 @@
                     <div class='W-full'>
                         {{ date('Ymd', strtotime($hoy)) }}
                     </div>
-
                 </th>
-
                 @php
                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                     $totalD = $totalD + 1;
