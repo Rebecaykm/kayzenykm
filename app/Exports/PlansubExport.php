@@ -216,6 +216,7 @@ class PlansubExport implements FromView
                     ->whereraw("(MCCPRO='" .   $subcompo[$key]. "')")
                     ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4'  ")
                     ->get()->toarray();
+                    dd($KMRPARENT);
 
 
 
