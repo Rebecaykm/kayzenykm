@@ -11,6 +11,7 @@ use App\Models\Iim;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
 use App\Models\Fma;
+use App\Models\YMCOM;
 use App\Models\Ecl;
 use App\Models\MBMr;
 use App\Models\Fso;
@@ -18,7 +19,7 @@ use App\Models\YK006;
 use App\Models\MStructure;
 use Illuminate\Contracts\View\View;
 
-class PlanFinalExport implements FromView
+class PlansubExport implements FromView
 {
     private $id; // declaras la propiedad
     private $fecha;
@@ -46,7 +47,8 @@ class PlanFinalExport implements FromView
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            // ->where('IPROD', 'Not like', '%-SOR%')
+            ->where('IPROD', 'Not like', '%-830%')
+            ->where('IPROD', 'Not like', '%-SOR%')
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -61,10 +63,9 @@ class PlanFinalExport implements FromView
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
         $cadfinal = [];
         foreach ($prods as $prod) {
-            // $contsub = self::contcargar($prod['IPROD']);
-            // if ($contsub != 0) {
+
                 array_push($cadfinal, $prod['IPROD']);
-            // }
+
         }
         $finales = implode("' OR  MPROD='",  $cadfinal);
         $valfinales = kmr::query() //forecast
@@ -210,6 +211,15 @@ class PlanFinalExport implements FromView
                 $pos = array_search($prod, $pqa);
                 $poskwr = array_search($prod,  $prowrok);
                 if ($contF1 > 1) {
+                    $KMRPARENT = YMCOM::query()
+                    ->select('MCCPRO', 'MCFPRO')
+                    ->whereraw("(MCCPRO='" .   $subcompo[$key]. "')")
+                    ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4'  ")
+                    ->get()->toarray();
+                    dd($KMRPARENT,$subcompo[$key]);
+
+
+
                     $F1 = self::cargarF1($subcompo[$key]);
                     $padres1 = array_column($F1, 'final');
                     $texpadre = implode(',' . ' <br> ', $padres1);
@@ -264,25 +274,24 @@ class PlanFinalExport implements FromView
                 //     ->groupBy('MPROD', 'MRDTE')
                 //     ->get()->toarray();
 
-                // $RKMR = KMR::query()
-                //     ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-                //     ->whereraw("(MPROD='" .  $cadsubs . "')")
-                //     ->where([
-                //         ['MRDTE', '>=', $hoy],
-                //         ['MRDTE', '<=', $totalF],
-                //     ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-                //     ->get()->toarray();
+                $RKMR = KMR::query()
+                    ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+                    ->whereraw("(MPROD='" .  $cadsubs . "')")
+                    ->where([
+                        ['MRDTE', '>=', $hoy],
+                        ['MRDTE', '<=', $totalF],
+                    ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+                    ->get()->toarray();
                 $forcast = [];
-
-                // if (count($RKMR) > 0) {
-                //     foreach ($RKMR as $reg) {
-                //         $dia =  $reg['MRDTE'];
-                //         $turno =  $reg['MRCNO'];
-                //         $total =  $reg['TOTAL'] + 0;
-                //         $valt = substr($turno, 4, 1);
-                //         $forcast  += ['kmr' . $dia . $valt => $total];
-                //     }
-                // }
+                if (count($RKMR) > 0) {
+                    foreach ($RKMR as $reg) {
+                        $dia =  $reg['MRDTE'];
+                        $turno =  $reg['MRCNO'];
+                        $total =  $reg['TOTAL'] + 0;
+                        $valt = substr($turno, 4, 1);
+                        $forcast  += ['kmr' . $dia . $valt => $total];
+                    }
+                }
                 // if (count($MBMS) > 0) {
                 //     foreach ($MBMS as $reg1) {
 
@@ -321,7 +330,7 @@ class PlanFinalExport implements FromView
             'fecha' => $fecha
         ];
 
-        return view('planeacion.RepPlanfinal', [
+        return view('planeacion.RepSubfinal', [
             'general' => $general
         ]);
     }

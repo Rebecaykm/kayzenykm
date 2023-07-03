@@ -40,15 +40,11 @@
                     </div>
                 </div>
             </form>
-
-            <form method="get" action="{{ route('planeacion.exportfinal') }}">
+            <form method="get" action="{{ route('planeacion.exportsubcomponentes') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Reporte de Planeación
                     </h2>
-
-
-
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
                             <input type="hidden" name="SeProject" id="SeProject" value="{{ $tp }}">
@@ -241,7 +237,7 @@
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
-                                            <input value="Firme"
+                                            <input value="Firme "
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
@@ -316,6 +312,16 @@
                                                     } else {
                                                         $valFiN = $info['F' . $hoy . 'N'];
                                                     }
+                                                    if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                                        $valeclD= '-';
+                                                    } else {
+                                                        $valeclD = $info['ecl' . $hoy . 'D'];
+                                                    }
+                                                    if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                                        $valeclN = '-';
+                                                    } else {
+                                                        $valeclN= $info['ecl' . $hoy . 'N'];
+                                                    }
                                                     $valRD = 0;
                                                     $valRN = 0;
 
@@ -336,13 +342,13 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valPD }}
+                                                <input value={{ $valeclD }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valPN }}
+                                                <input value={{  $valeclN }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
@@ -394,7 +400,7 @@
                                         @php
 
                                             $item = strtr($datossubs['sub'], ' ', '_');
-                                            $wctpar = 'wrk' . $datossubs['wrk'];
+                                            $wctpar =  $datossubs['wrk'] ?? 'xxxx';
 
                                         @endphp
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -418,6 +424,7 @@
                                         @php
 
                                            echo $datossubs['KMRpadres'];
+
                                         @endphp
 
                                     </td>
@@ -478,7 +485,7 @@
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-                                                <input value="{{ $totalplan }}"
+                                                <input value="{{  $datossubs['Totalpadres'] }}"
                                                     class="block w-20 text-xs form-input" disabled />
                                             </label>
                                         </div>
