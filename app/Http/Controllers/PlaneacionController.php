@@ -663,6 +663,7 @@ class PlaneacionController extends Controller
         $finales = implode("' OR  MPROD='",   $finaArra);
         $finalesecl = implode("' OR  LPROD='",   $finaArra);
         $finaleswrk = implode("' OR  RPROD='",   $finaArra);
+        $Qa= implode("' OR  IPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
         $valfinales = kmr::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
@@ -682,6 +683,14 @@ class PlaneacionController extends Controller
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
             ->get()->toarray();
 
+            $cond = IIM::query()
+            ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
+            ->whereraw("(IPROD='" . $Qa  . "')")
+            ->get()->toArray();
+
+            $prodcqa = array_column($cond, 'IPROD');
+            $pqa = array_column($cond, 'IMBOXQ');
+            $minba = array_column($cond, 'IMIN');
 
 
 
@@ -760,6 +769,8 @@ class PlaneacionController extends Controller
                     }
                 }
             }
+            $pos = array_search($prod['IPROD'], $prodcqa);
+            $padre +=['Qty' => $pqa[$pos] ?? 0];
             $padre  += ['tPlan' => $tPlan];
             $padre  += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'],   $prowk);

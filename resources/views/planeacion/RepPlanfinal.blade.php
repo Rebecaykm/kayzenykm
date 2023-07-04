@@ -82,7 +82,7 @@
                 <td rowspan="3">
                 </td>
                 <td>
-                    Forecast
+                    Forecast MMVO
                 </td>
                 <td>
                     {{ $info['total'] }}
@@ -115,7 +115,7 @@
             </tr>
             <tr >
                 <td>
-                    Plan
+                   Firme MMVO
                 </td>
                 <td>
                     {{ $info['tPlan'] }}
@@ -152,13 +152,14 @@
             </tr>
             <tr >
                 <td>
-                    Firme
+                    Firme YKM
                 </td>
                 <td>
                     {{ $info['tPlan'] }}
                 </td>
                 @while ($contdias < $dias)
                     @php
+                    dd($info);
                         if (array_key_exists('F' . $hoy . 'D', $info) == false) {
                             $valPD = '-';
                         } else {

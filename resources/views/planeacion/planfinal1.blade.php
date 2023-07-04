@@ -225,6 +225,7 @@
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                         {{ $padre }}<br>
+                                        SNP {{  $info['Qty'] }}<br>
                                         WRKcenter {{ $info['WRC'] }}
                                     </div>
                                 </td>
@@ -351,7 +352,7 @@
                                                 </label>
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
                                                 <label class="block text-sm ">
 
