@@ -192,7 +192,7 @@ class PlanFinalExport implements FromView
                     unset($resreg6[$key2]);
                 }
             }
-dd( $resreg6,$FTYPE);
+
 
 
 
@@ -209,59 +209,6 @@ dd( $resreg6,$FTYPE);
             $datossub = [];
 
 
-            while (($key = array_search($prod, $finalres)) != false) {
-
-                $contF1 = self::contcargarF1($subcompo[$key]);
-                $pos = array_search($prod, $pqa);
-                $poskwr = array_search($prod,  $prowrok);
-                if ($contF1 > 1) {
-                    $F1 = self::cargarF1($subcompo[$key]);
-                    $padres1 = array_column($F1, 'final');
-                    $texpadre = implode(',' . ' <br> ', $padres1);
-                    $cadsubs = implode("' OR  MPROD='",  $padres1);
-                    $cadsubsL = implode("' OR  LPROD='",  $padres1);
-                } else {
-                    $cadsubs = $prod;
-                    $cadsubsL =  $prod;
-                    $texpadre =  $prod;
-                }
-                foreach ($valPDp as $reg3) {
-                    if ($reg3['FPROD'] == $subcompo[$key]) {
-                        $dia =  $reg3['FRDTE'];
-                        $turno =  $reg3['FPCNO'];
-                        $tipo =  $reg3['FTYPE'];
-                        $total =  $reg3['FQTY'] + 0;
-                        $valt = substr($turno, 4, 1);
-                        $numpaplan += [$tipo . $dia . $valt => $total];
-                        if ($tipo == 'P') {
-                            $Tplan = $Tplan + $total;
-                        } else {
-                            $Tfirme = $Tfirme + $total;
-                        }
-                    }
-                }
-                foreach ($valSD as $reg4) {
-                    if ($reg4['SPROD'] == $subcompo[$key]) {
-                        $dia =  $reg4['SDDTE'];
-                        $turno =  $reg4['SOCNO'];
-                        $total =  $reg4['SQREQ'] + 0;
-                        $valt = substr($turno, 4, 1);
-                        $numpaplan += ['S' . $dia . $valt => $total];
-                        $Tshop =   $Tshop + $total;
-                    }
-                }
-
-                $forcast = [];
-
-
-                $numpar = [];
-
-                $numpar += ['sub' => $subcompo[$key], 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast, 'Qty' => $pqa[$pos], 'minbal' => $minba[$pos], 'wrk' => $prowrok[$poskwr], 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme];
-
-                unset($finalres[$key]);
-                $datossub +=  $numpar;
-                $sepa += [$subcompo[$key] => $numpar];
-            }
 
             $inF1 += ['hijos' =>   $sepa];
             array_push($totalpa, $inF1);
