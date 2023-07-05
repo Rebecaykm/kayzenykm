@@ -868,11 +868,15 @@ class PlaneacionController extends Controller
             $finaleskmr = [];
             while (($key2 = array_search($subs,  $kmrmccprod)) != false) {
 
-                if ( $KMRMCFCLS[$key2]== 'F1' && $kmrmcfprod[$key2]!=$subs) {
+                if ( $KMRMCFCLS[$key2]== 'F1') {
                     array_push($finaleskmr,$kmrmcfprod[$key2]);
                 }else
                 {
-                    array_push($padreskmr,$kmrmccprod[$key2]);
+                    if ($kmrmcfprod[$key2]!=$subs)
+                    {
+                        array_push($padreskmr,$kmrmcfprod[$key2]);
+                    }
+                    
                 }
                 unset($kmrmccprod[$key2]);
                 unset($KMRMCFCLS[$key2]);
@@ -918,6 +922,11 @@ class PlaneacionController extends Controller
                     ['MRDTE', '<', $totalF],
                 ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
                 ->get()->toarray();
+                if($subs=='BDTS5341PA')
+                {
+                    dd ($RKMR, $RKMRfinal);
+                }
+                
 
 
 
