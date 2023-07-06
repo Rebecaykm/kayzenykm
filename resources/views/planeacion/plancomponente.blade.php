@@ -602,6 +602,7 @@
 
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
+
                                                     <input value={{ $valRDH }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
@@ -616,10 +617,12 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valKMRsd }}
+
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
+
                                                     <input value={{ $valMKMRsn }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
