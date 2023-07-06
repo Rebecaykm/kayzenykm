@@ -602,28 +602,41 @@
 
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
+<<<<<<< HEAD
 
                                                     <input value={{ $valRDH }}
+=======
+                                                <input value={{ $valKMRsd }}
+                                                    
+>>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
-
-                                                    <input value={{ $valRNH }}
+                                                <input value={{ $valMKMRsn }}
+                                                   
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
+<<<<<<< HEAD
                                                     <input value={{ $valKMRsd }}
 
+=======
+                                                <input value={{ $valRDH }}
+>>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
+<<<<<<< HEAD
 
                                                     <input value={{ $valMKMRsn }}
+=======
+                                                <input value={{ $valRNH }}
+>>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>

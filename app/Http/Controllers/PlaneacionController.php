@@ -919,8 +919,21 @@ class PlaneacionController extends Controller
             $numpaplan =  [];
             $total = 0;
             while (($key2 = array_search($subs,  $kmrmccprod)) != false) {
+<<<<<<< HEAD
                 if ($kmrmcfprod[$key2] != $subs) {
                     array_push($padreskmr, $kmrmcfprod[$key2]);
+=======
+
+                if ( $KMRMCFCLS[$key2]== 'F1') {
+                    array_push($finaleskmr,$kmrmcfprod[$key2]);
+                }else
+                {
+                    if ($kmrmcfprod[$key2]!=$subs)
+                    {
+                        array_push($padreskmr,$kmrmcfprod[$key2]);
+                    }
+                    
+>>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                 }
                 unset($kmrmccprod[$key2]);
                 unset($KMRMCFCLS[$key2]);
@@ -977,6 +990,34 @@ class PlaneacionController extends Controller
                 // $cadsubsL = $$padreskmr[0];
                 $cadfinal = $finaleskmr[0] ?? '';
             }
+<<<<<<< HEAD
+=======
+            $RKMR = KMR::query()
+                ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+                ->whereraw("(MPROD='" .  $cadsubs . "')")
+                ->where([
+                    ['MRDTE', '>=', $hoy],
+                    ['MRDTE', '<', $totalF],
+                ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+                ->get()->toarray();
+            $RKMRfinal = KMR::query()
+                ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+                ->whereraw("(MPROD='" .    $cadfinal . "')")
+                ->where([
+                    ['MRDTE', '>=', $hoy],
+                    ['MRDTE', '<', $totalF],
+                ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+                ->get()->toarray();
+                if($subs=='BDTS5341PA')
+                {
+                    dd ($RKMR, $RKMRfinal);
+                }
+                
+
+
+
+
+>>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
             $forcast = [];
             $Tshop = 0;
             $Tplan = 0;
