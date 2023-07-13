@@ -50,12 +50,7 @@ class PlaneacionController extends Controller
         $TP = 'NO';
         $CP = '';
         $WC = '';
-        $WCs = ZCC::query()
-            ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
-            ->where('CCID', '=', 'CC')
-            ->Where('CCTABL', '=', 'SIRF4')
-            ->orderBy('CCID', 'ASC')
-            ->get();
+        $WCs = [];
         return view('planeacion.index', ['LWK' => $WCs]);
     }
 
@@ -79,14 +74,15 @@ class PlaneacionController extends Controller
 
         $CP = $request->SePC;
         $WC = $request->SeWC;
+        $array = explode(",", $TP);
         $plan1 = Iim::query()
-            ->select('IPROD')
+            ->select('IPROD', 'IREF04')
+            ->wherein('IREF04 ', $array)
             ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            // ->where('IPROD', 'Not like', '%-SOR%')
+            ->where('IPROD', 'Not like', '%-830%')
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -663,6 +659,7 @@ class PlaneacionController extends Controller
         $finales = implode("' OR  MPROD='",   $finaArra);
         $finalesecl = implode("' OR  LPROD='",   $finaArra);
         $finaleswrk = implode("' OR  RPROD='",   $finaArra);
+        $Qa = implode("' OR  IPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
         $valfinales = kmr::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
@@ -682,6 +679,14 @@ class PlaneacionController extends Controller
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
             ->get()->toarray();
 
+        $cond = IIM::query()
+            ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
+            ->whereraw("(IPROD='" . $Qa  . "')")
+            ->get()->toArray();
+
+        $prodcqa = array_column($cond, 'IPROD');
+        $pqa = array_column($cond, 'IMBOXQ');
+        $minba = array_column($cond, 'IMIN');
 
 
 
@@ -728,16 +733,16 @@ class PlaneacionController extends Controller
                 }
             }
             if (count($MBMS) > 0) {
-                    foreach ($MBMS as $reg1) {
-                        if ($reg1['LPROD'] == $prod['IPROD']) {
+                foreach ($MBMS as $reg1) {
+                    if ($reg1['LPROD'] == $prod['IPROD']) {
                         $dia =  $reg1['LSDTE'];
                         $turno =  $reg1['CLCNO'];
                         $total =  $reg1['TOTAL'] + 0;
                         $valt = substr($turno, 4, 1);
                         $forcastp += ['ecl' . $dia . $valt => $total];
-                        }
                     }
                 }
+            }
 
             $padre  += ['total' => $totalP];
 
@@ -760,6 +765,8 @@ class PlaneacionController extends Controller
                     }
                 }
             }
+            $pos = array_search($prod['IPROD'], $prodcqa);
+            $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre  += ['tPlan' => $tPlan];
             $padre  += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'],   $prowk);
@@ -781,9 +788,7 @@ class PlaneacionController extends Controller
     {
 
         $Sub = self::cargar($prod1);
-        $inF1 = array();
         $total = array();
-        $i = 0;
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $sub1 = array_column($Sub, 'Componente');
         $cadsubsPlan = implode("' OR  FPROD='",  $sub1);
@@ -791,6 +796,52 @@ class PlaneacionController extends Controller
         $cadsubKMR = implode("' OR  MPROD='",  $sub1);
         $cadsubswrk = implode("' OR  RPROD='",  $sub1);
         $Qa = implode("' OR  IPROD='",  $sub1);
+
+        $KMRFINAL = YMCOM::query()
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
+            ->whereraw("(MCCPRO='" .   $child  . "') AND ( MCFCLS='F1')")
+            ->get()->toarray();
+        $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
+        $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
+        $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
+        $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
+
+        $RKMRfinal = KMR::query()
+            ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+            ->whereraw("(MPROD='" .   $FINALKMR . "')")
+            ->where([
+                ['MRDTE', '>=', $hoy],
+                ['MRDTE', '<', $totalF],
+            ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+            ->get()->toarray();
+
+
+        // ------------------------------------------------------------------------------------pADRES
+        $KMRPARENT = YMCOM::query()
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
+            ->whereraw("(MCCPRO='" .   $child  . "') AND (MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4')")
+            ->get()->toarray();
+        $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
+        $kmrmcfprod = array_column($KMRPARENT, 'MCFPRO');
+        $KMRMCFCLS = array_column($KMRPARENT, 'MCFCLS');
+        $PADREKMR = implode("' OR  MPROD='", $kmrmcfprod);
+
+        $RKMR = KMR::query()
+            ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+            ->whereraw("(MPROD='" .   $PADREKMR . "')")
+            ->where([
+                ['MRDTE', '>=', $hoy],
+                ['MRDTE', '<', $totalF],
+            ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+            ->get()->toarray();
+
+
+
+
+
+
+
+        // -----------------------------------------FIRME PLAN
         $valPD = kFP::query()
             ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
             ->whereraw("(FPROD='" .  $cadsubsPlan . "')")
@@ -800,24 +851,30 @@ class PlaneacionController extends Controller
             ])
             ->get()->toarray();
 
-        $VALRKMR = KMR::query()
-            ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-            ->whereraw("(MPROD='" .   $cadsubKMR . "')")
-            ->where([
-                ['MRDTE', '>=', $hoy],
-                ['MRDTE', '<', $totalF],
-            ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-            ->get()->toarray();
 
-        // $KMRPARENT = MBMr::query()
-        //     ->select('BCHLD', 'BPROD')
-        //     ->whereraw("(BCHLD='" .   $child . "')")
+        // $VALRKMR = KMR::query()
+        //     ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+        //     ->whereraw("(MPROD='" .   $cadsubKMR . "')")
+        //     ->where([
+        //         ['MRDTE', '>=', $hoy],
+        //         ['MRDTE', '<', $totalF],
+        //     ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
         //     ->get()->toarray();
-        $KMRPARENT = YMCOM::query()
-            ->select('MCCPRO', 'MCFPRO')
-            ->whereraw("(MCCPRO='" .   $child . "')")
-            ->whereraw(" MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4'")
-            ->get()->toarray();
+
+
+
+
+
+
+        $kmrprod = array_column($RKMRfinal, 'MPROD');
+        $kmrmtype = array_column($RKMRfinal, 'MRCNO');
+        $KMRfecha = array_column($RKMRfinal, 'MRDTE');
+        $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
+
+        $kmrpad = array_column($RKMR, 'MPROD');
+        $kmrpadno = array_column($RKMR, 'MRCNO');
+        $KMRpaddat = array_column($RKMR, 'MRDTE');
+        $KMRmtoalpa = array_column($RKMR, 'TOTAL');
 
 
         $cadsubssh = implode("' OR  SPROD='",  $sub1);
@@ -840,15 +897,15 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-        $RFMA = FMA::query()
-            ->selectRaw('MPROD,MRDTE, SUM(MQREQ) as Total')
-            ->whereraw("(MPROD='" .  $cadsubKMR  . "')")
-            ->where([
-                ['MRDTE', '>=', $hoy],
-                ['MRDTE', '<', $totalF],
-            ])
-            ->groupBy('MPROD', 'MRDTE')
-            ->get()->toarray();
+        // $RFMA = FMA::query()
+        //     ->selectRaw('MPROD,MRDTE, SUM(MQREQ) as Total')
+        //     ->whereraw("(MPROD='" .  $cadsubKMR  . "')")
+        //     ->where([
+        //         ['MRDTE', '>=', $hoy],
+        //         ['MRDTE', '<', $totalF],
+        //     ])
+        //     ->groupBy('MPROD', 'MRDTE')
+        //     ->get()->toarray();
         $prowk = array_column($WCT, 'RPROD');
         $prowrok = array_column($WCT, 'RWRKC');
 
@@ -858,79 +915,79 @@ class PlaneacionController extends Controller
         $sepa = [];
 
         foreach ($sub1 as $subs) {
-            $contF1 = self::contcargarF1($subs);
+            $padreskmr = [];
+            $finaleskmr = [];
+            $numpar = [];
+            $numpaplan =  [];
+            $total = 0;
 
-            if ($contF1 > 1) {
-                $F1 = self::cargarF1($subs);
-                $padres1 = array_column($F1, 'final');
-                $texpadre = implode(',' . ' <br> ', $padres1);
-                $cadsubs = implode("' OR  MPROD='",  $padres1);
-                $cadsubsL = implode("' OR  LPROD='",  $padres1);
-            } else {
-                $cadsubs = $prod1;
-                $cadsubsL = $prod1;
-                $texpadre = $prod1;
+
+            while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
+
+                array_push($finaleskmr, $FINALLIST[$key5]);
+
+                unset($FINALLIST[$key5]);
+                unset($FINALMCPRO[$key5]);
+                unset($FINALCALS[$key5]);
             }
 
-            // $MBMS = ECL::query()
-            //     ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
-            //     ->whereraw("(LPROD='" .  $cadsubsL . "')")
-            //     ->where([
-            //         ['LSDTE', '>=', $hoy],
-            //         ['LSDTE', '<', $totalF],
-            //     ])
-            //     ->groupBy('LPROD', 'LSDTE', 'CLCNO')
-            //     ->get()->toarray();
 
 
-            $RKMR = KMR::query()
-                ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-                ->whereraw("(MPROD='" .  $cadsubs . "')")
-                ->where([
-                    ['MRDTE', '>=', $hoy],
-                    ['MRDTE', '<', $totalF],
-                ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-                ->get()->toarray();
+            while (($key2 = array_search($subs,  $kmrmccprod)) != false) {
+                if ($kmrmcfprod[$key2] != $subs) {
+                    array_push($padreskmr, $kmrmcfprod[$key2]);
+                }
+                unset($kmrmccprod[$key2]);
+                unset($KMRMCFCLS[$key2]);
+                unset($kmrmcfprod[$key2]);
+            }
 
+            $contpadres = count($padreskmr);
+            $contF1 = count($finaleskmr);
 
+            if ($contF1 >= 1) {
+
+                $texfinal = implode(',' . '<br> ',    $finaleskmr);
+
+                $cadfinal = implode("' OR  MPROD='",     $finaleskmr);
+                // $cadsubsL = implode("' OR  LPROD='", $padreskmr );
+            } else {
+                $texfinal = $finaleskmr[0] ?? '';
+                // $cadsubsL = $$padreskmr[0];
+                $cadfinal = $finaleskmr[0] ?? '';
+            }
             $forcast = [];
             $Tshop = 0;
             $Tplan = 0;
             $Tfirme = 0;
-            if (count($RKMR) > 0) {
+            $total = 0;
 
-                $total = 0;
-                foreach ($RKMR as $reg) {
-                    $dia =  $reg['MRDTE'];
-                    $turno =  $reg['MRCNO'];
-                    $total =  $reg['TOTAL'] + 0;
+            foreach ($finaleskmr as $F1) {
+
+                while (($key3 = array_search($F1,   $kmrprod)) != false) {
+                    $dia = $KMRfecha[$key3];
+                    $turno =  $kmrmtype[$key3];
+                    $total =   $KMRMtotal[$key3] + 0;
                     $valt = substr($turno, 4, 1);
-                    $forcast  += ['kmr' . $dia . $valt => $total];
-                }
-            }
-            // if (count($MBMS) > 0) {
-            //     $total = 0;
-            //     foreach ($MBMS as $reg1) {
-            //         $dia =  $reg1['LSDTE'];
-            //         $turno =  $reg1['CLCNO'];
-            //         $total =  $reg1['TOTAL'] + 0;
-            //         $valt = substr($turno, 4, 1);
-            //         $forcast  += ['ecl' . $dia . $valt => $total];
-            //     }
-            // }
+                    if (array_key_exists('kmr' . $dia . $valt,  $forcast) != false) {
+                        $total = $forcast['kmr' . $dia . $valt] + $total;
+                        $forcast['kmr' . $dia . $valt] = $total;
+                    } else {
+                        $forcast  += ['kmr' . $dia . $valt => $total];
+                    }
 
-            if (count($RFMA) > 0) {
-                $total = 0;
-                foreach ($RFMA  as $reg2) {
-                    $dia =  $reg2['MRDTE'];
-                    $total =  $reg2['TOTAL'] + 0;
-                    $forcast += ['FMA' . $dia . 'D' => $total];
+                    unset($kmrprod[$key3]);
+                    unset($kmrmtype[$key3]);
+                    unset($KMRfecha[$key3]);
+                    unset($KMRMtotal[$key3]);
                 }
             }
 
+            $kmrprod = array_column($RKMRfinal, 'MPROD');
+            $kmrmtype = array_column($RKMRfinal, 'MRCNO');
+            $KMRfecha = array_column($RKMRfinal, 'MRDTE');
+            $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
 
-            $numpar = [];
-            $numpaplan =  $valDp;
             $total = 0;
             foreach ($valPD as $reg3) {
                 if ($reg3['FPROD'] == $subs) {
@@ -960,26 +1017,21 @@ class PlaneacionController extends Controller
             }
             $total = 0;
             $Tshopkmr = 0;
-            foreach ($VALRKMR as $reg10) {
-                if ($reg10['MPROD'] == $subs) {
-                    $dia =  $reg10['MRDTE'];
-                    $turno =  $reg10['MRCNO'];
-                    $total =  $reg10['TOTAL'] + 0;
-                    $valt = substr($turno, 4, 1);
-                    $numpaplan += ['KMRS' . $dia . $valt => $total];
-                    $Tshopkmr =   $Tshopkmr + $total;
-                }
-            }
+            // foreach ($VALRKMR as $reg10) {
+            //     if ($reg10['MPROD'] == $subs) {
+            //         $dia =  $reg10['MRDTE'];
+            //         $turno =  $reg10['MRCNO'];
+            //         $total =  $reg10['TOTAL'] + 0;
+            //         $valt = substr($turno, 4, 1);
+            //         $numpaplan += ['KMRS' . $dia . $valt => $total];
+            //         $Tshopkmr =   $Tshopkmr + $total;
+            //     }
+            // }
 
-            $padreskmr = '';
-            foreach ($KMRPARENT as $reg11) {
-                if ($reg11['MCCPRO'] == $subs) {
-                    $padreskmr = $padreskmr . '<br>' . $reg11['MCFPRO'];
-                }
-            }
+
             $pos = array_search($subs, $prodcqa);
             $poskwr = array_search($subs,   $prowk);
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texpadre, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0, 'minbal' => $minba[$pos] ?? 0, 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres'  => $padreskmr, 'Totalpadres' => $Tshopkmr];
+            $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0, 'minbal' => $minba[$pos] ?? 0, 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres'  =>  $texpadre ?? 0, 'Totalpadres' => $Tshopkmr];
             $sepa += [$subs => $numpar];
         }
         return    $sepa;
