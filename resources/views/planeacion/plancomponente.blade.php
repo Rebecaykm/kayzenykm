@@ -8,7 +8,25 @@
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <form method="post" action="{{ route('planeacion.create') }}">
+
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        @switch($tp)
+                            @case('2,12,123,13,20')
+                                J03W/G
+                            @break
+
+                            @case('4,45,47')
+                                J59W
+                            @break
+
+                            @case('5,56,57')
+                                J59J
+                            @break
+
+                            @default
+                        @endswitch
+                    </h2>
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Planeación
                     </h2>
@@ -599,44 +617,28 @@
 
                                         @endphp
                                         <td class="px-2 py-1 text-xs text-center  ">
-
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
-<<<<<<< HEAD
-
                                                     <input value={{ $valRDH }}
-=======
-                                                <input value={{ $valKMRsd }}
-                                                    
->>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
                                                 <input value={{ $valMKMRsn }}
-                                                   
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
-<<<<<<< HEAD
                                                     <input value={{ $valKMRsd }}
 
-=======
-                                                <input value={{ $valRDH }}
->>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
-<<<<<<< HEAD
 
                                                     <input value={{ $valMKMRsn }}
-=======
-                                                <input value={{ $valRNH }}
->>>>>>> c79ebfdfa2e0849be4363d67389a40f6236c2884
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>

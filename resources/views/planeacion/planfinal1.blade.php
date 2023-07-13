@@ -10,14 +10,26 @@
             <form method="post" action="{{ route('planeacion.create') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        @switch($tp)
+                            @case('2,12,123,13,20')
+                                J03W/G
+                            @break
+
+                            @case('4,45,47')
+                                J59W
+                            @break
+
+                            @case('5,56,57')
+                                J59J
+                            @break
+
+                            @default
+                        @endswitch
+                    </h2>
+                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Planeación
                     </h2>
                     @csrf
-                    <label class="block mt-4 text-sm">
-                        <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
-                        <input id="dias" name="dias" type="number" max="8" min="1"
-                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                    </label>
 
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
@@ -50,13 +62,6 @@
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Reporte de Planeación
                     </h2>
-
-                    <label class="block mt-4 text-sm">
-                        <span class="text-gray-700 dark:text-gray-400 text-xs">Dias</span>
-                        <input id="dias" name="dias" type="number" max="9" min="1"
-                            class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                    </label>
-
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
                             <input type="hidden" name="SeProject" id="SeProject" value="{{ $tp }}">
@@ -165,6 +170,8 @@
                     <thead>
                         <tr
                             class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+                            <th class=" header px-4 py-3 sticky ">Cont</th>
+
                             <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
 
 
@@ -172,6 +179,7 @@
 
                             @php
                                 $hoy = $fecha;
+                                $contp = 0;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $diasjava = '';
@@ -216,36 +224,39 @@
 
                         @foreach ($res as $info1)
                             @php
-
+                                $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
 
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
+                                <td class="px-2 py-1 text-s  bg-teal-300">
+                                    {{ $contp }}
+                                </td>
                                 <td class="px-2 py-1 text-xs  bg-teal-300">
                                     <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                         {{ $padre }}<br>
-                                        SNP {{  $info['Qty'] }}<br>
+                                        SNP {{ $info['Qty'] }}<br>
                                         WRKcenter {{ $info['WRC'] }}
                                     </div>
                                 </td>
 
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="FORECASTE MMVO"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="FIRME MMVO"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="Firme YKM"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -352,7 +363,8 @@
                                                 </label>
 
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                            <div
+                                                class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
                                                 <label class="block text-sm ">
 
