@@ -350,7 +350,7 @@
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valFN }}
+                                                <input value={{ $valFN  }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
