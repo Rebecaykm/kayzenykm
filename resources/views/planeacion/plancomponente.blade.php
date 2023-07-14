@@ -350,7 +350,7 @@
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valFN  }}
+                                                <input value={{ $valFN}}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
@@ -532,7 +532,6 @@
                                         $coni = 0;
                                         $hoy1 = $fecha;
                                         $plan = $datossubs['plan'];
-// dd($plan);
                                     @endphp
                                     @while ($coni < $dias)
                                         @php
@@ -602,16 +601,16 @@
                                                 $valSNH = $plan['S' . $hoy1 . 'N'];
                                             }
 
-                                            if (array_key_exists('KMRS' . $hoy1 . 'D', $plan) == false) {
+                                            if (array_key_exists('KMRS' . $hoy1 . 'D',  $forcast) == false) {
                                                 $valKMRsd = '-';
                                             } else {
-                                                $valKMRsd = $plan['KMRS' . $hoy1 . 'D'];
+                                                $valKMRsd =$forcast['KMRS' . $hoy1 . 'D'];
                                             }
 
-                                            if (array_key_exists('KMRS' . $hoy1 . 'N', $plan) == false) {
+                                            if (array_key_exists('KMRS' . $hoy1 . 'N',  $forcast) == false) {
                                                 $valMKMRsn = '-';
                                             } else {
-                                                $valMKMRsn= $plan['KMRS' . $hoy1 . 'N'];
+                                                $valMKMRsn= $forcast['KMRS' . $hoy1 . 'N'];
                                             }
 
 
@@ -624,7 +623,7 @@
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
-                                                <input value={{ $valMKMRsn }}
+                                                <input value={{ $valRNH  }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
