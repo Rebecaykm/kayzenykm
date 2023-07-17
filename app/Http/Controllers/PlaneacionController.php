@@ -856,7 +856,7 @@ class PlaneacionController extends Controller
             ])
             ->whereraw("(MCCPRO='" .   $child  . "') AND (MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
             ->get()->toarray();
-            dd($KMRPARENT);
+
         $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
         $kmrmcfprod = array_column($KMRPARENT, 'MCFPRO');
         $KMRMCFCLS = array_column($KMRPARENT, 'MCFCLS');
@@ -951,7 +951,7 @@ class PlaneacionController extends Controller
         $sepa = [];
 
         foreach ($sub1 as $subs) {
-           
+
 
             $padreskmr = [];
             $finaleskmr = [];
@@ -978,7 +978,7 @@ class PlaneacionController extends Controller
             $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
             $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
             $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
-           
+
             $contpadres = count($padreskmr);
             $contF1 = count($finaleskmr);
 
@@ -1034,7 +1034,7 @@ class PlaneacionController extends Controller
                     unset($KMRmtoalpa [$key3]);
                 }
             }
-           
+
 
             $total = 0;
 
@@ -1113,7 +1113,7 @@ class PlaneacionController extends Controller
             $sepa += [$subs => $numpar];
 
         }
-    
+
         return    $sepa;
     }
 
