@@ -10,7 +10,7 @@
                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                     <option value=''>---Select---</option>
 
-                    <option value='2,12,123,13,20'>j03G/W</option>
+                    <option value='2,12,123,13,20,23'>j03G/W</option>
                     <option value='4,45,47'>j59W</option>
                     <option value='5,56,57'>j59J</option>
 

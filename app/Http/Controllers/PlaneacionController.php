@@ -83,11 +83,12 @@ class PlaneacionController extends Controller
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
-                ->where([
-                    ['IPROD', 'Not like', '%-SOR%'],
-                    ['IPROD', 'Not like', '%-830%']]
+                ->where(
+                    [
+                        ['IPROD', 'Not like', '%-SOR%'],
+                        ['IPROD', 'Not like', '%-830%']
+                    ]
                 )
-
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
@@ -114,7 +115,6 @@ class PlaneacionController extends Controller
                 ->get()->toArray();
             $total = 0;
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
-
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='",      $partsrev);
             return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' =>  $cadepar, 'pagina' => 0, 'tpag' => $total]);
@@ -132,14 +132,20 @@ class PlaneacionController extends Controller
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $WC = $request->SeWC;
+        $array = explode(",", $TP);
         $plan1 = Iim::query()
-            ->select('IPROD')
+            ->select('IPROD', 'IREF04')
+            ->wherein('IREF04 ', $array)
             ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where('IPROD', 'Not like', '%-SOR%')
+            ->where(
+                [
+                    ['IPROD', 'Not like', '%-SOR%'],
+                    ['IPROD', 'Not like', '%-830%']
+                ]
+            )
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -288,11 +294,8 @@ class PlaneacionController extends Controller
                 }
             }
             if ($CONT == 5) {
-
                 $indata = YK006::query()->insert($datas);
-
                 $insql = LOGSUP::query()->insert($datasql);
-
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -308,16 +311,15 @@ class PlaneacionController extends Controller
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
-
+        $array = explode(",", $TP);
         $plan1 = Iim::query()
-            ->select('IPROD')
+            ->select('IPROD', 'IREF04')
+            ->wherein('IREF04 ', $array)
             ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where('IPROD', 'Not like', '%-SOR%')
-            ->whereraw("(IPROD='" . $request->nextp . "')")
+            ->where('IPROD', 'Not like', '%-830%')
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -397,11 +399,8 @@ class PlaneacionController extends Controller
                 }
             }
             if ($CONT == 10) {
-
                 $indata = YK006::query()->insert($datas);
-
                 $insql = LOGSUP::query()->insert($datasql);
-
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -414,23 +413,26 @@ class PlaneacionController extends Controller
 
 
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU02.YMP006C";
-        // $result = odbc_exec($conn, $query);
-
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YMP006C";
+        $result = odbc_exec($conn, $query);
+        $array = explode(",", $TP);
         $plan1 = Iim::query()
-            ->select('IPROD')
+            ->select('IPROD', 'IREF04')
+            ->wherein('IREF04 ', $array)
             ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where('IPROD', 'Not like', '%-SOR%')
-            ->whereraw("(IPROD='" . $request->nextp . "')")
+            ->where(
+                [
+                    ['IPROD', 'Not like', '%-SOR%'],
+                    ['IPROD', 'Not like', '%-830%']
+                ]
+            )
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
-
 
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
@@ -439,7 +441,6 @@ class PlaneacionController extends Controller
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -450,132 +451,10 @@ class PlaneacionController extends Controller
     {
         //
     }
-    function info($producto)
-    {
-        $cond = IIM::query()
-            ->select('ICLAS', 'IMBOXQ', 'IMPLC')
-            ->where('IPROD', '=', $producto)
-            ->first()->toArray();
-        return $cond;
-    }
 
 
-    function contard($producto, $fecha, $turno)
-    {
-
-        $cond = kmr::query()
-            ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
-            ->where('MRDTE', '=', $fecha)
-            ->where('MPROD', '=', $producto)
-            ->where('MRCNO', 'like', $turno)
-            ->count();
-        return $cond;
-    }
-
-
-    function contar($producto, $fecha, $fechafin)
-    {
-        $WCs = kmr::query()
-            ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
-            ->where('MRDTE', '>=', $fecha)
-            ->where('MRDTE', '<=', $fechafin)
-            ->where('MPROD', '=', $producto)
-            ->count();
-        return $WCs;
-    }
-    function padre($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BDDIS', '>=', '9900000')
-            ->get();
-        return $MBMS;
-    }
-    function padrecon($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BDDIS', '=', '99999999')
-            ->count();
-        return $MBMS;
-    }
-    function F1($pro)
-    {
-
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BCHLD', '=', $pro)
-            ->where('BCLAS', '=', 'F1')
-            ->get();
-
-        return $MBMS;
-    }
-    function contarF1($pro)
-    {
-        $MBMS = MBMr::query()
-            ->select('BPROD')
-            ->where('BCHLD', '=', $pro)
-            ->where('BCLAS', '=', 'F1')
-            ->where('BDDIS', '>=', '99999997')
-            ->count();
-        return $MBMS;
-    }
     //---------------------------------------Buscar estructuras ------------------------------------------------------
-    function contcargar($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final')
-            ->where('Final', $prod)
-            ->where('clase', '!=', '01')
-            ->count();
-        return $res;
-    }
-    function cargar($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final', 'Componente', 'Activo', 'Clase')
-            ->where('Final', $prod)
-            ->where([
-                ['clase', '!=', '01'],
-                ['clase', '!=', 'F1'],
-                ['Activo', '1'],
-            ])
-            ->get()->toArray();
 
-        return $res;
-    }
-    function cargarestructura($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final', 'Componente', 'Activo')
-            ->where('Final', $prod)
-            ->where([
-                ['clase', '!=', '01'],
-            ])
-            ->get();
-        return $res;
-    }
-    function cargarF1($prod)
-    {
-        $res = MStructure::query()
-            ->select('final')
-            ->where('componente', $prod)
-            ->distinct('final')
-            ->get()->toArray();
-        return $res;
-    }
-    function contcargarF1($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final', 'componente')
-            ->where('componente', $prod)
-            ->count();
-        return $res;
-    }
     function CargarforcastF1($prods, $hoy, $dias)
     {
         $totalpa = array();
@@ -599,8 +478,7 @@ class PlaneacionController extends Controller
             ])
             ->get()->toarray();
         foreach ($prods as $prod) {
-            $contsub = self::contcargar($prod['IPROD']);
-            if ($contsub != 0) {
+
                 $inF1 = array();
                 $padre = [];
                 $dia = $hoy;
@@ -655,11 +533,11 @@ class PlaneacionController extends Controller
                 $inF1 += ['hijos' =>  $datossub];
                 array_push($totalpa, $inF1);
             }
-//             if($prod['IPROD']=="DGH934300A                         ")
-//             {
-// // dd($inF1 );
-//             }
-        }
+            //             if($prod['IPROD']=="DGH934300A                         ")
+            //             {
+            // // dd($inF1 );
+            //             }
+
 
         return   $totalpa;
     }
@@ -718,7 +596,7 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
         foreach ($prods as $prod) {
-            $contsub = self::contcargar($prod['IPROD']);
+
 
             $inF1 = array();
             $padre = [];
@@ -799,16 +677,16 @@ class PlaneacionController extends Controller
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
     {
         //  $Sub = self::cargar($prod1);
-        $Sub=YMCOM::query()
-        ->join('LX834F01.IIM','MCCPRO','=','IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS' )
+        $Sub = YMCOM::query()
+            ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
             ->where([
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-        ->whereraw("(MCFPRO='" .  $prod1 . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
-        ->where([['MCFPRO', 'not like', '%-830%'],['MCFPRO', 'not like', '%-SOR%']])
-        ->get()->toarray();
+            ->whereraw("(MCFPRO='" .  $prod1 . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
+            ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
+            ->get()->toarray();
 
 
         $total = array();
@@ -821,8 +699,8 @@ class PlaneacionController extends Controller
         $Qa = implode("' OR  IPROD='",  $sub1);
 
         $KMRFINAL = YMCOM::query()
-        ->join('LX834F01.IIM','MCCPRO','=','IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS' )
+            ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
             ->where([
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
@@ -831,10 +709,10 @@ class PlaneacionController extends Controller
             ->where('MCFPRO', 'not like', '%-830%')
             ->get()->toarray();
 
-            $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
-            $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
-            $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
-            $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
+        $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
+        $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
+        $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
+        $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
 
         $RKMRfinal = KMR::query()
             ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
@@ -848,8 +726,8 @@ class PlaneacionController extends Controller
 
         // ------------------------------------------------------------------------------------pADRES
         $KMRPARENT = YMCOM::query()
-            ->join('LX834F01.IIM','MCFPRO','=','IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'IID','IMPLC')
+            ->join('LX834F01.IIM', 'MCFPRO', '=', 'IPROD')
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'IID', 'IMPLC')
             ->where([
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
@@ -1011,13 +889,13 @@ class PlaneacionController extends Controller
             $total = 0;
             // ------------------------------- sacar valores KMR
 
-            foreach ( $padreskmr as $P1) {
+            foreach ($padreskmr as $P1) {
                 $kmrpad = array_column($RKMR, 'MPROD');
                 $kmrpadno = array_column($RKMR, 'MRCNO');
                 $KMRpaddat = array_column($RKMR, 'MRDTE');
                 $KMRmtoalpa = array_column($RKMR, 'TOTAL');
                 while (($key3 = array_search($P1,      $kmrpad)) !== false) {
-                    $dia = $KMRpaddat [$key3];
+                    $dia = $KMRpaddat[$key3];
                     $turno =    $kmrpadno[$key3];
                     $total =    $KMRmtoalpa[$key3] + 0;
                     $valt = substr($turno, 4, 1);
@@ -1028,10 +906,10 @@ class PlaneacionController extends Controller
                         $forcast  += ['KMRS' . $dia . $valt => $total];
                     }
 
-                    unset( $kmrpad [$key3]);
-                    unset( $kmrpadno[$key3]);
+                    unset($kmrpad[$key3]);
+                    unset($kmrpadno[$key3]);
                     unset($KMRpaddat[$key3]);
-                    unset($KMRmtoalpa [$key3]);
+                    unset($KMRmtoalpa[$key3]);
                 }
             }
 
@@ -1063,10 +941,10 @@ class PlaneacionController extends Controller
             $kmrmtype = array_column($RKMRfinal, 'MRCNO');
             $KMRfecha = array_column($RKMRfinal, 'MRDTE');
             $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
-//             if($subs=="DGH934310A -AP                     ")
-//             {
-// dd( $subs,$finaleskmr,$kmrprod,$RKMRfinal);
-//             }
+            //             if($subs=="DGH934310A -AP                     ")
+            //             {
+            // dd( $subs,$finaleskmr,$kmrprod,$RKMRfinal);
+            //             }
             $total = 0;
             foreach ($valPD as $reg3) {
                 if ($reg3['FPROD'] == $subs) {
@@ -1111,7 +989,6 @@ class PlaneacionController extends Controller
 
             $numpar += ['sub' => $subs, 'plan' => $numpaplan,  'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0, 'minbal' => $minba[$pos] ?? 0, 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres'  =>  $texpadre ?? 0, 'Totalpadres' => $Tshopkmr];
             $sepa += [$subs => $numpar];
-
         }
 
         return    $sepa;
