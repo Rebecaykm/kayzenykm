@@ -11,12 +11,7 @@
     <thead>
         <tr>
             <th  rowspan="2">No Parte Final </th>
-            <th  rowspan="2">
-                Parte <br> componente
-            </th>
-            <th rowspan="2">
-                Parte <br> Finales
-            </th>
+
             <th  rowspan="2"></th>
             <th  rowspan="2">
                 Parte <br> Total
@@ -77,10 +72,7 @@
                 <td rowspan="3">
                     {{ $info['parte'] }}
                 </td>
-                <td rowspan="3">
-                </td>
-                <td rowspan="3">
-                </td>
+
                 <td>
                     Forecast MMVO
                 </td>
@@ -159,7 +151,7 @@
                 </td>
                 @while ($contdias < $dias)
                     @php
-                    dd($info);
+
                         if (array_key_exists('F' . $hoy . 'D', $info) == false) {
                             $valPD = '-';
                         } else {

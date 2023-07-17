@@ -11,7 +11,7 @@
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         @switch($tp)
-                            @case('2,12,123,13,20')
+                            @case('2,12,123,13,20,23')
                                 J03W/G
                             @break
 
@@ -26,12 +26,12 @@
                             @default
                         @endswitch
                     </h2>
-                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                    {{-- <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Planeación
-                    </h2>
+                    </h2> --}}
                     @csrf
 
-                    <div class="flex justify-center">
+                    {{-- <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
@@ -53,7 +53,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </form>
 
@@ -278,7 +278,7 @@
                                     $workcen = $info['WRC'];
                                 @endphp
                                 @while ($contdias < $dias)
-                                    @if ($contdias == 6)
+                                    @if ($contdias == 7)
                                     @else
                                         <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">

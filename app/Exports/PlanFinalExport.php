@@ -39,18 +39,22 @@ class PlanFinalExport implements FromView
         $hoy = $this->fecha;
         $TP = $this->TP;
         $datos = [];
+        $array = explode(",", $TP);
         $prods = Iim::query()
-            ->select('IPROD')
-            ->where([
-                ['IREF04', 'like', '%' . $TP . '%'],
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('IPROD', 'Not like', '%-830%')
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
+        ->select('IPROD', 'IREF04')
+        ->wherein('IREF04 ', $array)
+        ->where([
+            ['IID', '!=', 'IZ'],
+            ['IMPLC', '!=', 'OBSOLETE'],
+        ])
+        ->where([
+            ['IPROD', 'Not like', '%-SOR%'],
+            ['IPROD', 'Not like', '%-830%']]
+        )
 
+        ->where('ICLAS', 'F1')
+        ->distinct('IPROD')
+        ->get()->toArray();
 
 
 
@@ -220,7 +224,7 @@ class PlanFinalExport implements FromView
             'dias' => $dias,
             'fecha' => $fecha
         ];
-        dd($general);
+
         return view('planeacion.RepPlanfinal', [
             'general' => $general
         ]);
