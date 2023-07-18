@@ -68,7 +68,7 @@ class PlaneacionController extends Controller
         $inF2 = array();
         $tipo = $request->Planeacion;
 
-        $dias = $request->dias ?? '8';
+        $dias = 8;
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
 
@@ -127,7 +127,9 @@ class PlaneacionController extends Controller
         $inF1 = array();
         $inF2 = array();
         $tipo = $request->SeProject;
-        $dias = $request->dias ?? '5';
+
+        $dias = 8;
+
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -149,6 +151,7 @@ class PlaneacionController extends Controller
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
+
         $padres = array_chunk($plan1, 10);
         $partsrev = array_column($plan1, 'IPROD');
 
@@ -158,7 +161,7 @@ class PlaneacionController extends Controller
 
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
 
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $request->dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
     public function export(Request $request)
     {
@@ -236,7 +239,7 @@ class PlaneacionController extends Controller
 
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
-        $dias =  $data[1];
+        $dias = 8;
         $fecha =  $data[0];
 
         $hoy = date('Ymd', strtotime($fecha));
@@ -341,7 +344,7 @@ class PlaneacionController extends Controller
 
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
-        $dias =  $data[1];
+        $dias =  8;
         $fecha =  $data[0];
 
         $hoy = date('Ymd', strtotime($fecha));
@@ -465,10 +468,11 @@ class PlaneacionController extends Controller
         $valfinales = kmr::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
-            ->where('MRDTE', '<',  $totalF)
+            ->where('MRDTE', '<=',  $totalF)
             ->where('MTYPE', '=', 'F')
             ->whereraw("(MPROD='" . $finales  . "')")
             ->get()->toarray();
+
         $valPDp  = kFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
@@ -478,7 +482,20 @@ class PlaneacionController extends Controller
             ])
             ->get()->toarray();
         foreach ($prods as $prod) {
+            $Sub = YMCOM::query()
+                ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
+                ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
+                ->where([
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                ])
+                ->whereraw("(MCFPRO='" .  $prod['IPROD'] . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
+                ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
+                ->get()->toarray();
 
+            if (count($Sub) == 0) {
+                $datossub = [];
+            } else {
                 $inF1 = array();
                 $padre = [];
                 $dia = $hoy;
@@ -530,15 +547,15 @@ class PlaneacionController extends Controller
                 $inF1 += ['padre' =>  $padre];
 
                 $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
-
-
                 $inF1 += ['hijos' =>  $datossub];
                 array_push($totalpa, $inF1);
             }
-            //             if($prod['IPROD']=="DGH934300A                         ")
-            //             {
-            // // dd($inF1 );
-            //             }
+
+
+
+
+        }
+
 
 
         return   $totalpa;
@@ -723,7 +740,7 @@ class PlaneacionController extends Controller
                 ['MRDTE', '>=', $hoy],
                 ['MRDTE', '<', $totalF],
                 ['MTYPE', '=', 'F'],
-            ])->groupBy('MRDTE', 'MRCNO', 'MPROD','MTYPE')
+            ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
 
 
@@ -749,7 +766,7 @@ class PlaneacionController extends Controller
             ->where([
                 ['MRDTE', '>=', $hoy],
                 ['MRDTE', '<', $totalF],
-            ])->groupBy('MRDTE', 'MRCNO', 'MPROD','MTYPE')
+            ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
 
         // -----------------------------------------FIRME PLAN
@@ -773,7 +790,7 @@ class PlaneacionController extends Controller
         $kmrmtype = array_column($RKMRfinal, 'MRCNO');
         $KMRfecha = array_column($RKMRfinal, 'MRDTE');
         $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
-        $KtYPE= array_column($RKMRfinal, 'MTYPE');
+        $KtYPE = array_column($RKMRfinal, 'MTYPE');
 
 
 
@@ -910,14 +927,14 @@ class PlaneacionController extends Controller
                     $turno =  $kmrmtype[$key3];
                     $total =   $KMRMtotal[$key3] + 0;
                     $valt = substr($turno, 4, 1);
-                    $ktype= $KtYPE[$key3] ;
+                    $ktype = $KtYPE[$key3];
 
-                        if (array_key_exists('kmr' . $dia . $valt,  $forcast) !== false) {
-                            $total = $forcast['kmr' . $dia . $valt] + $total;
-                            $forcast['kmr' . $dia . $valt] = $total;
-                        } else {
-                            $forcast  += ['kmr' . $dia . $valt => $total];
-                        }
+                    if (array_key_exists('kmr' . $dia . $valt,  $forcast) !== false) {
+                        $total = $forcast['kmr' . $dia . $valt] + $total;
+                        $forcast['kmr' . $dia . $valt] = $total;
+                    } else {
+                        $forcast  += ['kmr' . $dia . $valt => $total];
+                    }
 
 
 
@@ -931,7 +948,7 @@ class PlaneacionController extends Controller
             $kmrmtype = array_column($RKMRfinal, 'MRCNO');
             $KMRfecha = array_column($RKMRfinal, 'MRDTE');
             $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
-            $KtYPE= array_column($RKMRfinal, 'MTYPE');
+            $KtYPE = array_column($RKMRfinal, 'MTYPE');
             //             if($subs=="DGH934310A -AP                     ")
             //             {
             // dd( $subs,$finaleskmr,$kmrprod,$RKMRfinal);

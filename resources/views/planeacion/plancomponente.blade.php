@@ -5,6 +5,7 @@
         $projecto = $obj->Projecto($tp);
         // $dias = ;
     @endphp --}}
+
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <form method="post" action="{{ route('planeacion.create') }}">
@@ -187,6 +188,7 @@
                             @php
                                 $hoy = $fecha;
                                 $totalD = 0;
+                                $tdias= $dias;
                                 $dias = $dias - 2;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $diasjava = '';
@@ -731,15 +733,15 @@
                     @csrf
                     <div class="flex justify-center">
                         <label class="block mt-4 text-sm">
-                            <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
-                                value={{ $fecha . '/' . $dias }}>
+                            <input type="hidden" name={{ $fecha . '/' . $tdias}} id="data"
+                                value={{ $fecha . '/' .$tdias }}>
                             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
                             <input type="hidden" name="paginate" id="paginate" value={{ $pagina - 1 }}>
                             <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
-                            <input type="hidden" name="dias" id="data" value={{ $dias }}>
+                            <input type="hidden" name="dias" id="data" value={{$tdias }}>
                         </label>
                     </div>
                     <div class="flex justify-center">
@@ -777,7 +779,7 @@
                             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
                             <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
                             <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
-                            <input type="hidden" name="dias" id="data" value={{ $dias }}>
+                            <input type="hidden" name="dias" id="data" value={{$tdias }}>
                         </label>
                     </div>
                     <div class="flex justify-center">

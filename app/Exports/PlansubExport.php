@@ -42,22 +42,22 @@ class PlansubExport implements FromView
         $datos = [];
         $array = explode(",", $TP);
         $plan1 = Iim::query()
-        ->select('IPROD', 'IREF04')
-        ->wherein('IREF04 ', $array)
-        ->where([
-            ['IID', '!=', 'IZ'],
-            ['IMPLC', '!=', 'OBSOLETE'],
-        ])
-        ->where('IPROD', 'Not like', '%-830%')
-        ->where('ICLAS', 'F1')
-        ->distinct('IPROD')
-        ->get()->toArray();
-    $total = 0;
-    $datos = self::CargarforcastF1($plan1, $fecha, $dias);
-            dd($datos );
+            ->select('IPROD', 'IREF04')
+            ->wherein('IREF04 ', $array)
+            ->where([
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where('IPROD', 'Not like', '%-830%')
+            ->where('ICLAS', 'F1')
+            ->distinct('IPROD')
+            ->get()->toArray();
+        $total = 0;
+        $datos = self::CargarforcastF1($plan1, $fecha, $dias);
 
-    $partsrev = array_column($plan1, 'IPROD');
-    $cadepar = implode("' OR  IPROD='",      $partsrev);
+
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = implode("' OR  IPROD='",      $partsrev);
 
         return view('planeacion.RepSubfinal', [
             'general' => $general
@@ -70,13 +70,7 @@ class PlansubExport implements FromView
         $finaArra = array_column($prods, 'IPROD');
         $finales = implode("' OR  MPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
-        $valfinales = kmr::query() //forecast
-            ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $hoy)
-            ->where('MRDTE', '<',  $totalF)
-            ->where('MTYPE', '=', 'F')
-            ->whereraw("(MPROD='" . $finales  . "')")
-            ->get()->toarray();
+
         $valPDp  = kFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
@@ -87,64 +81,44 @@ class PlansubExport implements FromView
             ->get()->toarray();
         foreach ($prods as $prod) {
 
-                $inF1 = array();
-                $padre = [];
-                $dia = $hoy;
-                $connt = 1;
-                $i = 0;
-                $planpadre = [];
-                $totalP = 0;
-                $tPlan = 0;
-                $tfirme = 0;
-                $forcastp = [];
-                $padre  += ['parte' => $prod['IPROD']];
-                if (count($valfinales) > 0) {
-                    $total = 0;
-                    foreach ($valfinales  as $reg4) {
-                        if ($reg4['MPROD'] == $prod['IPROD']) {
-                            $dia = $reg4['MRDTE'];
-                            $turno =  $reg4['MRCNO'];
-                            $total = $reg4['MQTY'] + 0;
-                            $valt = substr($turno, 4, 1);
-                            $forcastp  += ['For' . $dia . $valt => $total];
-                            $totalP = $totalP + $total;
-                        }
-                    }
-                }
-                $padre  += ['total' => $totalP];
-                if (count($valPDp) > 0) {
-                    $total = 0;
-                    foreach ($valPDp  as $reg6) {
-                        if ($reg6['FPROD'] == $prod['IPROD']) {
-                            $dia = $reg6['FRDTE'];
-                            $turno =  $reg6['FPCNO'];
-                            $tipo =  $reg6['FTYPE'];
-                            $total = $reg6['FQTY'] + 0;
-                            $valt = substr($turno, 4, 1);
-                            $planpadre += [$tipo . $dia . $valt => $total];
-                            if ($valt == 'P') {
-                                $tPlan = $tPlan + $total;
-                            } else {
-                                $tfirme = $tfirme + $total;
-                            }
-                        }
-                    }
-                }
-                $padre  += ['tPlan' => $tPlan];
-                $padre  += ['tfirme' => $tfirme];
-                $padre  += $forcastp;
-                $padre  +=  $planpadre;
-                // dd( $padre);
-                $inF1 += ['padre' =>  $padre];
+            $inF1 = array();
+            $padre = [];
+            $dia = $hoy;
+            $planpadre = [];
+            $tfirme = 0;
+            $forcastp = [];
+            $padre  += ['parte' => $prod['IPROD']];
 
-                $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
-                $inF1 += ['hijos' =>  $datossub];
-                array_push($totalpa, $inF1);
+            if (count($valPDp) > 0) {
+                $total = 0;
+                foreach ($valPDp  as $reg6) {
+                    if ($reg6['FPROD'] == $prod['IPROD']) {
+                        $dia = $reg6['FRDTE'];
+                        $turno =  $reg6['FPCNO'];
+                        $tipo =  $reg6['FTYPE'];
+                        $total = $reg6['FQTY'] + 0;
+                        $valt = substr($turno, 4, 1);
+                        $planpadre += [$tipo . $dia . $valt => $total];
+
+                    }
+                }
             }
-            //             if($prod['IPROD']=="DGH934300A                         ")
-            //             {
-            // // dd($inF1 );
-            //             }
+
+            $padre  += ['tfirme' => $tfirme];
+            $padre  += $forcastp;
+            $padre  +=  $planpadre;
+            // dd( $padre);
+            $inF1 += ['padre' =>  $padre];
+
+            $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
+            $datossub = [];
+            $inF1 += ['hijos' =>  $datossub];
+            array_push($totalpa, $inF1);
+        }
+        //             if($prod['IPROD']=="DGH934300A                         ")
+        //             {
+        // // dd($inF1 );
+        //             }
 
 
         return   $totalpa;
@@ -189,14 +163,15 @@ class PlansubExport implements FromView
         $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
         $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
 
-        $RKMRfinal = KMR::query()
-            ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-            ->whereraw("(MPROD='" .   $FINALKMR . "')")
-            ->where([
-                ['MRDTE', '>=', $hoy],
-                ['MRDTE', '<', $totalF],
-            ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-            ->get()->toarray();
+        // $RKMRfinal = KMR::query()
+        //     ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+        //     ->whereraw("(MPROD='" .   $FINALKMR . "')")
+        //     ->where([
+        //         ['MRDTE', '>=', $hoy],
+        //         ['MRDTE', '<', $totalF],
+        //         ['MTYPE', '=', 'F'],
+        //     ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+        //     ->get()->toarray();
 
 
         // ------------------------------------------------------------------------------------pADRES
@@ -209,20 +184,20 @@ class PlansubExport implements FromView
             ])
             ->whereraw("(MCCPRO='" .   $child  . "') AND (MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
             ->get()->toarray();
-
         $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
         $kmrmcfprod = array_column($KMRPARENT, 'MCFPRO');
         $KMRMCFCLS = array_column($KMRPARENT, 'MCFCLS');
         $PADREKMR = implode("' OR  MPROD='", $kmrmcfprod);
 
-        $RKMR = KMR::query()
-            ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
-            ->whereraw("(MPROD='" .   $PADREKMR . "')")
-            ->where([
-                ['MRDTE', '>=', $hoy],
-                ['MRDTE', '<', $totalF],
-            ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
-            ->get()->toarray();
+        // $RKMR = KMR::query()
+        //     ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD')
+        //     ->whereraw("(MPROD='" .   $PADREKMR . "')")
+        //     ->where([
+        //         ['MRDTE', '>=', $hoy],
+        //         ['MRDTE', '<', $totalF],
+        // ['MTYPE', '=', 'F'],
+        //     ])->groupBy('MRDTE', 'MRCNO', 'MPROD')
+        //     ->get()->toarray();
 
 
 
@@ -255,10 +230,10 @@ class PlansubExport implements FromView
 
 
 
-        $kmrprod = array_column($RKMRfinal, 'MPROD');
-        $kmrmtype = array_column($RKMRfinal, 'MRCNO');
-        $KMRfecha = array_column($RKMRfinal, 'MRDTE');
-        $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
+        // $kmrprod = array_column($RKMRfinal, 'MPROD');
+        // $kmrmtype = array_column($RKMRfinal, 'MRCNO');
+        // $KMRfecha = array_column($RKMRfinal, 'MRDTE');
+        // $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
 
         // $kmrpad = array_column($RKMR, 'MPROD');
         // $kmrpadno = array_column($RKMR, 'MRCNO');
@@ -311,26 +286,26 @@ class PlansubExport implements FromView
             $numpar = [];
             $numpaplan =  [];
             $total = 0;
-            while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
+            // while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
 
-                array_push($finaleskmr, $FINALLIST[$key5]);
+            //     array_push($finaleskmr, $FINALLIST[$key5]);
 
-                unset($FINALLIST[$key5]);
-                unset($FINALMCPRO[$key5]);
-                unset($FINALCALS[$key5]);
-            }
-            while (($key2 = array_search($subs,  $kmrmccprod)) !== false) {
-                if ($kmrmcfprod[$key2] != $subs) {
-                    array_push($padreskmr, $kmrmcfprod[$key2]);
-                }
-                unset($kmrmccprod[$key2]);
-                unset($KMRMCFCLS[$key2]);
-                unset($kmrmcfprod[$key2]);
-            }
-            $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
-            $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
-            $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
-            $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
+            //     unset($FINALLIST[$key5]);
+            //     unset($FINALMCPRO[$key5]);
+            //     unset($FINALCALS[$key5]);
+            // }
+            // while (($key2 = array_search($subs,  $kmrmccprod)) !== false) {
+            //     if ($kmrmcfprod[$key2] != $subs) {
+            //         array_push($padreskmr, $kmrmcfprod[$key2]);
+            //     }
+            //     unset($kmrmccprod[$key2]);
+            //     unset($KMRMCFCLS[$key2]);
+            //     unset($kmrmcfprod[$key2]);
+            // }
+            // $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
+            // $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
+            // $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
+            // $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
 
             $contpadres = count($padreskmr);
             $contF1 = count($finaleskmr);
@@ -364,58 +339,58 @@ class PlansubExport implements FromView
             $total = 0;
             // ------------------------------- sacar valores KMR
 
-            foreach ($padreskmr as $P1) {
-                $kmrpad = array_column($RKMR, 'MPROD');
-                $kmrpadno = array_column($RKMR, 'MRCNO');
-                $KMRpaddat = array_column($RKMR, 'MRDTE');
-                $KMRmtoalpa = array_column($RKMR, 'TOTAL');
-                while (($key3 = array_search($P1,      $kmrpad)) !== false) {
-                    $dia = $KMRpaddat[$key3];
-                    $turno =    $kmrpadno[$key3];
-                    $total =    $KMRmtoalpa[$key3] + 0;
-                    $valt = substr($turno, 4, 1);
-                    if (array_key_exists('KMRS' . $dia . $valt,  $forcast) !== false) {
-                        $total = $forcast['KMRS' . $dia . $valt] + $total;
-                        $forcast['KMRS' . $dia . $valt] = $total;
-                    } else {
-                        $forcast  += ['KMRS' . $dia . $valt => $total];
-                    }
+            // foreach ($padreskmr as $P1) {
+            //     $kmrpad = array_column($RKMR, 'MPROD');
+            //     $kmrpadno = array_column($RKMR, 'MRCNO');
+            //     $KMRpaddat = array_column($RKMR, 'MRDTE');
+            //     $KMRmtoalpa = array_column($RKMR, 'TOTAL');
+            //     while (($key3 = array_search($P1,      $kmrpad)) !== false) {
+            //         $dia = $KMRpaddat[$key3];
+            //         $turno =    $kmrpadno[$key3];
+            //         $total =    $KMRmtoalpa[$key3] + 0;
+            //         $valt = substr($turno, 4, 1);
+            //         if (array_key_exists('KMRS' . $dia . $valt,  $forcast) !== false) {
+            //             $total = $forcast['KMRS' . $dia . $valt] + $total;
+            //             $forcast['KMRS' . $dia . $valt] = $total;
+            //         } else {
+            //             $forcast  += ['KMRS' . $dia . $valt => $total];
+            //         }
 
-                    unset($kmrpad[$key3]);
-                    unset($kmrpadno[$key3]);
-                    unset($KMRpaddat[$key3]);
-                    unset($KMRmtoalpa[$key3]);
-                }
-            }
+            //         unset($kmrpad[$key3]);
+            //         unset($kmrpadno[$key3]);
+            //         unset($KMRpaddat[$key3]);
+            //         unset($KMRmtoalpa[$key3]);
+            //     }
+            // }
 
 
             $total = 0;
 
 
-            foreach ($finaleskmr as $F1) {
+            // foreach ($finaleskmr as $F1) {
 
-                while (($key3 = array_search($F1,   $kmrprod)) !== false) {
-                    $dia = $KMRfecha[$key3];
-                    $turno =  $kmrmtype[$key3];
-                    $total =   $KMRMtotal[$key3] + 0;
-                    $valt = substr($turno, 4, 1);
-                    if (array_key_exists('kmr' . $dia . $valt,  $forcast) !== false) {
-                        $total = $forcast['kmr' . $dia . $valt] + $total;
-                        $forcast['kmr' . $dia . $valt] = $total;
-                    } else {
-                        $forcast  += ['kmr' . $dia . $valt => $total];
-                    }
+            //     while (($key3 = array_search($F1,   $kmrprod)) !== false) {
+            //         $dia = $KMRfecha[$key3];
+            //         $turno =  $kmrmtype[$key3];
+            //         $total =   $KMRMtotal[$key3] + 0;
+            //         $valt = substr($turno, 4, 1);
+            //         if (array_key_exists('kmr' . $dia . $valt,  $forcast) !== false) {
+            //             $total = $forcast['kmr' . $dia . $valt] + $total;
+            //             $forcast['kmr' . $dia . $valt] = $total;
+            //         } else {
+            //             $forcast  += ['kmr' . $dia . $valt => $total];
+            //         }
 
-                    unset($kmrprod[$key3]);
-                    unset($kmrmtype[$key3]);
-                    unset($KMRfecha[$key3]);
-                    unset($KMRMtotal[$key3]);
-                }
-            }
-            $kmrprod = array_column($RKMRfinal, 'MPROD');
-            $kmrmtype = array_column($RKMRfinal, 'MRCNO');
-            $KMRfecha = array_column($RKMRfinal, 'MRDTE');
-            $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
+            //         unset($kmrprod[$key3]);
+            //         unset($kmrmtype[$key3]);
+            //         unset($KMRfecha[$key3]);
+            //         unset($KMRMtotal[$key3]);
+            //     }
+            // }
+            // $kmrprod = array_column($RKMRfinal, 'MPROD');
+            // $kmrmtype = array_column($RKMRfinal, 'MRCNO');
+            // $KMRfecha = array_column($RKMRfinal, 'MRDTE');
+            // $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
             //             if($subs=="DGH934310A -AP                     ")
             //             {
             // dd( $subs,$finaleskmr,$kmrprod,$RKMRfinal);
