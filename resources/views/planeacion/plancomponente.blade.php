@@ -505,6 +505,8 @@
                                         $coni = 0;
                                         $hoy1 = $fecha;
                                         $plan = $datossubs['plan'];
+                                        $totalplan=0;
+                                        $totalKMRP=0;
                                         $totalfir=0;
                                     @endphp
                                     @while ($coni < $dias)
@@ -541,7 +543,8 @@
                                                 $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
                                             }
 
-                                            // dd(  $datossubs, $plan,$forcast,$valRNH, $valRDH );
+                                            $totalKMRP= $totalKMRP+$valRDH+ $valRNH;
+
                                             if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
                                                 $valPDH = '0';
                                             } else {
@@ -552,6 +555,9 @@
                                             } else {
                                                 $valPNH = $plan['P' . $hoy1 . 'N'];
                                             }
+                                            $totalplan=$valPDH+  $valPNH+ $totalplan;
+
+
                                             if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
                                                 $valFiDH = $valPDH;
                                             } else {
@@ -675,7 +681,7 @@
 
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
-                                                <input value="{{ $info['total'] }}"
+                                                <input value="{{  $totalKMRP}}"
                                                     class="block w-20 text-xs form-input   " disabled />
                                             </label>
                                         </div>
@@ -688,7 +694,7 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
-                                                <input value="{{ $datossubs['Tplan'] }}"
+                                                <input value="{{  $totalplan }}"
                                                     class="block w-20 text-xs form-input" disabled />
                                             </label>
                                         </div>
