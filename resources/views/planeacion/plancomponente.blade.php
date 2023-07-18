@@ -140,7 +140,7 @@
                 @csrf
                 <div class="flex justify-center">
                     <button type="submit"
-                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green" >
+                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                         <span class="mr-2">Actualizar</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
@@ -183,13 +183,14 @@
                             </th>
 
                             <th class=" header px-4 py-3 sticky "></th>
-                            <th class=" header px-4 py-3 sticky ">
-                                Parte <br> Total
-                            </th>
+
                             @php
                                 $hoy = $fecha;
                                 $totalD = 0;
+                                $dias = $dias - 2;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+                                $diasjava = '';
+
                             @endphp
                             @while ($hoy != $fin)
                                 <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -210,11 +211,17 @@
                                         </label>
                                     </div>
                                 </th>
+
                                 @php
+                                    $diasjava = $hoy . '/' . $diasjava;
                                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                     $totalD = $totalD + 1;
+
                                 @endphp
                             @endwhile
+                            <th class=" header px-4 py-3 sticky ">
+                                Parte <br> Total
+                            </th>
                         </tr>
                     </thead>
                     <tbody
@@ -262,32 +269,7 @@
                                     </div>
 
                                 </td>
-                                <td class="px-2 py-1 text-xs  bg-emerald-100">
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label class="block text-sm ">
-                                            <input value="{{ $info['total'] }}"
-                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                disabled />
-                                        </label>
-                                    </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label class="block text-sm ">@php
 
-                                        @endphp
-
-                                            <input value="{{ $info['tPlan'] }}"
-                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                disabled />
-                                        </label>
-                                    </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label class="block text-sm ">
-                                            <input value="{{$info['tfirme'] }}"
-                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                disabled />
-                                        </label>
-                                    </div>
-                                </td>
                                 @php
                                     $hoy = $fecha;
                                     $contdias = 0;
@@ -331,14 +313,14 @@
                                                         $valFiN = $info['F' . $hoy . 'N'];
                                                     }
                                                     if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
-                                                        $valeclD= '-';
+                                                        $valeclD = '-';
                                                     } else {
                                                         $valeclD = $info['ecl' . $hoy . 'D'];
                                                     }
                                                     if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
                                                         $valeclN = '-';
                                                     } else {
-                                                        $valeclN= $info['ecl' . $hoy . 'N'];
+                                                        $valeclN = $info['ecl' . $hoy . 'N'];
                                                     }
                                                     $valRD = 0;
                                                     $valRN = 0;
@@ -350,7 +332,7 @@
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{ $valFN}}
+                                                <input value={{ $valFN }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
@@ -366,7 +348,7 @@
                                             </label>
                                             <label class="block text-sm ">
 
-                                                <input value={{  $valeclN }}
+                                                <input value={{ $valeclN }}
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
@@ -399,7 +381,32 @@
                                         $contdias++;
                                     @endphp
                                 @endwhile
+                                <td class="px-2 py-1 text-xs  bg-emerald-100">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="{{ $info['total'] }}"
+                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">@php
 
+                                        @endphp
+
+                                            <input value="{{ $info['tPlan'] }}"
+                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="{{ $info['tfirme'] }}"
+                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
+                                </td>
                             </tr>
                             {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                             @php
@@ -418,7 +425,7 @@
                                         @php
 
                                             $item = strtr($datossubs['sub'], ' ', '_');
-                                            $wctpar =  $datossubs['wrk'] ?? 'xxxx';
+                                            $wctpar = $datossubs['wrk'] ?? 'xxxx';
 
                                         @endphp
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -441,7 +448,7 @@
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
 
-                                           echo $datossubs['KMRpadres'];
+                                            echo $datossubs['KMRpadres'];
 
                                         @endphp
 
@@ -493,45 +500,12 @@
 
                                     </td>
                                     {{-- totales --}}
-                                    <td class="px-2 py-1 text-xs text-center ">
 
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="{{ $info['total'] }}"
-                                                    class="block w-20 text-xs form-input   " disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input value="{{  $datossubs['Totalpadres'] }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-
-                                                <input value="{{ $datossubs['Tplan'] }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input id="{{ $item }}" value="{{ $datossubs['Tfirme'] }}"
-                                                    class="block w-20 text-xs form-input" disabled />
-                                            </label>
-                                        </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                            <label class="block text-sm ">
-                                                <input name="{{ $item }}" value="{{ $datossubs['Tshop'] }}"
-                                                    class="block w-20 text-xs  form-input" disabled />
-                                            </label>
-                                        </div>
-
-                                    </td>
                                     @php
                                         $coni = 0;
                                         $hoy1 = $fecha;
                                         $plan = $datossubs['plan'];
+                                        $totalfir=0;
                                     @endphp
                                     @while ($coni < $dias)
                                         @php
@@ -588,7 +562,7 @@
                                             } else {
                                                 $valFiNH = $plan['F' . $hoy1 . 'N'];
                                             }
-
+                                            $totalfir= $totalfir+$valFiDH+$valFiNH ;
                                             if (array_key_exists('S' . $hoy1 . 'D', $plan) == false) {
                                                 $valSDH = '-';
                                             } else {
@@ -601,18 +575,17 @@
                                                 $valSNH = $plan['S' . $hoy1 . 'N'];
                                             }
 
-                                            if (array_key_exists('KMRS' . $hoy1 . 'D',  $forcast) == false) {
+                                            if (array_key_exists('KMRS' . $hoy1 . 'D', $forcast) == false) {
                                                 $valKMRsd = '-';
                                             } else {
-                                                $valKMRsd =$forcast['KMRS' . $hoy1 . 'D'];
+                                                $valKMRsd = $forcast['KMRS' . $hoy1 . 'D'];
                                             }
 
-                                            if (array_key_exists('KMRS' . $hoy1 . 'N',  $forcast) == false) {
+                                            if (array_key_exists('KMRS' . $hoy1 . 'N', $forcast) == false) {
                                                 $valMKMRsn = '-';
                                             } else {
-                                                $valMKMRsn= $forcast['KMRS' . $hoy1 . 'N'];
+                                                $valMKMRsn = $forcast['KMRS' . $hoy1 . 'N'];
                                             }
-
 
                                         @endphp
                                         <td class="px-2 py-1 text-xs text-center  ">
@@ -623,7 +596,7 @@
                                                         disabled />
                                                 </label>
                                                 <label class="block text-sm ">
-                                                <input value={{ $valRNH  }}
+                                                    <input value={{ $valRNH }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -631,7 +604,6 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valKMRsd }}
-
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -667,15 +639,15 @@
                                                 class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-indigo-500/100 ">
                                                 <label class="block text-sm border-teal-400  outline-pink-500">
                                                     <input id={{ $inD }} name={{ $inD }}
-                                                        value={{ $valFiDH }}
-                                                        onchange="myFunction(this.id,'<?php echo $namenA; ?>','<?php echo $hoy1; ?>','<?php echo $dias; ?>', '<?php echo $WRCj; ?>',this.value)"
+                                                        value={{ $valFiDH  }}
+                                                        onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                         type="number" min="0"
                                                         class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  border-rose-600" />
                                                 </label>
                                                 <label class="block text-sm border-teal-400  outline-pink-500 ">
                                                     <input id={{ $inN }} name={{ $inN }}
-                                                        value={{ $valFiNH }}
-                                                        onchange="myFunction(this.id,'<?php echo $namenA; ?>','<?php echo $hoy1; ?>','<?php echo $dias; ?>','<?php echo $WRCj; ?>',this.value)"
+                                                        value={{  $valFiNH}}
+                                                        onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                         type="number" min="0"
                                                         class=" block w-20 text-xs form-input  " />
                                                 </label>
@@ -699,6 +671,44 @@
                                             $coni++;
                                         @endphp
                                     @endwhile
+                                    <td class="px-2 py-1 text-xs text-center ">
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="{{ $info['total'] }}"
+                                                    class="block w-20 text-xs form-input   " disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="{{ $datossubs['Totalpadres'] }}"
+                                                    class="block w-20 text-xs form-input" disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="{{ $datossubs['Tplan'] }}"
+                                                    class="block w-20 text-xs form-input" disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                @php
+                                                    $otalphp = 'totalFirykm' . $namenA;
+                                                @endphp
+                                                <input id="{{ $otalphp }}" value="{{ $totalfir }}"
+                                                    class="block w-20 text-xs form-input" disabled />
+                                            </label>
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input name="{{ $item }}" value="{{ $datossubs['Tshop'] }}"
+                                                    class="block w-20 text-xs  form-input" disabled />
+                                            </label>
+                                        </div>
+
+                                    </td>
                                 </tr>
                             @endforeach
                             {{-- @endif --}}
@@ -806,38 +816,31 @@
             </div>
         </div>
         <script>
-            function myFunction(xx, padre, fecha, dias, WRC,VALOR) {
-                 console.log(VALOR);
-                // console.log(padre, document.getElementById(padre).value);
-            //      cont = 0;
-            //     var d = 0;
-            //     var n = 0;
-            //     var idinputd = '';
-            //     var idinputN = '';
-            //     var cadfecha = new String(fecha);
-            //     var year=cadfecha[0]+cadfecha[1]+cadfecha[2]+cadfecha[3];
-            //     var mes=cadfecha[4]+cadfecha[5]
-            //     var dia=cadfecha[6]+cadfecha[7];
-            //     var fechac=new Date( year+'/'+mes+'/'+dia);
-            //      diasin=parseInt(dias);
-            //     console.log(cont,diasin+1,cont+1);
-            // for(cont=0;cont < diasin;cont++)
-            //     {
-            //         fecha1=fechac.setDate(fechac.getDate() + parseInt(1));
-            //       console.log(fecha1.format('YYYY-MM-DD'));
-            //         // idinputd=padre + '/' +fechanc + '/D/' + WRC;
-            //         // idinputn=padre + '/' +fechanc + '/N/' + WRC;
-            //         // console.log(idinput, idinputn)
+            function myFunction(dias, parte, wc, idtest) {
 
-            //     }
+                let mensaje = dias;
+                let arr = mensaje.split('/');
 
-                // var valpadre1 = parseInt(document.getElementById(padre).value) + parseInt(document.getElementById(document
-                //     .getElementById(xx).id).value);
-                // // console.log( valpadre1);
-                // document.getElementById(padre).value = valpadre1;
-                // var campo = document.getElementById(document.getElementById(xx).id);
-                // campo.style.color = "#217FF0";
-                // document.getElementById(padre).style.color = "#F08221 ";
+
+                val1 = parseInt(document.getElementById(parte + '/' + arr[1] + '/D/' + wc).value);
+                val2 = parseInt(document.getElementById(parte + '/' + arr[1] + '/N/' + wc).value);
+                val3 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);
+                val4 = parseInt(document.getElementById(parte + '/' + arr[2] + '/N/' + wc).value);
+                val5 = parseInt(document.getElementById(parte + '/' + arr[3] + '/D/' + wc).value);
+                val6 = parseInt(document.getElementById(parte + '/' + arr[3] + '/N/' + wc).value);
+                val7 = parseInt(document.getElementById(parte + '/' + arr[4] + '/D/' + wc).value);
+                val8 = parseInt(document.getElementById(parte + '/' + arr[4] + '/N/' + wc).value);
+                val9 = parseInt(document.getElementById(parte + '/' + arr[5] + '/D/' + wc).value);
+                val10 = parseInt(document.getElementById(parte + '/' + arr[5] + '/N/' + wc).value);
+                console.log(parte + '/' + arr[4] + '/D/' + wc);
+                console.log(arr[0],arr[1],arr[2],arr[3],arr[4],arr[5]);
+                valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10;
+                document.getElementById('totalFirykm' + parte).value = valtotal;
+                console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
+
+
+
+
             }
         </script>
 

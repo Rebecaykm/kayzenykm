@@ -531,10 +531,7 @@ class PlaneacionController extends Controller
 
                 $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
 
-                if($prod['IPROD']=='DA6A50070                          ')
-                {
-dd( $datossub );
-                }
+
                 $inF1 += ['hijos' =>  $datossub];
                 array_push($totalpa, $inF1);
             }
@@ -968,16 +965,7 @@ dd( $datossub );
             }
             $total = 0;
             $Tshopkmr = 0;
-            // foreach ($VALRKMR as $reg10) {
-            //     if ($reg10['MPROD'] == $subs) {
-            //         $dia =  $reg10['MRDTE'];
-            //         $turno =  $reg10['MRCNO'];
-            //         $total =  $reg10['TOTAL'] + 0;
-            //         $valt = substr($turno, 4, 1);
-            //         $numpaplan += ['KMRS' . $dia . $valt => $total];
-            //         $Tshopkmr =   $Tshopkmr + $total;
-            //     }
-            // }
+
             $pos = array_search($subs, $prodcqa);
             $poskwr = array_search($subs,   $prowk);
 
