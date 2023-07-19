@@ -54,7 +54,7 @@ class PlansubExport implements FromView
             ->get()->toArray();
         $total = 0;
         $datos = self::CargarforcastF1($plan1, $fecha, $dias);
-
+        dd($datos);
 
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='",      $partsrev);
@@ -110,7 +110,7 @@ class PlansubExport implements FromView
             // dd( $padre);
             $inF1 += ['padre' =>  $padre];
 
-            $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
+            // $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias,  $forcastp);
             $datossub = [];
             $inF1 += ['hijos' =>  $datossub];
             array_push($totalpa, $inF1);
