@@ -68,10 +68,11 @@
             @php
 
                 $info = $info1['padre'];
+                $fore= $info['fore'];
                 $contdias = 0;
 
             @endphp
-            <tr >
+            <tr>
                 <td rowspan="3">
                     {{ $info['parte'] }}
                 </td>
@@ -83,19 +84,19 @@
                     Forecast
                 </td>
                 <td>
-                    {{ $info['total'] }}
+
                 </td>
                 @while ($contdias < $dias)
                     @php
-                        if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                        if (array_key_exists('Fore' . $hoy . 'D', $info) == false) {
                             $valFD = '-';
                         } else {
-                            $valFD = $info['For' . $hoy . 'D'];
+                            $valFD = $info['Fore' . $hoy . 'D'];
                         }
-                        if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                        if (array_key_exists('Fore' . $hoy . 'N', $info) == false) {
                             $valFN = '-';
                         } else {
-                            $valFN = $info['For' . $hoy . 'N'];
+                            $valFN = $info['Fore' . $hoy . 'N'];
                         }
                     @endphp
                     <td>
@@ -111,58 +112,22 @@
                 @endwhile
 
             </tr>
-            <tr >
-                <td>
-                    Plan
-                </td>
-                <td>
-                    {{ $info['tPlan'] }}
-                </td>
-                @while ($contdias < $dias)
-                    @php
-                        if (array_key_exists('P' . $hoy . 'D', $info) == false) {
-                            $valPD = '-';
-                        } else {
-                            $valPD = $info['P' . $hoy . 'D'];
-                        }
-                        if (array_key_exists('P' . $hoy . 'N', $info) == false) {
-                            $valPN = '-';
-                        } else {
-                            $valPN = $info['P' . $hoy . 'N'];
-                        }
-                    @endphp
-                    <td>
-                        {{ $valPD }}
-                    </td>
-                    <td>
-                        {{ $valPN }}
-                    </td>
-                    @php
-                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                        $contdias++;
-                    @endphp
-                @endwhile
 
-                @php
-                    $hoy = $fecha;
-                    $contdias = 0;
-                @endphp
-            </tr>
             <tr >
                 <td>
                     Firme
                 </td>
                 <td>
-                    {{ $info['tPlan'] }}
+
                 </td>
                 @while ($contdias < $dias)
                     @php
-                        if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                        if (array_key_exists('F' . $hoy . 'D', $fore) == false) {
                             $valPD = '-';
                         } else {
                             $valPD = $info['F' . $hoy . 'D'];
                         }
-                        if (array_key_exists('F' . $hoy . 'N', $info) == false) {
+                        if (array_key_exists('F' . $hoy . 'N', $fore) == false) {
                             $valPN = '-';
                         } else {
                             $valPN = $info['F' . $hoy . 'N'];
@@ -217,7 +182,6 @@
                         Requeriment (Forecast)
                     </th>
                     <th>
-                        {{ $info['total'] }}
                     </th>
                     @php
                         $conti = 0;
@@ -300,7 +264,7 @@
                         Firme
                     </th>
                     <th>
-                        {{ $datossubs['Tfirme'] }}
+
                     </th>
                     @php
                         $coni = 0;
