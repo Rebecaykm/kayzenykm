@@ -41,6 +41,7 @@ class PlansubExport implements FromView
         $TP = $this->TP;
         $datos = [];
         $general = [];
+        $reporte = [];
         $array = explode(",", $TP);
         $plan1 = Iim::query()
             ->select('IPROD', 'IREF04')
@@ -155,15 +156,15 @@ class PlansubExport implements FromView
 
         }
 
-        $datos = self::CargarforcastF1($plan1, $fecha, $dias);
+        // $datos = self::CargarforcastF1($plan1, $fecha, $dias);
 
-        $general += ['res' => $datos, 'fecha' => $fecha, 'dias' => $dias];
+        $reporte += ['res' => $general, 'fecha' => $fecha, 'dias' => $dias];
 
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='",      $partsrev);
 
         return view('planeacion.RepSubfinal', [
-            'general' => $general
+            'general' => $reporte
         ]);
     }
     function CargarforcastF1($prods, $hoy, $dias)
