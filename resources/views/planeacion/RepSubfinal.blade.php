@@ -66,7 +66,7 @@
 
         @foreach ($res as $info1)
             @php
-
+dd( $info1);
                 $info = $info1['padre'];
                 $fore= $info['fore'];
                 $contdias = 0;
