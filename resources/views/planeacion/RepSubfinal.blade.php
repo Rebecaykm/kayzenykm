@@ -10,24 +10,19 @@
 
     <thead>
         <tr>
-            <th  rowspan="2">No Parte Final </th>
-            <th  rowspan="2">
+            <th rowspan="2">No Parte Final </th>
+            <th rowspan="2">
                 Parte <br> componente
             </th>
-            <th rowspan="2">
-                Parte <br> Finales
-            </th>
-            <th  rowspan="2"></th>
-            <th  rowspan="2">
-                Parte <br> Total
-            </th>
+
+            <th rowspan="2"></th>
             @php
                 $hoy = $fecha;
                 $totalD = 0;
                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
             @endphp
             @while ($hoy != $fin)
-                <th aling="center"  colspan="2">
+                <th aling="center" colspan="2">
                     <div class='W-full'>
                         {{ date('Ymd', strtotime($hoy)) }}
                     </div>
@@ -62,110 +57,41 @@
         </tr>
 
     </thead>
-    <tbody >
-
+    <tbody>
         @foreach ($res as $info1)
             @php
-
+    if (array_key_exists('padre',  $info1) == false) {
+        dd($info1,$res);
+    }
                 $info = $info1['padre'];
+                $infohijos = $info1['hijos'];
+                $fore = $info['fore'];
                 $contdias = 0;
 
             @endphp
-            <tr >
-                <td rowspan="3">
+            <tr>
+                <td>
                     {{ $info['parte'] }}
                 </td>
-                <td rowspan="3">
-                </td>
-                <td rowspan="3">
-                </td>
                 <td>
-                    Forecast
                 </td>
-                <td>
-                    {{ $info['total'] }}
-                </td>
-                @while ($contdias < $dias)
-                    @php
-                        if (array_key_exists('For' . $hoy . 'D', $info) == false) {
-                            $valFD = '-';
-                        } else {
-                            $valFD = $info['For' . $hoy . 'D'];
-                        }
-                        if (array_key_exists('For' . $hoy . 'N', $info) == false) {
-                            $valFN = '-';
-                        } else {
-                            $valFN = $info['For' . $hoy . 'N'];
-                        }
-                    @endphp
-                    <td>
-                        {{ $valFD }}
-                    </td>
-                    <td>
-                        {{ $valFN }}
-                    </td>
-                    @php
-                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                        $contdias++;
-                    @endphp
-                @endwhile
 
-            </tr>
-            <tr >
-                <td>
-                    Plan
-                </td>
-                <td>
-                    {{ $info['tPlan'] }}
-                </td>
-                @while ($contdias < $dias)
-                    @php
-                        if (array_key_exists('P' . $hoy . 'D', $info) == false) {
-                            $valPD = '-';
-                        } else {
-                            $valPD = $info['P' . $hoy . 'D'];
-                        }
-                        if (array_key_exists('P' . $hoy . 'N', $info) == false) {
-                            $valPN = '-';
-                        } else {
-                            $valPN = $info['P' . $hoy . 'N'];
-                        }
-                    @endphp
-                    <td>
-                        {{ $valPD }}
-                    </td>
-                    <td>
-                        {{ $valPN }}
-                    </td>
-                    @php
-                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                        $contdias++;
-                    @endphp
-                @endwhile
 
-                @php
-                    $hoy = $fecha;
-                    $contdias = 0;
-                @endphp
-            </tr>
-            <tr >
                 <td>
                     Firme
                 </td>
-                <td>
-                    {{ $info['tPlan'] }}
-                </td>
+
                 @while ($contdias < $dias)
                     @php
-                        if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                        if (array_key_exists('F' . $hoy . 'D', $fore) == false) {
                             $valPD = '-';
                         } else {
-                            $valPD = $info['F' . $hoy . 'D'];
+                            $valPD = $fore['F' . $hoy . 'D'];
                         }
-                        if (array_key_exists('F' . $hoy . 'N', $info) == false) {
+                        if (array_key_exists('F' . $hoy . 'N', $fore) == false) {
                             $valPN = '-';
                         } else {
-                            $valPN = $info['F' . $hoy . 'N'];
+                            $valPN = $fore['F' . $hoy . 'N'];
                         }
                     @endphp
                     <td>
@@ -185,162 +111,60 @@
                     $contdias = 0;
                 @endphp
             </tr>
-       @php
-
-                $datossub = $info1['hijos'];
-
-            @endphp
-            @foreach ($datossub as $datossubs)
+            @foreach ($infohijos as $hijo)
                 @php
-                    $hoy = $fecha;
-                    $forcast = $datossubs['forcast'];
-                    $totalplan = array_sum($forcast);
+                    if (array_key_exists('Forehijo', $hijo) == false) {
+                        $hijop = [];
+                    }
+                    $forehijo = $hijo['Forehijo'] ?? $hijop;
 
                 @endphp
                 <tr>
-                    <th rowspan="3">
-                    </th>
-                    <th rowspan="3">
-                        {{ $datossubs['sub'] }}<br>
-                        @php
-                            $wctpar = 'wrk' . $datossubs['wrk'];
-                        @endphp
-                        {{-- SNP: {{ $datossubs['Qty'] }} <br>
-                        Wrkcente: {{ $datossubs['wrk'] }}<br>
-                        Min balance: {{ $datossubs['minbal'] }} --}}
+                    <td>
 
-                    </th>
-                    <th rowspan="3">
-                        {{ $datossubs['padres'] }}
-                    </th>
-                    <th>
-                        Requeriment (Forecast)
-                    </th>
-                    <th>
-                        {{ $info['total'] }}
-                    </th>
-                    @php
-                        $conti = 0;
-                        $hoy = $fecha;
-                        $plan = $datossubs['plan'];
+                    </td>
+                    {{ $hijo['parte'] }}
+                    <td>
+                    </td>
 
-                    @endphp
-                    @while ($conti <= $dias)
+
+                    <td>
+                        Firme
+                    </td>
+
+                    @while ($contdias < $dias)
                         @php
-                            if (array_key_exists('For' . $hoy . 'D', $info) == false) {
-                                $valFD = '-';
+
+                            if (array_key_exists('F' . $hoy . 'D', $forehijo) == false) {
+                                $valPD = '-';
                             } else {
-                                $valFD = $info['For' . $hoy . 'D'];
+                                $valPD = $forehijo['F' . $hoy . 'D'];
                             }
-                            if (array_key_exists('For' . $hoy . 'N', $info) == false) {
-                                $valFN = '-';
+                            if (array_key_exists('F' . $hoy . 'N', $forehijo) == false) {
+                                $valPN = '-';
                             } else {
-                                $valFN = $info['For' . $hoy . 'N'];
+                                $valPN = $forehijo['F' . $hoy . 'N'];
                             }
                         @endphp
                         <td>
-                            {{ $valFD }}
+                            {{ $valPD }}
                         </td>
                         <td>
-                            {{ $valFN }}
+                            {{ $valPN }}
                         </td>
                         @php
                             $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                            $conti++;
+                            $contdias++;
                         @endphp
                     @endwhile
-
-
-
-
-                </tr>
-
-                <tr>
-                    <th>
-                        Plan
-                    </th>
-                    <th>
-                        {{ $datossubs['Tplan'] }}
-                    </th>
                     @php
-                    $coni = 0;
-                    $hoy1 = $fecha;
-                @endphp
-                @while ($coni <= $dias)
-                    @php
-
-                        if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
-                            $valFiDh = 0;
-                        } else {
-                            $valFiDh = $plan['P' . $hoy1 . 'D'];
-                        }
-                        if (array_key_exists('P' . $hoy1 . 'N', $plan) == false) {
-                            $valFiNH = 0;
-                        } else {
-                            $valFiNH = $plan['P' . $hoy1 . 'N'];
-                        }
+                        $hoy = $fecha;
+                        $contdias = 0;
                     @endphp
-                    <th>
-                        {{ $valFiDh }}
-                    </th>
-                    <th>
-                        {{ $valFiNH  }}
-
-                    </th>
-                    @php
-                        $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
-                        $coni++;
-                    @endphp
-                @endwhile
-
-
                 </tr>
-                <tr>
-                    <th>
-                        Firme
-                    </th>
-                    <th>
-                        {{ $datossubs['Tfirme'] }}
-                    </th>
-                    @php
-                        $coni = 0;
-                        $hoy1 = $fecha;
-                    @endphp
-                    @while ($coni <= $dias)
-                        @php
-
-                            if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
-                                $valFiDh = 0;
-                            } else {
-                                $valFiDh = $plan['F' . $hoy1 . 'D'];
-                            }
-                            if (array_key_exists('F' . $hoy1 . 'N', $plan) == false) {
-                                $valFiNH = 0;
-                            } else {
-                                $valFiNH = $plan['F' . $hoy1 . 'N'];
-                            }
-                        @endphp
-                        <th>
-                            {{ $valFiDh }}
-                        </th>
-                        <th>
-                            {{ $valFiNH  }}
-
-                        </th>
-                        @php
-                            $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
-                            $coni++;
-                        @endphp
-                    @endwhile
-
-
-
-
-                </tr>
-
             @endforeach
-
         @endforeach
+
 
     </tbody>
 </table>
