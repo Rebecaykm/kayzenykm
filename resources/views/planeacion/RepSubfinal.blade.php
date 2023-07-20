@@ -10,24 +10,19 @@
 
     <thead>
         <tr>
-            <th  rowspan="2">No Parte Final </th>
-            <th  rowspan="2">
+            <th rowspan="2">No Parte Final </th>
+            <th rowspan="2">
                 Parte <br> componente
             </th>
-            <th rowspan="2">
-                Parte <br> Finales
-            </th>
-            <th  rowspan="2"></th>
-            <th  rowspan="2">
-                Parte <br> Total
-            </th>
+
+            <th rowspan="2"></th>
             @php
                 $hoy = $fecha;
                 $totalD = 0;
                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
             @endphp
             @while ($hoy != $fin)
-                <th aling="center"  colspan="2">
+                <th aling="center" colspan="2">
                     <div class='W-full'>
                         {{ date('Ymd', strtotime($hoy)) }}
                     </div>
@@ -62,77 +57,41 @@
         </tr>
 
     </thead>
-    <tbody >
-
+    <tbody>
         @foreach ($res as $info1)
             @php
-
+    if (array_key_exists('padre',  $info1) == false) {
+        dd($info1,$res);
+    }
                 $info = $info1['padre'];
-                
-                $fore= $info['fore'];
+                $infohijos = $info1['hijos'];
+                $fore = $info['fore'];
                 $contdias = 0;
 
             @endphp
             <tr>
-                <td rowspan="3">
+                <td>
                     {{ $info['parte'] }}
                 </td>
-                <td rowspan="3">
-                </td>
-                <td rowspan="3">
-                </td>
                 <td>
-                    Forecast
                 </td>
-                <td>
 
-                </td>
-               
-                @while ($contdias < $dias)
-                    @php
-                        if (array_key_exists('Fore' . $hoy . 'D', $info) == false) {
-                            $valFD = '-';
-                        } else {
-                            $valFD = $info['Fore' . $hoy . 'D'];
-                        }
-                        if (array_key_exists('Fore' . $hoy . 'N', $info) == false) {
-                            $valFN = '-';
-                        } else {
-                            $valFN = $info['Fore' . $hoy . 'N'];
-                        }
-                    @endphp
-                    <td>
-                        {{ $valFD }}
-                    </td>
-                    <td>
-                        {{ $valFN }}
-                    </td>
-                    @php
-                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                        $contdias++;
-                    @endphp
-                @endwhile
 
-            </tr>
-         
-            <tr >
                 <td>
                     Firme
                 </td>
-                <td>
 
-                </td>
                 @while ($contdias < $dias)
                     @php
                         if (array_key_exists('F' . $hoy . 'D', $fore) == false) {
                             $valPD = '-';
                         } else {
-                            $valPD = $info['F' . $hoy . 'D'];
+                            $valPD = $fore['F' . $hoy . 'D'];
                         }
                         if (array_key_exists('F' . $hoy . 'N', $fore) == false) {
                             $valPN = '-';
                         } else {
-                            $valPN = $info['F' . $hoy . 'N'];
+                            $valPN = $fore['F' . $hoy . 'N'];
                         }
                     @endphp
                     <td>
@@ -152,10 +111,60 @@
                     $contdias = 0;
                 @endphp
             </tr>
-          
+            @foreach ($infohijos as $hijo)
+                @php
+                    if (array_key_exists('Forehijo', $hijo) == false) {
+                        $hijop = [];
+                    }
+                    $forehijo = $hijo['Forehijo'] ?? $hijop;
 
+                @endphp
+                <tr>
+                    <td>
+
+                    </td>
+                    {{ $hijo['parte'] }}
+                    <td>
+                    </td>
+
+
+                    <td>
+                        Firme
+                    </td>
+
+                    @while ($contdias < $dias)
+                        @php
+
+                            if (array_key_exists('F' . $hoy . 'D', $forehijo) == false) {
+                                $valPD = '-';
+                            } else {
+                                $valPD = $forehijo['F' . $hoy . 'D'];
+                            }
+                            if (array_key_exists('F' . $hoy . 'N', $forehijo) == false) {
+                                $valPN = '-';
+                            } else {
+                                $valPN = $forehijo['F' . $hoy . 'N'];
+                            }
+                        @endphp
+                        <td>
+                            {{ $valPD }}
+                        </td>
+                        <td>
+                            {{ $valPN }}
+                        </td>
+                        @php
+                            $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                            $contdias++;
+                        @endphp
+                    @endwhile
+                    @php
+                        $hoy = $fecha;
+                        $contdias = 0;
+                    @endphp
+                </tr>
+            @endforeach
         @endforeach
-       
-        
+
+
     </tbody>
 </table>
