@@ -57,7 +57,7 @@
                 </div>
             </form>
 
-            <form method="get" action="{{ route('planeacion.exportfinal') }}">
+            {{-- <form method="get" action="{{ route('planeacion.exportfinal') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Reporte de Planeación
@@ -86,15 +86,13 @@
                         </button>
                     </div>
                 </div>
-            </form>
+            </form> --}}
 
 
-            <form method="get" action="{{ route('planeacion.export') }}">
+            {{-- <form method="get" action="{{ route('planeacion.export') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <div class="flex justify-center">
-                        {{-- <span class="text-gray-700 dark:text-gray-400">
-                        <input type="hidden" name="Fecha" id="Fecha" value={{ $fecha  }}>
-                    </span> --}}
+
                         <div class="flex justify-center m-2">
                             <label class="block mt-4 text-sm">
                                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
@@ -130,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </form> --}}
         </div>
 
 
@@ -227,19 +225,40 @@
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
-
                             @endphp
-                            <tr class="text-gray-700 dark:text-gray-400  text-xs ">
-                                <td class="px-2 py-1 text-s  bg-teal-300">
-                                    {{ $contp }}
-                                </td>
-                                <td class="px-2 py-1 text-xs  bg-teal-300">
-                                    <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                        {{ $padre }}<br>
-                                        SNP {{ $info['Qty'] }}<br>
-                                        WRKcenter {{ $info['WRC'] }}
-                                    </div>
-                                </td>
+                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
+                            @if( strpos($padre, 'SOR')===false)
+
+
+                                    <td class="px-2 py-1 text-s  bg-teal-300">
+                                        {{ $contp }}
+                                    </td>
+
+                                    <td class="px-2 py-1 text-xs  bg-teal-300">
+                                        <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                            {{ $padre }}<br>
+                                            SNP {{ $info['Qty'] }}<br>
+                                            WRKcenter {{ $info['WRC'] }}
+                                        </div>
+                                    </td>
+                            @else
+
+                                    <td class="px-2 py-1 text-s bg-yellow-300">
+                                        {{ $contp }}
+                                    </td>
+
+                                    <td class="px-2 py-1 text-xs bg-yellow-300">
+                                        <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                            {{ $padre }}<br>
+                                            SNP {{ $info['Qty'] }}<br>
+                                            WRKcenter {{ $info['WRC'] }}
+                                        </div>
+                                    </td>
+                            @endif
+
+
+
+
 
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
                                     <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">

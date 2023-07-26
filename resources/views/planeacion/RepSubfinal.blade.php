@@ -14,7 +14,9 @@
             <th rowspan="2">
                 Parte <br> componente
             </th>
-
+            <th rowspan="2">
+               Workcenter
+            </th>
             <th rowspan="2"></th>
             @php
                 $hoy = $fecha;
@@ -32,7 +34,12 @@
                     $totalD = $totalD + 1;
                 @endphp
             @endwhile
+            <th rowspan="2">
+                Total
+             </th>
         </tr>
+
+
         <tr>
             @php
                 $hoy = $fecha;
@@ -54,20 +61,20 @@
                     $totalD = $totalD + 1;
                 @endphp
             @endwhile
+
+
         </tr>
 
     </thead>
     <tbody>
         @foreach ($res as $info1)
             @php
-    if (array_key_exists('padre',  $info1) == false) {
-        dd($info1,$res);
-    }
+
                 $info = $info1['padre'];
                 $infohijos = $info1['hijos'];
                 $fore = $info['fore'];
                 $contdias = 0;
-
+$totalp=0;
             @endphp
             <tr>
                 <td>
@@ -75,7 +82,8 @@
                 </td>
                 <td>
                 </td>
-
+                <td>
+                </td>
 
                 <td>
                     Firme
@@ -84,15 +92,16 @@
                 @while ($contdias < $dias)
                     @php
                         if (array_key_exists('F' . $hoy . 'D', $fore) == false) {
-                            $valPD = '-';
+                            $valPD =0;
                         } else {
                             $valPD = $fore['F' . $hoy . 'D'];
                         }
                         if (array_key_exists('F' . $hoy . 'N', $fore) == false) {
-                            $valPN = '-';
+                            $valPN = 0;
                         } else {
                             $valPN = $fore['F' . $hoy . 'N'];
                         }
+                        $totalp+=$valPD+  $valPN ;
                     @endphp
                     <td>
                         {{ $valPD }}
@@ -105,10 +114,13 @@
                         $contdias++;
                     @endphp
                 @endwhile
-
+                <td>
+                    {{ $totalp}}
+                </td>
                 @php
                     $hoy = $fecha;
                     $contdias = 0;
+                    $totalp=0;
                 @endphp
             </tr>
             @foreach ($infohijos as $hijo)
@@ -117,7 +129,7 @@
                         $hijop = [];
                     }
                     $forehijo = $hijo['Forehijo'] ?? $hijop;
-
+                    $totalh=0;
                 @endphp
                 <tr>
                     <td>
@@ -126,7 +138,9 @@
                     {{ $hijo['parte'] }}
                     <td>
                     </td>
-
+                    <td>
+                        {{ $hijo['WKC'] }}
+                    </td>
 
                     <td>
                         Firme
@@ -136,15 +150,16 @@
                         @php
 
                             if (array_key_exists('F' . $hoy . 'D', $forehijo) == false) {
-                                $valPD = '-';
+                                $valPD = 0;
                             } else {
                                 $valPD = $forehijo['F' . $hoy . 'D'];
                             }
                             if (array_key_exists('F' . $hoy . 'N', $forehijo) == false) {
-                                $valPN = '-';
+                                $valPN =0;
                             } else {
                                 $valPN = $forehijo['F' . $hoy . 'N'];
                             }
+                            $totalh+=$valPD+  $valPN ;
                         @endphp
                         <td>
                             {{ $valPD }}
@@ -157,9 +172,13 @@
                             $contdias++;
                         @endphp
                     @endwhile
+                    <td>
+                        {{ $totalh}}
+                    </td>
                     @php
                         $hoy = $fecha;
                         $contdias = 0;
+                        $totalh=0;
                     @endphp
                 </tr>
             @endforeach

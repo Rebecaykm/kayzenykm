@@ -92,7 +92,7 @@ class PlaneacionController extends Controller
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
-            $padres = array_chunk($plan1, 5);
+            $padres = array_chunk($plan1, 10);
 
             $total = count($padres);
 
@@ -309,8 +309,6 @@ class PlaneacionController extends Controller
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
 
-
-
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
@@ -365,8 +363,6 @@ class PlaneacionController extends Controller
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql =   date('Ymd', strtotime($inp[1]));
-
-
                 if ($request->$plans != 0) {
 
                     $dfa = [
@@ -441,6 +437,7 @@ class PlaneacionController extends Controller
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
@@ -779,13 +776,6 @@ class PlaneacionController extends Controller
                 ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
-
-
-
-
-
-
-
 
         $kmrprod = array_column($RKMRfinal, 'MPROD');
         $kmrmtype = array_column($RKMRfinal, 'MRCNO');
