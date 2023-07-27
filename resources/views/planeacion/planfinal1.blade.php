@@ -156,8 +156,7 @@
 
             </div>
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
-                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
-                    value={{ $fecha . '/' . $dias }}>
+                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                 <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
@@ -226,10 +225,8 @@
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
                             @endphp
-                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
-                            @if( strpos($padre, 'SOR')===false)
-
-
+                            <tr class="text-gray-700 dark:text-gray-400  text-xs ">
+                                @if (strpos($padre, 'SOR') === false)
                                     <td class="px-2 py-1 text-s  bg-teal-300">
                                         {{ $contp }}
                                     </td>
@@ -241,8 +238,7 @@
                                             WRKcenter {{ $info['WRC'] }}
                                         </div>
                                     </td>
-                            @else
-
+                                @else
                                     <td class="px-2 py-1 text-s bg-yellow-300">
                                         {{ $contp }}
                                     </td>
@@ -254,7 +250,7 @@
                                             WRKcenter {{ $info['WRC'] }}
                                         </div>
                                     </td>
-                            @endif
+                                @endif
 
 
 
@@ -345,6 +341,8 @@
                                                         } else {
                                                             $valeclN = $info['ecl' . $hoy . 'N'] + 0;
                                                         }
+
+
                                                         $valRD = 0;
                                                         $valRN = 0;
                                                         $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
@@ -353,6 +351,7 @@
                                                         $totalfirM += $valeclD + $valeclN;
                                                         $totalfirykm += $valFiN + $valFiD;
                                                         $workcen = $info['WRC'];
+
                                                     @endphp
                                                     <input value='{{ $valFD }}'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -382,25 +381,53 @@
                                                 </label>
 
                                             </div>
+
+                                            @if (strpos($padre, 'SOR') === false)
+
                                             <div
-                                                class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
-                                                <label class="block text-sm ">
+                                            <label class="block text-sm ">
 
-                                                    <input id='{{ $inD }}' name='{{ $inD }}'
-                                                        onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                        value='{{ $valFiD }}'
-                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
-                                                <label class="block text-sm ">
+                                                <input id='{{ $inD }}' name='{{ $inD }}'
+                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                    value='{{ $valFiD }}'
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                            <label class="block text-sm ">
 
-                                                    <input id='{{ $inN }}' name='{{ $inN }}'
-                                                        onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                        value='{{ $valFiN }}'
-                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                </label>
+                                                <input id='{{ $inN }}' name='{{ $inN }}'
+                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                    value='{{ $valFiN }}'
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
 
-                                            </div>
+                                        </div>
+                                            @else
+                                            @php
+                                                  $totalfirykm=0;
+                                            @endphp
+                                            <div
+                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
+
+                                            <label class="block text-sm ">
+
+                                                <input id='{{ $inD }}' name='{{ $inD }}'
+                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                    value='0'
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
+                                            </label>
+                                            <label class="block text-sm ">
+
+                                                <input id='{{ $inN }}' name='{{ $inN }}'
+                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                    value='0'
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled/>
+                                            </label>
+
+                                        </div>
+                                            @endif
+
 
 
                                         </td>
@@ -415,6 +442,7 @@
 
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        =
                                         <label class="block text-sm ">
                                             <input name='totalForMMVO' id='totalForMMVO' value="{{ $totalforM }}"
                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
@@ -429,6 +457,7 @@
                                         </label>
                                     </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        =
                                         <label class="block text-sm ">
                                             @php
                                                 $otalphp = 'totalFirykm' . $namenA;

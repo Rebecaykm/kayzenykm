@@ -75,7 +75,7 @@ class PlansubExport implements FromView
 
         $valPDp  = kFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
-            // ->whereraw("(FPROD='DA6A70470            ')")
+
             ->wherein('FPROD', array_column($Sub, 'MCCPRO'))
             ->where([
                 ['FRDTE', '>=', $hoy],
