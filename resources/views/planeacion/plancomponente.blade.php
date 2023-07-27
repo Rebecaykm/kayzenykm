@@ -435,6 +435,7 @@
                                     @php
 
                                         $forcast = $datossubs['forcast'];
+
                                         $totalplan = array_sum($forcast);
                                         echo $datossubs['padres'];
                                     @endphp
@@ -454,6 +455,13 @@
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="Requeriment (Forecast)"
+                                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                disabled />
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        <label class="block text-sm ">
+                                            <input value="Requeriment (Firme YKM)"
                                                 class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                 disabled />
                                         </label>
@@ -503,6 +511,7 @@
                                     $totalplan = 0;
                                     $totalKMRP = 0;
                                     $totalfir = 0;
+                                    $totalkfp=0;
                                 @endphp
                                 @while ($coni < $dias)
                                     @php
@@ -586,6 +595,18 @@
                                         } else {
                                             $valMKMRsn = $forcast['KMRS' . $hoy1 . 'N'];
                                         }
+                                        if (array_key_exists('kfp' . $hoy1 . 'D', $forcast) == false) {
+                                            $valkfpsd = '0';
+                                        } else {
+                                            $valkfpsd = $forcast['kfp' . $hoy1 . 'D'];
+                                        }
+
+                                        if (array_key_exists('kfp' . $hoy1 . 'N', $forcast) == false) {
+                                            $valMkfpsn = '0';
+                                        } else {
+                                            $valMkfpsn = $forcast['kfp' . $hoy1 . 'N'];
+                                        }
+                                        $totalkfp+=  $valkfpsd+$valMkfpsn;
 
                                     @endphp
                                     <td class="px-2 py-1 text-xs text-center  ">
@@ -597,6 +618,20 @@
                                             </label>
                                             <label class="block text-sm ">
                                                 <input value={{ $valRNH }}
+                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+                                        </div>
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg  border-b-4 border-green-400">
+                                            <label class="block text-sm ">
+                                                <input value={{ $valkfpsd }}
+                                                    class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+                                            <label class="block text-sm ">
+
+                                                <input value={{$valMkfpsn  }}
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
@@ -636,21 +671,21 @@
                                         @endphp
 
                                         <div
-                                            class="  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-indigo-500/100 ">
-                                            <label class="block text-sm border-teal-400  outline-pink-500">
+                                        class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                         <label class="block text-sm border-teal-400  outline-pink-500">
                                                 <input id={{ $inD }} name={{ $inD }}
                                                     value={{ $valFiDH }}
                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                     type="number" min="0"
-                                                    class=" block w-20 text-xs dark:border-blue-600 dark:bg-blue-700 focus:border-green-400 focus: outline-pink-500 focus:shadow-outline-green dark:text-gray-300 dark:focus:shadow-outline-blue form-input  border-rose-600" />
-                                            </label>
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
                                             <label class="block text-sm border-teal-400  outline-pink-500 ">
                                                 <input id={{ $inN }} name={{ $inN }}
                                                     value={{ $valFiNH }}
                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                     type="number" min="0"
-                                                    class=" block w-20 text-xs form-input  " />
-                                            </label>
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                </label>
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
@@ -679,6 +714,12 @@
                                                 class="block w-20 text-xs form-input   " disabled />
                                         </label>
                                     </div>
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-green-400">
+                                       = <label class="block text-sm ">
+                                            <input value="{{ $totalkfp}}"
+                                                class="block w-20 text-xs form-input   " disabled />
+                                        </label>
+                                    </div>
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="{{ $datossubs['Totalpadres'] }}"
@@ -692,8 +733,8 @@
                                                 disabled />
                                         </label>
                                     </div>
-                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                        <label class="block text-sm ">
+                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4  border-blue-400">
+                                        =<label class="block text-sm ">
                                             @php
                                                 $otalphp = 'totalFirykm' . $namenA;
                                             @endphp

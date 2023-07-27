@@ -328,6 +328,7 @@ class PlaneacionController extends Controller
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+        dd( $datos );
         return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
     public function update(Request $request)
@@ -440,6 +441,7 @@ class PlaneacionController extends Controller
 
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='",      $partsrev);
+
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
     /**
@@ -717,18 +719,19 @@ class PlaneacionController extends Controller
 
         $KMRFINAL = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS','MCQREQ ')
             ->where([
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->whereraw("(MCCPRO='" .   $child  . "') AND ( MCFCLS='F1')")
-            ->where('MCFPRO', 'not like', '%-830%')
+            ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
             ->get()->toarray();
 
         $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
         $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
         $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
+        $FINALREQ = array_column($KMRFINAL, 'MCQREQ');
         $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
 
         $RKMRfinal = KMR::query()
@@ -741,6 +744,30 @@ class PlaneacionController extends Controller
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
 
+
+            $valPDpadres  = kFP::query() //plan
+            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
+            ->wherein('FPROD',   array_column($KMRFINAL, 'MCFPRO'))
+            ->where([
+                ['FRDTE', '>=', $hoy],
+                ['FRDTE', '<', $totalF],
+                ['FTYPE', '=', 'F'],
+            ])
+            ->orderby('FPROD', 'DESC')
+            ->get()->toarray();
+
+
+            $KFPprod = array_column( $valPDpadres, 'FPROD');
+            $KFPmtype = array_column( $valPDpadres, 'FPCNO');
+            $KFPfecha = array_column( $valPDpadres, 'FRDTE');
+            $KFPMtotal = array_column( $valPDpadres, 'FQTY');
+            $kftype= array_column( $valPDpadres, 'FTYPE');
+
+            $kmrprod = array_column($RKMRfinal, 'MPROD');
+            $kmrmtype = array_column($RKMRfinal, 'MRCNO');
+            $KMRfecha = array_column($RKMRfinal, 'MRDTE');
+            $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
+            $KtYPE = array_column($RKMRfinal, 'MTYPE');
 
         // ------------------------------------------------------------------------------------pADRES
         $KMRPARENT = YMCOM::query()
@@ -763,9 +790,17 @@ class PlaneacionController extends Controller
             ->whereraw("(MPROD='" .   $PADREKMR . "')")
             ->where([
                 ['MRDTE', '>=', $hoy],
-                ['MRDTE', '<', $totalF],
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
+
+
+
+
+
+
+
+
+
 
         // -----------------------------------------FIRME PLAN
         $valPD = kFP::query()
@@ -777,11 +812,6 @@ class PlaneacionController extends Controller
             ])
             ->get()->toarray();
 
-        $kmrprod = array_column($RKMRfinal, 'MPROD');
-        $kmrmtype = array_column($RKMRfinal, 'MRCNO');
-        $KMRfecha = array_column($RKMRfinal, 'MRDTE');
-        $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
-        $KtYPE = array_column($RKMRfinal, 'MTYPE');
 
 
 
@@ -830,13 +860,15 @@ class PlaneacionController extends Controller
             $numpar = [];
             $numpaplan =  [];
             $total = 0;
+            $req=0;
             while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
-
-                array_push($finaleskmr, $FINALLIST[$key5]);
+                $req=0+$FINALREQ[$key5];
+                array_push($finaleskmr, $FINALLIST[$key5]."/REQ:".$req );
 
                 unset($FINALLIST[$key5]);
                 unset($FINALMCPRO[$key5]);
                 unset($FINALCALS[$key5]);
+                unset($FINALREQ[$key5]);
             }
             while (($key2 = array_search($subs,  $kmrmccprod)) !== false) {
                 if ($kmrmcfprod[$key2] != $subs) {
@@ -849,6 +881,7 @@ class PlaneacionController extends Controller
             $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
             $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
             $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
+            $FINALREQ = array_column($KMRFINAL, 'MCQREQ');
             $FINALKMR = implode("' OR  MPROD='", $FINALLIST);
 
             $contpadres = count($padreskmr);
@@ -906,6 +939,41 @@ class PlaneacionController extends Controller
                     unset($KMRmtoalpa[$key3]);
                 }
             }
+
+
+
+            foreach ($finaleskmr as $F1) {
+                $total = 0;
+                while (($key3 = array_search($F1,    $KFPprod)) !== false) {
+                    $dia =  $KFPfecha[$key3];
+                    $turno = $KFPmtype[$key3];
+                    $total =  $KFPMtotal[$key3] + 0;
+                    $valt = substr($turno, 4, 1);
+
+
+                    if (array_key_exists('kfp' . $dia . $valt,  $forcast) !== false) {
+                        $total = $forcast['kfp' . $dia . $valt] + $total;
+                        $forcast['kfp' . $dia . $valt] = $total;
+
+                    } else {
+                        $forcast  += ['kfp' . $dia . $valt => $total];
+                    }
+                    unset( $KFPprod[$key3]);
+                    unset( $KFPmtype[$key3]);
+                    unset(  $KFPfecha[$key3]);
+                    unset( $KFPMtotal [$key3]);
+                }
+            }
+            $KFPprod = array_column( $valPDpadres, 'FPROD');
+            $KFPmtype = array_column( $valPDpadres, 'FPCNO');
+            $KFPfecha = array_column( $valPDpadres, 'FRDTE');
+            $KFPMtotal = array_column( $valPDpadres, 'FQTY');
+            $kftype = array_column( $valPDpadres, 'FTYPE');
+
+            // if("BDTS28B35 -P                       "==$subs)
+            // {
+            //     dd($forcast,$F1, $valPDpadres);
+            // }
 
 
             $total = 0;
