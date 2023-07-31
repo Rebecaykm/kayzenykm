@@ -22,7 +22,7 @@ class DailyProductionController extends Controller
 
         $dailyDiurno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
-            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
                 ['SWRKC', 'LIKE', '%' . $work . '%'],
@@ -35,7 +35,7 @@ class DailyProductionController extends Controller
 
         $dailyNocturno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
-            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
                 ['SWRKC', 'LIKE', '%' . $work . '%'],
@@ -87,7 +87,7 @@ class DailyProductionController extends Controller
 
         $dailyDiurno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
-            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
                 ['SWRKC', 'LIKE', '%' . $work . '%'],
@@ -100,7 +100,7 @@ class DailyProductionController extends Controller
 
         $dailyNocturno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
-            ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
+            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.FSO.SPROD')
             ->where([
                 ['SDDTE', '=', $date],
                 ['SWRKC', 'LIKE', '%' . $work . '%'],
