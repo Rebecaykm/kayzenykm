@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Ipb extends Model
 {
     use HasFactory;
-    protected $connection = 'odbc-connection-lx834f02';
-    protected $table = 'LX834F02.IPB';
+    protected $connection = 'odbc-connection-lx834f01';
+    protected $table = 'LX834F01.IPB';
 }
