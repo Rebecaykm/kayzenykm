@@ -7,16 +7,16 @@ use Illuminate\Pagination\Paginator;
 use App\Models\LWK;
 use App\Models\IPB;
 use App\Models\KMR;
-use App\Models\kFP;
-use App\Models\frt;
-use App\Models\Iim;
+use App\Models\KFP;
+use App\Models\FRT;
+use App\Models\LIM;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
-use App\Models\Fma;
-use App\Models\Ecl;
+use App\Models\FMA;
+use App\Models\ECL;
 use App\Models\MBMr;
 use App\Models\YMCOM;
-use App\Models\Fso;
+use App\Models\FSO;
 use App\Models\YK006;
 use App\Models\MStructure;
 use Carbon\Carbon;
@@ -76,7 +76,7 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
         $array = explode(",", $TP);
         if ($tipo == 2) {
-            $plan1 = Iim::query()
+            $plan1 = LIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
                 ->where([
@@ -102,7 +102,7 @@ class PlaneacionController extends Controller
             $cadepar = implode("' OR  IPROD='",      $partsrev);
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' =>  $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
-            $plan1 = Iim::query()
+            $plan1 = LIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
                 ->where([
@@ -135,7 +135,7 @@ class PlaneacionController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
         $array = explode(",", $TP);
-        $plan1 = Iim::query()
+        $plan1 = LIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -313,7 +313,7 @@ class PlaneacionController extends Controller
         $query = "CALL LX834OU01.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-        $plan1 = Iim::query()
+        $plan1 = LIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -418,7 +418,7 @@ class PlaneacionController extends Controller
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-        $plan1 = Iim::query()
+        $plan1 = LIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -465,7 +465,7 @@ class PlaneacionController extends Controller
         $finaArra = array_column($prods, 'IPROD');
         $finales = implode("' OR  MPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
-        $valfinales = kmr::query() //forecast
+        $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
             ->where('MRDTE', '<=',  $totalF)
@@ -473,7 +473,7 @@ class PlaneacionController extends Controller
             ->whereraw("(MPROD='" . $finales  . "')")
             ->get()->toarray();
 
-        $valPDp  = kFP::query() //plan
+        $valPDp  = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
             ->where([
@@ -570,7 +570,7 @@ class PlaneacionController extends Controller
         $finaleswrk = implode("' OR  RPROD='",   $finaArra);
         $Qa = implode("' OR  IPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
-        $valfinales = kmr::query() //forecast
+        $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
             ->where('MRDTE', '<',  $totalF)
@@ -588,7 +588,7 @@ class PlaneacionController extends Controller
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
             ->get()->toarray();
 
-        $cond = IIM::query()
+        $cond = LIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
             ->whereraw("(IPROD='" . $Qa  . "')")
             ->get()->toArray();
@@ -599,13 +599,13 @@ class PlaneacionController extends Controller
 
 
 
-        $WCT = Frt::query()
+        $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->whereraw("(RPROD='" . $finaleswrk . "')")
             ->get()->toarray();
         $prowk = array_column($WCT, 'RPROD');
         $wk = array_column($WCT, 'RWRKC');
-        $valPDp  = kFP::query() //plan
+        $valPDp  = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
             ->where([
@@ -745,7 +745,7 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-            $valPDpadres  = kFP::query() //plan
+            $valPDpadres  = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->wherein('FPROD',   array_column($KMRFINAL, 'MCFPRO'))
             ->where([
@@ -803,7 +803,7 @@ class PlaneacionController extends Controller
 
 
         // -----------------------------------------FIRME PLAN
-        $valPD = kFP::query()
+        $valPD = KFP::query()
             ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
             ->whereraw("(FPROD='" .  $cadsubsPlan . "')")
             ->where([
@@ -816,7 +816,7 @@ class PlaneacionController extends Controller
 
 
         $cadsubssh = implode("' OR  SPROD='",  $sub1);
-        $valSD = Fso::query()
+        $valSD = FSO::query()
             ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
             ->whereraw("(SPROD='" .  $cadsubssh  . "')")
             ->where('SDDTE', '>=', $hoy)
@@ -824,12 +824,12 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-        $cond = IIM::query()
+        $cond = LIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
             ->whereraw("(IPROD='" . $Qa  . "')")
             ->get()->toArray();
 
-        $WCT = Frt::query()
+        $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->whereraw("(RPROD='" .  $cadsubswrk  . "')")
             ->get()->toarray();
@@ -1058,82 +1058,3 @@ class PlaneacionController extends Controller
 
     // ---------------------------------guardar estructuras de BOM----------------------------------------------
     function guardar($prod, $sub, $clase)
-    {
-        $res = self::buscar($prod, $sub);
-        if ($res == 0) {
-            $data = MStructure::create([
-                'final' => $prod,
-                'componente' => $sub,
-                'clase' => $clase,
-                'Activo' => '1',
-            ]);
-        }
-    }
-
-    function buscar($prod, $sub)
-    {
-        $data = MStructure::query()
-            ->select('Final', 'Componente')
-            ->where('Final', '=', $prod)
-            ->where('Componente', '=', $sub)
-            ->count();
-
-        return $data;
-    }
-    function buscarF1($prod)
-    {
-        $a = array(array());
-        $i = count($a);
-        $hijo = self::Hijo($prod);
-        foreach ($hijo as $hijos) {
-            $a[$i][0] = $hijos->BCHLD;
-            $a[$i][1] = $hijos->BCLAC;
-            $Chijo = self::Conthijo($hijos->BCHLD);
-            if ($Chijo != 0) {
-                $b = self::buscarF1($hijos->BCHLD);
-                $i = count($a);
-                foreach ($b as $bs) {
-                    $j = 0;
-                    foreach ($bs as $valor) {
-                        $a[$i][$j] = $valor;
-                        $j++;
-                    }
-                    $i++;
-                }
-            }
-            $i++;
-        }
-        return $a;
-    }
-    function Conthijo($prod)
-    {
-        $ContBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS', 'IMPLC')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
-            ->where('BPROD', '=', $prod)
-            ->where('IMPLC', '!=', 'OBSOLETE')
-            ->where(function ($query) {
-                $query->where('BCLAC ', 'M2')
-                    ->orwhere('BCLAC ', 'M3')
-                    ->orwhere('BCLAC ', '01')
-                    ->orwhere('BCLAC ', 'M4');
-            })
-            ->count();
-        return $ContBMS;
-    }
-    function Hijo($prod)
-    {
-        $MBMS = MBMr::query()
-            ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
-            ->where('BPROD', '=', $prod)
-            ->where(function ($query) {
-                $query->where('BCLAC ', 'M2')
-                    ->orwhere('BCLAC ', 'M3')
-                    ->orwhere('BCLAC ', '01')
-                    ->orwhere('BCLAC ', 'M4');
-            })
-            ->orderby('BCHLD')
-            ->get();
-        return $MBMS;
-    }
-}

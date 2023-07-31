@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Yf005 extends Model
+class YF005 extends Model
 {
     use HasFactory;
 
@@ -50,7 +50,7 @@ class Yf005 extends Model
      */
     public static function storeOpenOrder(string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, string $sqfin, string $cdte, string $canc)
     {
-        return Yf005::query()->insert([
+        return YF005::query()->insert([
             'F5ID' => 'SO',
             'F5WRKC' => $swrkc,
             'F5DDTE' => $sddte,

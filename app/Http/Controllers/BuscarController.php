@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ZCC;
 use App\Models\KMR;
-use App\Models\kFP;
-use App\Models\frt;
-use App\Models\Iim;
+use App\Models\KFP;
+use App\Models\FRT;
+use App\Models\LIM;
 use App\Models\LOGSUP;
-use App\Models\Fma;
-use App\Models\Ecl;
+use App\Models\FMA;
+use App\Models\ECL;
 use App\Models\MBMr;
-use App\Models\Fso;
+use App\Models\FSO;
 use App\Models\YK006;
 use App\Models\Structure;
 use Carbon\Carbon;
@@ -141,7 +141,7 @@ class BuscarController extends Controller
                 $hora = date('His', time());
 
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                $WCT = Frt::query()
+                $WCT = FRT::query()
                     ->select('RWRKC', 'RPROD')
                     ->where('RPROD', $namenA)
                     ->value('RWRKC');
@@ -416,7 +416,7 @@ class BuscarController extends Controller
     function Forecast($producto, $fecha, $turno,$dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $plan = kmr::query()
+        $plan = KMR::query()
             ->select('MQTY' ,'MRDTE','MRCNO')
             ->where('MRDTE', '>=', $fecha)
             ->where('MRDTE', '<=', $totalF)
@@ -430,7 +430,7 @@ class BuscarController extends Controller
     function ForecastTOTAL($producto, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $plan = kmr::query()
+        $plan = KMR::query()
             ->select('MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $fecha)
             ->where('MRDTE', '<=', $totalF)
@@ -443,7 +443,7 @@ class BuscarController extends Controller
     {
 
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
             ->where([
                 ['FPROD', '=', $pro],
@@ -459,7 +459,7 @@ class BuscarController extends Controller
     function ShopOTotal($pro, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $Fsos = Fso::query()
+        $Fsos = FSO::query()
             ->select('SDDTE', 'SQREQ', 'SOCNO')
             ->where('SPROD', '=', $pro)
             // ->where('SOCNO', 'like', $turno)

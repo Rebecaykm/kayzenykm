@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Zcc extends Model
+class FRT extends Model
 {
+
     use HasFactory;
     protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F01.ZCC';
+    protected $table = 'LX834F01.FRT';
+
 }

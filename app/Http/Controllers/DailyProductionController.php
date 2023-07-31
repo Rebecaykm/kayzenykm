@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fso;
-use App\Models\Lwk;
-use App\Models\Yf006;
+use App\Models\FSO;
+use App\Models\LWK;
+use App\Models\YF006;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -20,7 +20,7 @@ class DailyProductionController extends Controller
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
-        $dailyDiurno = Fso::query()
+        $dailyDiurno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
@@ -33,7 +33,7 @@ class DailyProductionController extends Controller
             ->orderBy('SWRKC', 'ASC')
             ->get();
 
-        $dailyNocturno = Fso::query()
+        $dailyNocturno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
@@ -85,7 +85,7 @@ class DailyProductionController extends Controller
         $work = $request->workCenter ?? '';
         $date = $request->dueDate != '' ? Carbon::parse($request->dueDate)->format('Ymd') : '';
 
-        $dailyDiurno = Fso::query()
+        $dailyDiurno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
@@ -98,7 +98,7 @@ class DailyProductionController extends Controller
             ->orderBy('SWRKC', 'ASC')
             ->get();
 
-        $dailyNocturno = Fso::query()
+        $dailyNocturno = FSO::query()
             ->select(['SOCNO', 'SPROD', 'SORD', 'SQREQ', 'SQFIN', 'SQREMM', 'SID', 'SWRKC', 'SSTAT', 'IOPB', 'IRCT', 'IISS', 'IADJ', 'IMSPKT', 'IMBOXQ'])
             ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.FSO.SPROD')
             ->where([
@@ -158,12 +158,12 @@ class DailyProductionController extends Controller
             $canc = $arrayDaily['canc'] ?? 0;
 
             if ($cdte !== '' || $canc !== 0 || $sqfin !== '0' || $sqremm !== '0') {
-                $data = Fso::query()
+                $data = FSO::query()
                     ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SQREMM'])
                     ->where('SORD', '=', $arrayDaily['sord'])
                     ->first();
                 if ($data->SID == 'SO') {
-                    $insert = Yf006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
+                    $insert = YF006::storeDailyProduction($data->SID, $data->SWRKC, $data->SDDTE, $data->SORD, $data->SPROD, $data->SQREQ, $sqfin, $sqremm, $canc, $cdte);
                 }
             }
         }
