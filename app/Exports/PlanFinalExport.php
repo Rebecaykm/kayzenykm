@@ -5,15 +5,15 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use App\Models\KMR;
-use App\Models\kFP;
-use App\Models\frt;
-use App\Models\Iim;
+use App\Models\KFP;
+use App\Models\FRT;
+use App\Models\LIM;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
-use App\Models\Fma;
-use App\Models\Ecl;
+use App\Models\FMA;
+use App\Models\ECL;
 use App\Models\MBMr;
-use App\Models\Fso;
+use App\Models\FSO;
 use App\Models\YK006;
 use App\Models\MStructure;
 use Illuminate\Contracts\View\View;
@@ -40,7 +40,7 @@ class PlanFinalExport implements FromView
         $TP = $this->TP;
         $datos = [];
         $array = explode(",", $TP);
-        $prods = Iim::query()
+        $prods = LIM::query()
         ->select('IPROD', 'IREF04')
         ->wherein('IREF04 ', $array)
         ->where([
@@ -71,14 +71,14 @@ class PlanFinalExport implements FromView
             // }
         }
         $finales = implode("' OR  MPROD='",  $cadfinal);
-        $valfinales = kmr::query() //forecast
+        $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
             ->where('MRDTE', '<',  $totalF)
             ->whereraw("(MPROD='" . $finales  . "')")
             ->get()->toarray();
 
-        $valPDp  = kFP::query() //plan
+        $valPDp  = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->whereraw("(FPROD='" .   $finaleskfp  . "')")
             ->where([
@@ -102,7 +102,7 @@ class PlanFinalExport implements FromView
         $finalres =    array_column($res, 'Final');
         $subcompo = array_column($res, 'Componente');
         $cadsubsPlan = implode("' OR  FPROD='",  $subcompo);
-        // $valPD = kFP::query()
+        // $valPD = KFP::query()
         //     ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
         //     ->whereraw("(FPROD='" .  $cadsubsPlan . "')")
         //     ->where([
@@ -113,7 +113,7 @@ class PlanFinalExport implements FromView
 
 
         $cadsubssh = implode("' OR  SPROD='",  $subcompo);
-        $valSD = Fso::query()
+        $valSD = FSO::query()
             ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
             ->whereraw("(SPROD='" .  $cadsubssh  . "')")
             ->where('SDDTE', '>=', $hoy)
@@ -124,12 +124,12 @@ class PlanFinalExport implements FromView
         $Qa = implode("' OR  IPROD='",  $subcompo);
 
 
-        $cond = IIM::query()
+        $cond = LIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
             ->whereraw("(IPROD='" . $Qa  . "')")
             ->get()->toArray();
 
-        $WCT = Frt::query()
+        $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->whereraw("(RPROD='" .  $cadsubswrk  . "')")
             ->get()->toarray();

@@ -6,20 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Fso extends Model
+class LWK extends Model
 {
     use HasFactory;
 
     protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F01.FSO';
+    protected $table = 'LX834F01.LWK';
 
     protected $fillable = [
-        'SWRKC',
-        'SDDTE',
-        'SORD',
-        'SPROD',
-        'SQREQ',
-        'SQFIN',
+        'WWRKC',
+        'WDESC',
     ];
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Yf006 extends Model
+class YF006 extends Model
 {
     use HasFactory;
 
@@ -38,7 +38,7 @@ class Yf006 extends Model
 
     public static function storeDailyProduction(string $sid, string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, float $sqfin, float $sqremm, int $canc, string $cdte)
     {
-        return Yf006::query()->insert([
+        return YF006::query()->insert([
             'F6ID' => $sid,
             'F6WRKC' => $swrkc,
             'F6DDTE' => $sddte,

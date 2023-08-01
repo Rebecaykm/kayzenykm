@@ -6,17 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lwk extends Model
+class LIM extends Model
 {
     use HasFactory;
 
     protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F01.LWK';
-
-    protected $fillable = [
-        'WWRKC',
-        'WDESC',
-    ];
+    protected $table = 'LX834F01.IIM';
 
     /**
      * @param $value

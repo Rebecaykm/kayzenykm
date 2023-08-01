@@ -3,13 +3,13 @@
 
 use App\Models\LWK;
 use App\Models\IPB;
-use App\Models\Kmr;
-use App\Models\Fma;
-use App\Models\Ecl;
-use App\Models\kFP;
-use App\Models\Fso;
-use App\Models\Iim;
-use App\Models\Fpo;
+use App\Models\KMR;
+use App\Models\FMA;
+use App\Models\ECL;
+use App\Models\KFP;
+use App\Models\FSO;
+use App\Models\LIM;
+use App\Models\FPO;
 use App\Models\MBMr;
 use App\Models\ZCC;
 use App\Models\MStructure;
@@ -23,7 +23,7 @@ class registros
     function info($producto)
     {
 
-        $cond = IIM::query()
+        $cond = LIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC')
             ->where('IPROD', '=', $producto)
             ->first()->toArray();
@@ -34,7 +34,7 @@ class registros
     function contard($producto, $fecha, $turno)
     {
 
-        $cond = kmr::query()
+        $cond = KMR::query()
             ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
             ->where('MRDTE', '=', $fecha)
             ->where('MPROD', '=', $producto)
@@ -46,7 +46,7 @@ class registros
 
     function contar($producto, $fecha, $fechafin)
     {
-        $WCs = kmr::query()
+        $WCs = KMR::query()
             ->select('MPROD', 'MQTY', 'MRDTE', 'MRCNO')
             ->where('MRDTE', '>=', $fecha)
             ->where('MRDTE', '<=', $fechafin)
@@ -383,7 +383,7 @@ class registros
     function Forecast($producto, $fecha, $turno)
     {
 
-        $plan = kmr::query()
+        $plan = KMR::query()
             ->select('MQTY')
             ->where('MRDTE', '=', $fecha)
             ->where('MPROD', '=', $producto)
@@ -396,7 +396,7 @@ class registros
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
 
 
-        $plan = kmr::query()
+        $plan = KMR::query()
             ->select('MRDTE', 'MQTY')
             ->where('MRDTE', '>=', $fecha)
             ->where('MRDTE', '<=', $totalF)
@@ -408,7 +408,7 @@ class registros
     function planyfirme($pro, $fecha, $turno)
     {
 
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FTYPE')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -420,7 +420,7 @@ class registros
     function contplanyfirme($pro, $fecha, $turno)
     {
 
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FTYPE')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -433,7 +433,7 @@ class registros
     function plan($pro, $fecha, $turno)
     {
 
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -445,7 +445,7 @@ class registros
     function planTotal($pro, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FRDTE', 'FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -459,7 +459,7 @@ class registros
 
     function Firme($pro, $fecha, $turno)
     {
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -471,7 +471,7 @@ class registros
     function FirmeTotal($pro, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FRDTE', 'FQTY')
             ->where('FPROD', '=', $pro)
             ->where('FPCNO', 'like', $turno)
@@ -484,7 +484,7 @@ class registros
 
     function ShopO($pro, $fecha, $turno)
     {
-        $Fsos = Fso::query()
+        $Fsos = FSO::query()
             ->select('SQREQ')
             ->where('SPROD', '=', $pro)
             ->where('SOCNO', 'like', $turno)
@@ -497,7 +497,7 @@ class registros
     function ShopOTotal($pro, $fecha, $turno, $dias)
     {
         $totalF = date('Ymd', strtotime($fecha . '+' . $dias . ' day'));
-        $Fsos = Fso::query()
+        $Fsos = FSO::query()
             ->select('SDDTE', 'SQREQ')
             ->where('SPROD', '=', $pro)
             ->where('SOCNO', 'like', $turno)
@@ -509,7 +509,7 @@ class registros
     }
     function contarfirme($pro, $fecha, $fechafin)
     {
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
             ->where('FPROD', '=', $pro)
             ->where('FRDTE', '>=', $fecha)
@@ -520,7 +520,7 @@ class registros
     }
     function contarplan($pro, $fecha, $fechafin)
     {
-        $kfps = kFP::query()
+        $kfps = KFP::query()
             ->select('FPROD', 'FQTY', 'FTYPE', 'FRDTE', 'FPCNO')
             ->where('FPROD', '=', $pro)
             ->where('FRDTE', '>=', $fecha)
@@ -532,7 +532,7 @@ class registros
 
     function contarShopO($pro, $fecha, $fechafin)
     {
-        $Fsos = Fso::query()
+        $Fsos = FSO::query()
             ->select('SQREQ')
             ->where('SPROD', '=', $pro)
             ->where('SDDTE', '>=', $fecha)

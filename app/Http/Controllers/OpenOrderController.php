@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fso;
-use App\Models\Yf005;
+use App\Models\FSO;
+use App\Models\YF005;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -16,7 +16,7 @@ class OpenOrderController extends Controller
         $sprod = $request->sprod ?? '';
         $date = $request->due_date != '' ? Carbon::parse($request->due_date)->format('Ymd') : '';
 
-        $openOrders = Fso::query()
+        $openOrders = FSO::query()
             ->select([
                 'SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'
             ])
@@ -32,7 +32,7 @@ class OpenOrderController extends Controller
             ->orderByRaw('SORD DESC', 'SDDTE DESC')
             ->simplePaginate(100);
 
-        $totalOpenOrders = Fso::query()
+        $totalOpenOrders = FSO::query()
             ->select(['SID', 'SWRKC', 'SDDTE', 'SORD', 'SPROD', 'SQREQ', 'SQFIN', 'SSTAT'])
             ->where('SID', '=', 'SO')
             ->where('SSTAT', '!=', 'X')
@@ -68,12 +68,12 @@ class OpenOrderController extends Controller
             $canc = $arrayOpenOrder['canc'] ?? 0;
             if ($cdte != '') {
                 if ($canc != 0) {
-                    $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
+                    $data = YF005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
                 } else {
-                    $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
+                    $data = YF005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
                 }
             } elseif ($canc != 0) {
-                $data = Yf005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
+                $data = YF005::storeOpenOrder($arrayOpenOrder['swrkc'], $arrayOpenOrder['sddte'], $arrayOpenOrder['sord'], $arrayOpenOrder['sprod'], $arrayOpenOrder['sqreq'], $arrayOpenOrder['sqfin'], $cdte, $canc);
             }
         }
 

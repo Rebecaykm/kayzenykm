@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Departament;
-use App\Models\Lwk;
+use App\Models\LWK;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -22,7 +22,7 @@ class WorkCenter extends Component
 
         $departaments = Departament::whereIn('code', $arrayDepto)->get();
 
-        $workCenters = Lwk::query()
+        $workCenters = LWK::query()
             ->select('WWRKC', 'WDESC')
             ->orderBy('WWRKC', 'ASC')
             ->where('WWRKC', 'LIKE', $this->departament . '%')
