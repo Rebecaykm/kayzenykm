@@ -755,7 +755,8 @@ class PlaneacionController extends Controller
             ])
             ->orderby('FPROD', 'DESC')
             ->get()->toarray();
-
+          
+            
 
             $KFPprod = array_column( $valPDpadres, 'FPROD');
             $KFPmtype = array_column( $valPDpadres, 'FPCNO');
@@ -790,6 +791,7 @@ class PlaneacionController extends Controller
             ->whereraw("(MPROD='" .   $PADREKMR . "')")
             ->where([
                 ['MRDTE', '>=', $hoy],
+                ['MRDTE','<', $totalF],
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
 
@@ -857,14 +859,15 @@ class PlaneacionController extends Controller
 
             $padreskmr = [];
             $finaleskmr = [];
+            $finaleskmrQTY=[];
             $numpar = [];
             $numpaplan =  [];
             $total = 0;
             $req=0;
             while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
                 $req=0+$FINALREQ[$key5];
-                array_push($finaleskmr, $FINALLIST[$key5]."/REQ:".$req );
-
+                array_push($finaleskmr, $FINALLIST[$key5]);
+                array_push($finaleskmrQTY, $FINALLIST[$key5]."/REQ:".$req );
                 unset($FINALLIST[$key5]);
                 unset($FINALMCPRO[$key5]);
                 unset($FINALCALS[$key5]);
@@ -889,7 +892,7 @@ class PlaneacionController extends Controller
 
             if ($contF1 >= 1) {
 
-                $texfinal = implode(',' . '<br> ',    $finaleskmr);
+                $texfinal = implode(',' . '<br> ',    $finaleskmrQTY);
 
                 $cadfinal = implode("' OR  MPROD='",     $finaleskmr);
                 // $cadsubsL = implode("' OR  LPROD='", $padreskmr );
@@ -944,6 +947,7 @@ class PlaneacionController extends Controller
 
             foreach ($finaleskmr as $F1) {
                 $total = 0;
+                
                 while (($key3 = array_search($F1,    $KFPprod)) !== false) {
                     $dia =  $KFPfecha[$key3];
                     $turno = $KFPmtype[$key3];
@@ -954,16 +958,20 @@ class PlaneacionController extends Controller
                     if (array_key_exists('kfp' . $dia . $valt,  $forcast) !== false) {
                         $total = $forcast['kfp' . $dia . $valt] + $total;
                         $forcast['kfp' . $dia . $valt] = $total;
+             
 
                     } else {
                         $forcast  += ['kfp' . $dia . $valt => $total];
+             
                     }
+                    
                     unset( $KFPprod[$key3]);
                     unset( $KFPmtype[$key3]);
                     unset(  $KFPfecha[$key3]);
                     unset( $KFPMtotal [$key3]);
                 }
             }
+          
             $KFPprod = array_column( $valPDpadres, 'FPROD');
             $KFPmtype = array_column( $valPDpadres, 'FPCNO');
             $KFPfecha = array_column( $valPDpadres, 'FRDTE');

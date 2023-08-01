@@ -1,10 +1,5 @@
 <x-app-layout title="Plan">
-    {{-- @php
-        include_once '../app/Http/Controllers/registros.php';
-        $obj = new registros();
-        $projecto = $obj->Projecto($tp);
-        // $dias = ;
-    @endphp --}}
+
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <form method="post" action="{{ route('planeacion.create') }}">
@@ -26,112 +21,10 @@
                             @default
                         @endswitch
                     </h2>
-                    {{-- <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Planeación
-                    </h2> --}}
-                    @csrf
 
-                    {{-- <div class="flex justify-center">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
-                            <input id="fecha" name="fecha" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Search</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div> --}}
                 </div>
             </form>
-
-            {{-- <form method="get" action="{{ route('planeacion.exportfinal') }}">
-                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Reporte de Planeación
-                    </h2>
-                    <div class="flex justify-center">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="SeProject" id="SeProject" value="{{ $tp }}">
-                            <input type="hidden" name="SePC" id="SePC" value="{{ $cp }}">
-                            <input type="hidden" name="SeWC" id="SeWC" value="{{ $wc }}">
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
-                            <input id="fecha" name="fecha" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Search</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </form> --}}
-
-
-            {{-- <form method="get" action="{{ route('planeacion.export') }}">
-                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                    <div class="flex justify-center">
-
-                        <div class="flex justify-center m-2">
-                            <label class="block mt-4 text-sm">
-                                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                                <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                                <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                                <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicialf</span>
-                                <input id="fecha" name="fecha" type="date"
-                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                            </label>
-                        </div>
-                        <div class="flex justify-center m-2">
-                            <label class="block mt-4 text-sm">
-                                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                                <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                                <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                                <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha Fin</span>
-                                <input id="fechaFin" name="fechaFin" type="date"
-                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                            </label>
-                        </div>
-                        <div class="flex justify-center">
-                            <button type="submit"
-                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                                <span class="mr-2">Reporte excel</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form> --}}
         </div>
-
-
         <form action="{{ route('planeacion.updatef1') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
                 @csrf
@@ -146,14 +39,6 @@
                         </svg>
                     </button>
                 </div>
-                {{-- <div class="flex items-center mb-4">
-                    <input id="default-checkbox" type="checkbox" value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="default-checkbox"
-                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Aplicar cambios </label>
-                </div> --}}
-
-
             </div>
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
@@ -203,8 +88,6 @@
                                         </div>
                                     </th>
                                 @endif
-
-
                                 @php
                                     $diasjava = $hoy . '/' . $diasjava;
                                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
@@ -221,9 +104,11 @@
 
                         @foreach ($res as $info1)
                             @php
+                                
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
+                                
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 @if (strpos($padre, 'SOR') === false)
@@ -251,11 +136,6 @@
                                         </div>
                                     </td>
                                 @endif
-
-
-
-
-
                                 <td class="px-2 py-1 text-xs  bg-emerald-100">
                                     <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
@@ -299,35 +179,25 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     @php
-
+                                                        
                                                         if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                             $valFD = 0;
                                                         } else {
                                                             $valFD = $info['For' . $hoy . 'D'];
                                                         }
-
+                                                        
                                                         if (array_key_exists('For' . $hoy . 'N', $info) == false) {
                                                             $valFN = 0;
                                                         } else {
                                                             $valFN = $info['For' . $hoy . 'N'];
                                                         }
-                                                        if (array_key_exists('P' . $hoy . 'D', $info) == false) {
-                                                            $valPD = 0;
-                                                        } else {
-                                                            $valPD = $info['P' . $hoy . 'D'];
-                                                        }
-                                                        if (array_key_exists('P' . $hoy . 'N', $info) == false) {
-                                                            $valPN = 0;
-                                                        } else {
-                                                            $valPN = $info['P' . $hoy . 'N'];
-                                                        }
                                                         if (array_key_exists('F' . $hoy . 'D', $info) == false) {
-                                                            $valFiD = $valPD;
+                                                            $valFiD = $valFD;
                                                         } else {
                                                             $valFiD = $info['F' . $hoy . 'D'];
                                                         }
                                                         if (array_key_exists('F' . $hoy . 'N', $info) == false) {
-                                                            $valFiN = $valPN;
+                                                            $valFiN = $valFN;
                                                         } else {
                                                             $valFiN = $info['F' . $hoy . 'N'];
                                                         }
@@ -341,8 +211,7 @@
                                                         } else {
                                                             $valeclN = $info['ecl' . $hoy . 'N'] + 0;
                                                         }
-
-
+                                                        
                                                         $valRD = 0;
                                                         $valRN = 0;
                                                         $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
@@ -351,7 +220,7 @@
                                                         $totalfirM += $valeclD + $valeclN;
                                                         $totalfirykm += $valFiN + $valFiD;
                                                         $workcen = $info['WRC'];
-
+                                                        
                                                     @endphp
                                                     <input value='{{ $valFD }}'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -381,51 +250,57 @@
                                                 </label>
 
                                             </div>
+                                            {{-- @php
+                                                if ($padre == 'BDTS53383                          ') {
+                                                    dd($info1, $valFiD,$valFiN );
+                                                }
+                                            @endphp --}}
 
                                             @if (strpos($padre, 'SOR') === false)
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
-                                            <div
-                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                                    <label class="block text-sm ">
 
-                                            <label class="block text-sm ">
+                                                        <input id='{{ $inD }}' name='{{ $inD }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='{{ $valFiD }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
-                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                    value='{{ $valFiD }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-                                            <label class="block text-sm ">
+                                                        <input id='{{ $inN }}' name='{{ $inN }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='{{ $valFiN }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
 
-                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                    value='{{ $valFiN }}'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                            </label>
-
-                                        </div>
+                                                </div>
                                             @else
-                                            @php
-                                                  $totalfirykm=0;
-                                            @endphp
-                                            <div
-                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
+                                                @php
+                                                    $totalfirykm = 0;
+                                                @endphp
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 
-                                            <label class="block text-sm ">
+                                                    <label class="block text-sm ">
 
-                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                    value='0'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled />
-                                            </label>
-                                            <label class="block text-sm ">
+                                                        <input id='{{ $inD }}' name='{{ $inD }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='0'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
-                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                    value='0'
-                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled/>
-                                            </label>
+                                                        <input id='{{ $inN }}' name='{{ $inN }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='0'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
 
-                                        </div>
+                                                </div>
                                             @endif
 
 

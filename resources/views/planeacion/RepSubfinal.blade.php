@@ -69,12 +69,20 @@
     <tbody>
         @foreach ($res as $info1)
             @php
+           
 
                 $info = $info1['padre'];
                 $infohijos = $info1['hijos'];
                 $fore = $info['fore'];
                 $contdias = 0;
 $totalp=0;
+if($info== "BDTS53383                          ")
+            {
+                dd($info1['padre']); 
+            }else
+            {
+                dd($res); 
+            }
             @endphp
             <tr>
                 <td>
