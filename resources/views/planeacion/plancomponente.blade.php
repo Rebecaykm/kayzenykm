@@ -27,111 +27,6 @@
         </h2>
 
 
-        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg"> --}}
-        {{-- <form method="post" action="{{ route('planeacion.create') }}">
-
-                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-
-                    @csrf
-
-                    <div class="flex justify-center">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="Planeacion" id="Planeacion" value='2'>
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
-                            <input id="fecha" name="fecha" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label> --}}
-        {{-- </div> --}}
-        {{-- <div class="flex justify-center">
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Search</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </form> --}}
-        {{-- <form method="get" action="{{ route('planeacion.exportsubcomponentes') }}">
-                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Reporte de Planeación
-                    </h2>
-                    <div class="flex justify-center">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="SeProject" id="SeProject" value="{{ $tp }}">
-                            <input type="hidden" name="SePC" id="SePC" value="{{ $cp }}">
-                            <input type="hidden" name="SeWC" id="SeWC" value="{{ $wc }}">
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicial</span>
-                            <input id="fecha" name="fecha" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Search</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </form> --}}
-
-
-        {{-- <form method="get" action="{{ route('planeacion.export') }}">
-            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                <div class="flex justify-center">
-
-                    <div class="flex justify-center m-2">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha inicialf</span>
-                            <input id="fecha" name="fecha" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                    </div>
-                    <div class="flex justify-center m-2">
-                        <label class="block mt-4 text-sm">
-                            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                            <span class="text-gray-700 dark:text-gray-400 text-xs">Fecha Fin</span>
-                            <input id="fechaFin" name="fechaFin" type="date"
-                                class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                        </label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Reporte excel</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form> --}}
     </div>
 
 
@@ -149,12 +44,7 @@
                     </svg>
                 </button>
             </div>
-            {{-- <div class="flex items-center mb-4">
-                    <input id="default-checkbox" type="checkbox" value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="default-checkbox"
-                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Aplicar cambios </label>
-                </div> --}}
+        
 
 
         </div>
@@ -188,6 +78,7 @@
                             $dias = $dias - 2;
                             $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                             $diasjava = '';
+                           
                         @endphp
                         @while ($hoy != $fin)
                             <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -224,7 +115,7 @@
 
                     @foreach ($res as $info1)
                         @php
-
+                            
                             $info = $info1['padre'];
 
                         @endphp
