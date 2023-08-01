@@ -757,7 +757,6 @@ class PlaneacionController extends Controller
             ])
             ->orderby('FPROD', 'DESC')
             ->get()->toarray();
-          
             
 
         $KFPprod = array_column($valPDpadres, 'FPROD');
@@ -959,17 +958,14 @@ class PlaneacionController extends Controller
                     unset(  $KFPfecha[$key3]);
                     unset( $KFPMtotal [$key3]);
                 }
-            
+            }
             $KFPprod = array_column( $valPDpadres, 'FPROD');
             $KFPmtype = array_column( $valPDpadres, 'FPCNO');
             $KFPfecha = array_column( $valPDpadres, 'FRDTE');
             $KFPMtotal = array_column( $valPDpadres, 'FQTY');
             $kftype = array_column( $valPDpadres, 'FTYPE');
 
-            // if("BDTS28B35 -P                       "==$subs)
-            // {
-            //     dd($forcast,$F1, $valPDpadres);
-            // }
+        
 
 
             $total = 0;
