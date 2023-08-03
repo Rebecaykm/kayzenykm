@@ -104,11 +104,11 @@
 
                         @foreach ($res as $info1)
                             @php
-                                
+
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
-                                
+
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                 @if (strpos($padre, 'SOR') === false)
@@ -179,13 +179,20 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     @php
-                                                        
+                                                     // if($prod['IPROD']=="BDTS53816                          ")
+                        // {
+                        //     dd($prod['IPROD'],  $reg6['FRDTE'],
+                        //     $turno = $reg6['FPCNO'],
+                        //     $tipo = $reg6['FTYPE'],
+                        //     $total = $reg6['FQTY']);
+                        // }
+
                                                         if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                             $valFD = 0;
                                                         } else {
                                                             $valFD = $info['For' . $hoy . 'D'];
                                                         }
-                                                        
+
                                                         if (array_key_exists('For' . $hoy . 'N', $info) == false) {
                                                             $valFN = 0;
                                                         } else {
@@ -211,7 +218,7 @@
                                                         } else {
                                                             $valeclN = $info['ecl' . $hoy . 'N'] + 0;
                                                         }
-                                                        
+
                                                         $valRD = 0;
                                                         $valRN = 0;
                                                         $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
@@ -220,7 +227,7 @@
                                                         $totalfirM += $valeclD + $valeclN;
                                                         $totalfirykm += $valFiN + $valFiD;
                                                         $workcen = $info['WRC'];
-                                                        
+
                                                     @endphp
                                                     <input value='{{ $valFD }}'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
