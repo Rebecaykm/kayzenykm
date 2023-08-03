@@ -44,7 +44,7 @@
                     </svg>
                 </button>
             </div>
-        
+
 
 
         </div>
@@ -78,7 +78,7 @@
                             $dias = $dias - 2;
                             $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                             $diasjava = '';
-                           
+
                         @endphp
                         @while ($hoy != $fin)
                             <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -115,7 +115,7 @@
 
                     @foreach ($res as $info1)
                         @php
-                            
+
                             $info = $info1['padre'];
 
                         @endphp
