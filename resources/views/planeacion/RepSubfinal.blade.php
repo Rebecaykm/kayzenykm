@@ -15,7 +15,7 @@
                 Parte <br> componente
             </th>
             <th rowspan="2">
-               Workcenter
+                Workcenter
             </th>
             <th rowspan="2"></th>
             @php
@@ -36,7 +36,7 @@
             @endwhile
             <th rowspan="2">
                 Total
-             </th>
+            </th>
         </tr>
 
 
@@ -67,22 +67,16 @@
 
     </thead>
     <tbody>
+
+
         @foreach ($res as $info1)
             @php
-           
-
                 $info = $info1['padre'];
                 $infohijos = $info1['hijos'];
                 $fore = $info['fore'];
                 $contdias = 0;
-$totalp=0;
-if($info== "BDTS53383                          ")
-            {
-                dd($info1['padre']); 
-            }else
-            {
-                dd($res); 
-            }
+                $totalp = 0;
+                $hoy = $fecha;
             @endphp
             <tr>
                 <td>
@@ -97,10 +91,12 @@ if($info== "BDTS53383                          ")
                     Firme
                 </td>
 
+
                 @while ($contdias < $dias)
+
                     @php
                         if (array_key_exists('F' . $hoy . 'D', $fore) == false) {
-                            $valPD =0;
+                            $valPD = 0;
                         } else {
                             $valPD = $fore['F' . $hoy . 'D'];
                         }
@@ -109,7 +105,10 @@ if($info== "BDTS53383                          ")
                         } else {
                             $valPN = $fore['F' . $hoy . 'N'];
                         }
-                        $totalp+=$valPD+  $valPN ;
+                        $totalp += $valPD + $valPN;
+                //         if ($info['parte']  =="DGH928B0XD                         ") {
+                //     dd($info1['padre'],$hoy ,$contdias, $fore);
+                // }
                     @endphp
                     <td>
                         {{ $valPD }}
@@ -123,12 +122,12 @@ if($info== "BDTS53383                          ")
                     @endphp
                 @endwhile
                 <td>
-                    {{ $totalp}}
+                    {{ $totalp }}
                 </td>
                 @php
                     $hoy = $fecha;
                     $contdias = 0;
-                    $totalp=0;
+                    $totalp = 0;
                 @endphp
             </tr>
             @foreach ($infohijos as $hijo)
@@ -137,7 +136,7 @@ if($info== "BDTS53383                          ")
                         $hijop = [];
                     }
                     $forehijo = $hijo['Forehijo'] ?? $hijop;
-                    $totalh=0;
+                    $totalh = 0;
                 @endphp
                 <tr>
                     <td>
@@ -163,11 +162,11 @@ if($info== "BDTS53383                          ")
                                 $valPD = $forehijo['F' . $hoy . 'D'];
                             }
                             if (array_key_exists('F' . $hoy . 'N', $forehijo) == false) {
-                                $valPN =0;
+                                $valPN = 0;
                             } else {
                                 $valPN = $forehijo['F' . $hoy . 'N'];
                             }
-                            $totalh+=$valPD+  $valPN ;
+                            $totalh += $valPD + $valPN;
                         @endphp
                         <td>
                             {{ $valPD }}
@@ -181,12 +180,12 @@ if($info== "BDTS53383                          ")
                         @endphp
                     @endwhile
                     <td>
-                        {{ $totalh}}
+                        {{ $totalh }}
                     </td>
                     @php
                         $hoy = $fecha;
                         $contdias = 0;
-                        $totalh=0;
+                        $totalh = 0;
                     @endphp
                 </tr>
             @endforeach

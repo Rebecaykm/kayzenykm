@@ -332,7 +332,7 @@ class PlaneacionController extends Controller
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        dd($datos);
+        // dd($datos);
         return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
 
@@ -634,6 +634,7 @@ class PlaneacionController extends Controller
                 $total = 0;
                 foreach ($valfinales as $reg4) {
                     if ($reg4['MPROD'] == $prod['IPROD']) {
+
                         $dia = $reg4['MRDTE'];
                         $turno = $reg4['MRCNO'];
                         $total = $reg4['MQTY'] + 0;
@@ -661,11 +662,18 @@ class PlaneacionController extends Controller
                 $total = 0;
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
+                        // if($prod['IPROD']=="BDTS53816                          ")
+                        // {
+                        //     dd($prod['IPROD'],  $reg6['FRDTE'],
+                        //     $turno = $reg6['FPCNO'],
+                        //     $tipo = $reg6['FTYPE'],
+                        //     $total = $reg6['FQTY']);
+                        // }
                         $dia = $reg6['FRDTE'];
                         $turno = $reg6['FPCNO'];
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
-                        $valt = substr($turno, 4, 1);
+                        $valt = substr($turno, 4, 1)?? 'D';
                         $planpadre += [$tipo . $dia . $valt => $total];
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
@@ -757,7 +765,7 @@ class PlaneacionController extends Controller
             ])
             ->orderby('FPROD', 'DESC')
             ->get()->toarray();
-            
+
 
         $KFPprod = array_column($valPDpadres, 'FPROD');
         $KFPmtype = array_column($valPDpadres, 'FPCNO');
@@ -937,7 +945,7 @@ class PlaneacionController extends Controller
 
             foreach ($finaleskmr as $F1) {
                 $total = 0;
-                
+
                 while (($key3 = array_search($F1,    $KFPprod)) !== false) {
                     $dia =  $KFPfecha[$key3];
                     $turno = $KFPmtype[$key3];
@@ -952,7 +960,7 @@ class PlaneacionController extends Controller
                     } else {
                         $forcast  += ['kfp' . $dia . $valt => $total];
                     }
-                    
+
                     unset( $KFPprod[$key3]);
                     unset( $KFPmtype[$key3]);
                     unset(  $KFPfecha[$key3]);
@@ -965,7 +973,7 @@ class PlaneacionController extends Controller
             $KFPMtotal = array_column( $valPDpadres, 'FQTY');
             $kftype = array_column( $valPDpadres, 'FTYPE');
 
-        
+
 
 
             $total = 0;
