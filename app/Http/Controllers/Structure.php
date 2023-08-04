@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LIM;
+use App\Models\IIM;
 use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
 use App\Models\MStructure;
-use App\Models\mbmr;
+use App\Models\MBM;
 
 
 class Structure extends Controller
@@ -22,7 +22,7 @@ class Structure extends Controller
             ->Where('CCTABL', '=', 'SIRF4')
             ->orderBy('CCID', 'ASC')
             ->get();
-        $plan = LIM::query()
+        $plan = IIM::query()
             ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],
@@ -109,7 +109,7 @@ class Structure extends Controller
     }
     function Conthijo($prod)
     {
-        $ContBMS = MBMr::query()
+        $ContBMS = MBM::query()
             ->select('BPROD')
             ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
             ->where('BPROD', '=', $prod)
@@ -125,7 +125,7 @@ class Structure extends Controller
     }
     function Hijo($prod)
     {
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BCHLD', 'BCLAC')
             ->where('BPROD', '=', $prod)
             ->where(function ($query) {

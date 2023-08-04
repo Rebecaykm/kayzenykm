@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 
-use App\Models\LIM;
+use App\Models\IIM;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -18,7 +18,7 @@ class UsersExport implements FromView
     public function view(): View
     {
         $Pr =  $this->id;
-        $plan = LIM::query()
+        $plan = IIM::query()
             ->select('IPROD')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],

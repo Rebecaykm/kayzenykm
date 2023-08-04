@@ -7,13 +7,13 @@ use Maatwebsite\Excel\Concerns\FromView;
 use App\Models\KMR;
 use App\Models\KFP;
 use App\Models\FRT;
-use App\Models\LIM;
+use App\Models\IIM;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
 use App\Models\FMA;
 use App\Models\YMCOM;
 use App\Models\ECL;
-use App\Models\MBMr;
+use App\Models\MBM;
 use App\Models\FSO;
 use App\Models\YK006;
 use App\Models\MStructure;
@@ -43,7 +43,7 @@ class PlansubExport implements FromView
         $general = [];
         $reporte = [];
         $array = explode(",", $TP);
-        $plan1 = LIM::query()
+        $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([

@@ -8,9 +8,9 @@ use App\Models\FMA;
 use App\Models\ECL;
 use App\Models\KFP;
 use App\Models\FSO;
-use App\Models\LIM;
+use App\Models\IIM;
 use App\Models\FPO;
-use App\Models\MBMr;
+use App\Models\MBM;
 use App\Models\ZCC;
 use App\Models\MStructure;
 use Illuminate\Support\Arr;
@@ -23,7 +23,7 @@ class registros
     function info($producto)
     {
 
-        $cond = LIM::query()
+        $cond = IIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC')
             ->where('IPROD', '=', $producto)
             ->first()->toArray();
@@ -57,7 +57,7 @@ class registros
     function padre($pro)
     {
 
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
             ->where('BCHLD', '=', $pro)
             ->where('BDDIS', '>=', '9900000')
@@ -67,7 +67,7 @@ class registros
     function padrecon($pro)
     {
 
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
             ->where('BCHLD', '=', $pro)
             ->where('BDDIS', '=', '99999999')
@@ -77,7 +77,7 @@ class registros
     function F1($pro)
     {
 
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BPROD', 'BCLAS', 'BCHLD', 'BCLAC', 'BDDIS')
             ->where('BCHLD', '=', $pro)
             ->where('BCLAS', '=', 'F1')
@@ -88,7 +88,7 @@ class registros
 
     function contarF1($pro)
     {
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BPROD')
             ->where('BCHLD', '=', $pro)
             ->where('BCLAS', '=', 'F1')
@@ -339,7 +339,7 @@ class registros
     }
     function Conthijo($prod)
     {
-        $ContBMS = MBMr::query()
+        $ContBMS = MBM::query()
             ->select('BPROD')
             ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.MBM.BPROD')
             ->where('BPROD', '=', $prod)
@@ -355,7 +355,7 @@ class registros
     }
     function Hijo($prod)
     {
-        $MBMS = MBMr::query()
+        $MBMS = MBM::query()
             ->select('BCHLD', 'BCLAC')
             ->where('BPROD', '=', $prod)
             ->where(function ($query) {

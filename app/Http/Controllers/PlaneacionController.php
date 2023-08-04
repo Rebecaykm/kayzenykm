@@ -9,12 +9,12 @@ use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\KFP;
 use App\Models\FRT;
-use App\Models\LIM;
+use App\Models\IIM;
 use App\Models\ZCC;
 use App\Models\LOGSUP;
 use App\Models\FMA;
 use App\Models\ECL;
-use App\Models\MBMr;
+use App\Models\MBM;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
@@ -76,7 +76,7 @@ class PlaneacionController extends Controller
         $WC = $request->SeWC;
         $array = explode(",", $TP);
         if ($tipo == 2) {
-            $plan1 = LIM::query()
+            $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
                 ->where([
@@ -102,7 +102,7 @@ class PlaneacionController extends Controller
             $cadepar = implode("' OR  IPROD='", $partsrev);
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
-            $plan1 = LIM::query()
+            $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
                 ->where([
@@ -135,7 +135,7 @@ class PlaneacionController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
         $array = explode(",", $TP);
-        $plan1 = LIM::query()
+        $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -317,7 +317,7 @@ class PlaneacionController extends Controller
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-        $plan1 = LIM::query()
+        $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -422,7 +422,7 @@ class PlaneacionController extends Controller
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-        $plan1 = LIM::query()
+        $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
             ->where([
@@ -591,7 +591,7 @@ class PlaneacionController extends Controller
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
             ->get()->toarray();
 
-        $cond = LIM::query()
+        $cond = IIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
             ->whereraw("(IPROD='" . $Qa . "')")
             ->get()->toArray();
@@ -825,7 +825,7 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-        $cond = LIM::query()
+        $cond = IIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
             ->whereraw("(IPROD='" . $Qa . "')")
             ->get()->toArray();

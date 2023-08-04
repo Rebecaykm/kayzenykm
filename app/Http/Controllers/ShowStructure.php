@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LIM;
+use App\Models\IIM;
 use Illuminate\Http\Request;
 use App\Models\IPB;
 use App\Models\ZCC;
@@ -28,7 +28,7 @@ class ShowStructure extends Controller
             ->get();
 
 
-        $plan = LIM::query()
+        $plan = IIM::query()
             ->select('IPROD', 'ICLAS', 'IREF04', 'IID', 'IMPLC', 'IBUYC', 'IMPLC')
             ->where([
                 ['IREF04', 'like', '%' . $Pr . '%'],

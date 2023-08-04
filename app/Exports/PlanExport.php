@@ -4,7 +4,7 @@ namespace App\Exports;
 
 
 use App\Models\LOGSUP;
-use App\Models\LIM;
+use App\Models\IIM;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
