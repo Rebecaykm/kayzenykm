@@ -6,7 +6,7 @@
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         @switch($tp)
-                            @case('2,12,123,13,20,23')
+                            @case('2,12,123,13,20,23,3')
                                 J03W/G
                             @break
 
@@ -471,9 +471,11 @@
                 val8 = parseInt(document.getElementById(parte + '/' + arr[7] + '/N/' + wc).value);
                 val9 = parseInt(document.getElementById(parte + '/' + arr[3] + '/D/' + wc).value);
                 val10 = parseInt(document.getElementById(parte + '/' + arr[3] + '/N/' + wc).value);
+                val11 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);
+                val12 = parseInt(document.getElementById(parte + '/' + arr[2] + '/N/' + wc).value);
 
 
-                valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10;
+                valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10+ val11 + val12;
                 document.getElementById('totalFirykm' + parte).value = valtotal;
                 console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
 

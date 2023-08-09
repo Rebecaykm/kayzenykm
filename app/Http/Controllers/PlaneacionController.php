@@ -113,6 +113,7 @@ class PlaneacionController extends Controller
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
+
             $total = 0;
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
@@ -1052,4 +1053,49 @@ class PlaneacionController extends Controller
 
         return $sepa;
     }
+
+
+    public function Buscar(Request $request)
+    {
+        $inF1 = array();
+        $inF2 = array();
+        $tipo = $request->Planeacion;
+
+        $dias = 8;
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $TP = $request->SeProject;
+
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
+        $array = explode(",", $TP);
+
+            $plan1 = LIM::query()
+                ->select('IPROD', 'IREF04')
+                ->wherein('IREF04 ', $array)
+                ->where([
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                ])
+                ->where(
+                    [
+                        ['IPROD', 'like', '%-SOR%'],
+                        ['IPROD', 'Not like', '%-830%']
+                    ]
+                )
+                ->where('ICLAS', 'F1')
+                ->distinct('IPROD')
+                ->get()->toArray();
+            $padres = array_chunk($plan1, 10);
+
+            $total = count($padres);
+
+            $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
+
+            $partsrev = array_column($plan1, 'IPROD');
+            $cadepar = implode("' OR  IPROD='", $partsrev);
+            return view('planeacion.buscar');
+
+    }
+
+
 }

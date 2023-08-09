@@ -10,7 +10,7 @@
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Planeacion proyecto
             @switch($tp)
-                @case('2,12,123,13,20,23')
+                @case('2,12,123,13,20,23,3')
                     J03W/G
                 @break
 
