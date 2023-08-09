@@ -7,7 +7,7 @@
            <ul class="list-disc">
                @if (!empty($results))
                    @foreach ($results as $result)
-                       <li wire:click='{{dd("kndskn")}}'>{{ $result['IPROD'] }}/{{ $result['ICLAS'] }}
+                       <li wire:click='getProduct({{ $result['IPROD'] }})'>{{ $result['IPROD'] }}/{{ $result['ICLAS'] }}
                        </li>
                    @endforeach
                @endif

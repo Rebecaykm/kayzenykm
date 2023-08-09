@@ -191,7 +191,7 @@ class PlaneacionController extends Controller
     {
         $inF1 = array();
         $inF2 = array();
-        $dias = $request->dias ?? '5';
+        $dias = $request->dias ?? '6';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
