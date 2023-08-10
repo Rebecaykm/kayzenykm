@@ -318,21 +318,17 @@
                                     @endphp
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
 
-                                        SNP: {{ $datossubs['Qty'] }} <br>
+                                        SNP: {{ $datossubs['Qty'] }}<br>
                                         Wrkcente: {{ $datossubs['wrk'] }}<br>
                                         Min balance: {{ $datossubs['minbal'] }}
                                     </div>
                                 </td>
-
                                 <td class="px-2 py-1 text-xs text-center">
                                     @php
-
                                         $forcast = $datossubs['forcast'];
-
                                         $totalplan = array_sum($forcast);
                                         echo $datossubs['padres'];
                                     @endphp
-
                                 </td>
                                 <td class="px-2 py-1 text-xs text-center">
                                     @php
@@ -766,9 +762,10 @@
             val8 = parseInt(document.getElementById(parte + '/' + arr[4] + '/N/' + wc).value);
             val9 = parseInt(document.getElementById(parte + '/' + arr[5] + '/D/' + wc).value);
             val10 = parseInt(document.getElementById(parte + '/' + arr[5] + '/N/' + wc).value);
+            val11 = parseInt(document.getElementById(parte + '/' + arr[0] + '/D/' + wc).value);
             console.log(parte + '/' + arr[4] + '/D/' + wc);
             console.log(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
-            valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10;
+            valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11;
             document.getElementById('totalFirykm' + parte).value = valtotal;
             console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
 
