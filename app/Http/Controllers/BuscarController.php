@@ -53,25 +53,63 @@ class BuscarController extends Controller
      */
     public function create(Request $request)
     {
-
-        $dias = $request->dias ?? '5';
-        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $NP = $request->NP ?? 'x';
-        $plan = '';
-        $TP = $request->SeProject ?? 'NO';
         $inF1 = array();
-        $WCs = ZCC::query()
-            ->select('CCID', 'CCTABL', 'CCCODE', 'CCDESC')
-            ->where('CCID', '=', 'CC')
-            ->Where('CCTABL', '=', 'SIRF4')
-            ->orderBy('CCID', 'ASC')
-            ->get();
+        $inF2 = array();
+        $tipo = $request->Planeacion;
 
-        $datos = self::CargarforcastF1($NP, $fecha, $dias);
-        $inF1 += [$NP =>  $datos];
-        return view('planeacion.buscar', ['LWK' => $WCs, 'fecha' => $fecha, 'tp' => $TP, 'NP' => $NP, 'dias' => $dias, 'plan' => $inF1]);
+        $dias = 8;
+        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
+        $TP = $request->SeProject;
+
+        $CP = $request->SePC;
+        $WC = $request->SeWC;
+        $array = explode(",", $TP);
+        if ($tipo == 2) {
+            $plan1 = LIM::query()
+                ->select('IPROD', 'IREF04')
+                ->wherein('IREF04 ', $array)
+                ->where([
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                ])
+                ->where(
+                    [
+                        ['IPROD', 'Not like', '%-SOR%'],
+                        ['IPROD', 'Not like', '%-830%']
+                    ]
+                )
+                ->where('ICLAS', 'F1')
+                ->distinct('IPROD')
+                ->get()->toArray();
+            $padres = array_chunk($plan1, 10);
+
+            $total = count($padres);
+
+            $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
+
+            $partsrev = array_column($plan1, 'IPROD');
+            $cadepar = implode("' OR  IPROD='", $partsrev);
+            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+        } else {
+            $plan1 = LIM::query()
+                ->select('IPROD', 'IREF04')
+                ->wherein('IREF04 ', $array)
+                ->where([
+                    ['IID', '!=', 'IZ'],
+                    ['IMPLC', '!=', 'OBSOLETE'],
+                ])
+                ->where('IPROD', 'Not like', '%-830%')
+                ->where('ICLAS', 'F1')
+                ->distinct('IPROD')
+                ->get()->toArray();
+
+            $total = 0;
+            $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+            $partsrev = array_column($plan1, 'IPROD');
+            $cadepar = implode("' OR  IPROD='", $partsrev);
+            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+        }
     }
-
     /**
      * Store a newly created resource in storage.
      *
