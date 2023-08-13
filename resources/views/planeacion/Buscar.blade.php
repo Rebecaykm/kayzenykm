@@ -275,7 +275,6 @@
                         @endphp
                         @foreach ($datossub as $datossubs)
                             @php
-
                                 $hoy = $fecha;
                             @endphp
                             <tr class="text-gray-700 dark:text-gray-400 ">
@@ -284,24 +283,18 @@
                                 <td class="px-2 py-1 text-xs text-center">
                                     {{ $datossubs['sub'] }}<br>
                                     @php
-
                                         $item = strtr($datossubs['sub'], ' ', '_');
                                         $wctpar = $datossubs['wrk'] ?? 'xxxx';
-
                                     @endphp
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-
                                         SNP: {{ $datossubs['Qty'] }} <br>
                                         Wrkcente: {{ $datossubs['wrk'] }}<br>
                                         Min balance: {{ $datossubs['minbal'] }}
                                     </div>
                                 </td>
-
                                 <td class="px-2 py-1 text-xs text-center">
                                     @php
-
                                         $forcast = $datossubs['forcast'];
-
                                         $totalplan = array_sum($forcast);
                                         echo $datossubs['padres'];
                                     @endphp
@@ -309,15 +302,10 @@
                                 </td>
                                 <td class="px-2 py-1 text-xs text-center">
                                     @php
-
                                         echo $datossubs['KMRpadres'];
-
                                     @endphp
-
                                 </td>
-
                                 <td class="px-2 py-1 text-xs text-center ">
-
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             <input value="Requeriment (Forecast)"

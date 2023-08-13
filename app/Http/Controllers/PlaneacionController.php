@@ -851,6 +851,7 @@ class PlaneacionController extends Controller
         $pqa = array_column($cond, 'IMBOXQ');
         $minba = array_column($cond, 'IMIN');
         $sepa = [];
+      
 
         foreach ($sub1 as $subs) {
 
