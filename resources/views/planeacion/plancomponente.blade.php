@@ -655,7 +655,7 @@
                             @endif
                         @endforeach
                     @endforeach
-                {{dd($histo)}}
+             
                 </tbody>
             </table>
 

@@ -1066,7 +1066,7 @@ class PlaneacionController extends Controller
 
         $plan1 = LIM::query()
             ->select('IPROD', 'IREF04')
-            ->where('IPROD ', 'LIKE', $request->item . "%")
+            ->where('IPROD ', $request->item )
             ->get()->toArray();
 
         if ($request->Type == 1) {
@@ -1074,7 +1074,7 @@ class PlaneacionController extends Controller
         } else {
             $datos = self::CargarforcastF1($plan1, $fecha, $dias);
         }
-
-        return view('planeacion.buscar', ['res' => $datos, 'tp' => $TP, 'fecha' => $fecha, 'dias' => $dias]);
+    
+        return view('planeacion.buscar', ['res' => $datos, 'tp' => $TP, 'fecha' => $fecha, 'dias' => $dias,'tipo'=>$request->Type]);
     }
 }
