@@ -78,7 +78,7 @@
                             $dias = $dias - 2;
                             $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                             $diasjava = '';
-                            
+
                         @endphp
                         @while ($hoy != $fin)
                             <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
@@ -103,7 +103,7 @@
                                 $diasjava = $hoy . '/' . $diasjava;
                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                 $totalD = $totalD + 1;
-                                
+
                             @endphp
                         @endwhile
                         <th class=" header px-4 py-3 sticky ">
@@ -117,9 +117,9 @@
                     @endphp
                     @foreach ($res as $info1)
                         @php
-                            
+
                             $info = $info1['padre'];
-                            
+
                         @endphp
                         <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                             <td class="px-2 py-1 text-xs  bg-teal-300">
@@ -161,20 +161,20 @@
                             @php
                                 $hoy = $fecha;
                                 $contdias = 0;
-                                
+
                             @endphp
                             @while ($contdias < $dias)
                                 <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                         <label class="block text-sm ">
                                             @php
-                                                
+
                                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                     $valFD = '-';
                                                 } else {
                                                     $valFD = $info['For' . $hoy . 'D'];
                                                 }
-                                                
+
                                                 if (array_key_exists('For' . $hoy . 'N', $info) == false) {
                                                     $valFN = '-';
                                                 } else {
@@ -212,7 +212,7 @@
                                                 }
                                                 $valRD = 0;
                                                 $valRN = 0;
-                                                
+
                                             @endphp
                                             <input value={{ $valFD }}
                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -281,7 +281,7 @@
                                 </div>
                                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                     <label class="block text-sm ">@php
-                                        
+
                                     @endphp
                                         <input value="{{ $info['tPlan'] }}"
                                             class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
@@ -300,16 +300,16 @@
                         {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                         @php
                             $datossub = $info1['hijos'];
-                            
+
                         @endphp
                         @foreach ($datossub as $datossubs)
                             @php
-                                $hoy = $fecha;    
+                                $hoy = $fecha;
                             @endphp
-                
+
                             @if (array_search($datossubs['sub'], $histo) != true)
-                 
-                          
+
+
                                 @php
                                     array_push($histo, $datossubs['sub']);
                                 @endphp
@@ -319,16 +319,17 @@
                                     <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>
                                         @php
-                                            
+
                                             $item = strtr($datossubs['sub'], ' ', '_');
                                             $wctpar = $datossubs['wrk'] ?? 'xxxx';
-                                            
+
                                         @endphp
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
 
                                             SNP: {{ $datossubs['Qty'] }}<br>
                                             Wrkcente: {{ $datossubs['wrk'] }}<br>
-                                            Min balance: {{ $datossubs['minbal'] }}
+                                            Min balance: {{ $datossubs['minbal'] }}<br>
+                                            Contenedor: {{ $datossubs['typkt']}}
                                         </div>
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
@@ -340,9 +341,9 @@
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
-                                            
+
                                             echo $datossubs['KMRpadres'];
-                                            
+
                                         @endphp
 
                                     </td>
@@ -409,7 +410,7 @@
                                         $totalKMRP = 0;
                                         $totalfir = 0;
                                         $totalkfp = 0;
-                                        
+
                                     @endphp
                                     @while ($coni < $dias)
                                         @php
@@ -418,7 +419,7 @@
                                             } else {
                                                 $valFDH = $plan['For' . $hoy1 . 'D'];
                                             }
-                                            
+
                                             if (array_key_exists('For' . $hoy1 . 'N', $plan) == false) {
                                                 $valFNH = '-';
                                             } else {
@@ -428,7 +429,7 @@
                                             $re = 0;
                                             $valRDH = 0;
                                             $valRNH = 0;
-                                            
+
                                             if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
                                                 $valRDH = $valRDH + $forcast['FMA' . $hoy1 . 'D'];
                                             }
@@ -444,9 +445,9 @@
                                             if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
                                                 $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
                                             }
-                                            
+
                                             $totalKMRP = $totalKMRP + $valRDH + $valRNH;
-                                            
+
                                             if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
                                                 $valPDH = '0';
                                             } else {
@@ -458,7 +459,7 @@
                                                 $valPNH = $plan['P' . $hoy1 . 'N'];
                                             }
                                             $totalplan = $valPDH + $valPNH + $totalplan;
-                                            
+
                                             if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
                                                 $valFiDH = $valPDH;
                                             } else {
@@ -475,19 +476,19 @@
                                             } else {
                                                 $valSDH = $plan['S' . $hoy1 . 'D'];
                                             }
-                                            
+
                                             if (array_key_exists('S' . $hoy1 . 'N', $plan) == false) {
                                                 $valSNH = '-';
                                             } else {
                                                 $valSNH = $plan['S' . $hoy1 . 'N'];
                                             }
-                                            
+
                                             if (array_key_exists('KMRS' . $hoy1 . 'D', $forcast) == false) {
                                                 $valKMRsd = '-';
                                             } else {
                                                 $valKMRsd = $forcast['KMRS' . $hoy1 . 'D'];
                                             }
-                                            
+
                                             if (array_key_exists('KMRS' . $hoy1 . 'N', $forcast) == false) {
                                                 $valMKMRsn = '-';
                                             } else {
@@ -498,14 +499,14 @@
                                             } else {
                                                 $valkfpsd = $forcast['kfp' . $hoy1 . 'D'];
                                             }
-                                            
+
                                             if (array_key_exists('kfp' . $hoy1 . 'N', $forcast) == false) {
                                                 $valMkfpsn = '0';
                                             } else {
                                                 $valMkfpsn = $forcast['kfp' . $hoy1 . 'N'];
                                             }
                                             $totalkfp += $valkfpsd + $valMkfpsn;
-                                            
+
                                         @endphp
                                         <td class="px-2 py-1 text-xs text-center  ">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -655,7 +656,7 @@
                             @endif
                         @endforeach
                     @endforeach
-             
+
                 </tbody>
             </table>
 

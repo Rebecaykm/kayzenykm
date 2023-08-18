@@ -104,11 +104,11 @@
 
                         @foreach ($res as $info1)
                             @php
-                                
+
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
-                                
+
                             @endphp
                             @switch($info['WRC'])
                                 @case(111020)
@@ -116,10 +116,10 @@
                                 @case(111010)
                                 @case(112020)
                                 @case(112010)
-                                @case(112040) 
+                                @case(112040)
                                 @case(114010)
                                 @case(114020)
-                                @case(112030) 
+                                @case(112030)
                                 @case(112060)
                                 @case(114030)
                                 @case(116010)
@@ -136,7 +136,8 @@
                                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>
                                                     SNP {{ $info['Qty'] }}<br>
-                                                    WRKcenter {{ $info['WRC'] }}
+                                                    WRKcenter {{ $info['WRC'] }}<br>
+                                                    Container {{$info['typkt']}}
                                                 </div>
                                             </td>
                                         @else
@@ -202,13 +203,13 @@
                                                                 //     $tipo = $reg6['FTYPE'],
                                                                 //     $total = $reg6['FQTY']);
                                                                 // }
-                                                                
+
                                                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                                     $valFD = 0;
                                                                 } else {
                                                                     $valFD = $info['For' . $hoy . 'D'];
                                                                 }
-                                                                
+
                                                                 if (array_key_exists('For' . $hoy . 'N', $info) == false) {
                                                                     $valFN = 0;
                                                                 } else {
@@ -234,7 +235,7 @@
                                                                 } else {
                                                                     $valeclN = $info['ecl' . $hoy . 'N'] + 0;
                                                                 }
-                                                                
+
                                                                 $valRD = 0;
                                                                 $valRN = 0;
                                                                 $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
@@ -247,7 +248,7 @@
                                                                 $totalfirM += $valeclD + $valeclN;
                                                                 $totalfirykm += $valFiN + $valFiD;
                                                                 $workcen = $info['WRC'];
-                                                                
+
                                                             @endphp
                                                             <input value='{{ $valFD }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
