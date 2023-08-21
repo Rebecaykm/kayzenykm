@@ -179,7 +179,7 @@ class PlaneacionController extends Controller
     {
         $inF1 = array();
         $inF2 = array();
-        $dias = $request->dias ?? '5';
+        $dias = $request->dias ?? '6';
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
@@ -195,8 +195,27 @@ class PlaneacionController extends Controller
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
+        $pro = '';
+        switch ($TP) {
+            case ('2,12,123,13,20,23,3');
+                $pro = 'J03W-G';
+                break;
 
-        return Excel::download(new PlansubExport($fecha, $dias, $TP), 'PartessubcomponentesP' . $TP . '.xlsx');
+            case ('4,45,47'):
+                $pro = 'J59W';
+                break;
+
+            case ('5,56,57'):
+                $pro = 'J59J';
+                break;
+        }
+
+
+        if ($request->Type == 1) {
+            return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_'.$fecha . '.xlsx');
+        } else {
+            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro .'_'. $fecha . '.xlsx');
+        }
     }
 
     public function store(Request $request)
@@ -862,7 +881,7 @@ class PlaneacionController extends Controller
             $padreskmr = [];
             $finaleskmr = [];
             $finaleskmrQTY = [];
-            $finalkmrQTY=[];
+            $finalkmrQTY = [];
             $numpar = [];
             $numpaplan = [];
             $total = 0;
@@ -973,9 +992,8 @@ class PlaneacionController extends Controller
                     unset($KFPfecha[$key3]);
                     unset($KFPMtotal[$key3]);
                 }
-
             }
-            dd( $forcast);
+
             $KFPprod = array_column($valPDpadres, 'FPROD');
             $KFPmtype = array_column($valPDpadres, 'FPCNO');
             $KFPfecha = array_column($valPDpadres, 'FRDTE');

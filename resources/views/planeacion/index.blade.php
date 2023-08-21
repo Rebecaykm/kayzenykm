@@ -129,6 +129,20 @@
                                 class="block w-full mt-1  text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                         </label>
                     </div>
+                    <div class="flex-auto ">
+                        <label class="block mt-4 text-sm pt-6 ">
+
+                            <input type="radio" value='1'
+                                class="text-purple-600 form-radio focus:border-purple-400  focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                id='Type' name="Type" />
+                            <span class="ml-2">Final</span>
+                            <br>
+                            <input type="radio" id='Type' name="Type" value='2'
+                                class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                id='Type' name="Type" />
+                            <span class="ml-2">Subcomponentes</span>
+                        </label>
+                    </div>
                     <div class="flex-auto  place-content-cente">
                         <button
                             class="flex items-center justify-between mt-5 px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
@@ -141,11 +155,12 @@
                             <span>Descargar</span>
                         </button>
                     </div>
+
                 </div>
             </form>
         </div>
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-        Busqueda individual 
+        Busqueda individual
         </h4>
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <livewire:address-autocomplete />
