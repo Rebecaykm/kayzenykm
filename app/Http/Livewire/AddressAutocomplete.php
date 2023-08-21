@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\LIM;
+use App\Models\IIM;
 class AddressAutocomplete extends Component
 {
     public string $streetAddress = '';
@@ -19,7 +19,7 @@ class AddressAutocomplete extends Component
         if($this->streetAddress != '') {
             // An array of SearchResults
             $this->searchResults =
-            LIM::query()
+            IIM::query()
             ->select('IPROD','ICLAS')
             ->where([['IPROD','LIKE','%BDT%'],['ICLAS','F1'] ,['IID', '!=', 'IZ'],
             ['IMPLC', '!=', 'OBSOLETE'],['IPROD', 'Not like', '%-830%']])
