@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('measurements', function (Blueprint $table) {
             $table->id();
-            $table->string('symbol', 4);
-            $table->string('unit', 60);
+            $table->string('symbol', 4)->unique();
+            $table->string('unit', 60)->unique();
             $table->timestamps();
         });
     }

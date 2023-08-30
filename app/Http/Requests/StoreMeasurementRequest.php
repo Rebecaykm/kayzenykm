@@ -22,8 +22,8 @@ class StoreMeasurementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'symbol' => ['required', 'string', 'max:4'],
-            'unit' => ['required', 'string', 'max:60']
+            'symbol' => ['required', 'unique:measurements', 'string', 'max:4', 'min:1'],
+            'unit' => ['required', 'unique:measurements', 'string', 'max:60', 'min:2']
         ];
     }
 }

@@ -23,7 +23,6 @@ class MeasurementController extends Controller
      */
     public function create()
     {
-        dd("Create");
         return view('measurement.create');
     }
 
@@ -32,7 +31,9 @@ class MeasurementController extends Controller
      */
     public function store(StoreMeasurementRequest $request)
     {
-        //
+        $measurement =  Measurement::create($request->validated());
+
+        return redirect()->route('measurement.index');
     }
 
     /**
@@ -56,7 +57,13 @@ class MeasurementController extends Controller
      */
     public function update(UpdateMeasurementRequest $request, Measurement $measurement)
     {
-        //
+        $measurement->fill($request->validated());
+
+        if ($measurement->isDirty()) {
+            $measurement->save();
+        }
+
+        return redirect()->route('measurement.index');
     }
 
     /**
@@ -64,6 +71,8 @@ class MeasurementController extends Controller
      */
     public function destroy(Measurement $measurement)
     {
-        //
+        $measurement->delete();
+
+        return redirect()->back();
     }
 }

@@ -11,7 +11,7 @@ class UpdateMeasurementRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateMeasurementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'symbol' => ['string', 'max:4', 'min:1'],
+            'unit' => ['string', 'max:60', 'min:2']
         ];
     }
 }
