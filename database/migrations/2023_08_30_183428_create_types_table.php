@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->string('abbreviation', 10);
-            $table->string('name', 60);
+            $table->string('abbreviation', 10)->unique();
+            $table->string('name', 60)->unique();
             $table->timestamps();
         });
     }

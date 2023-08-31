@@ -33,7 +33,7 @@ class StandardPackageController extends Controller
     {
         $standardPackage =  StandardPackage::create($request->validated());
 
-        return redirect()->route('sta$standardPackage.index');
+        return redirect()->route('standardPackage.index');
     }
 
     /**
