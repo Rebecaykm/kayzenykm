@@ -57,6 +57,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
+    Route::resource('planner', \App\Http\Controllers\PlannerController::class);
+
+    /**
+     *
+     */
     Route::resource('examples', \App\Http\Controllers\ExampleController::class);
 
     /**
