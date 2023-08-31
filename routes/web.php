@@ -42,6 +42,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
+    Route::resource('type', \App\Http\Controllers\TypeController::class);
+
+    /**
+     *
+     */
     Route::resource('examples', \App\Http\Controllers\ExampleController::class);
 
     /**
