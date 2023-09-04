@@ -52,7 +52,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('project.edit');
+        $clients = Client::query()->orderBy('name', 'DESC')->get();
+
+        return view('project.edit', ['project' => $project, 'clients' => $clients]);
     }
 
     /**
@@ -60,7 +62,13 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $project->fill($request->validated());
+
+        if ($project->isDirty()) {
+            $project->save();
+        }
+
+        return redirect()->route('project.index');
     }
 
     /**
@@ -68,6 +76,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->back();
     }
 }
