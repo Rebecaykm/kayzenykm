@@ -14,7 +14,7 @@ class UnemploymentType extends Model
         'name'
     ];
 
-    public function unemployment(): HasMany
+    public function unemployments(): HasMany
     {
         return $this->hasMany(Unemployment::class, 'unemployment_type_id');
     }
