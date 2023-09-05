@@ -47,12 +47,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
-    Route::resource('itemClass', \App\Http\Controllers\ItemClassController::class);
+    Route::resource('item-class', \App\Http\Controllers\ItemClassController::class);
 
     /**
      *
      */
-    Route::resource('standardPackage', \App\Http\Controllers\StandardPackageController::class);
+    Route::resource('standard-package', \App\Http\Controllers\StandardPackageController::class);
 
     /**
      *
@@ -78,6 +78,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('departament', \App\Http\Controllers\DepartamentController::class);
+
+    /**
+     *
+     */
+    Route::resource('unemployment-type', \App\Http\Controllers\UnemploymentTypeController::class);
 
     /**
      *

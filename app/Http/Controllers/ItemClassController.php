@@ -15,7 +15,7 @@ class ItemClassController extends Controller
     {
         $itemClasses = ItemClass::query()->orderBy('name', 'DESC')->paginate(10);
 
-        return view('itemClass.index', ['itemClasses' => $itemClasses]);
+        return view('item-class.index', ['itemClasses' => $itemClasses]);
     }
 
     /**
@@ -23,7 +23,7 @@ class ItemClassController extends Controller
      */
     public function create()
     {
-        return view('itemClass.create');
+        return view('item-class.create');
     }
 
     /**
@@ -33,7 +33,7 @@ class ItemClassController extends Controller
     {
         $itemClass =  ItemClass::create($request->validated());
 
-        return redirect()->route('itemClass.index');
+        return redirect()->route('item-class.index');
     }
 
     /**
@@ -49,7 +49,7 @@ class ItemClassController extends Controller
      */
     public function edit(ItemClass $itemClass)
     {
-        return view('itemClass.edit', ['itemClass' => $itemClass]);
+        return view('item-class.edit', ['itemClass' => $itemClass]);
     }
 
     /**
@@ -63,7 +63,7 @@ class ItemClassController extends Controller
             $itemClass->save();
         }
 
-        return redirect()->route('itemClass.index');
+        return redirect()->route('item-class.index');
     }
 
     /**

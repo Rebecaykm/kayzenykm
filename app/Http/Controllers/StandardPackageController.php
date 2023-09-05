@@ -15,7 +15,7 @@ class StandardPackageController extends Controller
     {
         $standardPackages = StandardPackage::query()->orderBy('name', 'DESC')->paginate(10);
 
-        return view('standardPackage.index', ['standardPackages' => $standardPackages]);
+        return view('standard-package.index', ['standardPackages' => $standardPackages]);
     }
 
     /**
@@ -23,7 +23,7 @@ class StandardPackageController extends Controller
      */
     public function create()
     {
-        return view('standardPackage.create');
+        return view('standard-package.create');
     }
 
     /**
@@ -33,7 +33,7 @@ class StandardPackageController extends Controller
     {
         $standardPackage =  StandardPackage::create($request->validated());
 
-        return redirect()->route('standardPackage.index');
+        return redirect()->route('standard-package.index');
     }
 
     /**
@@ -49,7 +49,7 @@ class StandardPackageController extends Controller
      */
     public function edit(StandardPackage $standardPackage)
     {
-        return view('standardPackage.edit', ['standardPackage' => $standardPackage]);
+        return view('standard-package.edit', ['standardPackage' => $standardPackage]);
     }
 
     /**
@@ -63,7 +63,7 @@ class StandardPackageController extends Controller
             $standardPackage->save();
         }
 
-        return redirect()->route('standardPackage.index');
+        return redirect()->route('standard-package.index');
     }
 
     /**

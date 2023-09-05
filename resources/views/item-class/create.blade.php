@@ -16,17 +16,16 @@
         </div>
         @endif
 
-        <form action="{{ route('itemClass.update', $itemClass->id) }}" method="post">
+        <form action="{{ route('item-class.store') }}" method="post">
             @csrf
-            @method('PUT')
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Abreviatura') }}</span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $itemClass->abbreviation }}" type="text" name="abbreviation" autocomplete="off" />
+                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="abbreviation" autocomplete="off" />
                 </label>
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Nombre') }}</span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $itemClass->name }}" type="text" name="name" autocomplete="off" />
+                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="name" autocomplete="off" />
                 </label>
                 <div class="flex justify-end mt-4">
                     <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
