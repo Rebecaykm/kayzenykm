@@ -11,7 +11,7 @@ class PartNumber extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'number'
+        'name', 'number', 'measurement_id', 'type_id', 'item_class_id', 'standard_package_id', 'workcenter_id', 'planner_id', 'project_id'
     ];
 
     public function measurement(): BelongsTo

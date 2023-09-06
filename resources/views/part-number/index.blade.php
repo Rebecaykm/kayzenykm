@@ -32,6 +32,13 @@
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">{{ __('Nombre') }}</th>
                             <th class="px-4 py-3">{{ __('Numero') }}</th>
+                            <th class="px-4 py-3">{{ __('Proyecto') }}</th>
+                            <th class="px-4 py-3">{{ __('Cliente') }}</th>
+                            <th class="px-4 py-3">{{ __('Medida') }}</th>
+                            <th class="px-4 py-3">{{ __('Item') }}</th>
+                            <th class="px-4 py-3">{{ __('Clase') }}</th>
+                            <th class="px-4 py-3">{{ __('Paquete Estandar') }}</th>
+                            <th class="px-4 py-3">{{ __('Centro de Trabajo') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -39,25 +46,31 @@
                         @foreach ($partNumbers as $partNumber)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
+                                {{ $partNumber->name }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->number }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->name }}
+                                {{ $partNumber->project->name }}
                             </td>
-                            @php
-                            dd($partNumber->measurement);
-                            @endphp
+                            <td class="px-4 py-3 text-sm">
+                                {{ $partNumber->project->client->name  }}
+                            </td>
                             <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->measurement->symbol }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->name }}
+                                {{ $partNumber->type->abbreviation }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->number }}
+                                {{ $partNumber->itemClass->abbreviation }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->name }}
+                                {{ $partNumber->standardPackage->name ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $partNumber->workcenter->number }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
