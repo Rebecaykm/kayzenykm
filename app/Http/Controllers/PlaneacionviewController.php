@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Input;
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
 
-class PlaneacionController extends Controller
+class PlaneacionviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -52,7 +52,7 @@ class PlaneacionController extends Controller
         $CP = '';
         $WC = '';
         $WCs = [];
-        return view('planeacion.index', ['LWK' => $WCs]);
+        return view('planeacion.indexview', ['LWK' => $WCs]);
     }
 
     /**
@@ -64,6 +64,7 @@ class PlaneacionController extends Controller
 
     public function create(Request $request)
     {
+
         $inF1 = array();
         $inF2 = array();
         $tipo = $request->Planeacion;
@@ -100,7 +101,7 @@ class PlaneacionController extends Controller
 
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteview', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
@@ -118,7 +119,7 @@ class PlaneacionController extends Controller
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacionview.planfinal1view', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         }
     }
 
@@ -162,7 +163,7 @@ class PlaneacionController extends Controller
 
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
 
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+        return view('planeacion.plancomponenteview', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     public function export(Request $request)
@@ -251,223 +252,223 @@ class PlaneacionController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function updateF1(Request $request)
-    {
+    // public function updateF1(Request $request)
+    // {
 
-        $inF1 = array();
-        $TP = $request->SeProject;
-        $CP = $request->SePC;
-        $tipo = $request->tipo;
-        $WC = $request->SeWC;
-        $variables = $request->all();
+    //     $inF1 = array();
+    //     $TP = $request->SeProject;
+    //     $CP = $request->SePC;
+    //     $tipo = $request->tipo;
+    //     $WC = $request->SeWC;
+    //     $variables = $request->all();
 
-        $keyes = array_keys($variables);
-        $data = explode('/', $keyes[1], 2);
-        $dias = 8;
-        $fecha = $data[0];
+    //     $keyes = array_keys($variables);
+    //     $data = explode('/', $keyes[1], 2);
+    //     $dias = 8;
+    //     $fecha = $data[0];
 
-        $hoy = date('Ymd', strtotime($fecha));
-        $datas = [];
-        $datasql = [];
-        $CONT = 0;
-        foreach ($keyes as $plans) {
-            $dfa = [];
-            $dfasql = [];
+    //     $hoy = date('Ymd', strtotime($fecha));
+    //     $datas = [];
+    //     $datasql = [];
+    //     $CONT = 0;
+    //     foreach ($keyes as $plans) {
+    //         $dfa = [];
+    //         $dfasql = [];
 
-            $inp = explode('/', $plans, 4);
-            if (count($inp) >= 3) {
-                $WCT = $inp[3];
-                $namenA = strtr($inp[0], '_', ' ');
-                $turno = $inp[2];
-                $load = date('Ymd', strtotime('now'));
-                $hora = date('His', time());
-                $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                $fechasql = date('Ymd', strtotime($inp[1]));
-
-
-                if ($request->$plans != 0) {
-
-                    $dfa = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $inp[1],
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    $dfasql = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $fechasql,
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $horasql,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    array_push($datasql, $dfasql);
-                    array_push($datas, $dfa);
-                }
-            }
-            if ($CONT == 5) {
-                $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
-                $datas = [];
-                $datasql = [];
-                $CONT = 0;
-            }
-            $CONT = $CONT + 1;
-        }
-
-        $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
-
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-        $result = odbc_exec($conn, $query);
-        $array = explode(",", $TP);
-        $plan1 = IIM::query()
-            ->select('IPROD', 'IREF04')
-            ->wherein('IREF04 ', $array)
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('IPROD', 'Not like', '%-830%')
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
-
-        $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
-        $partsrev = array_column($plan1, 'IPROD');
-        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        // dd($datos);
-        return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
-    }
-
-    public function update(Request $request)
-    {
-
-        $inF1 = array();
-        $TP = $request->SeProject;
-        $CP = $request->SePC;
-        $tipo = $request->tipo;
-        $WC = $request->SeWC;
-        $variables = $request->all();
-
-        $keyes = array_keys($variables);
-        $data = explode('/', $keyes[1], 2);
-        $dias = 8;
-        $fecha = $data[0];
-
-        $hoy = date('Ymd', strtotime($fecha));
-        $datas = [];
-        $datasql = [];
-        $CONT = 0;
-        foreach ($keyes as $plans) {
-            $dfa = [];
-            $dfasql = [];
-
-            $inp = explode('/', $plans, 4);
-            if (count($inp) >= 3) {
-                $WCT = $inp[3];
-                $namenA = strtr($inp[0], '_', ' ');
-                $turno = $inp[2];
-                $load = date('Ymd', strtotime('now'));
-                $hora = date('His', time());
-                $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
-                $fechasql = date('Ymd', strtotime($inp[1]));
-                if ($request->$plans != 0) {
-
-                    $dfa = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $inp[1],
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    $dfasql = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $fechasql,
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $horasql,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    array_push($datasql, $dfasql);
-                    array_push($datas, $dfa);
-                }
-            }
-            if ($CONT == 10) {
-                $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
-                $datas = [];
-                $datasql = [];
-                $CONT = 0;
-            }
-            $CONT = $CONT + 1;
-        }
-
-        $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
+    //         $inp = explode('/', $plans, 4);
+    //         if (count($inp) >= 3) {
+    //             $WCT = $inp[3];
+    //             $namenA = strtr($inp[0], '_', ' ');
+    //             $turno = $inp[2];
+    //             $load = date('Ymd', strtotime('now'));
+    //             $hora = date('His', time());
+    //             $horasql = date('H:i:s', time());
+    //             $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+    //             $fechasql = date('Ymd', strtotime($inp[1]));
 
 
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+    //             if ($request->$plans != 0) {
 
-        $result = odbc_exec($conn, $query);
-        $array = explode(",", $TP);
-        $plan1 = IIM::query()
-            ->select('IPROD', 'IREF04')
-            ->wherein('IREF04 ', $array)
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where(
-                [
-                    ['IPROD', 'Not like', '%-SOR%'],
-                    ['IPROD', 'Not like', '%-830%']
-                ]
-            )
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
+    //                 $dfa = [
+    //                     'K6PROD' => $namenA,
+    //                     'K6WRKC' => $WCT,
+    //                     'K6SDTE' => $fecha,
+    //                     'K6EDTE' => $fefin,
+    //                     'K6DDTE' => $inp[1],
+    //                     'K6DSHT' => $turno,
+    //                     'K6PFQY' => $request->$plans,
+    //                     'K6CUSR' => 'LXSECOFR',
+    //                     'K6CCDT' => $load,
+    //                     'K6CCTM' => $hora,
+    //                     'K6FIL1' => '',
+    //                     'K6FIL2' => ''
+    //                 ];
+    //                 $dfasql = [
+    //                     'K6PROD' => $namenA,
+    //                     'K6WRKC' => $WCT,
+    //                     'K6SDTE' => $fecha,
+    //                     'K6EDTE' => $fefin,
+    //                     'K6DDTE' => $fechasql,
+    //                     'K6DSHT' => $turno,
+    //                     'K6PFQY' => $request->$plans,
+    //                     'K6CUSR' => 'LXSECOFR',
+    //                     'K6CCDT' => $load,
+    //                     'K6CCTM' => $horasql,
+    //                     'K6FIL1' => '',
+    //                     'K6FIL2' => ''
+    //                 ];
+    //                 array_push($datasql, $dfasql);
+    //                 array_push($datas, $dfa);
+    //             }
+    //         }
+    //         if ($CONT == 5) {
+    //             $indata = YK006::query()->insert($datas);
+    //             $insql = LOGSUP::query()->insert($datasql);
+    //             $datas = [];
+    //             $datasql = [];
+    //             $CONT = 0;
+    //         }
+    //         $CONT = $CONT + 1;
+    //     }
 
-        $padres = array_chunk($plan1, 10);
-        $total = count($padres);
-        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+    //     $indata = YK006::query()->insert($datas);
+    //     $indatasql = LOGSUP::query()->insert($datasql);
 
-        $partsrev = array_column($plan1, 'IPROD');
-        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+    //     $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+    //     $query = "CALL LX834OU.YMP006C";
+    //     $result = odbc_exec($conn, $query);
+    //     $array = explode(",", $TP);
+    //     $plan1 = IIM::query()
+    //         ->select('IPROD', 'IREF04')
+    //         ->wherein('IREF04 ', $array)
+    //         ->where([
+    //             ['IID', '!=', 'IZ'],
+    //             ['IMPLC', '!=', 'OBSOLETE'],
+    //         ])
+    //         ->where('IPROD', 'Not like', '%-830%')
+    //         ->where('ICLAS', 'F1')
+    //         ->distinct('IPROD')
+    //         ->get()->toArray();
 
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
-    }
+    //     $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+    //     $partsrev = array_column($plan1, 'IPROD');
+    //     $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+    //     // dd($datos);
+    //     return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
+    // }
+
+    // public function update(Request $request)
+    // {
+
+    //     $inF1 = array();
+    //     $TP = $request->SeProject;
+    //     $CP = $request->SePC;
+    //     $tipo = $request->tipo;
+    //     $WC = $request->SeWC;
+    //     $variables = $request->all();
+
+    //     $keyes = array_keys($variables);
+    //     $data = explode('/', $keyes[1], 2);
+    //     $dias = 8;
+    //     $fecha = $data[0];
+
+    //     $hoy = date('Ymd', strtotime($fecha));
+    //     $datas = [];
+    //     $datasql = [];
+    //     $CONT = 0;
+    //     foreach ($keyes as $plans) {
+    //         $dfa = [];
+    //         $dfasql = [];
+
+    //         $inp = explode('/', $plans, 4);
+    //         if (count($inp) >= 3) {
+    //             $WCT = $inp[3];
+    //             $namenA = strtr($inp[0], '_', ' ');
+    //             $turno = $inp[2];
+    //             $load = date('Ymd', strtotime('now'));
+    //             $hora = date('His', time());
+    //             $horasql = date('H:i:s', time());
+    //             $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+    //             $fechasql = date('Ymd', strtotime($inp[1]));
+    //             if ($request->$plans != 0) {
+
+    //                 $dfa = [
+    //                     'K6PROD' => $namenA,
+    //                     'K6WRKC' => $WCT,
+    //                     'K6SDTE' => $fecha,
+    //                     'K6EDTE' => $fefin,
+    //                     'K6DDTE' => $inp[1],
+    //                     'K6DSHT' => $turno,
+    //                     'K6PFQY' => $request->$plans,
+    //                     'K6CUSR' => 'LXSECOFR',
+    //                     'K6CCDT' => $load,
+    //                     'K6CCTM' => $hora,
+    //                     'K6FIL1' => '',
+    //                     'K6FIL2' => ''
+    //                 ];
+    //                 $dfasql = [
+    //                     'K6PROD' => $namenA,
+    //                     'K6WRKC' => $WCT,
+    //                     'K6SDTE' => $fecha,
+    //                     'K6EDTE' => $fefin,
+    //                     'K6DDTE' => $fechasql,
+    //                     'K6DSHT' => $turno,
+    //                     'K6PFQY' => $request->$plans,
+    //                     'K6CUSR' => 'LXSECOFR',
+    //                     'K6CCDT' => $load,
+    //                     'K6CCTM' => $horasql,
+    //                     'K6FIL1' => '',
+    //                     'K6FIL2' => ''
+    //                 ];
+    //                 array_push($datasql, $dfasql);
+    //                 array_push($datas, $dfa);
+    //             }
+    //         }
+    //         if ($CONT == 10) {
+    //             $indata = YK006::query()->insert($datas);
+    //             $insql = LOGSUP::query()->insert($datasql);
+    //             $datas = [];
+    //             $datasql = [];
+    //             $CONT = 0;
+    //         }
+    //         $CONT = $CONT + 1;
+    //     }
+
+    //     $indata = YK006::query()->insert($datas);
+    //     $indatasql = LOGSUP::query()->insert($datasql);
+
+
+    //     $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+    //     $query = "CALL LX834OU.YMP006C";
+
+    //     $result = odbc_exec($conn, $query);
+    //     $array = explode(",", $TP);
+    //     $plan1 = IIM::query()
+    //         ->select('IPROD', 'IREF04')
+    //         ->wherein('IREF04 ', $array)
+    //         ->where([
+    //             ['IID', '!=', 'IZ'],
+    //             ['IMPLC', '!=', 'OBSOLETE'],
+    //         ])
+    //         ->where(
+    //             [
+    //                 ['IPROD', 'Not like', '%-SOR%'],
+    //                 ['IPROD', 'Not like', '%-830%']
+    //             ]
+    //         )
+    //         ->where('ICLAS', 'F1')
+    //         ->distinct('IPROD')
+    //         ->get()->toArray();
+
+    //     $padres = array_chunk($plan1, 10);
+    //     $total = count($padres);
+    //     $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+
+    //     $partsrev = array_column($plan1, 'IPROD');
+    //     $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+
+    //     return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -479,6 +480,9 @@ class PlaneacionController extends Controller
     {
         //
     }
+
+
+    //---------------------------------------Buscar estructuras ------------------------------------------------------
 
     function CargarforcastF1($prods, $hoy, $dias)
     {
@@ -1093,10 +1097,10 @@ class PlaneacionController extends Controller
 
         if ($request->Type == 1) {
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
+            return view('planeacion.planfinal1view', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         } else {
             $datos = self::CargarforcastF1($plan1, $fecha, $dias);
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
+            return view('planeacion.plancomponenteview', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         }
     }
 }

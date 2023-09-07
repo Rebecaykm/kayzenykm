@@ -63,6 +63,7 @@ class PlanFinalExport implements FromView
         $finaArra = array_column($prods, 'IPROD');
         $finales = implode("' OR  MPROD='",   $finaArra);
         $finaleskfp = implode("' OR  FPROD='",   $finaArra);
+        $finaleswrk = implode("' OR  RPROD='",   $finaArra);
         $cadfinal = [];
         foreach ($prods as $prod) {
             // $contsub = self::contcargar($prod['IPROD']);
@@ -102,14 +103,6 @@ class PlanFinalExport implements FromView
         $finalres =    array_column($res, 'Final');
         $subcompo = array_column($res, 'Componente');
         $cadsubsPlan = implode("' OR  FPROD='",  $subcompo);
-        // $valPD = KFP::query()
-        //     ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-        //     ->whereraw("(FPROD='" .  $cadsubsPlan . "')")
-        //     ->where([
-        //         ['FRDTE', '>=', $hoy],
-        //         ['FRDTE', '<', $totalF],
-        //     ])
-        //     ->get()->toarray();
 
 
         $cadsubssh = implode("' OR  SPROD='",  $subcompo);
@@ -131,7 +124,7 @@ class PlanFinalExport implements FromView
 
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
-            ->whereraw("(RPROD='" .  $cadsubswrk  . "')")
+            ->whereraw("(RPROD='" .  $finaleswrk  . "')")
             ->get()->toarray();
 
         $prowk = array_column($WCT, 'RPROD');
@@ -201,14 +194,14 @@ class PlanFinalExport implements FromView
 
 
             $padre  += ['tPlan' => $tPlan];
+            $pos = array_search($prod, $prowk );
+
+            $padre  += ['Wrc' => $prowrok[$pos]];
+
             $padre  += $forcastp;
             $padre  +=  $planpadre;
             $inF1 += ['padre' =>  $padre];
-            $prowk = array_column($WCT, 'RPROD');
-            $prowrok = array_column($WCT, 'RWRKC');
-            $prodcqa = array_column($cond, 'IPROD');
-            $pqa = array_column($cond, 'IMBOXQ');
-            $minba = array_column($cond, 'IMIN');
+
             $sepa = [];
             $datossub = [];
 
