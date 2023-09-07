@@ -1091,12 +1091,16 @@ class PlaneacionController extends Controller
             ->where([['IPROD ', $request->item], ['ICLAS', 'F1']])
             ->get()->toArray();
 
+
         if ($request->Type == 1) {
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+
             return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         } else {
             $datos = self::CargarforcastF1($plan1, $fecha, $dias);
+
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         }
+
     }
 }

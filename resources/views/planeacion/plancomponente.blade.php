@@ -305,7 +305,7 @@
                         @foreach ($datossub as $datossubs)
                             @php
                                 $hoy = $fecha;
-                                dd($datossub);
+
                             @endphp
 
                             @if (array_search($datossubs['sub'], $histo) != true)
