@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\OpenOrders;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('item-class', \App\Http\Controllers\ItemClassController::class);
+    Route::get('item-class-data-upload', [\App\Http\Controllers\ItemClassController::class, 'dataUpload'])->name('item-class.data-upload');
 
     /**
      *
@@ -73,6 +75,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('workcenter', \App\Http\Controllers\WorkcenterController::class);
+    Route::get('workcenter-data-upload', [\App\Http\Controllers\WorkcenterController::class, 'dataUpload'])->name('workcenter.data-upload');
 
     /**
      *

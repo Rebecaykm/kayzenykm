@@ -19,13 +19,13 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MeasurementSeeder::class,
             TypeSeeder::class,
-            ItemClassSeeder::class,
+            // ItemClassSeeder::class,
             StandardPackageSeeder::class,
             PlannerSeeder::class,
             ClientSeeder::class,
             ProjectSeeder::class,
-            WorkcenterSeeder::class,
-            PartNumberSeeder::class
+            // WorkcenterSeeder::class,
+            // PartNumberSeeder::class
         ]);
     }
 }

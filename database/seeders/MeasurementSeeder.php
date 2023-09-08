@@ -13,6 +13,7 @@ class MeasurementSeeder extends Seeder
      */
     public function run(): void
     {
-        Measurement::factory(10)->create();
+        Measurement::create(['symbol' => 'KG', 'unit' => 'Kilogramos']);
+        Measurement::create(['symbol' => 'EA', 'unit' => 'Pieza']);
     }
 }

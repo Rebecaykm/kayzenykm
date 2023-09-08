@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('number')->unique();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->foreignId('departament_id')->constrained('departaments');
             $table->timestamps();
         });

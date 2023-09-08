@@ -5,9 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\ItemClass;
 use App\Http\Requests\StoreItemClassRequest;
 use App\Http\Requests\UpdateItemClassRequest;
+use App\Jobs\ItemClassMigrationJob;
 
 class ItemClassController extends Controller
 {
+    /**
+     *
+     */
+    function dataUpload()
+    {
+        ItemClassMigrationJob::dispatch();
+
+        return redirect('item-class');
+    }
+
     /**
      * Display a listing of the resource.
      */

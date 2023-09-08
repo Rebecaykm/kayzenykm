@@ -14,8 +14,7 @@ class LWK extends Model
     protected $table = 'LX834F01.LWK';
 
     protected $fillable = [
-        'WWRKC',
-        'WDESC',
+        'WID', 'WWRKC', 'WDESC', 'WDEPT', 'WFORE'
     ];
 
     /**

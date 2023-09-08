@@ -15,10 +15,10 @@ class DepartamentSeeder extends Seeder
      */
     public function run()
     {
-        Departament::create(['code' => '11', 'name' => 'Estampado']);
-        Departament::create(['code' => '12', 'name' => 'Carrocería']);
-        Departament::create(['code' => '13', 'name' => 'Chasis']);
-        Departament::create(['code' => '14', 'name' => 'Pintura']);
-        Departament::create(['code' => '40', 'name' => 'Proveedor']);
+        Departament::create(['code' => '1100', 'name' => 'Estampado']);
+        Departament::create(['code' => '1200', 'name' => 'Carrocería']);
+        Departament::create(['code' => '1300', 'name' => 'Chasis']);
+        Departament::create(['code' => '1400', 'name' => 'Pintura']);
+        Departament::create(['code' => '4000', 'name' => 'Proveedor']);
     }
 }

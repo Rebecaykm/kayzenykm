@@ -5,10 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Workcenter;
 use App\Http\Requests\StoreWorkcenterRequest;
 use App\Http\Requests\UpdateWorkcenterRequest;
+use App\Jobs\WorkcenterMigrationJob;
 use App\Models\Departament;
+use App\Models\LWK;
 
 class WorkcenterController extends Controller
 {
+    /**
+     *
+     */
+    public function dataUpload()
+    {
+        WorkcenterMigrationJob::dispatch();
+
+        return redirect('workcenter');
+    }
+
     /**
      * Display a listing of the resource.
      */

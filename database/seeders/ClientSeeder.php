@@ -13,6 +13,9 @@ class ClientSeeder extends Seeder
      */
     public function run(): void
     {
-        Client::factory(10)->create();
+        Client::create(['code' => '200000', 'name' => 'MMVO']);
+        Client::create(['code' => '400403', 'name' => 'TOYOTA']);
+        Client::create(['code' => '200700', 'name' => 'MNAO']);
+        Client::create(['code' => '400501', 'name' => 'F&P']);
     }
 }

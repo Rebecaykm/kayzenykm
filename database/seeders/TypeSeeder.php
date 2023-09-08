@@ -13,6 +13,16 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
-        Type::factory(10)->create();
+        Type::create(['abbreviation' => 'F', 'name' => 'FinishedProd']);
+        Type::create(['abbreviation' => 'G', 'name' => 'OutsideProd']);
+        Type::create(['abbreviation' => 'M', 'name' => 'Manufactured']);
+        Type::create(['abbreviation' => 'P', 'name' => 'Purchased']);
+        Type::create(['abbreviation' => 'S', 'name' => 'Supply']);
+        Type::create(['abbreviation' => 'T', 'name' => 'Materials']);
+        Type::create(['abbreviation' => '0', 'name' => 'Phanthom']);
+        Type::create(['abbreviation' => '3', 'name' => 'Assorment']);
+        Type::create(['abbreviation' => '4', 'name' => 'Kit']);
+        Type::create(['abbreviation' => '5', 'name' => 'Planning Bill']);
+        Type::create(['abbreviation' => '6', 'name' => 'NON-INV']);
     }
 }
