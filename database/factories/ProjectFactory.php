@@ -20,7 +20,6 @@ class ProjectFactory extends Factory
             'type' => $this->faker->numberBetween(1, 10),
             'model' => $this->faker->word,
             'prefixe' => $this->faker->randomDigit . $this->faker->randomDigit . $this->faker->randomDigit,
-            'client_id' => $this->faker->numberBetween(1, 10)
         ];
     }
 }

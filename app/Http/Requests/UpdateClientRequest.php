@@ -23,7 +23,8 @@ class UpdateClientRequest extends FormRequest
     {
         return [
             'code' => ['string'],
-            'name' => ['string']
+            'name' => ['string'],
+            'projects' => ['array']
         ];
     }
 }

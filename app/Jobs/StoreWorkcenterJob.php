@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Departament;
 use App\Models\Workcenter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -16,16 +17,16 @@ class StoreWorkcenterJob implements ShouldQueue
 
     private $number;
     private $name;
-    private $departament_id;
+    private $departament;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($number, $name, $departament_id)
+    public function __construct($number, $name, $departament)
     {
         $this->number = $number;
         $this->name = $name;
-        $this->departament_id = $departament_id;
+        $this->departament = $departament;
     }
 
     /**
@@ -33,10 +34,20 @@ class StoreWorkcenterJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Workcenter::create([
-            'number' => $this->number,
-            'name' => $this->name,
-            'departament_id' => $this->departament_id
-        ]);
+        $departament = Departament::query()
+            ->where('code', 'LIKE', $this->departament . '%')
+            ->first();
+
+        if ($departament !== null) {
+            Workcenter::updateOrCreate(
+                [
+                    'number' => $this->number
+                ],
+                [
+                    'name' => $this->name,
+                    'departament_id' => $departament->id
+                ]
+            );
+        }
     }
 }

@@ -86,7 +86,7 @@ class RoleController extends Controller
         $role->update($request->all());
 
         if (!empty($request->permissions)) {
-            $role->permissions()->sync($request->permissions);
+            $role->permissions()->sync($request->permissions, false);
         }
 
         return redirect()->back();

@@ -34,7 +34,9 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project =  Project::create($request->validated());
+        $project =  Project::create(['type' => $request->type, 'model' => $request->model, 'prefixe' => $request->prefixe]);
+
+        $project->clients()->sync($request->clients);
 
         return redirect()->route('project.index');
     }
@@ -62,11 +64,9 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->fill($request->validated());
+        $project->update(['type' => $request->type, 'model' => $request->model, 'prefixe' => $request->prefixe]);
 
-        if ($project->isDirty()) {
-            $project->save();
-        }
+        $project->clients()->sync($request->clients);
 
         return redirect()->route('project.index');
     }
@@ -76,6 +76,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $project->clients()->detach();
+
         $project->delete();
 
         return redirect()->back();

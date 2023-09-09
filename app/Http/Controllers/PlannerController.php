@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Planner;
 use App\Http\Requests\StorePlannerRequest;
 use App\Http\Requests\UpdatePlannerRequest;
+use App\Jobs\PlannerMigrationJob;
 
 class PlannerController extends Controller
 {
+    /**
+     *
+     */
+    function dataUpload()
+    {
+        PlannerMigrationJob::dispatch();
+
+        return redirect('planner');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $planners = Planner::query()->orderBy('name', 'DESC')->paginate(10);
+        $planners = Planner::query()->orderBy('name', 'ASC')->paginate(10);
 
         return view('planner.index', ['planners' => $planners]);
     }

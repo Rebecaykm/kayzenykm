@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             // ItemClassSeeder::class,
             StandardPackageSeeder::class,
-            PlannerSeeder::class,
+            // PlannerSeeder::class,
             ClientSeeder::class,
             ProjectSeeder::class,
             // WorkcenterSeeder::class,

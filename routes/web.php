@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('planner', \App\Http\Controllers\PlannerController::class);
+    Route::get('planner-data-upload', [\App\Http\Controllers\PlannerController::class, 'dataUpload'])->name('planner.data-upload');
 
     /**
      *

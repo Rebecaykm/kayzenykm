@@ -31,29 +31,13 @@ class WorkcenterMigrationJob implements ShouldQueue
     {
         $workcenters = LWK::query()->select('WID', 'WWRKC', 'WDESC', 'WDEPT', 'WFORE')->orderBy('WWRKC', 'ASC')->get();
 
+
         foreach ($workcenters as $key => $workcenter) {
-
-            $departament = Departament::query()
-                ->where('code', $workcenter->WDEPT)
-                ->first();
-
-            if ($departament !== null) {
-                $input = Workcenter::query()
-                    ->where([
-                        ['number', $workcenter->WWRKC],
-                        ['name', $workcenter->WDESC],
-                        ['departament_id', $departament->id]
-                    ])
-                    ->first();
-
-                if ($input === null) {
-                    StoreWorkcenterJob::dispatch(
-                        $workcenter->WWRKC,
-                        $workcenter->WDESC,
-                        $departament->id
-                    );
-                }
-            }
+            StoreWorkcenterJob::dispatch(
+                $workcenter->WWRKC,
+                $workcenter->WDESC,
+                substr($workcenter->WDEPT, 0, 2)
+            );
         }
     }
 }

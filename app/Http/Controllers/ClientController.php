@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Project;
 
 class ClientController extends Controller
 {
@@ -23,7 +24,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return view('client.create');
+        $projects = Project::query()->orderBy('model', 'ASC')->get();
+
+        return view('client.create', ['projects' => $projects]);
     }
 
     /**
@@ -31,7 +34,9 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $client =  Client::create($request->validated());
+        $client =  Client::create(['code' => $request->code, 'name' => $request->name]);
+
+        $client->projects()->sync($request->projects);
 
         return redirect()->route('client.index');
     }
@@ -49,7 +54,9 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        return view('client.edit', ['client' => $client]);
+        $projects = Project::query()->orderBy('model', 'ASC')->get();
+
+        return view('client.edit', ['client' => $client, 'projects' => $projects]);
     }
 
     /**
@@ -57,11 +64,9 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
-        $client->fill($request->validated());
+        $client->update(['code' => $request->code, 'name' => $request->name]);
 
-        if ($client->isDirty()) {
-            $client->save();
-        }
+        $client->projects()->sync($request->projects);
 
         return redirect()->route('client.index');
     }
@@ -71,6 +76,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        $client->projects()->detach();
+
         $client->delete();
 
         return redirect()->back();

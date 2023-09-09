@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\IPB;
+use App\Models\Planner;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,6 +28,18 @@ class PlannerMigrationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        $planners = IPB::query()
+            ->select('PBPBC', 'PBTYP', 'PBFAC', 'PBNAM')
+            ->where([['PBTYP', 'LIKE', 'P'], ['PBFAC', '!=', ' ']])
+            ->orderBy('PBPBC', 'ASC')->get();
+
+        foreach ($planners as $key => $planner) {
+            StorePlannerClassJob::dispatch(
+                $planner->PBPBC,
+                $planner->PBTYP,
+                $planner->PBFAC,
+                $planner->PBNAM
+            );
+        }
     }
 }

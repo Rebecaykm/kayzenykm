@@ -32,16 +32,29 @@
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Prefijo') }}</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $project->prefixe }}" type="text" name="prefixe" autocomplete="off" />
                 </label>
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        {{ __('Cliente') }}
-                    </span>
-                    <select name="client_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        @foreach ($clients as $client)
-                        <option {{ $project->client_id == $client->id ? "selected" : "" }} value="{{ $client->id }}">{{ $client->name }}</option>
-                        @endforeach
-                    </select>
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{ __('Clientes') }}</span>
                 </label>
+                <div class="grid grid-cols-4 gap-4 px-4 py-2 rounded-lg shadow-xs border-1 bg-white dark:bg-gray-80">
+                    @foreach ($clients as $key => $client)
+                    <div class="flex col-span-2 p-2 text-sm">
+                        <label class="flex items-center dark:text-gray-400">
+                            <input type="checkbox" value="{{ $client->id }}" name="clients[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
+                            @if (isset($project->clients))
+                                @foreach ($project->clients as $i => $project_clients)
+                                    @if ($project_clients->id == $client->id)
+                                        {{ "checked" }}
+                                    @endif
+                                @endforeach
+                            @endif
+                            />
+                            <span class="ml-2">
+                                {{ $client->name }}
+                            </span>
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
                 <div class="flex justify-end mt-4">
                     <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
                         <span>{{ __('Guardar')}}</span>
