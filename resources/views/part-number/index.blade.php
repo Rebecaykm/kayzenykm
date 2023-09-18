@@ -15,7 +15,7 @@
             </ul>
         </div>
         @endif
-
+<!-- 
         <div class="flex justify-end mb-4">
             <a href="{{ route('part-number.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Nuevo Número de Parte') }}
@@ -23,7 +23,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </a>
-        </div>
+        </div> -->
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
@@ -33,46 +33,42 @@
                             <th class="px-4 py-3">{{ __('Nombre') }}</th>
                             <th class="px-4 py-3">{{ __('Numero') }}</th>
                             <th class="px-4 py-3">{{ __('Proyecto') }}</th>
-                            <th class="px-4 py-3">{{ __('Cliente') }}</th>
                             <th class="px-4 py-3">{{ __('Medida') }}</th>
                             <th class="px-4 py-3">{{ __('Item') }}</th>
                             <th class="px-4 py-3">{{ __('Clase') }}</th>
                             <th class="px-4 py-3">{{ __('Paquete Estandar') }}</th>
                             <th class="px-4 py-3">{{ __('Centro de Trabajo') }}</th>
-                            <th class="px-4 py-3">{{ __('Acciones') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($partNumbers as $partNumber)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->name }}
+                                {{ $partNumber->name ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->number }}
+                                {{ $partNumber->number ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->project->name }}
+                                {{ $partNumber->project->model  ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->project->client->name  }}
+                                {{ $partNumber->measurement->symbol ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->measurement->symbol }}
+                                {{ $partNumber->type->abbreviation ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->type->abbreviation }}
+                                {{ $partNumber->itemClass->abbreviatio ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->itemClass->abbreviation }}
+                                {{ $partNumber->standardPackage->name ?? ''}}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->standardPackage->name ?? '' }}
+                                {{ $partNumber->workcenter->name ?? ''}}
                             </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->workcenter->number }}
-                            </td>
-                            <td class="px-4 py-3">
+                            <!-- <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <a href="{{ route('part-number.edit', $partNumber->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -90,7 +86,7 @@
                                         </button>
                                     </form>
                                 </div>
-                            </td>
+                            </td> -->
                         </tr>
                         @endforeach
                     </tbody>

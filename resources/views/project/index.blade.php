@@ -33,6 +33,7 @@
                             <th class="px-4 py-3">{{ __('Tipo') }}</th>
                             <th class="px-4 py-3">{{ __('Modelo') }}</th>
                             <th class="px-4 py-3">{{ __('Prefijo') }}</th>
+                            <th class="px-4 py-3">{{ __('Cliente') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -40,13 +41,16 @@
                         @foreach ($projects as $project)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
-                                {{ $project->type }}
+                                {{ $project->type ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $project->model }}
+                                {{ $project->model ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $project->prefixe }}
+                                {{ $project->prefixe ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $project->client->name ?? '' }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">

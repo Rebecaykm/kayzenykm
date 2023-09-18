@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('model');
             $table->string('prefixe');
+            $table->foreignId('client_id')->nullable()->constrained('clients');
             $table->timestamps();
         });
     }

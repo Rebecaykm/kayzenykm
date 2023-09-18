@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('number');
-            $table->foreignId('measurement_id')->constrained('measurements');
-            $table->foreignId('type_id')->constrained('types');
-            $table->foreignId('item_class_id')->constrained('item_classes');
-            $table->foreignId('standard_package_id')->constrained('standard_packages');
-            $table->foreignId('workcenter_id')->constrained('workcenters');
-            $table->foreignId('planner_id')->constrained('planners');
-            $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('measurement_id')->nullable()->constrained('measurements');
+            $table->foreignId('type_id')->nullable()->constrained('types');
+            $table->foreignId('item_class_id')->nullable()->constrained('item_classes');
+            $table->foreignId('standard_package_id')->nullable()->constrained('standard_packages');
+            $table->foreignId('workcenter_id')->nullable()->constrained('workcenters');
+            $table->foreignId('planner_id')->nullable()->constrained('planners');
+            $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->timestamps();
         });
     }

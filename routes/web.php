@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('workcenter', \App\Http\Controllers\WorkcenterController::class);
     Route::get('workcenter-data-upload', [\App\Http\Controllers\WorkcenterController::class, 'dataUpload'])->name('workcenter.data-upload');
+    Route::get('workcenter-part-number', [\App\Http\Controllers\WorkcenterController::class, 'addPartNumber'])->name('workcenter.part-number');
 
     /**
      *
@@ -97,6 +98,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('part-number', \App\Http\Controllers\PartNumberController::class);
+    Route::get('part-number-data-upload', [\App\Http\Controllers\PartNumberController::class, 'dataUpload'])->name('part-number.data-upload');
 
     /**
      *
