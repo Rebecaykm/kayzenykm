@@ -25,7 +25,7 @@ class UpdateProjectRequest extends FormRequest
             'type' => ['string'],
             'model' => ['string'],
             'prefixe' => ['string'],
-            'clients' => ['array']
+            'client_id' => ['numeric']
         ];
     }
 }

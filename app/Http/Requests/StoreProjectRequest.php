@@ -25,7 +25,7 @@ class StoreProjectRequest extends FormRequest
             'type' => ['required', 'string'],
             'model' => ['required', 'string'],
             'prefixe' => ['required', 'string'],
-            'clients' => ['array']
+            'client_id' => ['required', 'numeric']
         ];
     }
 }
