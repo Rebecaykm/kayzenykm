@@ -45,7 +45,7 @@ class PartNumberController extends Controller
         //     );
         // }
 
-        dd("Fin");
+        return redirect('part-number');
     }
 
     /**

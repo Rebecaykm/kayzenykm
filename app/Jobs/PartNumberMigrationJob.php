@@ -34,29 +34,44 @@ class PartNumberMigrationJob implements ShouldQueue
      */
     public function handle(): void
     {
+        //                                  Nombre,  Numero,  Balance, Medida, Tipo,   Clase,   Paquete,   Cantidad, Planeador, Projecto, Creacion dia y hora
         $partNumbers = IIM::query()->select('IDESC', 'IPROD', 'IOPB', 'IUMS', 'IITYP', 'ICLAS', 'IMSPKT', 'IMBOXQ', 'IBUYC', 'IREF04', 'IMENDT', 'IMENTM')->where('IID', 'IM')->orderBy('IMENDT', 'ASC')->get();
 
         foreach ($partNumbers as $key => $partNumber) {
-
-            $measurementType = Measurement::where('symbol', '=', $partNumber->IUMS)->first();
-            $itemType = Type::where('abbreviation', '=', $partNumber->IITYP)->first();
-            $itemClass = ItemClass::where('abbreviation', '=', $partNumber->ICLAS)->first();
-            $plannerCode = Planner::where('code', $partNumber->IBUYC)->first();
-
-            Log::info($partNumber->IPROD . ', ' . $partNumber->IDESC . ', ' . $partNumber->IUMS . ', ' . $partNumber->IITYP . ', ' . $partNumber->ICLAS . ', ' . $partNumber->IBUYC);
-
-            PartNumber::updateOrCreate(
-                [
-                    'number' => $partNumber->IPROD,
-                ],
-                [
-                    'name' => preg_replace('([^A-Za-z0-9])', '', $partNumber->IDESC),
-                    'measurement_id' => $measurementType->id ?? null,
-                    'type_id' => $itemType->id ?? null,
-                    'item_class_id' => $itemClass->id ?? null,
-                    'planner_id' => $plannerCode->id ?? null,
-                ],
+//                                  Nombre,  Numero,  Medida, Tipo,   Clase,  Planeador, Projecto
+            StorePartNumberJob::dispatch(
+                $partNumber->IDESC,
+                $partNumber->IPROD,
+                // $partNumber->IOPB,
+                $partNumber->IUMS,
+                $partNumber->IITYP,
+                $partNumber->ICLAS,
+                // $partNumber->IMSPKT,
+                // $partNumber->IMBOXQ,
+                $partNumber->IBUYC,
+                $partNumber->IREF04,
+                // $partNumber->IMENDT,
+                // $partNumber->IMENTM
             );
+            // $measurementType = Measurement::where('symbol', '=', $partNumber->IUMS)->first();
+            // $itemType = Type::where('abbreviation', '=', $partNumber->IITYP)->first();
+            // $itemClass = ItemClass::where('abbreviation', '=', $partNumber->ICLAS)->first();
+            // $plannerCode = Planner::where('code', $partNumber->IBUYC)->first();
+
+            // Log::info($partNumber->IPROD . ', ' . $partNumber->IDESC . ', ' . $partNumber->IUMS . ', ' . $partNumber->IITYP . ', ' . $partNumber->ICLAS . ', ' . $partNumber->IBUYC);
+
+            // PartNumber::updateOrCreate(
+            //     [
+            //         'number' => $partNumber->IPROD,
+            //     ],
+            //     [
+            //         'name' => preg_replace('([^A-Za-z0-9])', '', $partNumber->IDESC),
+            //         'measurement_id' => $measurementType->id ?? null,
+            //         'type_id' => $itemType->id ?? null,
+            //         'item_class_id' => $itemClass->id ?? null,
+            //         'planner_id' => $plannerCode->id ?? null,
+            //     ],
+            // );
         }
     }
 }

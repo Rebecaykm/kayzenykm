@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('standard_package_id')->nullable()->constrained('standard_packages');
             $table->foreignId('workcenter_id')->nullable()->constrained('workcenters');
             $table->foreignId('planner_id')->nullable()->constrained('planners');
-            $table->foreignId('project_id')->nullable()->constrained('projects');
             $table->timestamps();
         });
     }

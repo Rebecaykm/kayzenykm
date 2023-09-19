@@ -15,7 +15,7 @@
             </ul>
         </div>
         @endif
-<!-- 
+<!--
         <div class="flex justify-end mb-4">
             <a href="{{ route('part-number.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Nuevo Número de Parte') }}
@@ -60,7 +60,7 @@
                                 {{ $partNumber->type->abbreviation ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->itemClass->abbreviatio ?? '' }}
+                                {{ $partNumber->itemClass->abbreviation ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->standardPackage->name ?? ''}}
