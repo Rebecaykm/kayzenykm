@@ -104,6 +104,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
+    Route::resource('type-scrap', \App\Http\Controllers\TypeScrapController::class);
+
+    /**
+     *
+     */
+    Route::resource('scrap', \App\Http\Controllers\ScrapController::class);
+
+    /**
+     *
+     */
     Route::resource('examples', \App\Http\Controllers\ExampleController::class);
 
     /**
