@@ -31,21 +31,17 @@ class AddWorkCenterPartNumberJob implements ShouldQueue
     public function handle(): void
     {
         $workcenters = FRT::query()->select('RPROD', 'ROPNO', 'RWRKC', 'ROPDS')->orderBy('RPROD', 'ASC')->get();
-
         foreach ($workcenters as $key => $workcenter) {
-
-            $partNumer = PartNumber::query()->where('number', $workcenter->RPROD)->first();
-
+            $partNumer = PartNumber::query()->where('number', preg_replace('([^A-Za-z0-9])', '', $workcenter->RPROD))->first();
             if ($partNumer !== null) {
-                $wc = Workcenter::query()->where('number', $workcenter->RWRKC)->first();
+                $wc = Workcenter::query()->where('number', preg_replace('([^A-Za-z0-9])', '',$workcenter->RWRKC))->first();
                 if ($wc !== null) {
-
                     $partNumer->update(['workcenter_id' => $wc->id]);
                 } else {
-                    Log::info('No encontro el WorkCenter: ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
+                    Log::info('WorkCenter: ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
                 }
             } else {
-                Log::info('No encontro el Item: ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
+                Log::info('PartNumber: ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
             }
         }
     }

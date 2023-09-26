@@ -11,7 +11,7 @@ class StandardPackage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'capacity'
+        'name'
     ];
 
     public function partNumbers(): HasMany

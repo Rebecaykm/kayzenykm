@@ -7,6 +7,7 @@ use App\Models\Measurement;
 use App\Models\PartNumber;
 use App\Models\Planner;
 use App\Models\Project;
+use App\Models\StandardPackage;
 use App\Models\Type;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,8 +26,8 @@ class StorePartNumberJob implements ShouldQueue
     private $measurementUnit;
     private $itemType;
     private $itemClass;
-    // private $standardPackage;
-    // private $boxQuantity;
+    private $standardPackage;
+    private $boxQuantity;
     private $plannerCode;
     private $project;
     // private $createdDate;
@@ -35,13 +36,15 @@ class StorePartNumberJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct($name, $number, $measurementUnit, $itemType, $itemClass, $plannerCode, $project)
+    public function __construct($name, $number, $measurementUnit, $itemType, $itemClass, $standardPackage, $boxQuantity, $plannerCode, $project)
     {
         $this->number = $number;
         $this->name = $name;
         $this->measurementUnit = $measurementUnit;
         $this->itemType = $itemType;
         $this->itemClass =  $itemClass;
+        $this->standardPackage = $standardPackage;
+        $this->boxQuantity = $boxQuantity;
         $this->plannerCode = $plannerCode;
         $this->project = $project;
     }
@@ -52,9 +55,10 @@ class StorePartNumberJob implements ShouldQueue
     public function handle(): void
     {
         $measurementType = Measurement::where('symbol', '=', $this->measurementUnit)->first();
-        $itemType = Type::where('abbreviation', '=', $this->itemType)->first();
-        $itemClass = ItemClass::where('abbreviation', '=', $this->itemClass)->first();
-        $plannerCode = Planner::where('code', $this->plannerCode)->first();
+        $type = Type::where('abbreviation', '=', $this->itemType)->first();
+        $class = ItemClass::where('abbreviation', '=', $this->itemClass)->first();
+        $package = StandardPackage::where('name', $this->standardPackage)->first();
+        $planner = Planner::where('code', $this->plannerCode)->first();
 
         $item = PartNumber::where('number', $this->number)->first();
 
@@ -62,18 +66,22 @@ class StorePartNumberJob implements ShouldQueue
             $item->update([
                 'name' => $this->name,
                 'measurement_id' => $measurementType->id ?? null,
-                'type_id' => $itemType->id ?? null,
-                'item_class_id' => $itemClass->id ?? null,
-                'planner_id' => $plannerCode->id ?? null,
+                'type_id' => $type->id ?? null,
+                'item_class_id' => $class->id ?? null,
+                'standard_package_id' => $package->id ?? null,
+                'quantity' => $this->boxQuantity ?? null,
+                'planner_id' => $planner->id ?? null,
             ]);
         } else {
             $item = PartNumber::create([
                 'number' => $this->number,
                 'name' => $this->name,
                 'measurement_id' => $measurementType->id ?? null,
-                'type_id' => $itemType->id ?? null,
-                'item_class_id' => $itemClass->id ?? null,
-                'planner_id' => $plannerCode->id ?? null,
+                'type_id' => $type->id ?? null,
+                'item_class_id' => $class->id ?? null,
+                'standard_package_id' => $package->id ?? null,
+                'quantity' => $this->boxQuantity ?? null,
+                'planner_id' => $planner->id ?? null,
             ]);
         }
 
@@ -128,10 +136,9 @@ class StorePartNumberJob implements ShouldQueue
                 $item->projects()->sync($project);
                 break;
 
-            case '3Y':
-                $project = Project::where('type', trim($this->project))->pluck('id')->toArray();
+            case '3Y   ':
+                $project = Project::where('type', '3Y')->pluck('id')->toArray();
                 $item->projects()->sync($project);
-                Log::info("No. Parte : " . $this->number . ", Proyecto" . $this->project);
                 break;
 
             case '20':
@@ -195,7 +202,7 @@ class StorePartNumberJob implements ShouldQueue
                 break;
 
             default:
-                Log::info("No. Parte : " . $this->number . ", Proyecto" . $this->project);
+                Log::info("No. Parte : " . $this->number . ", Proyecto : " . $this->project);
                 break;
         }
     }

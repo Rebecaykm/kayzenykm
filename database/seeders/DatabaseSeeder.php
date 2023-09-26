@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             MeasurementSeeder::class,
             TypeSeeder::class,
             // ItemClassSeeder::class,
-            StandardPackageSeeder::class,
+            // StandardPackageSeeder::class,
             // PlannerSeeder::class,
             ClientSeeder::class,
             ProjectSeeder::class,

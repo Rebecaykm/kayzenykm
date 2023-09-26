@@ -15,7 +15,7 @@
             </ul>
         </div>
         @endif
-<!--
+        <!--
         <div class="flex justify-end mb-4">
             <a href="{{ route('part-number.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Nuevo Número de Parte') }}
@@ -23,39 +23,56 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </a>
-        </div> -->
+        </div>
+        -->
+        <div class="px-4 py-3 gap-x-2 my-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+            <label class="block mt-4 text-sm">
+                <div class="relative text-gray-500 focus-within:text-purple-600">
+                    <form action="{{ route('part-number.index') }}" method="get">
+                        <input name="search" class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" placeholder="Número de Parte" autocomplete="off"/>
+                        <button class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Buscar
+                        </button>
+                    </form>
+                </div>
+            </label>
+        </div>
 
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-hidden rounded-lg shadow-lg">
             <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">{{ __('Nombre') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Nombre') }}</th> -->
                             <th class="px-4 py-3">{{ __('Numero') }}</th>
                             <th class="px-4 py-3">{{ __('Proyecto') }}</th>
-                            <th class="px-4 py-3">{{ __('Medida') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Medida') }}</th> -->
                             <th class="px-4 py-3">{{ __('Item') }}</th>
                             <th class="px-4 py-3">{{ __('Clase') }}</th>
                             <th class="px-4 py-3">{{ __('Paquete Estandar') }}</th>
+                            <th class="px-4 py-3">{{ __('Cantidad') }}</th>
                             <th class="px-4 py-3">{{ __('Centro de Trabajo') }}</th>
+                            <th class="px-4 py-3">{{ __('Código de Planeador') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($partNumbers as $partNumber)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-sm">
+                            <!-- <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->name ?? '' }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->number ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->project->model  ?? '' }}
+                                @foreach ($partNumber->projects as $project)
+                                {{ $project->model  ?? '' }}
+                                @endforeach
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <!-- <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->measurement->symbol ?? '' }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->type->abbreviation ?? '' }}
                             </td>
@@ -66,7 +83,13 @@
                                 {{ $partNumber->standardPackage->name ?? ''}}
                             </td>
                             <td class="px-4 py-3 text-sm">
+                                {{ $partNumber->quantity ?? ''}}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
                                 {{ $partNumber->workcenter->name ?? ''}}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                {{ $partNumber->planner->name ?? ''}}
                             </td>
                             <!-- <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">

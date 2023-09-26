@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('type_id')->nullable()->constrained('types');
             $table->foreignId('item_class_id')->nullable()->constrained('item_classes');
             $table->foreignId('standard_package_id')->nullable()->constrained('standard_packages');
+            $table->float('quantity')->nullable();
             $table->foreignId('workcenter_id')->nullable()->constrained('workcenters');
             $table->foreignId('planner_id')->nullable()->constrained('planners');
             $table->timestamps();

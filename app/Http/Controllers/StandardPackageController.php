@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\StandardPackage;
 use App\Http\Requests\StoreStandardPackageRequest;
 use App\Http\Requests\UpdateStandardPackageRequest;
+use App\Jobs\StandardPackageMigrationJob;
 
 class StandardPackageController extends Controller
 {
+    function dataUpload() {
+        StandardPackageMigrationJob::dispatch();
+
+        return redirect('standard-package');
+    }
+
     /**
      * Display a listing of the resource.
      */

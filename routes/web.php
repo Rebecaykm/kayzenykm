@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('standard-package', \App\Http\Controllers\StandardPackageController::class);
+    Route::get('standard-package-data-upload', [\App\Http\Controllers\StandardPackageController::class, 'dataUpload'])->name('standard-package.data-upload');
 
     /**
      *
