@@ -32,9 +32,9 @@ class AddWorkCenterPartNumberJob implements ShouldQueue
     {
         $workcenters = FRT::query()->select('RPROD', 'ROPNO', 'RWRKC', 'ROPDS')->orderBy('RPROD', 'ASC')->get();
         foreach ($workcenters as $key => $workcenter) {
-            $partNumer = PartNumber::query()->where('number', preg_replace('([^A-Za-z0-9])', '', $workcenter->RPROD))->first();
+            $partNumer = PartNumber::query()->where('number', preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $workcenter->RPROD))->first();
             if ($partNumer !== null) {
-                $wc = Workcenter::query()->where('number', preg_replace('([^A-Za-z0-9])', '',$workcenter->RWRKC))->first();
+                $wc = Workcenter::query()->where('number', preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $workcenter->RWRKC))->first();
                 if ($wc !== null) {
                     $partNumer->update(['workcenter_id' => $wc->id]);
                 } else {

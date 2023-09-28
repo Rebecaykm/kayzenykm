@@ -98,8 +98,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
+    Route::resource('shift', \App\Http\Controllers\ShiftController::class);
+
+    /**
+     *
+     */
     Route::resource('part-number', \App\Http\Controllers\PartNumberController::class);
     Route::get('part-number-data-upload', [\App\Http\Controllers\PartNumberController::class, 'dataUpload'])->name('part-number.data-upload');
+
+    /**
+     *
+     */
+    Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
+    Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
 
     /**
      *

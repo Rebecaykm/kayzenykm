@@ -36,10 +36,9 @@ class PartNumberMigrationJob implements ShouldQueue
             ->get();
 
         foreach ($partNumbers as $key => $partNumber) {
-
             StorePartNumberJob::dispatch(
-                preg_replace('([^A-Za-z0-9])', '', $partNumber->IDESC),
-                preg_replace('([^A-Za-z0-9])', '', $partNumber->IPROD),
+                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IDESC),
+                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IPROD),
                 // $partNumber->IOPB,
                 $partNumber->IUMS,
                 $partNumber->IITYP,

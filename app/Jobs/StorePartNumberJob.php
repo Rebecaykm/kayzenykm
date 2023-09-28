@@ -38,8 +38,8 @@ class StorePartNumberJob implements ShouldQueue
      */
     public function __construct($name, $number, $measurementUnit, $itemType, $itemClass, $standardPackage, $boxQuantity, $plannerCode, $project)
     {
-        $this->number = $number;
         $this->name = $name;
+        $this->number = $number;
         $this->measurementUnit = $measurementUnit;
         $this->itemType = $itemType;
         $this->itemClass =  $itemClass;
