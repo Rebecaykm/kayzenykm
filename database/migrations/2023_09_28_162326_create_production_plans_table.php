@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('part_number_id')->nullable()->constrained('part_numbers');
             $table->double('plan_quantity')->nullable();
-            $table->double('production_quantity')->nullable();
+            $table->double('production_quantity')->nullable()->default(0);
             $table->date('date')->nullable();
             $table->foreignId('shift_id')->nullable()->constrained('shifts');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

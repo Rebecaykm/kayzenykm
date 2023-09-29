@@ -26,10 +26,10 @@
         </div>
         -->
         <div class="px-4 py-3 gap-x-2 my-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
-            <label class="block mt-4 text-sm">
+            <label class="block text-sm">
                 <div class="relative text-gray-500 focus-within:text-purple-600">
                     <form action="{{ route('part-number.index') }}" method="get">
-                        <input name="search" class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" placeholder="Número de Parte" autocomplete="off"/>
+                        <input name="search" class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" placeholder="Número de Parte" autocomplete="off" />
                         <button class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                             Buscar
                         </button>
@@ -47,7 +47,7 @@
                             <th class="px-4 py-3">{{ __('Numero') }}</th>
                             <th class="px-4 py-3">{{ __('Proyecto') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Medida') }}</th> -->
-                            <th class="px-4 py-3">{{ __('Item') }}</th>
+                            <th class="px-4 py-3">{{ __('Tipo') }}</th>
                             <th class="px-4 py-3">{{ __('Clase') }}</th>
                             <th class="px-4 py-3">{{ __('Paquete Estandar') }}</th>
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
@@ -86,10 +86,10 @@
                                 {{ $partNumber->quantity ?? ''}}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->workcenter->name ?? ''}}
+                                {{ $partNumber->workcenter->number ?? ''}} - {{ $partNumber->workcenter->name ?? ''}}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $partNumber->planner->name ?? ''}}
+                                {{ $partNumber->planner->code ?? ''}}
                             </td>
                             <!-- <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
