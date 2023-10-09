@@ -112,8 +112,13 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
     Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
-    Route::get('production-unemployment/create', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentCreate'])->name('production-unemployment.create');
-    Route::post('production-unemployment', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentStore'])->name('production-unemployment.store');
+    // Route::get('production-unemployment/create', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentCreate'])->name('production-unemployment.create');
+    // Route::post('production-unemployment', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentStore'])->name('production-unemployment.store');
+
+    /**
+     *
+     */
+    Route::resource('unemployment-record', \App\Http\Controllers\UnemploymentRecordController::class);
 
     /**
      *
@@ -194,4 +199,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
     // Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
+
+    /**
+     * ver Estructura livewird
+     */
+    Route::get('planeacionview', [\App\Http\Controllers\planeacionviewController::class, 'index'])->name('planeacionview.index');
+    Route::get('planeacionview/create', [\App\Http\Controllers\planeacionviewController::class, 'create'])->name('planeacionview.create');
+    Route::post('planeacionview/buscar', [\App\Http\Controllers\planeacionviewController::class, 'buscar'])->name('planeacionview.buscar');
+    Route::post('planeacionview/create', [\App\Http\Controllers\planeacionviewController::class, 'create'])->name('planeacionview.create');
+    Route::post('planeacionview/update', [\App\Http\Controllers\planeacionviewController::class, 'update'])->name('planeacionview.update');
+    Route::get('planeacionview/update', [\App\Http\Controllers\planeacionviewController::class, 'create'])->name('planeacionview.update');
+    Route::post('planeacionview/updatef1', [\App\Http\Controllers\planeacionviewController::class, 'updateF1'])->name('planeacionview.updatef1');
+    Route::get('planeacionview/export', [\App\Http\Controllers\planeacionviewController::class, 'export'])->name('planeacionview.export');
+    Route::get('planeacionview/exportfinal', [\App\Http\Controllers\planeacionviewController::class, 'exportfinal'])->name('planeacionview.exportfinal');
+    Route::get('planeacionview/exportsubcomponentes', [\App\Http\Controllers\planeacionviewController::class, 'exportsubcomponentes'])->name('planeacionview.exportsubcomponentes');
+    Route::post('planeacionview/siguiente', [\App\Http\Controllers\planeacionviewController::class, 'siguiente'])->name('planeacionview.siguiente');
 });

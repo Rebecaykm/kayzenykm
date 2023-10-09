@@ -16,7 +16,7 @@
         </div>
         @endif
 
-        <form action="{{ route('production-unemployment.store') }}" method="post">
+        <form action="{{ route('unemployment-record.store') }}" method="post">
             @csrf
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <label class="block mt-2 text-sm">
@@ -44,11 +44,11 @@
                 </label>
                 <label class="block mt-2 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Hora Inicio') }}</span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="time" name="start" autocomplete="off" />
+                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="time" name="time_start" autocomplete="off" />
                 </label>
                 <label class="block mt-2 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Hora Fin') }}</span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="time" name="end" autocomplete="off" />
+                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="time" name="time_end" autocomplete="off" />
                 </label>
                 <div class="flex justify-end mt-4">
                     <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">

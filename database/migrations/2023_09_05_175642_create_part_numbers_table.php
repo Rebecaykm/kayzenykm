@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('number');
+            $table->string('cycle_time')->nullable();
             $table->foreignId('measurement_id')->nullable()->constrained('measurements');
             $table->foreignId('type_id')->nullable()->constrained('types');
             $table->foreignId('item_class_id')->nullable()->constrained('item_classes');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->float('quantity')->nullable();
             $table->foreignId('workcenter_id')->nullable()->constrained('workcenters');
             $table->foreignId('planner_id')->nullable()->constrained('planners');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

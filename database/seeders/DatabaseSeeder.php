@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\UnemploymentType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +27,9 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             // WorkcenterSeeder::class,
             // PartNumberSeeder::class
+            UnemploymentTypeSeeder::class,
+            UnemploymentSeeder::class,
+            ShiftSeeder::class,
         ]);
     }
 }

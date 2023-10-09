@@ -25,28 +25,9 @@
                 </div>
             </form>
         </div>
-        <form action="{{ route('planeacion.updatef1') }}" method="post">
-            <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
-                @csrf
-                <div class="flex justify-center">
-                    <button type="submit"
-                        class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
-                        <span class="mr-2">Actualizar</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+
+
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
-                <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
-                <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-                <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-                <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-                <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
-                <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
 
                 <table class="w-full whitespace-no-wrap ">
                     <thead>
@@ -122,9 +103,7 @@
                                 @case(112030)
                                 @case(112060)
                                 @case(114030)
-
                                 @break
-
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
@@ -379,7 +358,7 @@
                 </table>
 
             </div>
-        </form>
+
 
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <form method="post" action="{{ route('planeacion.siguiente') }}">

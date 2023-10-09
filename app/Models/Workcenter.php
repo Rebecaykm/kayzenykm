@@ -24,4 +24,9 @@ class Workcenter extends Model
     {
         return $this->hasMany(PartNumber::class);
     }
+
+    public function unemploymentRecords(): HasMany
+    {
+        return $this->hasMany(UnemploymentRecord::class, 'workcenter_id');
+    }
 }

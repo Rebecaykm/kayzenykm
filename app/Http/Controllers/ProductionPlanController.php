@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
 use App\Jobs\ProductionPlanMigrationJob;
 use App\Models\Unemployment;
+use App\Models\UnemploymentType;
 use App\Models\Workcenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,14 +39,14 @@ class ProductionPlanController extends Controller
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $productionPlans =  ProductionPlan::whereHas('partNumber.itemClass', function ($query) use ($arrayClass) {
-            $query->whereIn('abbreviation', $arrayClass);
-        })
+                $query->whereIn('abbreviation', $arrayClass);
+            })
             ->whereHas('partNumber.workcenter.departament', function ($query) use ($departamentCode) {
                 $query->whereIn('code', $departamentCode);
             })
             // ->whereBetween('date', [$startWeek, $endWeek])
             ->where('part_numbers.number', 'LIKE', '%' . $search . '%')
-            ->where('status', true)
+            ->where('production_plans.status', true)
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
@@ -103,24 +104,5 @@ class ProductionPlanController extends Controller
     public function destroy(ProductionPlan $productionPlan)
     {
         //
-    }
-
-    function productionUnemploymentCreate()
-    {
-        $user = Auth::user()->departaments->pluck('id')->toArray();
-
-        $workcenters = Workcenter::whereHas('departament', function ($query) use ($user) {
-            $query->whereIn('departaments.id', $user);
-        })
-        ->orderBy('number', 'asc')
-        ->get();
-
-        $unemployments = Unemployment::orderBy('name', 'asc')->get();
-
-        return view('production-plan.production-unemployment-create', ['workcenters' => $workcenters, 'unemployments' => $unemployments]);
-    }
-
-    function productionUnemploymentStore()
-    {
     }
 }

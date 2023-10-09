@@ -13,8 +13,8 @@ class UnemploymentTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        UnemploymentType::create(['name' => 'Planeado']);
-        UnemploymentType::create(['name' => 'Normales']);
-        UnemploymentType::create(['name' => 'Anormales']);
+        UnemploymentType::create(['name' => 'PLANEADO']);
+        UnemploymentType::create(['name' => 'NORMALES']);
+        UnemploymentType::create(['name' => 'ANORMALES']);
     }
 }
