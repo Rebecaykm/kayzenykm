@@ -112,8 +112,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
     Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
-    // Route::get('production-unemployment/create', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentCreate'])->name('production-unemployment.create');
-    // Route::post('production-unemployment', [\App\Http\Controllers\ProductionPlanController::class, 'productionUnemploymentStore'])->name('production-unemployment.store');
 
     /**
      *
@@ -129,6 +127,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('scrap', \App\Http\Controllers\ScrapController::class);
+
+    /**
+     *
+     */
+    Route::resource('scrap-record', \App\Http\Controllers\ScrapRecordController::class);
+    Route::get('scrap-record/create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
 
     /**
      *

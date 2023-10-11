@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductionPlan extends Model
 {
@@ -22,5 +23,10 @@ class ProductionPlan extends Model
     public function shift(): BelongsTo
     {
         return $this->belongsTo(Shift::class);
+    }
+
+    public function scrapRecords(): HasMany
+    {
+        return $this->hasMany(ScrapRecord::class, 'production_plan_id');
     }
 }

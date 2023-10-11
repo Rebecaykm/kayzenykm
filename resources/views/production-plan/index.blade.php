@@ -54,12 +54,12 @@
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
-                            <th class="px-4 py-3">{{ __('Tipo de Item') }}</th>
                             <th class="px-4 py-3">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
-                            <th class="px-4 py-3">{{ __('Cantidad Planeada') }}</th>
-                            <th class="px-4 py-3">{{ __('Cantidad Produccida') }}</th>
+                            <th class="px-4 py-3">{{ __('Tipo de Item') }}</th>
                             <th class="px-4 py-3">{{ __('SNP') }}</th>
+                            <th class="px-4 py-3">{{ __('Cant Planeada') }}</th>
+                            <th class="px-4 py-3">{{ __('Cant Produccida') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -67,46 +67,41 @@
                         @foreach ($productionPlans as $productionPlan)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->workcenter->number ?? '' }} - {{ $productionPlan->partNumber->workcenter->name ?? '' }}
+                                {{ $productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->number ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->itemClass->abbreviation ?? '' }}
-                            </td>
-                            <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->date ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs text-center">
                                 {{ $productionPlan->shift->abbreviation ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->plan_quantity ?? '' }}
-                            </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->production_quantity ?? '' }}
+                            <td class="px-4 py-3 text-xs text-center">
+                                {{ $productionPlan->partNumber->itemClass->abbreviation ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
                             </td>
+                            <td class="px-4 py-3 text-xs text-center">
+                                {{ $productionPlan->plan_quantity ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs text-center">
+                                {{ $productionPlan->production_quantity ?? '' }}
+                            </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-xs">
-                                    <a href="{{ route('production-plan.edit', $productionPlan->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
-                                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-                                            </path>
+                                    <a href="{{ route('production-plan.edit', $productionPlan->production_plan_id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                                         </svg>
                                     </a>
-                                    <form action="{{ route('production-plan.destroy', $productionPlan->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
-                                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    <a href="{{ route('scrap-record.create', ['item' => $productionPlan->part_number_id, 'production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

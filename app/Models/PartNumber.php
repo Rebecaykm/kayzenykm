@@ -55,4 +55,9 @@ class PartNumber extends Model
     {
         return $this->hasMany(ProductionPlan::class, 'part_number_id');
     }
+
+    public function scrapRecords(): HasMany
+    {
+        return $this->hasMany(ScrapRecord::class, 'part_number_id');
+    }
 }

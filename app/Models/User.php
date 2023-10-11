@@ -83,4 +83,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UnemploymentRecord::class, 'user_id');
     }
+
+    public function scrapRecords(): HasMany
+    {
+        return $this->hasMany(ScrapRecord::class, 'user_id');
+    }
 }

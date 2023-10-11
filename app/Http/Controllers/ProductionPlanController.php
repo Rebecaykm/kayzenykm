@@ -38,20 +38,28 @@ class ProductionPlanController extends Controller
         $arrayClass = ['M1', 'M2', 'M3', 'M4'];
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
-        $productionPlans =  ProductionPlan::whereHas('partNumber.itemClass', function ($query) use ($arrayClass) {
-                $query->whereIn('abbreviation', $arrayClass);
-            })
-            ->whereHas('partNumber.workcenter.departament', function ($query) use ($departamentCode) {
-                $query->whereIn('code', $departamentCode);
-            })
-            // ->whereBetween('date', [$startWeek, $endWeek])
+        $productionPlans = ProductionPlan::select([
+                '*',
+                'production_plans.id as production_plan_id',
+                'part_numbers.id as part_number_id',
+                'item_classes.id as item_class_id',
+                'workcenters.id as workcenter_id',
+                'departaments.id as departament_id',
+                'shifts.id as shift_id'
+            ])
+            ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
+            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->where('part_numbers.number', 'LIKE', '%' . $search . '%')
             ->where('production_plans.status', true)
-            ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
-            ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
-            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->whereIn('item_classes.abbreviation', $arrayClass)
+            ->whereIn('departaments.code', $departamentCode)
+            // ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
             ->orderBy('shifts.abbreviation', 'asc')
+            ->orderBy('part_numbers.number')
             ->orderBy('workcenters.number', 'asc')
             ->paginate(10);
 

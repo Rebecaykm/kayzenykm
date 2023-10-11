@@ -26,7 +26,9 @@ class DatabaseSeeder extends Seeder
             ClientSeeder::class,
             ProjectSeeder::class,
             // WorkcenterSeeder::class,
-            // PartNumberSeeder::class
+            // PartNumberSeeder::class,
+            TypeScrapSeeder::class,
+            ScrapSeeder::class,
             UnemploymentTypeSeeder::class,
             UnemploymentSeeder::class,
             ShiftSeeder::class,
