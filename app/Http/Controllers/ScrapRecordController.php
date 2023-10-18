@@ -38,7 +38,22 @@ class ScrapRecordController extends Controller
 
     public function createScrap()
     {
-        dd("Si entro");
+        $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id'])
+            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->whereIn('item_classes.abbreviation', $arrayClass)
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('workcenters.number')
+            ->orderBy('part_numbers.number')
+            ->get();
+
+        $scraps = Scrap::orderBy('code', 'ASC')->get();
+
+        return view('scrap-record.create-scrap', ['partNumbers' => $partNumbers, 'scraps' => $scraps]);
     }
 
     /**
@@ -59,6 +74,23 @@ class ScrapRecordController extends Controller
         $productionPlan = ProductionPlan::find($request->production_plan_id);
         $total =  $productionPlan->production_quantity + $request->quantity;
         $productionPlan->update(['production_quantity' => $total]);
+
+        return redirect()->back();
+    }
+
+    function storeScrap(Request $request)
+    {
+        $validated = $request->validate([
+            'part_number_id' => ['required', 'numeric'],
+            'scrap_id' => ['required', 'numeric'],
+        ]);
+
+        ScrapRecord::create([
+            'part_number_id' => $request->part_number_id,
+            'scrap_id' => $request->scrap_id,
+            'user_id' => Auth::id(),
+            'quantity' => $request->quantity,
+        ]);
 
         return redirect()->back();
     }

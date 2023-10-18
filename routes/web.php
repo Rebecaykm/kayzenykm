@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
     Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
+    Route::get('production-plan-disable', [\App\Http\Controllers\ProductionPlanController::class, 'disable'])->name('production-plan.disable');
 
     /**
      *
@@ -132,7 +133,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('scrap-record', \App\Http\Controllers\ScrapRecordController::class);
-    Route::get('scrap-record/create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
+    Route::get('create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
+    Route::post('store-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'storeScrap'])->name('scrap-record.store-scrap');
+
+    /**
+     *
+     */
+    Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
+
+    /**
+     *
+     */
+    Route::resource('status',  \App\Http\Controllers\StatusController::class);
 
     /**
      *
@@ -148,6 +160,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      * Routes Users
      */
     Route::resource('users', \App\Http\Controllers\UserController::class);
+    Route::get('data', [\App\Http\Controllers\UserController::class, 'data'])->name('data');
 
     /**
      * Routes Open Orders

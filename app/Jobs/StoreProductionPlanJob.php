@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Shift;
+use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class StoreProductionPlanJob implements ShouldQueue
 {
@@ -40,16 +42,25 @@ class StoreProductionPlanJob implements ShouldQueue
     {
         $item = PartNumber::where('number', $this->partNumber)->first();
         $openShift = Shift::where('abbreviation', substr($this->shift, 4, 1))->first();
+        $status = Status::where('name', 'PENDIENTE')->first();
 
-        ProductionPlan::updateOrCreate(
-            [
+        $productionPlan = ProductionPlan::where(
+                [
+                    ['part_number_id', $item->id],
+                    ['date', Carbon::parse($this->date)->format('Y-m-d')],
+                    ['shift_id', $openShift->id ?? null]
+                ]
+            )
+            ->first();
+
+        if ($productionPlan === null) {
+            ProductionPlan::create([
                 'part_number_id' => $item->id ?? '',
                 'date' => Carbon::parse($this->date)->format('Y-m-d') ?? '',
-                'shift_id' => $openShift->id ?? null
-            ],
-            [
-                'plan_quantity' => $this->quantity ?? ''
-            ]
-        );
+                'shift_id' => $openShift->id ?? null,
+                'plan_quantity' => intval($this->quantity) ?? '',
+                'status_id' => $status->id
+            ]);
+        }
     }
 }

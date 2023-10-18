@@ -18,7 +18,7 @@ return new class extends Migration
             $table->double('production_quantity')->nullable()->default(0);
             $table->date('date')->nullable();
             $table->foreignId('shift_id')->nullable()->constrained('shifts');
-            $table->boolean('status')->default(1);
+            $table->foreignId('status_id')->nullable()->constrained('statuses');
             $table->timestamps();
         });
     }

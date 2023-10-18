@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('scrap_records', function (Blueprint $table) {
+        Schema::create('prodcution_records', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('production_plan_id')->nullable()->constrained('production_plans');
             $table->foreignId('part_number_id')->constrained('part_numbers');
-            $table->foreignId('scrap_id')->constrained('scraps');
-            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->double('quantity');
+            $table->string('sequence');
+            $table->time('time_start');
+            $table->time('time_end');
+            $table->string('minutes');
+            $table->foreignId('status_id')->nullable()->constrained('statuses');
+            $table->foreignId('production_plan_id')->constrained('production_plans');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('scrap_records');
+        Schema::dropIfExists('prodcution_records');
     }
 };

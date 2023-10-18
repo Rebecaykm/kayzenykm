@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float('quantity')->nullable();
             $table->foreignId('workcenter_id')->nullable()->constrained('workcenters');
             $table->foreignId('planner_id')->nullable()->constrained('planners');
-            $table->boolean('status')->default(1);
+            $table->foreignId('status_id')->nullable()->constrained('statuses');
             $table->timestamps();
         });
     }
