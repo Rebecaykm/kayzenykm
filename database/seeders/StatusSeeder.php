@@ -22,6 +22,6 @@ class StatusSeeder extends Seeder
         Status::create(['name' => 'INACTIVO']);
         Status::create(['name' => 'EN CURSO']);
         Status::create(['name' => 'DENTRO DE PLANEACIÓN']);
-        Status::create(['name' => 'FUERA DE PLANEACIÓN']);
+        Status::create(['name' => 'EXCEDENTE DE PLANEACIÓN']);
     }
 }

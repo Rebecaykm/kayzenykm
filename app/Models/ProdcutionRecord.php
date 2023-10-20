@@ -41,7 +41,7 @@ class ProdcutionRecord extends Model
         if ($prodcutionRecord === null) {
             $status = Status::where('name', 'EN PROCESO')->first();
 
-            $prodcutionRecord = ProdcutionRecord::create([
+            $x = ProdcutionRecord::create([
                 'part_number_id' => $partNumberId,
                 'quantity' => $snpQuantity,
                 'sequence' => '001',
@@ -56,11 +56,13 @@ class ProdcutionRecord extends Model
             $productionPlan = ProductionPlan::find($productionPlanId);
             $total = $productionPlan->production_quantity + $quantity;
             $productionPlan->update(['production_quantity' => $total, 'status_id' => $status->id]);
+
+            return $x;
         } else {
             $prodcutionRecord = ProdcutionRecord::where('production_plan_id', $productionPlanId)->orderBy('sequence', 'DESC')->first();
             $seq = $prodcutionRecord->sequence + 1;
 
-            $update = ProdcutionRecord::create([
+            $x = ProdcutionRecord::create([
                 'part_number_id' => $partNumberId,
                 'quantity' => $snpQuantity,
                 'sequence' => str_pad($seq, 3, "0", STR_PAD_LEFT),
@@ -75,6 +77,8 @@ class ProdcutionRecord extends Model
             $productionPlan = ProductionPlan::find($productionPlanId);
             $total = $productionPlan->production_quantity + $quantity;
             $productionPlan->update(['production_quantity' => $total]);
+
+            return $x;
         }
     }
 }

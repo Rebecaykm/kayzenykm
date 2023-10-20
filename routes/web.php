@@ -215,7 +215,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      * ver Estructura livewird
      */
     // Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
-    // Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
+    Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
 
     /**
      * ver Estructura livewird

@@ -39,8 +39,8 @@ class ProdcutionRecordController extends Controller
      */
     public function store(StoreProdcutionRecordRequest $request)
     {
-        $total = 0;
-        $seq = 0;
+        $data = [];
+        $result = [];
 
         $start = new Carbon($request->time_start);
         $end = new Carbon($request->time_end);
@@ -63,13 +63,21 @@ class ProdcutionRecordController extends Controller
             }
 
             if ($quantity >= $snpQuantity) {
-                ProdcutionRecord::storeProductionRecord($request->part_number_id, $snpQuantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $snpQuantity, $prodcutionRecordStatus->id);
+                $result = ProdcutionRecord::storeProductionRecord($request->part_number_id, $snpQuantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $snpQuantity, $prodcutionRecordStatus->id);
+                array_push($data, $result);
                 $quantity -= $snpQuantity;
             } else {
-                ProdcutionRecord::storeProductionRecord($request->part_number_id, $quantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $quantity, $prodcutionRecordStatus->id);
+                $result = ProdcutionRecord::storeProductionRecord($request->part_number_id, $quantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $quantity, $prodcutionRecordStatus->id);
+                array_push($data, $result);
                 $quantity = 0;
             }
         }
+
+        // Principio de Etiqueta
+        // foreach ($data as $value) {
+        //     echo "Numero de Parte: $value->part_number_id, Cantidad: $value->quantity <br>";
+        // }
+        // dd("Fin");
 
         return redirect('production-plan');
     }

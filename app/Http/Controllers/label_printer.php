@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-Require  'C:\label\eps.php'; //Nota: si renombraste la carpeta a algo diferente de "ticket" cambia el nombre en esta línea
+
+require  'C:\label\eps.php'; //Nota: si renombraste la carpeta a algo diferente de "ticket" cambia el nombre en esta línea
 
 use Mike42\Escpos\EscposImage;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\Printer;
 
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+
 class label_printer extends Controller
 {
     /**
@@ -83,18 +85,16 @@ class label_printer extends Controller
             <STX>D0<ETX>
             <STX>R<ETX>
             <STX><SI>l13<ETX>
-<STX><ESC>E*,1<CAN><ETX>
-<STX><RS>1<US>1<ETB><ETX>    ;
+            <STX><ESC>E*,1<CAN><ETX>
+            <STX><RS>1<US>1<ETB><ETX>    ;
 
-';
-$printer->getPrintConnector()->write($command);
-$printer->getPrintConnector()->finalize();
-
-} catch (\Exception $e) {
+            ';
+            $printer->getPrintConnector()->write($command);
+            $printer->getPrintConnector()->finalize();
+        } catch (\Exception $e) {
             return "No se pudo establecer la conexión con la impresora: " . $e->getMessage();
         }
-
-}
+    }
 
 
     /**
