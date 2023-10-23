@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\AddWorkCenterPartNumberJob;
+use App\Jobs\ItemClassMigrationJob;
+use App\Jobs\PartNumberMigrationJob;
+use App\Jobs\PlannerMigrationJob;
+use App\Jobs\ProductionPlanMigrationJob;
+use App\Jobs\StandardPackageMigrationJob;
+use App\Jobs\WorkcenterMigrationJob;
 use App\Models\Departament;
 use App\Models\Module;
 use App\Models\User;
+use Database\Seeders\WorkcenterSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +20,21 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    /**
+     *
+     */
+    function data() {
+        ItemClassMigrationJob::dispatch();
+        StandardPackageMigrationJob::dispatch();
+        PlannerMigrationJob::dispatch();
+        WorkcenterMigrationJob::dispatch();
+        PartNumberMigrationJob::dispatch();
+        AddWorkCenterPartNumberJob::dispatch();
+        ProductionPlanMigrationJob::dispatch();
+
+        return redirect('production-plan');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Livewire\OpenOrders;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,116 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
+    Route::resource('measurement', \App\Http\Controllers\MeasurementController::class);
+
+    /**
+     *
+     */
+    Route::resource('type', \App\Http\Controllers\TypeController::class);
+
+    /**
+     *
+     */
+    Route::resource('item-class', \App\Http\Controllers\ItemClassController::class);
+    Route::get('item-class-data-upload', [\App\Http\Controllers\ItemClassController::class, 'dataUpload'])->name('item-class.data-upload');
+
+    /**
+     *
+     */
+    Route::resource('standard-package', \App\Http\Controllers\StandardPackageController::class);
+    Route::get('standard-package-data-upload', [\App\Http\Controllers\StandardPackageController::class, 'dataUpload'])->name('standard-package.data-upload');
+
+    /**
+     *
+     */
+    Route::resource('planner', \App\Http\Controllers\PlannerController::class);
+    Route::get('planner-data-upload', [\App\Http\Controllers\PlannerController::class, 'dataUpload'])->name('planner.data-upload');
+
+    /**
+     *
+     */
+    Route::resource('client', \App\Http\Controllers\ClientController::class);
+
+    /**
+     *
+     */
+    Route::resource('project', \App\Http\Controllers\ProjectController::class);
+
+    /**
+     *
+     */
+    Route::resource('workcenter', \App\Http\Controllers\WorkcenterController::class);
+    Route::get('workcenter-data-upload', [\App\Http\Controllers\WorkcenterController::class, 'dataUpload'])->name('workcenter.data-upload');
+    Route::get('workcenter-part-number', [\App\Http\Controllers\WorkcenterController::class, 'addPartNumber'])->name('workcenter.part-number');
+
+    /**
+     *
+     */
+    Route::resource('departament', \App\Http\Controllers\DepartamentController::class);
+
+    /**
+     *
+     */
+    Route::resource('unemployment-type', \App\Http\Controllers\UnemploymentTypeController::class);
+
+    /**
+     *
+     */
+    Route::resource('unemployment', \App\Http\Controllers\UnemploymentController::class);
+
+    /**
+     *
+     */
+    Route::resource('shift', \App\Http\Controllers\ShiftController::class);
+
+    /**
+     *
+     */
+    Route::resource('part-number', \App\Http\Controllers\PartNumberController::class);
+    Route::get('part-number-data-upload', [\App\Http\Controllers\PartNumberController::class, 'dataUpload'])->name('part-number.data-upload');
+
+    /**
+     *
+     */
+    Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
+    Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
+    Route::get('production-plan-disable', [\App\Http\Controllers\ProductionPlanController::class, 'disable'])->name('production-plan.disable');
+
+    /**
+     *
+     */
+    Route::resource('unemployment-record', \App\Http\Controllers\UnemploymentRecordController::class);
+
+    /**
+     *
+     */
+    Route::resource('type-scrap', \App\Http\Controllers\TypeScrapController::class);
+
+    /**
+     *
+     */
+    Route::resource('scrap', \App\Http\Controllers\ScrapController::class);
+
+    /**
+     *
+     */
+    Route::resource('scrap-record', \App\Http\Controllers\ScrapRecordController::class);
+    Route::get('create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
+    Route::post('store-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'storeScrap'])->name('scrap-record.store-scrap');
+
+    /**
+     *
+     */
+    Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
+
+    /**
+     *
+     */
+    Route::resource('status',  \App\Http\Controllers\StatusController::class);
+
+    /**
+     *
+     */
     Route::resource('examples', \App\Http\Controllers\ExampleController::class);
 
     /**
@@ -48,6 +160,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      * Routes Users
      */
     Route::resource('users', \App\Http\Controllers\UserController::class);
+    Route::get('data', [\App\Http\Controllers\UserController::class, 'data'])->name('data');
 
     /**
      * Routes Open Orders
@@ -97,12 +210,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('ShowStructure/update', [\App\Http\Controllers\showStructure::class, 'update'])->name('ShowStructure.update');
     Route::get('ShowStructure', [\App\Http\Controllers\showStructure::class, 'index'])->name('ShowStructure.update');
     Route::get('ShowStructure/export', [\App\Http\Controllers\showStructure::class, 'export'])->name('ShowStructure.export');
-  /**
+
+    /**
      * ver Estructura livewird
      */
-    Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
+    // Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
     Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
-  /**
+
+    /**
      * ver Estructura livewird
      */
     Route::get('planeacionview', [\App\Http\Controllers\planeacionviewController::class, 'index'])->name('planeacionview.index');
@@ -116,5 +231,4 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('planeacionview/exportfinal', [\App\Http\Controllers\planeacionviewController::class, 'exportfinal'])->name('planeacionview.exportfinal');
     Route::get('planeacionview/exportsubcomponentes', [\App\Http\Controllers\planeacionviewController::class, 'exportsubcomponentes'])->name('planeacionview.exportsubcomponentes');
     Route::post('planeacionview/siguiente', [\App\Http\Controllers\planeacionviewController::class, 'siguiente'])->name('planeacionview.siguiente');
-
 });

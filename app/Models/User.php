@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -77,4 +78,14 @@ class User extends Authenticatable
     // {
     //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
     // }
+
+    public function unemploymentRecords(): HasMany
+    {
+        return $this->hasMany(UnemploymentRecord::class, 'user_id');
+    }
+
+    public function scrapRecords(): HasMany
+    {
+        return $this->hasMany(ScrapRecord::class, 'user_id');
+    }
 }
