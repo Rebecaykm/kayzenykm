@@ -6,19 +6,20 @@
     <style>
         @media print {
             @page {
-                size: 4in 3in;
-                margin: 0;
+                size: 6in 3in;
+                /* size: 4in 3in; */
+                margin: 2px;
             }
         }
 
         @page {
-            size: 4in 3in;
-            /* size: a4; */
+            /* size: 4in 3in; */
+            size: 6in 3in;
             margin: 2px;
         }
 
         body {
-            margin: 0;
+            margin: 4px;
         }
 
         table {
@@ -110,9 +111,9 @@
                 <span class="large-text"> {{ $container }} </span>
             </td>
             <td colspan="1">
-                <span class="small-text bold">SNP</span>
+                <span class="small-text bold">Cantidad</span>
                 <br>
-                <span class="large-text">{{ $snp }} </span>
+                <span class="large-text">{{ $quantity }} </span>
             </td>
         </tr>
         <tr>
@@ -122,16 +123,10 @@
                 Y-TEC KEYLEX MÉXICO
             </td>
             <td class="no-border text-center" colspan="4" style="max-width: 100%; max-height: 100%;">
-                <img src="data:image/png;base64, {!! base64_encode($qrCode) !!}" width="100" height="100">
+                <img src="data:image/png;base64, {!! base64_encode($qrCode) !!}" width="75" height="75">
             </td>
         </tr>
     </table>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.print();
-        });
-    </script>
 
 </body>
 

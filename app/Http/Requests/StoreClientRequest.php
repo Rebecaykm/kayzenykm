@@ -23,8 +23,7 @@ class StoreClientRequest extends FormRequest
     {
         return [
             'code' => ['required', 'unique:clients', 'string'],
-            'name' => ['required', 'string'],
-            'projects' => ['array']
+            'name' => ['required', 'string']
         ];
     }
 }

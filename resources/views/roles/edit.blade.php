@@ -36,13 +36,12 @@
                     @foreach ($permissions as $key => $permission)
                     <div class="flex col-span-2 p-2 text-sm">
                         <label class="flex items-center dark:text-gray-400">
-                            <input type="checkbox" value="{{ $permission->id }}" name="permissions[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray"
-                            @if (isset($role->permissions))
-                                @foreach ($role->permissions as $i => $role_permissions)
-                                    @if ($role_permissions->id == $permission->id)
-                                        {{ "checked" }}
-                                    @endif
-                                @endforeach
+                            <input type="checkbox" value="{{ $permission->id }}" name="permissions[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($role->permissions))
+                            @foreach ($role->permissions as $i => $role_permissions)
+                            @if ($role_permissions->id == $permission->id)
+                            {{ "checked" }}
+                            @endif
+                            @endforeach
                             @endif
                             />
                             <span class="ml-2">
@@ -51,11 +50,14 @@
                         </label>
                     </div>
                     @endforeach
-                    <div class="col-span-6">
-                        <button class="block w-full px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" type="submit">
-                            Guardar
-                        </button>
-                    </div>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue" type="submit">
+                        <span>{{ __('Guardar')}}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
                 </div>
             </form>
         </div>

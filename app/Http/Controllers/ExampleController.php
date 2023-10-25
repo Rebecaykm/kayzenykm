@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 require  'C:\label\eps.php';
 
-use Dompdf\Dompdf;
+use BaconQrCode\Encoder\QrCode;
+use DOMDocument;
+use DOMXPath;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use Milon\Barcode\DNS1D;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Mike42\Escpos\EscposImage;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\Printer;
+use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
+use Spatie\Browsershot\Browsershot;
 
 class ExampleController extends Controller
 {
@@ -19,9 +25,6 @@ class ExampleController extends Controller
      */
     public function index()
     {
-
-        // PDF
-
         $data = [
             'departament' => 'CHASIS',
             'workcenterNumber' => '139050',
@@ -30,31 +33,40 @@ class ExampleController extends Controller
             'shift' => 'D',
             'partNumber' => 'BDTS28B01',
             'container' => 'CARRO',
-            'snp' => '30',
+            'quantity' => '30',
             'sequence' => '001'
         ];
 
-        // $barcode = new DNS1D();
-        // $barcodeData = $barcode->getBarcodeHTML('BDTS28B0100120231019', 'C39');
-        // $data['barcode'] = $barcodeData;
-
-        $qrCodeData = QrCode::size(300)->generate('BDTS28B0100120231019');
+        $qrCodeData = FacadesQrCode::size(300)->generate('BDTS28B0100120231019');
         $data['qrCode'] = $qrCodeData;
 
         $view = View::make('label', $data);
         $html = $view->render();
 
-        $pdf = new Dompdf();
-        $pdf->loadHtml($html);
-        $pdf->setPaper(array(0, 0, 216, 144), 'portrait');
-        $pdf->render();
+        // PDF
 
-        $output = $pdf->output();
 
-        return response($output, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="etiqueta.pdf"'
-        ]);
+
+        // $barcode = new DNS1D();
+        // $barcodeData = $barcode->getBarcodeHTML('BDTS28B0100120231019', 'C39');
+        // $data['barcode'] = $barcodeData;
+
+        // $qrCodeData = QrCode::size(300)->generate('BDTS28B0100120231019');
+        // $data['qrCode'] = $qrCodeData;
+
+
+
+        // $pdf = new Dompdf();
+        // $pdf->loadHtml($html);
+        // $pdf->setPaper(array(0, 0, 216, 144), 'portrait');
+        // $pdf->render();
+
+        // $output = $pdf->output();
+
+        // return response($output, 200, [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="etiqueta.pdf"'
+        // ]);
 
         // Miguel
 

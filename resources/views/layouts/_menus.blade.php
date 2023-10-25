@@ -94,6 +94,18 @@
         </li>
         @endcan
 
+        @can('permissions.index')
+        <li class="relative px-6 py-3">
+            {!! request()->routeIs('permissions.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
+            <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('permissions.index')}}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+                </svg>
+                <span class="ml-4">Permisos</span>
+            </a>
+        </li>
+        @endcan
+
         @can('roles.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('roles.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
@@ -101,7 +113,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span class="ml-4">Roles & Permisos</span>
+                <span class="ml-4">Roles</span>
             </a>
         </li>
         @endcan
@@ -188,6 +200,7 @@
         </li>
         @endcan
 
+        @can('measurement.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('measurement.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('measurement.index')}}">
@@ -197,7 +210,9 @@
                 <span class="ml-4">Unidad de Medida</span>
             </a>
         </li>
+        @endcan
 
+        @can('type.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('type.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('type.index')}}">
@@ -207,7 +222,9 @@
                 <span class="ml-4">Tipo de Item</span>
             </a>
         </li>
+        @endcan
 
+        @can('item-class.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('item-class.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('item-class.index')}}">
@@ -217,7 +234,9 @@
                 <span class="ml-4">Clase de Item</span>
             </a>
         </li>
+        @endcan
 
+        @can('standard-package.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('standard-package.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('standard-package.index')}}">
@@ -227,7 +246,9 @@
                 <span class="ml-4">Contenedor</span>
             </a>
         </li>
+        @endcan
 
+        @can('planner.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('planner.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('planner.index')}}">
@@ -237,7 +258,9 @@
                 <span class="ml-4">Planeador</span>
             </a>
         </li>
+        @endcan
 
+        @can('client.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('client.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('client.index')}}">
@@ -247,17 +270,21 @@
                 <span class="ml-4">Cliente</span>
             </a>
         </li>
+        @endcan
 
+        @can('project.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('project.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('project.index')}}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                 </svg>
-                <span class="ml-4">Projecto</span>
+                <span class="ml-4">Proyecto</span>
             </a>
         </li>
+        @endcan
 
+        @can('workcenter.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('workcenter.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('workcenter.index')}}">
@@ -265,10 +292,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span class="ml-4">Estacion de Trabajo</span>
+                <span class="ml-4">Estación de Trabajo</span>
             </a>
         </li>
+        @endcan
 
+        @can('part-number.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('part-number.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('part-number.index')}}">
@@ -278,27 +307,33 @@
                 <span class="ml-4">Numero de Parte</span>
             </a>
         </li>
+        @endcan
 
+        @can('status.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('status.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('status.index')}}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="ml-4">Status</span>
+                <span class="ml-4">Estados</span>
             </a>
         </li>
+        @endcan
 
+        @can('shift.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('shift.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('shift.index')}}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                 </svg>
-                <span class="ml-4">Turno</span>
+                <span class="ml-4">Turnos</span>
             </a>
         </li>
+        @endcan
 
+        @can('type-scrap.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('type-scrap.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('type-scrap.index')}}">
@@ -308,7 +343,9 @@
                 <span class="ml-4">Tipo de Scrap</span>
             </a>
         </li>
+        @endcan
 
+        @can('scrap.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('scrap.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('scrap.index')}}">
@@ -318,7 +355,9 @@
                 <span class="ml-4">Scrap</span>
             </a>
         </li>
+        @endcan
 
+        @can('unemployment-type.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('unemployment-type.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('unemployment-type.index')}}">
@@ -328,7 +367,9 @@
                 <span class="ml-4">Tipo de Paro</span>
             </a>
         </li>
+        @endcan
 
+        @can('unemployment.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('unemployment.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('unemployment.index')}}">
@@ -338,7 +379,9 @@
                 <span class="ml-4">Paro</span>
             </a>
         </li>
+        @endcan
 
+        @can('unemployment-record.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('unemployment-record.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('unemployment-record.index')}}">
@@ -348,7 +391,9 @@
                 <span class="ml-4">Registro de Paros</span>
             </a>
         </li>
+        @endcan
 
+        @can('scrap-record.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('scrap-record.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('scrap-record.index')}}">
@@ -358,7 +403,9 @@
                 <span class="ml-4">Registro de Scrap</span>
             </a>
         </li>
+        @endcan
 
+        @can('production-plan.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('production-plan.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('production-plan.index')}}">
@@ -368,7 +415,9 @@
                 <span class="ml-4">Plan de Producción</span>
             </a>
         </li>
+        @endcan
 
+        @can('prodcution-record.index')
         <li class="relative px-6 py-3">
             {!! request()->routeIs('prodcution-record.index') ? '<span class="absolute inset-y-0 left-0 w-1 bg-blue-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>' : '' !!}
             <a data-turbolinks-action="replace" class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="{{route('prodcution-record.index')}}">
@@ -378,7 +427,6 @@
                 <span class="ml-4">Registro de Producción</span>
             </a>
         </li>
-
-
+        @endcan
     </ul>
 </div>
