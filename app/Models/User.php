@@ -33,7 +33,7 @@ class User extends Authenticatable
         'name', 'email', 'password', 'infor',
     ];
 
-    protected $dateFormat = 'Ymd H:i:s.v';
+    protected $dateFormat = 'Ydm H:i:s.v';
 
     /**
      * The attributes that should be hidden for arrays.

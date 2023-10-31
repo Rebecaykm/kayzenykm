@@ -11,6 +11,8 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'type', 'model', 'prefixe', 'client_id'
     ];

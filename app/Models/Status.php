@@ -10,6 +10,8 @@ class Status extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'name'
     ];

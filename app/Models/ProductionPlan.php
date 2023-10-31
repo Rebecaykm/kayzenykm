@@ -11,6 +11,8 @@ class ProductionPlan extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id'
     ];

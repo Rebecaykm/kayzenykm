@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 require  'C:\label\eps.php';
 
+use App\Models\Client;
 use BaconQrCode\Encoder\QrCode;
 use DOMDocument;
 use DOMXPath;

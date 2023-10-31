@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
+    Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
 
     /**
      *
