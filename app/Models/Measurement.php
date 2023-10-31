@@ -10,11 +10,11 @@ class Measurement extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'symbol', 'unit'
     ];
-
-    protected $dateFormat='Y-m-d H:i:s.v';
 
     public function partNumbers(): HasMany
     {

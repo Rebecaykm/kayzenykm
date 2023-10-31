@@ -23,18 +23,13 @@
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Tipo') }}</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="type" autocomplete="off" />
                 </label>
-                <label class="block text-sm">
+                <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Modelo') }}</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="model" autocomplete="off" />
                 </label>
-                <label class="block text-sm">
+                <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Prefijo') }}</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="prefixe" autocomplete="off" />
-                </label>
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        {{ __('Clientes') }}
-                    </span>
                 </label>
                 <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">

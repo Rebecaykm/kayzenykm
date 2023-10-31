@@ -68,8 +68,6 @@ class ProjectController extends Controller
             $project->save();
         }
 
-        dd($project);
-
         return redirect()->route('project.index');
     }
 

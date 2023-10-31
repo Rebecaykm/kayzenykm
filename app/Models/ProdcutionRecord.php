@@ -11,8 +11,10 @@ class ProdcutionRecord extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
-        'part_number_id', 'quantity', 'sequence', 'time_start', 'time_end', 'minutes', 'status_id', 'production_plan_id', 'user_id'
+        'id', 'part_number_id', 'quantity', 'sequence', 'time_start', 'time_end', 'minutes', 'status_id', 'production_plan_id', 'user_id'
     ];
 
     /**

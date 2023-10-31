@@ -17,12 +17,13 @@ class UserSeeder extends Seeder
     {
         $admin = User::create(['name' => 'Usuario Administrador', 'email' => 'admin@admin.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrador');
         $it = User::create(['name' => 'Usuario IT', 'email' => 'it@ykm.com.mx', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Administrador');
-        $press = User::create(['name' => 'Líder Estampado', 'email' => 'press@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
-        $body = User::create(['name' => 'Líder Carrocería', 'email' => 'body@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
-        $chassis = User::create(['name' => 'Líder Chasis', 'email' => 'chassis@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
-        $paint = User::create(['name' => 'Líder Pintura', 'email' => 'paint@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
-        $vendor = User::create(['name' => 'Líder Proveedor', 'email' => 'vendor@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
-        $line = User::create(['name' => 'Usuario Línea', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Invitado');
+        $planner = User::create(['name' => 'Rafael Nieto', 'email' => 'rafael.nieto@ykm.com.mx', 'email_verified_at' => now(), 'password' => bcrypt('Rani1123'), 'remember_token' => Str::random(10)])->assignRole('Usuario');
+        $press = User::create(['name' => 'Lider Estampado', 'email' => 'press@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
+        $body = User::create(['name' => 'Lider Carrocería', 'email' => 'body@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
+        $chassis = User::create(['name' => 'Lider Chasis', 'email' => 'chassis@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
+        $paint = User::create(['name' => 'Lider Pintura', 'email' => 'paint@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
+        $vendor = User::create(['name' => 'Lider Proveedor', 'email' => 'vendor@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
+        $operador = User::create(['name' => 'Oerador', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Operador');
 
         $admin->departaments()->sync([1, 2, 3, 4, 5]);
 
@@ -33,6 +34,6 @@ class UserSeeder extends Seeder
         $paint->departaments()->sync([4]);
         $vendor->departaments()->sync([5]);
 
-        $line->departaments()->sync([4]);
+        $operador->departaments()->sync([2]);
     }
 }

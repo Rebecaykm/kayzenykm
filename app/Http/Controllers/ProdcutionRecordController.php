@@ -9,8 +9,10 @@ use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Status;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ProdcutionRecordController extends Controller
 {
@@ -39,47 +41,85 @@ class ProdcutionRecordController extends Controller
      */
     public function store(StoreProdcutionRecordRequest $request)
     {
-        $data = [];
-        $result = [];
+        $dataArray = [];
+        $htmlContent = '';
 
-        $start = new Carbon($request->time_start);
-        $end = new Carbon($request->time_end);
-        $minutes = $end->diffInMinutes($start);
+        $minutes = Carbon::parse($request->time_start)->diffInMinutes(Carbon::parse($request->time_end));
 
-        $count = 0;
-
-
-        $snpQuantity = PartNumber::where('id', $request->part_number_id)->value('quantity');
+        $partNumber = PartNumber::findOrFail($request->part_number_id);
         $quantity = $request->quantity;
 
         for ($count = 1; $quantity > 0; $count++) {
 
-            $productionPlanQuantity = ProductionPlan::findOrFail($request->production_plan_id);
+            $productionPlan = ProductionPlan::findOrFail($request->production_plan_id);
 
-            if ($productionPlanQuantity->plan_quantity > $productionPlanQuantity->production_quantity) {
-                $prodcutionRecordStatus = Status::where('name', 'DENTRO DE PLANEACIÓN')->first();
-            } else {
-                $prodcutionRecordStatus = Status::where('name', 'FUERA DE PLANEACIÓN')->first();
-            }
+            $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
+                Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
+                Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
 
-            if ($quantity >= $snpQuantity) {
-                $result = ProdcutionRecord::storeProductionRecord($request->part_number_id, $snpQuantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $snpQuantity, $prodcutionRecordStatus->id);
-                array_push($data, $result);
-                $quantity -= $snpQuantity;
-            } else {
-                $result = ProdcutionRecord::storeProductionRecord($request->part_number_id, $quantity, $request->time_start, $request->time_end, $minutes, $request->production_plan_id, $quantity, $prodcutionRecordStatus->id);
-                array_push($data, $result);
-                $quantity = 0;
-            }
+            $currentQuantity = min($quantity, $partNumber->quantity);
+
+            $result = ProdcutionRecord::storeProductionRecord(
+                $request->part_number_id,
+                $currentQuantity,
+                $request->time_start,
+                $request->time_end,
+                $minutes,
+                $request->production_plan_id,
+                $currentQuantity,
+                $prodcutionRecordStatus->id
+            );
+
+            array_push($dataArray, [
+                'id' => str_pad($result->id, 6, '0', STR_PAD_LEFT),
+                'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
+                'workcenterNumber' => trim($partNumber->workcenter->number),
+                'workcenterName' => trim($partNumber->workcenter->name),
+                'partNumber' => trim($partNumber->number),
+                'quantity' => str_pad($currentQuantity, 6, '0', STR_PAD_LEFT),
+                'sequence' => $result->sequence,
+                'date' => $productionPlan->date,
+                'shift' => $productionPlan->shift->abbreviation,
+                'container' => trim($partNumber->standardPackage->name),
+                'snp' => str_pad($partNumber->quantity, 6, '0', STR_PAD_LEFT),
+                'production_plan_id' => str_pad($result->production_plan_id, 6, '0', STR_PAD_LEFT),
+                'user_id' => str_pad($result->user_id, 6, '0', STR_PAD_LEFT),
+                'projects' => $partNumber->projects,
+                'class' => $partNumber->itemClass->abbreviation,
+                'a' => "*** ORIGINAL ***"
+            ]);
+
+            $quantity -= $partNumber->quantity;
+        }
+        //Etiqueta
+        foreach ($dataArray as $data) {
+            $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
+            $qrCodeData = QrCode::size(600)->generate($qrData);
+            $data['qrCode'] = $qrCodeData;
+            $view = View::make('label', $data);
+            $htmlContent .= $view->render();
+
+            // $htmlContent = $view->render();
+            // $connector = new WindowsPrintConnector("EPSON TM-T20 Receipt");
+            // $printer = new Printer($connector);
+            // $printer->text($htmlContent);
+            // $printer->cut();
+            // $printer->close();
         }
 
-        // Principio de Etiqueta
-        // foreach ($data as $value) {
-        //     echo "Numero de Parte: $value->part_number_id, Cantidad: $value->quantity <br>";
-        // }
-        // dd("Fin");
+        $pdf = new Dompdf();
+        $pdf->loadHtml($htmlContent);
+        $pdf->setPaper(array(0, 0, 216, 432), 'portrait');
+        $pdf->render();
 
-        return redirect('production-plan');
+        $output = $pdf->output();
+
+        return response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
+        ]);
+
+        // return redirect('production-plan');
     }
 
     /**
@@ -112,5 +152,45 @@ class ProdcutionRecordController extends Controller
     public function destroy(ProdcutionRecord $prodcutionRecord)
     {
         //
+    }
+
+    function reprint(ProdcutionRecord $prodcutionRecord)
+    {
+        $data = [
+            'id' => str_pad($prodcutionRecord->id, 6, '0', STR_PAD_LEFT),
+            'departament' => strtoupper(trim($prodcutionRecord->productionPlan->PartNumber->workcenter->departament->name)),
+            'workcenterNumber' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->number),
+            'workcenterName' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->name),
+            'partNumber' => trim($prodcutionRecord->productionPlan->PartNumber->number),
+            'quantity' => str_pad($prodcutionRecord->quantity, 6, '0', STR_PAD_LEFT),
+            'sequence' => $prodcutionRecord->sequence,
+            'date' => $prodcutionRecord->productionPlan->date,
+            'shift' => $prodcutionRecord->productionPlan->shift->abbreviation,
+            'container' => trim($prodcutionRecord->productionPlan->partNumber->standardPackage->name),
+            'snp' => str_pad($prodcutionRecord->productionPlan->partNumber->quantity, 6, '0', STR_PAD_LEFT),
+            'production_plan_id' => str_pad($prodcutionRecord->production_plan_id, 6, '0', STR_PAD_LEFT),
+            'user_id' => str_pad($prodcutionRecord->user_id, 6, '0', STR_PAD_LEFT),
+            'projects' => $prodcutionRecord->productionPlan->partNumber->projects,
+            'class' => $prodcutionRecord->productionPlan->partNumber->itemClass->abbreviation,
+            'a' => "*** REIMPRESIÓN ***"
+        ];
+
+        $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
+        $qrCodeData = QrCode::size(600)->generate($qrData);
+        $data['qrCode'] = $qrCodeData;
+        $view = View::make('label', $data);
+        $htmlContent = $view->render();
+
+        $pdf = new Dompdf();
+        $pdf->loadHtml($htmlContent);
+        $pdf->setPaper(array(0, 0, 216, 432), 'portrait');
+        $pdf->render();
+
+        $output = $pdf->output();
+
+        return response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
+        ]);
     }
 }

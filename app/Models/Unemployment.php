@@ -11,6 +11,8 @@ class Unemployment extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'name', 'unemployment_type_id'
     ];

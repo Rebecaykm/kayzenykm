@@ -90,7 +90,7 @@
             </div>
             @else
             <div class="px-4 py-3 rounded-md text-sm text-center font-semibold text-gray-700 uppercase bg-white sm:grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
-                {{ __('No Se Han Encontrado Centros de Trabajo') }}
+                {{ __('No Se Han Encontrado Datos') }}
             </div>
             @endif
         </div>

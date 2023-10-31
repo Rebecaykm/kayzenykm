@@ -11,6 +11,8 @@ class Workcenter extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'number', 'name', 'description', 'departament_id'
     ];

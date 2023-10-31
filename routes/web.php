@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
     Route::view('production', 'production')->name('production');
+    Route::view('label', 'label')->name('label');
 
     /**
      *
@@ -140,6 +141,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
+    Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
 
     /**
      *
@@ -150,6 +152,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+
+    /**
+     * Routes Permissions
+     */
+    Route::resource('permissions', \App\Http\Controllers\PermissionController::class);
 
     /**
      * Routes Roles
