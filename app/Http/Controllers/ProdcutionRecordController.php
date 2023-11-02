@@ -91,7 +91,7 @@ class ProdcutionRecordController extends Controller
 
             $quantity -= $partNumber->quantity;
         }
-        //Etiqueta
+
         foreach ($dataArray as $data) {
             $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
             $qrCodeData = QrCode::size(600)->generate($qrData);
@@ -118,6 +118,9 @@ class ProdcutionRecordController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
         ]);
+
+
+        // return redirect()->back();
 
         // return redirect('production-plan');
     }
