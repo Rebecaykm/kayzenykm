@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'infor',
+        'name', 'email', 'email_verified_at', 'password', 'infor',
     ];
 
     protected $dateFormat = 'Ydm H:i:s.v';

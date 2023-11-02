@@ -77,6 +77,7 @@ class UserController extends Controller
 
         $data = $request->only(['name', 'email', 'password', 'infor']);
         $data['password'] = bcrypt($data['password']);
+        $data['email_verified_at'] = now();
         $user = User::create($data);
         $user->roles()->sync($request->role_id);
         $user->departaments()->sync($request->departament);
