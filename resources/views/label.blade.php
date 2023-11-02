@@ -152,6 +152,15 @@
         </tr>
     </table>
 
+    <script type="text/javascript">
+        window.print();
+        window.onafterprint = function() {
+            window.close();
+        }
+    </script>
+
+
+
 </body>
 
 </html>
