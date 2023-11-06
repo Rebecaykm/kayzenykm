@@ -52,7 +52,7 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">{{ __('ID') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('ID') }}</th> -->
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
                             <th class="px-4 py-3">{{ __('Fecha') }}</th>
@@ -68,9 +68,9 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($productionPlans as $productionPlan)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-xs">
+                            <!-- <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->production_plan_id ?? '' }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>

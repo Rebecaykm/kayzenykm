@@ -8,6 +8,7 @@ use App\Models\Client;
 use BaconQrCode\Encoder\QrCode;
 use DOMDocument;
 use DOMXPath;
+use EscposTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Mike42\Escpos\EscposImage;
@@ -26,7 +27,24 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        return view('example');
+        phpinfo();
+
+        // $random = sha1(base64_encode(sha1("Hello world")));
+        // $random = $random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random;
+
+
+
+        // $connector = new WindowsPrintConnector("EPSON TM-T20 Receipt");
+        // $printer = new Printer($connector);
+        // $path = public_path("img".DIRECTORY_SEPARATOR."dashboard.png");
+        // $ecpPostImage = EscposImage::load($path);
+        // $printer->graphics($ecpPostImage);
+        // $printer->cut();
+        // $printer->close();
+
+
+        // return response(    "success");
+
     }
 
     /**

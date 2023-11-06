@@ -1,5 +1,5 @@
 <x-app-layout title="Registro de Scrap">
-    <div class="container grid px-6 mx-auto">
+    <div class="xl:container lg:container md:container sm:container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             {{ __('Registro de Scrap')}}
         </h2>
@@ -30,6 +30,7 @@
                 <table class="w-full whitespace-no-wrap table-fixed">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">{{ __('Departamento') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
                             <th class="px-4 py-3">{{ __('Scrap') }}</th>
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
@@ -37,9 +38,12 @@
                             <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    <tbody class="bg-white divide-y dark:divide-gray-700 uppercase dark:bg-gray-800">
                         @foreach ($scrapRecords as $scrapRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-3 text-xs">
+                                {{ $scrapRecord->partNumber->workcenter->departament->name ?? '' }}
+                            </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $scrapRecord->partNumber->number ?? '' }}
                             </td>

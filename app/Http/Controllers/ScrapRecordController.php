@@ -19,7 +19,23 @@ class ScrapRecordController extends Controller
      */
     public function index()
     {
-        $scrapRecords = ScrapRecord::query()->orderBy('created_at', 'DESC')->paginate(10);
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $scrapRecords = ScrapRecord::query()
+            ->select([
+                '*',
+                'production_plans.id as production_plan_id',
+                'part_numbers.id as part_number_id',
+                'scraps.id as scrap_id'
+            ])
+            ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
+            ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('scraps', 'scrap_records.scrap_id', '=', 'scraps.id')
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('scrap_records.created_at', 'DESC')
+            ->paginate(10);
 
         return view('scrap-record.index', ['scrapRecords' => $scrapRecords]);
     }

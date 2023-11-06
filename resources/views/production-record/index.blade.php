@@ -33,16 +33,16 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($productionRecords as $prodcutionRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->productionPlan->partNumber->workcenter->number  ?? ''}} - {{ $prodcutionRecord->productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->productionPlan->partNumber->number }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->quantity }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->sequence }}
                             </td>
 
@@ -64,7 +64,7 @@
                             </td>
                             @endif
 
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->created_at }}
                             </td>
                             <td class="px-4 py-3">

@@ -17,7 +17,23 @@ class UnemploymentRecordController extends Controller
      */
     public function index()
     {
-        $unemploymentRecords = UnemploymentRecord::query()->orderBy('created_at', 'DESC')->paginate(10);
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $unemploymentRecords = UnemploymentRecord::query()
+            ->select([
+                '*',
+                'workcenters.id as workcenter_id',
+                'departaments.id as departament_id',
+                'unemployments.id as unemployment_id',
+                'unemployment_types.id as unemployment_type_id'
+            ])
+            ->join('workcenters', 'unemployment_records.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
+            ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('unemployment_records.created_at', 'DESC')
+            ->paginate(10);
 
         return view('unemployment-record.index', ['unemploymentRecords' => $unemploymentRecords]);
     }

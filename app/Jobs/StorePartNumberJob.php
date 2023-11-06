@@ -85,7 +85,7 @@ class StorePartNumberJob implements ShouldQueue
             ]);
         }
 
-        switch ($this->project) {
+        switch (trim($this->project)) {
             case '1':
                 $project = Project::where('type', trim($this->project))->pluck('id')->toArray();
                 $item->projects()->sync($project);
@@ -136,7 +136,7 @@ class StorePartNumberJob implements ShouldQueue
                 $item->projects()->sync($project);
                 break;
 
-            case '3Y   ':
+            case '3Y':
                 $project = Project::where('type', '3Y')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
@@ -147,57 +147,57 @@ class StorePartNumberJob implements ShouldQueue
                 break;
 
             case '12':
-                $project = Project::where('type', 1)->orWhere('type', 2)->pluck('id')->toArray();
+                $project = Project::where('type', '1')->orWhere('type', '2')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '123':
-                $project = Project::where('type', 1)->orWhere('type', 2)->orWhere('type', 3)->pluck('id')->toArray();
+                $project = Project::where('type', '1')->orWhere('type', '2')->orWhere('type', '3')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '13':
-                $project = Project::where('type', 1)->orWhere('type', 3)->pluck('id')->toArray();
+                $project = Project::where('type', '1')->orWhere('type', '3')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '23':
-                $project = Project::where('type', 2)->orWhere('type', 3)->pluck('id')->toArray();
+                $project = Project::where('type', '2')->orWhere('type', '3')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '45':
-                $project = Project::where('type', 4)->orWhere('type', 5)->pluck('id')->toArray();
+                $project = Project::where('type', '4')->orWhere('type', '5')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '56':
-                $project = Project::where('type', 5)->orWhere('type', 6)->pluck('id')->toArray();
+                $project = Project::where('type', '5')->orWhere('type', '6')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '710':
-                $project = Project::where('type', 7)->orWhere('type', 10)->pluck('id')->toArray();
+                $project = Project::where('type', '7')->orWhere('type', '10')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '79':
-                $project = Project::where('type', 7)->orWhere('type', 9)->pluck('id')->toArray();
+                $project = Project::where('type', '7')->orWhere('type', '9')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '47':
-                $project = Project::where('type', 4)->orWhere('type', 7)->pluck('id')->toArray();
+                $project = Project::where('type', '4')->orWhere('type', '7')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '57':
-                $project = Project::where('type', 5)->orWhere('type', 7)->pluck('id')->toArray();
+                $project = Project::where('type', '5')->orWhere('type', '7')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 
             case '811':
-                $project = Project::where('type', 8)->orWhere('type', 11)->pluck('id')->toArray();
+                $project = Project::where('type', '8')->orWhere('type', '11')->pluck('id')->toArray();
                 $item->projects()->sync($project);
                 break;
 

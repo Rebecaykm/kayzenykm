@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         $it->departaments()->sync([1, 2, 3, 4, 5]);
         $press->departaments()->sync([1]);
         $body->departaments()->sync([2]);
-        $chassis->departaments()->sync([2]);
+        $chassis->departaments()->sync([3]);
         $paint->departaments()->sync([4]);
         $vendor->departaments()->sync([5]);
 

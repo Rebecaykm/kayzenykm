@@ -11,6 +11,7 @@ use App\Models\Status;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,7 +22,30 @@ class ProdcutionRecordController extends Controller
      */
     public function index()
     {
-        $prodcutionRecords = ProdcutionRecord::orderBy('created_at', 'DESC')->orderBy('sequence', 'DESC')->paginate(10);
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $prodcutionRecords = ProdcutionRecord::select([
+                '*',
+                'prodcution_records.id as prodcution_record_id',
+                'production_plans.id as production_plan_id',
+                'part_numbers.id as part_number_id',
+                'item_classes.id as item_class_id',
+                'workcenters.id as workcenter_id',
+                'departaments.id as departament_id',
+                'shifts.id as shift_id',
+                'statuses.id as status_id'
+            ])
+            ->join('part_numbers', 'prodcution_records.part_number_id', '=', 'part_numbers.id')
+            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('production_plans', 'prodcution_records.production_plan_id', '=', 'production_plans.id')
+            ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
+            ->join('statuses', 'prodcution_records.status_id', '=', 'statuses.id')
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('prodcution_records.created_at', 'DESC')
+            ->orderBy('prodcution_records.sequence', 'DESC')
+            ->paginate(10);
 
         return view('production-record.index', ['productionRecords' => $prodcutionRecords]);
     }
@@ -119,7 +143,6 @@ class ProdcutionRecordController extends Controller
             'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
         ]);
 
-
         // return redirect()->back();
 
         // return redirect('production-plan');
@@ -157,7 +180,7 @@ class ProdcutionRecordController extends Controller
         //
     }
 
-    function reprint(ProdcutionRecord $prodcutionRecord)
+    public function reprint(ProdcutionRecord $prodcutionRecord)
     {
         $data = [
             'id' => str_pad($prodcutionRecord->id, 6, '0', STR_PAD_LEFT),
@@ -195,5 +218,9 @@ class ProdcutionRecordController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
         ]);
+    }
+
+    public function report() {
+
     }
 }

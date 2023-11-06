@@ -15,7 +15,6 @@ class DepartamentSeeder extends Seeder
      */
     public function run()
     {
-        Departament::create(['code' => '20', 'name' => 'Mazda']);
         Departament::create(['code' => '11', 'name' => 'Estampado']);
         Departament::create(['code' => '12', 'name' => 'Carrocería']);
         Departament::create(['code' => '13', 'name' => 'Chasis']);

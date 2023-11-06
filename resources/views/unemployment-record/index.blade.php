@@ -1,5 +1,5 @@
 <x-app-layout title="Registro de Paro">
-    <div class="container grid px-6 mx-auto">
+    <div class="xl:container lg:container md:container sm:container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             {{ __('Registro de Paro')}}
         </h2>
@@ -30,34 +30,38 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">{{ __('Departamento') }}</th>
+                            <th class="px-4 py-3">{{ __('Estación de Trabajo') }}</th>
                             <th class="px-4 py-3">{{ __('Tipo de Paro') }}</th>
                             <th class="px-4 py-3">{{ __('Paro') }}</th>
-                            <th class="px-4 py-3">{{ __('Estación de Trabajo') }}</th>
                             <th class="px-4 py-3">{{ __('Hora de Inicio') }}</th>
                             <th class="px-4 py-3">{{ __('Hora de Fin') }}</th>
                             <th class="px-4 py-3">{{ __('Minutos') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    <tbody class="bg-white divide-y uppercase dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($unemploymentRecords as $unemploymentRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-sm">
-                                {{ $unemploymentRecord->unemployment->unemploymentType->name ?? '' }}
+                            <td class="px-4 py-3 text-xs">
+                                {{ $unemploymentRecord->workcenter->departament->name ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ $unemploymentRecord->unemployment->name ?? '' }}
-                            </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $unemploymentRecord->workcenter->number ?? '' }} - {{ $unemploymentRecord->workcenter->name ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
+                                {{ $unemploymentRecord->unemployment->unemploymentType->name ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs">
+                                {{ $unemploymentRecord->unemployment->name ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs">
                                 {{ $unemploymentRecord->time_start ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $unemploymentRecord->time_end ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $unemploymentRecord->minutes ?? '' }}
                             </td>
                             <!-- <td class="px-4 py-3">
