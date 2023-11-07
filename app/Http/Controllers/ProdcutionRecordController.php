@@ -140,14 +140,20 @@ class ProdcutionRecordController extends Controller
 
         $output = $pdf->output();
 
-        return response($output, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
-        ]);
+        // return response($output, 200, [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
+        // ]);
 
-        // return redirect()->back();
+        session()->put('pdfData', base64_encode($output));
 
-        // return redirect('production-plan');
+        return redirect()->back();
+    }
+
+    public function clearPDFSessionData()
+    {
+        session()->forget('pdfData');
+        return response()->json(['message' => 'PDF session data cleared successfully']);
     }
 
     /**
@@ -229,6 +235,8 @@ class ProdcutionRecordController extends Controller
 
     public function download(Request $request)
     {
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
         $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
         $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
 
@@ -240,9 +248,11 @@ class ProdcutionRecordController extends Controller
                 'part_numbers.number as number_part_number',
                 'prodcution_records.sequence',
                 'prodcution_records.quantity',
+                'production_plans.date as date_production',
+                'shifts.abbreviation as abbreviation_shift',
                 'prodcution_records.time_start',
                 'prodcution_records.time_end',
-                'prodcution_records.minutes',
+                // 'prodcution_records.minutes',
                 'prodcution_records.created_at',
                 'statuses.name as name_status',
             )
@@ -251,7 +261,10 @@ class ProdcutionRecordController extends Controller
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
             ->join('statuses', 'prodcution_records.status_id', '=', 'statuses.id')
+            ->join('production_plans', 'prodcution_records.production_plan_id', '=', 'production_plans.id')
+            ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->whereBetween('prodcution_records.created_at', [$start, $end])
+            ->whereIn('departaments.code', $departamentCode)
             ->orderBy('prodcution_records.created_at', 'DESC')
             ->orderBy('prodcution_records.sequence', 'DESC')
             ->get()

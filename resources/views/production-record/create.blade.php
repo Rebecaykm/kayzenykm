@@ -141,10 +141,16 @@
                         </div>
                     </label>
                 </div>
-                <div class="flex justify-end mt-4">
+                <div class="flex justify-end mt-4 gap-4">
+                    <a href="{{ route('production-plan.index') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray" type="submit">
+                        <span>{{ __('Regresar')}}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                        </svg>
+                    </a>
                     <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
                         <span>{{ __('Guardar')}}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </button>
@@ -153,4 +159,27 @@
 
         </form>
     </div>
+    <script>
+        var pdfData = "{{ session('pdfData') }}";
+
+        if (pdfData !== "") {
+            var pdfWindow = window.open("", "_blank", "width=800,height=600,scrollbars=yes");
+
+            pdfWindow.document.write(
+                "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
+                encodeURI(pdfData) + "'></iframe>"
+            );
+            // pdfWindow.print();
+
+            fetch('/clear-pdf-session-data', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        }
+    </script>
+
 </x-app-layout>

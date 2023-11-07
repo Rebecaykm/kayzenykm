@@ -6,6 +6,7 @@ require  'C:\label\eps.php';
 
 use App\Models\Client;
 use BaconQrCode\Encoder\QrCode;
+use Carbon\Carbon;
 use DOMDocument;
 use DOMXPath;
 use EscposTest;
@@ -27,8 +28,7 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        phpinfo();
-
+        echo now(); 
         // $random = sha1(base64_encode(sha1("Hello world")));
         // $random = $random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random.$random;
 

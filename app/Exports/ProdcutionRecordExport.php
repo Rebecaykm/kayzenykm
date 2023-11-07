@@ -21,17 +21,30 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     public function collection()
     {
         return collect($this->data)->map(function ($item) {
-            $item['name_departament'] = strtoupper($item['name_departament']);
-            $item['number_workcenter'] = strtoupper($item['number_workcenter']);
-            $item['name_workcenter'] = strtoupper($item['name_workcenter']);
-            $item['number_part_number'] = strtoupper($item['number_part_number']);
-            $item['sequence'] = strtoupper($item['sequence']);
-            $item['quantity'] = strtoupper($item['quantity']);
-            $item['time_start'] = strtoupper($item['time_start']);
-            $item['time_end'] = strtoupper($item['time_end']);
-            $item['minutes'] = strtoupper($item['minutes']);
-            $item['created_at'] = Carbon::parse($item['created_at'])->format('Y-m-d H:i:s');
-            $item['name_status'] = strtoupper($item['name_status']);
+            $item['area'] = strtoupper(trim($item['name_departament']));
+            $item['estacion'] = strtoupper(trim($item['number_workcenter'] . ' ' . $item['name_workcenter']));
+            $item['no_parte'] = strtoupper(trim($item['number_part_number']));
+            $item['secuencia'] = strtoupper(trim($item['sequence']));
+            $item['cantidad'] = strtoupper(trim($item['quantity']));
+            $item['fecha'] = strtoupper(trim(Carbon::parse($item['date_production'])->format('d-m') . ' / ' . $item['abbreviation_shift']));
+            $item['inicio'] = strtoupper(trim($item['time_start']));
+            $item['fin'] = strtoupper(trim($item['time_end']));
+            // $item['CANT. MINUTOS'] = strtoupper($item['minutes']);
+            $item['registro'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
+            $item['estado'] = strtoupper(trim($item['name_status']));
+            unset($item['name_departament']);
+            unset($item['number_workcenter']);
+            unset($item['name_workcenter']);
+            unset($item['number_part_number']);
+            unset($item['sequence']);
+            unset($item['quantity']);
+            unset($item['date_production']);
+            unset($item['abbreviation_shift']);
+            unset($item['time_start']);
+            unset($item['time_end']);
+            // unset($item['minutes']);
+            unset($item['created_at']);
+            unset($item['name_status']);
             return $item;
         });
     }
@@ -39,15 +52,15 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     public function headings(): array
     {
         return [
-            'DEPARTAMENTO',
-            'NO. ESTACIÓN',
-            'NOMBRE ESTACIÓN',
-            'NÚMERO DE PARTE',
+            'ÁREA',
+            'ESTACIÓN',
+            'NO. DE PARTE',
             'SECUENCIA',
             'CANTIDAD',
+            'FECHA',
             'HORA DE INICIO',
             'HORA DE FIN',
-            'CANT. MINUTOS',
+            // 'CANT. MINUTOS',
             'FECHA DE REGISTRO',
             'ESTADO'
         ];
