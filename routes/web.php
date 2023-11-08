@@ -142,6 +142,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
+    Route::get('prodcution-report', [\App\Http\Controllers\ProdcutionRecordController::class, 'report'])->name('prodcution-record.report');
+    Route::post('prodcution-report/download', [\App\Http\Controllers\ProdcutionRecordController::class, 'download'])->name('prodcution-record.download');
+
+    Route::get('clear-pdf-session-data', [\App\Http\Controllers\ProdcutionRecordController::class, 'clearPDFSessionData'])->name('clear-pdf-session-data');
 
     /**
      *
