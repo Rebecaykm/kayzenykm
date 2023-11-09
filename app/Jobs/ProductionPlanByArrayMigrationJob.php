@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductionPlanByArrayMigrationJob implements ShouldQueue
 {
@@ -31,10 +30,7 @@ class ProductionPlanByArrayMigrationJob implements ShouldQueue
     public function handle(): void
     {
         foreach ($this->data as $item) {
-
             $partNumber = $item['part_number'];
-
-            Log::info("Número de parte: $partNumber");
 
             $prodcutionPlans = DB::connection('odbc-connection-lx834f01')
                 ->table('LX834F01.KFP')

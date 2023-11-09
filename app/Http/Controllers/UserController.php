@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\AddWorkCenterPartNumberJob;
 use App\Jobs\ItemClassMigrationJob;
+use App\Jobs\PartHierarchyMigrationJob;
 use App\Jobs\PartNumberMigrationJob;
 use App\Jobs\PlannerMigrationJob;
 use App\Jobs\ProductionPlanMigrationJob;
@@ -32,7 +33,8 @@ class UserController extends Controller
         WorkcenterMigrationJob::dispatch();
         PartNumberMigrationJob::dispatch();
         AddWorkCenterPartNumberJob::dispatch();
-        // ProductionPlanMigrationJob::dispatch();
+        PartHierarchyMigrationJob::dispatch();
+        ProductionPlanMigrationJob::dispatch();
 
         return redirect('production-plan');
     }
