@@ -32,18 +32,18 @@ class ProductionPlanByArrayMigrationJob implements ShouldQueue
         foreach ($this->data as $item) {
             $partNumber = $item['part_number'];
 
-            $prodcutionPlans = DB::connection('odbc-connection-lx834f01')
-                ->table('LX834F01.KFP')
-                ->select('LX834F01.KFP.FPROD', 'LX834F01.KFP.FRDTE', 'LX834F01.KFP.FTYPE', 'LX834F01.KFP.FQTY', 'LX834F01.KFP.FCLAS', 'LX834F01.KFP.FDATE', 'LX834F01.KFP.FWHSE', 'LX834F01.KFP.FPCNO', 'LX834F01.IIM.IMPLC')
-                ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.KFP.FPROD')
+            $prodcutionPlans = DB::connection('odbc-connection-lx834f02')
+                ->table('LX834F02.KFP')
+                ->select('LX834F02.KFP.FPROD', 'LX834F02.KFP.FRDTE', 'LX834F02.KFP.FTYPE', 'LX834F02.KFP.FQTY', 'LX834F02.KFP.FCLAS', 'LX834F02.KFP.FDATE', 'LX834F02.KFP.FWHSE', 'LX834F02.KFP.FPCNO', 'LX834F02.IIM.IMPLC')
+                ->join('LX834F02.IIM', 'LX834F02.IIM.IPROD', '=', 'LX834F02.KFP.FPROD')
                 ->where(
                     [
-                        ['LX834F01.KFP.FPROD', 'LIKE', $partNumber],
-                        ['LX834F01.KFP.FTYPE', 'F'],
-                        ['LX834F01.IIM.IMPLC', '!=', 'OBSOLETE']
+                        ['LX834F02.KFP.FPROD', 'LIKE', $partNumber],
+                        ['LX834F02.KFP.FTYPE', 'F'],
+                        ['LX834F02.IIM.IMPLC', '!=', 'OBSOLETE']
                     ]
                 )
-                ->orderBy('LX834F01.KFP.FRDTE', 'DESC')
+                ->orderBy('LX834F02.KFP.FRDTE', 'DESC')
                 ->get();
 
             foreach ($prodcutionPlans as $key => $prodcutionPlan) {

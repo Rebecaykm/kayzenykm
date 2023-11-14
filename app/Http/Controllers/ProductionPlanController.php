@@ -122,6 +122,7 @@ class ProductionPlanController extends Controller
 
     public function disable(Request $request)
     {
+        dd($request->all());
         $status = Status::where('name', 'INACTIVO')->first();
 
         $productionPlan = ProductionPlan::where('id', $request->production)->first();

@@ -27,13 +27,21 @@ class UserController extends Controller
      */
     function data()
     {
+        echo now();
         ItemClassMigrationJob::dispatch();
+        echo now();
         StandardPackageMigrationJob::dispatch();
+        echo now();
         PlannerMigrationJob::dispatch();
+        echo now();
         WorkcenterMigrationJob::dispatch();
+        echo now();
         PartNumberMigrationJob::dispatch();
+        echo now();
         AddWorkCenterPartNumberJob::dispatch();
+        echo now();
         PartHierarchyMigrationJob::dispatch();
+        echo now();
         // ProductionPlanMigrationJob::dispatch();
 
         return redirect('production-plan');

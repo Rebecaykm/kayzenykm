@@ -9,5 +9,5 @@ class Fpo extends Model
 {
     use HasFactory;
     protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F01.FPO';
+    protected $table = 'LX834F02.FPO';
 }
