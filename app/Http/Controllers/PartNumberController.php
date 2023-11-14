@@ -79,4 +79,60 @@ class PartNumberController extends Controller
     {
         //
     }
+
+    function getPartNumberTree()
+    {
+        $partNumbers = PartNumber::whereHas('itemClass', function ($query) {
+            $query->where('abbreviation', 'F1');
+        })
+            // ->where('number', 'LIKE', 'BDTS3480XG                         ')
+            ->get();
+
+        $tree = [];
+
+        foreach ($partNumbers as $partNumber) {
+            $processedNodes = [];
+            $tree[] = $this->buildTree($partNumber, $processedNodes);
+        }
+
+        return view('tree')->with('tree', $tree);
+    }
+
+    private function buildTree($partNumber, &$processedNodes)
+    {
+        // Verificar si el nodo ya ha sido procesado
+        if (in_array($partNumber->id, $processedNodes)) {
+            return null;
+        }
+
+        // Agregar el nodo actual al registro de nodos procesados
+        $processedNodes[] = $partNumber->id;
+
+        $treeNode = [
+            // 'id' => $partNumber->id,
+            'number' => $partNumber->number,
+            'class' => $partNumber->itemClass->abbreviation,
+            'required_quantiy' => $partNumber->pivot->required_quantity ?? '',
+            'subParts' => [],
+        ];
+
+        $subPartNumbers = $partNumber->subPartNumbers;
+
+        foreach ($subPartNumbers as $subPartNumber) {
+            // Evitar que el subnúmero sea igual al número actual para prevenir ciclos infinitos
+            if ($subPartNumber->id != $partNumber->id) {
+                // echo "Número de parte: {$partNumber->name} - Subnúmero: {$subPartNumber->name}\n";
+
+                $subTree = $this->buildTree($subPartNumber, $processedNodes);
+
+                if ($subTree) {
+                    $treeNode['subParts'][] = $subTree;
+                }
+            } else {
+                // echo "Evitando ciclo infinito: {$partNumber->name} - Subnúmero igual al número actual: {$subPartNumber->name}\n";
+            }
+        }
+
+        return $treeNode;
+    }
 }

@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Row;
 //     return view('dashboard');
 // })->name('dashboard');
 
+Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/', function () {
