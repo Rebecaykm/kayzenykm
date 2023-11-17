@@ -18,6 +18,7 @@ use Database\Seeders\WorkcenterSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -27,22 +28,23 @@ class UserController extends Controller
      */
     function data()
     {
-        echo now();
+        // Log::info(now());
         ItemClassMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
         StandardPackageMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
         PlannerMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
         WorkcenterMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
         PartNumberMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
         AddWorkCenterPartNumberJob::dispatch();
-        echo now();
-        PartHierarchyMigrationJob::dispatch();
-        echo now();
+        // Log::info(now());
+        // PartHierarchyMigrationJob::dispatchAfterResponse();
+        // Log::info(now());
         // ProductionPlanMigrationJob::dispatch();
+        // Log::info(now());
 
         return redirect('production-plan');
     }
