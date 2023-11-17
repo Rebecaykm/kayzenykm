@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProductionPlanByArrayMigrationJob;
 use App\Models\PartNumber;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -16,7 +17,22 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            [
+                'part_number' => 'DGH97027Q                          ',
+                'date' => '20231113'
+            ],
+            [
+                'part_number' => 'DGH971T3S                          ',
+                'date' => '20231116'
+            ],
+            [
+                'part_number' => 'DGH954570                          ',
+                'date' => '20231116'
+            ],
+        ];
+
+        ProductionPlanByArrayMigrationJob::dispatch($data);
     }
 
     /**

@@ -40,56 +40,26 @@ class StoreProductionPlanJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $date = Carbon::parse($this->date)->format('Y-m-d');
+
         $item = PartNumber::where('number', $this->partNumber)->first();
         $openShift = Shift::where('abbreviation', substr($this->shift, 4, 1))->first();
         $status = Status::where('name', 'PENDIENTE')->first();
 
-        // $productionPlan = ProductionPlan::query()
-        //     ->where(
-        //         [
-        //             ['part_number_id', $item->id],
-        //             ['date', Carbon::parse($this->date)->format('Y-m-d')],
-        //             ['shift_id', $openShift->id ?? null]
-        //         ]
-        //     )
-        //     ->first();
+        $productionPlan = ProductionPlan::with(['partNumber', 'shift'])
+            ->where('part_number_id', $item->id)
+            ->where('date', $date)
+            ->where('shift_id', optional($openShift)->id)
+            ->firstOrNew();
 
-        // if ($productionPlan === null) {
-        //     ProductionPlan::create([
-        //         'part_number_id' => $item->id ?? '',
-        //         'date' => Carbon::parse($this->date)->format('Y-m-d') ?? '',
-        //         'shift_id' => $openShift->id ?? null,
-        //         'plan_quantity' => intval($this->quantity) ?? '',
-        //         'status_id' => $status->id
-        //     ]);
-        // }
-
-        $productionPlan = ProductionPlan::updateOrCreate(
-            [
-                'part_number_id' => $item->id ?? '',
-                'date' => Carbon::parse($this->date)->format('Y-m-d') ?? '',
-                'shift_id' => $openShift->id ?? null,
-            ],
-            [
-                'plan_quantity' => intval($this->quantity) ?? '',
-                'status_id' => $status->id
-            ]
-        );
-
-        $plans = ProductionPlan::query()
-            ->where([
-                ['part_number_id', $item->id],
-                ['date', Carbon::parse($this->date)->format('Y-m-d')],
-                ['shift_id', $openShift->id ?? null]
-            ])
-            ->get();
-
-        if ($plans->count() > 1) {
-            foreach ($plans as $plan) {
-                if ($plan->plan_quantity != $productionPlan->plan_quantity) {
-                    $plan->delete();
-                }
-            }
+        if (!$productionPlan->exists) {
+            $productionPlan->fill([
+                'part_number_id' => $item->id ?? null,
+                'date' => $date ?? null,
+                'shift_id' => optional($openShift)->id ?? null,
+                'plan_quantity' => intval($this->quantity) ?? null,
+                'status_id' => $status->id ?? null,
+            ])->save();
         }
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Models\PartNumber;
+use App\Models\ProductionPlan;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,7 +33,18 @@ class ProductionPlanByArrayMigrationJob implements ShouldQueue
     public function handle(): void
     {
         foreach ($this->data as $item) {
+
             $partNumber = $item['part_number'];
+            $date = $item['date'];
+
+            $startDate = Carbon::parse($date)->startOfWeek();
+            $endDate = Carbon::parse($date)->endOfWeek();
+
+            $planDelete = ProductionPlan::query()
+                ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
+                ->where('part_numbers.number', 'LIKE', $partNumber)
+                ->whereBetween('production_plans.date', [$startDate, $endDate])
+                ->delete();
 
             $prodcutionPlans = DB::connection('odbc-connection-lx834f02')
                 ->table('LX834F02.KFP')
