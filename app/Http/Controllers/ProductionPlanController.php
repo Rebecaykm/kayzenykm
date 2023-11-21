@@ -7,10 +7,12 @@ use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
 use App\Jobs\ProductionPlanMigrationJob;
 use App\Models\IPYF013;
+use App\Models\ProdcutionRecord;
 use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductionPlanController extends Controller
 {
@@ -119,38 +121,53 @@ class ProductionPlanController extends Controller
 
     public function disable(Request $request)
     {
-        $status = Status::where('name', 'INACTIVO')->first();
+        try {
+            DB::transaction(function ()  use ($request) {
 
-        $productionPlan = ProductionPlan::where('id', $request->production)->first();
+                $status = Status::where('name', 'INACTIVO')->first();
 
-        $ipyf03 = IPYF013::query()->insert([
-            'YFWRKC' => $productionPlan->partNumber->workcenter->number,
-            'YFWRKN' => $productionPlan->partNumber->workcenter->name,
-            'YFRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
-            'YFSHFT' => $productionPlan->shift->abbreviation,
-            'YFPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence'),
-            'YFPROD' => $productionPlan->partNumber->number,
-            // 'YFSTIM' => ,
-            // 'YFETIM' => ,
-            // 'YFSDT' => ,
-            // 'YFEDT' => ,
-            'YFQPLA' => $productionPlan->plan_quantity,
-            'YFQPRO' => $productionPlan->production_quantity,
-            'YFQSCR' => $productionPlan->scrapRecords->sum('quantity'),
-            // 'YFSCRE' => ,
-            'YFCRDT' => Carbon::now()->format('Ymd'),
-            'YFCRTM' => Carbon::now()->format('His'),
-            // 'YFCRUS' => Auth::user()->infor ?? '',
-            // 'YFCRWS' => ,
-            // 'YFFIL1' => ,
-            // 'YFFIL2' => ,
-        ]);
+                $productionPlan = ProductionPlan::where('id', $request->production)->first();
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU.YSF013B";
-        // $result = odbc_exec($conn, $query);
+                $records = ProdcutionRecord::where('production_plan_id', $productionPlan->id)->get();
 
-        $productionPlan->update(['status_id' => $status->id]);
+                $timeStart = Carbon::parse($records->min('time_start'))->format('Hi');
+                $timeEnd = Carbon::parse($records->max('time_end'))->format('Hi');
+
+                $dateStart = Carbon::parse($records->min('created_at'))->format('Ymd');
+                $dateEnd = Carbon::parse($records->max('created_at'))->format('Ymd');
+
+                $ipyf03 = IPYF013::query()->insert([
+                    'YFWRKC' => $productionPlan->partNumber->workcenter->number,
+                    'YFWRKN' => $productionPlan->partNumber->workcenter->name,
+                    'YFRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
+                    'YFSHFT' => $productionPlan->shift->abbreviation,
+                    'YFPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence'),
+                    'YFPROD' => $productionPlan->partNumber->number,
+                    'YFSTIM' => $timeStart,
+                    'YFETIM' => $timeEnd,
+                    'YFSDT' => $dateStart . $timeStart,
+                    'YFEDT' => $dateEnd . $timeEnd,
+                    'YFQPLA' => $productionPlan->plan_quantity,
+                    'YFQPRO' => $productionPlan->production_quantity,
+                    'YFQSCR' => $productionPlan->scrapRecords->sum('quantity'),
+                    // 'YFSCRE' => ,
+                    'YFCRDT' => Carbon::now()->format('Ymd'),
+                    'YFCRTM' => Carbon::now()->format('His'),
+                    'YFCRUS' => Auth::user()->infor ?? '',
+                    // 'YFCRWS' => ,
+                    // 'YFFIL1' => ,
+                    // 'YFFIL2' => ,
+                ]);
+
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YSF013B";
+                // $result = odbc_exec($conn, $query);
+
+                $productionPlan->update(['status_id' => $status->id]);
+            });
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
         return redirect()->back();
     }
