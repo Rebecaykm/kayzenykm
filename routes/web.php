@@ -137,6 +137,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('scrap-record', \App\Http\Controllers\ScrapRecordController::class);
     Route::get('create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
     Route::post('store-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'storeScrap'])->name('scrap-record.store-scrap');
+    Route::get('scrap-report', [\App\Http\Controllers\ScrapRecordController::class, 'report'])->name('scrap-record.report');
+    Route::post('scrap-report/download', [\App\Http\Controllers\ScrapRecordController::class, 'download'])->name('scrap-record.download');
 
     /**
      *
