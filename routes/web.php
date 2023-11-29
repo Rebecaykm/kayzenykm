@@ -120,6 +120,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('unemployment-record', \App\Http\Controllers\UnemploymentRecordController::class);
+    Route::get('unemploymentrecord/record', [\App\Http\Controllers\UnemploymentRecordController::class, 'record'])->name('unemployment-record.record');
+    Route::post('unemploymentrecord', [\App\Http\Controllers\UnemploymentRecordController::class, 'save'])->name('unemployment-record.save');
+    Route::get('unemployment-report', [\App\Http\Controllers\UnemploymentRecordController::class, 'report'])->name('unemployment-record.report');
+    Route::post('unemployment-report/download', [\App\Http\Controllers\UnemploymentRecordController::class, 'download'])->name('unemployment-record.download');
 
     /**
      *

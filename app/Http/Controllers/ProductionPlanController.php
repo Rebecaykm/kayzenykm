@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductionPlanController extends Controller
 {
@@ -166,9 +167,8 @@ class ProductionPlanController extends Controller
                 $productionPlan->update(['status_id' => $status->id]);
             });
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            Log::info($e->getMessage());
         }
-
         return redirect()->back();
     }
 }
