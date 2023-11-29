@@ -80,19 +80,23 @@ class PartNumberController extends Controller
         //
     }
 
-    function getPartNumberTree()
+    function getPartNumberTree(Request $request)
     {
-        $partNumbers = PartNumber::whereHas('itemClass', function ($query) {
-            $query->where('abbreviation', 'F1');
-        })
-            // ->where('number', 'LIKE', 'BDTS3480XG                         ')
-            ->get();
+        $search = $request->search ?? '';
 
         $tree = [];
 
-        foreach ($partNumbers as $partNumber) {
-            $processedNodes = [];
-            $tree[] = $this->buildTree($partNumber, $processedNodes);
+        if ($search != '') {
+            $partNumbers = PartNumber::whereHas('itemClass', function ($query) {
+                $query->where('abbreviation', 'F1');
+            })
+                ->where('number', 'LIKE', '%' . $search . '%')
+                ->get();
+
+            foreach ($partNumbers as $partNumber) {
+                $processedNodes = [];
+                $tree[] = $this->buildTree($partNumber, $processedNodes);
+            }
         }
 
         return view('tree')->with('tree', $tree);

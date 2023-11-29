@@ -16,6 +16,12 @@
 
 <body>
 
+    <form action="{{ url('tree') }}" method="get">
+        <label for="search">Buscar : </label>
+        <input type="text" id="search" name="search" placeholder="Ingrese el número de parte">
+        <button type="submit">Buscar</button>
+    </form>
+
     <!-- <h1>Árbol de PartNumbers</h1> -->
 
     @foreach ($tree as $node)
