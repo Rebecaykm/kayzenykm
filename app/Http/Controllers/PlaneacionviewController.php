@@ -3,33 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use App\Models\LWK;
-use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\KFP;
 use App\Models\FRT;
 use App\Models\IIM;
-use App\Models\ZCC;
-use App\Models\LOGSUP;
-use App\Models\FMA;
 use App\Models\ECL;
-use App\Models\MBM;
 use App\Models\YMCOM;
+use App\Models\ProductionPlan;
 use App\Models\FSO;
-use App\Models\YK006;
-use App\Models\MStructure;
 use Carbon\Carbon;
-use registros;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
 use App\Exports\PlansubExport;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Input;
-
-
 use Symfony\Component\VarDumper\Caster\FrameStub;
 
 class PlaneacionviewController extends Controller
@@ -776,24 +762,36 @@ class PlaneacionviewController extends Controller
             ->get()->toarray();
 
 
-        $valPDpadres = KFP::query() //plan
-            ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
-            ->wherein('FPROD', array_column($KMRFINAL, 'MCFPRO'))
-            ->where([
-                ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<', $totalF],
-                ['FTYPE', '=', 'F'],
-            ])
-            ->orderby('FPROD', 'DESC')
-            ->get()->toarray();
+        $valPDpadres =ProductionPlan::query()
+        ->join('part_numbers','part_numbers.id','=', 'part_number_id')
+        ->join('shifts','shifts.id','=','shift_id')
+        ->select('number','plan_quantity','date','abbreviation')
+        ->wherein('number', array_column($KMRFINAL, 'MCFPRO'))
+        ->where('date','>=',$hoy)
+        ->where('date','<',$totalF)
+        ->get()->toarray();
 
 
-        $KFPprod = array_column($valPDpadres, 'FPROD');
-        $KFPmtype = array_column($valPDpadres, 'FPCNO');
-        $KFPfecha = array_column($valPDpadres, 'FRDTE');
-        $KFPMtotal = array_column($valPDpadres, 'FQTY');
+
+
+
+        // KFP::query() //plan
+        //     ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
+        //     ->wherein('FPROD', array_column($KMRFINAL, 'MCFPRO'))
+        //     ->where([
+        //         ['FRDTE', '>=', $hoy],
+        //         ['FRDTE', '<', $totalF],
+        //         ['FTYPE', '=', 'F'],
+        //     ])
+        //     ->orderby('FPROD', 'DESC')
+        //     ->get()->toarray();
+
+
+        $KFPprod = array_column($valPDpadres, 'number');
+        $KFPmtype = array_column($valPDpadres, 'abbreviation');
+        $KFPfecha = array_column($valPDpadres, 'date');
+        $KFPMtotal = array_column($valPDpadres, 'plan_quantity');
         $kftype = array_column($valPDpadres, 'FTYPE');
-
         $kmrprod = array_column($RKMRfinal, 'MPROD');
         $kmrmtype = array_column($RKMRfinal, 'MRCNO');
         $KMRfecha = array_column($RKMRfinal, 'MRDTE');
@@ -827,14 +825,23 @@ class PlaneacionviewController extends Controller
 
 
         // -----------------------------------------FIRME PLAN
-        $valPD = KFP::query()
-            ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->whereraw("(FPROD='" . $cadsubsPlan . "')")
-            ->where([
-                ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<', $totalF],
-            ])
-            ->get()->toarray();
+        $valPD =ProductionPlan::query()
+        ->join('part_numbers','part_numbers.id','=', 'part_number_id')
+        ->join('shifts','shifts.id','=','shift_id')
+        ->select('number','plan_quantity','date','abbreviation')
+        ->wherein('number', $sub1 )
+        ->where('date','>=',$hoy)
+        ->where('date','<',$totalF)
+        ->get()->toarray();
+
+        // KFP::query()
+        //     ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
+        //     ->whereraw("(FPROD='" . $cadsubsPlan . "')")
+        //     ->where([
+        //         ['FRDTE', '>=', $hoy],
+        //         ['FRDTE', '<', $totalF],
+        //     ])
+        //     ->get()->toarray();
 
 
         $cadsubssh = implode("' OR  SPROD='", $sub1);
@@ -874,11 +881,7 @@ class PlaneacionviewController extends Controller
         $minba = array_column($cond, 'IMIN');
         $typkt = array_column($cond, 'IMSPKT');
         $sepa = [];
-
-
         foreach ($sub1 as $subs) {
-
-
             $padreskmr = [];
             $finaleskmr = [];
             $finaleskmrQTY = [];
@@ -975,7 +978,7 @@ class PlaneacionviewController extends Controller
                 $total = 0;
 
                 while (($key3 = array_search($F1,    $KFPprod)) !== false) {
-                    $dia =  $KFPfecha[$key3];
+                    $dia =   date('Ymd', strtotime($KFPfecha[$key3]));
                     $turno = $KFPmtype[$key3];
                     $total = $KFPMtotal[$key3] + 0;
                     $valt = substr($turno, 4, 1);
@@ -987,7 +990,6 @@ class PlaneacionviewController extends Controller
                     } else {
                         $forcast  += ['kfp' . $dia . $valt => $total];
                     }
-
                     unset($KFPprod[$key3]);
                     unset($KFPmtype[$key3]);
                     unset($KFPfecha[$key3]);
@@ -1035,23 +1037,20 @@ class PlaneacionviewController extends Controller
             $KMRfecha = array_column($RKMRfinal, 'MRDTE');
             $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
             $KtYPE = array_column($RKMRfinal, 'MTYPE');
-
             $total = 0;
+
             foreach ($valPD as $reg3) {
-                if ($reg3['FPROD'] == $subs) {
-                    $dia = $reg3['FRDTE'];
-                    $turno = $reg3['FPCNO'];
-                    $tipo = $reg3['FTYPE'];
-                    $total = $reg3['FQTY'] + 0;
-                    $valt = substr($turno, 4, 1);
-                    $numpaplan += [$tipo . $dia . $valt => $total];
-                    if ($tipo == 'P') {
-                        $Tplan = $Tplan + $total;
-                    } else {
+                if ($reg3['number'] == $subs) {
+                    $dia = date('Ymd',strtotime($reg3['date']));
+                    $turno = $reg3['abbreviation'];
+                    $tipo = 'F';
+                    $total = $reg3['plan_quantity'] + 0;
+
+                    $numpaplan += [$tipo . $dia .  $turno  => $total];
                         $Tfirme = $Tfirme + $total;
-                    }
                 }
             }
+
             $total = 0;
             foreach ($valSD as $reg4) {
                 if ($reg4['SPROD'] == $subs) {
