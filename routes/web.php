@@ -120,6 +120,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('unemployment-record', \App\Http\Controllers\UnemploymentRecordController::class);
+    Route::get('unemploymentrecord/record', [\App\Http\Controllers\UnemploymentRecordController::class, 'record'])->name('unemployment-record.record');
+    Route::post('unemploymentrecord', [\App\Http\Controllers\UnemploymentRecordController::class, 'save'])->name('unemployment-record.save');
+    Route::get('unemployment-report', [\App\Http\Controllers\UnemploymentRecordController::class, 'report'])->name('unemployment-record.report');
+    Route::post('unemployment-report/download', [\App\Http\Controllers\UnemploymentRecordController::class, 'download'])->name('unemployment-record.download');
 
     /**
      *
@@ -137,6 +141,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('scrap-record', \App\Http\Controllers\ScrapRecordController::class);
     Route::get('create-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'createScrap'])->name('scrap-record.create-scrap');
     Route::post('store-scrap', [\App\Http\Controllers\ScrapRecordController::class, 'storeScrap'])->name('scrap-record.store-scrap');
+    Route::get('scrap-report', [\App\Http\Controllers\ScrapRecordController::class, 'report'])->name('scrap-record.report');
+    Route::post('scrap-report/download', [\App\Http\Controllers\ScrapRecordController::class, 'download'])->name('scrap-record.download');
 
     /**
      *

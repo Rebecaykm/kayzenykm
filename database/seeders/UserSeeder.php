@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         $chassis = User::create(['name' => 'Lider Chasis', 'email' => 'chassis@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
         $paint = User::create(['name' => 'Lider Pintura', 'email' => 'paint@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
         $vendor = User::create(['name' => 'Lider Proveedor', 'email' => 'vendor@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Lider');
-        $operador = User::create(['name' => 'Oerador', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Operador');
+        $operador = User::create(['name' => 'Operador', 'email' => 'guest@example.com', 'email_verified_at' => now(), 'password' => bcrypt('123'), 'remember_token' => Str::random(10)])->assignRole('Operador');
 
         $admin->departaments()->sync([1, 2, 3, 4, 5]);
 

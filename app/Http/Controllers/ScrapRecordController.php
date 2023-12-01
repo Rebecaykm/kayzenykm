@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ScrapRecordExport;
 use App\Models\ScrapRecord;
 use App\Http\Requests\StoreScrapRecordRequest;
 use App\Http\Requests\UpdateScrapRecordRequest;
@@ -9,8 +10,10 @@ use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Scrap;
 use App\Models\Shift;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ScrapRecordController extends Controller
 {
@@ -24,11 +27,12 @@ class ScrapRecordController extends Controller
         $scrapRecords = ScrapRecord::query()
             ->select([
                 '*',
-                'production_plans.id as production_plan_id',
+                // 'production_plans.id as production_plan_id',
                 'part_numbers.id as part_number_id',
-                'scraps.id as scrap_id'
+                'scraps.id as scrap_id',
+                'scrap_records.quantity as quantity_scrap'
             ])
-            ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
+            // ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
             ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
@@ -141,5 +145,50 @@ class ScrapRecordController extends Controller
     public function destroy(ScrapRecord $scrapRecord)
     {
         //
+    }
+
+    /**
+     *
+     */
+    public function report()
+    {
+        return view('scrap-record.report');
+    }
+
+    /**
+     *
+     */
+    public function download(Request $request)
+    {
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
+        $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
+
+        $scrapRecords = ScrapRecord::query()
+            ->select([
+                'type_scraps.name as type_scrap',
+                'scraps.code as scrap_code',
+                'scraps.name as scrap_name',
+                'scrap_records.quantity as scrap_quatity',
+                'part_numbers.number as number_part',
+                'departaments.name as departament_name',
+                'users.name as user_name',
+                'scrap_records.created_at as created_at'
+            ])
+            ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
+            ->join('scraps', 'scrap_records.scrap_id', '=', 'scraps.id')
+            ->join('type_scraps', 'scraps.type_scrap_id', '=', 'type_scraps.id')
+            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('users', 'scrap_records.user_id', '=', 'users.id')
+            ->whereBetween('scrap_records.created_at', [$start, $end])
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('scrap_records.created_at', 'DESC')
+            ->get()
+            ->toArray();
+
+        return Excel::download(new ScrapRecordExport($scrapRecords), 'ScrapReport_' . date("dmY") . '.xlsx');
     }
 }
