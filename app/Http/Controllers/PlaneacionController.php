@@ -269,6 +269,9 @@ class PlaneacionController extends Controller
 
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
+        $datas = [];
+        $datval=[];
+        $datajob=[];
         $datasql = [];
         $CONT = 0;
         foreach ($keyes as $plans) {
@@ -286,7 +289,11 @@ class PlaneacionController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-
+                if (!in_array($namenA,   $datajob)) {
+                    array_push(  $datajob,$namenA);
+                    $ar=["part_number"=>$namenA,"date"=>$fechasql];
+                    array_push(  $datval, $ar);
+                }
                 if ($request->$plans != 0) {
 
                     $dfa = [
@@ -338,6 +345,10 @@ class PlaneacionController extends Controller
         $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
+
+
+        ProductionPlanByArrayMigrationJob::dispatch($datval);
+
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
@@ -371,7 +382,6 @@ class PlaneacionController extends Controller
         $data = explode('/', $keyes[1], 2);
         $dias = 8;
         $fecha = $data[0];
-
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datasql = [];
