@@ -15,6 +15,8 @@ class TypeSeeder extends Seeder
     {
         Type::create(['abbreviation' => 'F', 'name' => 'FinishedProd']);
         Type::create(['abbreviation' => 'G', 'name' => 'OutsideProd']);
+        Type::create(['abbreviation' => 'H', 'name' => 'Supply FYP']);
+        Type::create(['abbreviation' => 'I', 'name' => 'Parts FYP']);
         Type::create(['abbreviation' => 'M', 'name' => 'Manufactured']);
         Type::create(['abbreviation' => 'P', 'name' => 'Purchased']);
         Type::create(['abbreviation' => 'S', 'name' => 'Supply']);
