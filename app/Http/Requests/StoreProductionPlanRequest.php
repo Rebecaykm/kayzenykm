@@ -11,7 +11,7 @@ class StoreProductionPlanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreProductionPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'partNumber' => ['required'],
+            'planQuantity' => ['required'],
+            'date' => ['required'],
+            'shift' => ['required']
         ];
     }
 }

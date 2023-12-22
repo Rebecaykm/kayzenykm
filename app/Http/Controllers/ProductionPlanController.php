@@ -7,9 +7,12 @@ use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
 use App\Jobs\ProductionPlanMigrationJob;
 use App\Models\IPYF013;
+use App\Models\PartNumber;
 use App\Models\ProdcutionRecord;
+use App\Models\Shift;
 use App\Models\Status;
 use Carbon\Carbon;
+use Database\Seeders\ShiftSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,15 +47,15 @@ class ProductionPlanController extends Controller
         $status = Status::where('name', 'INACTIVO')->first();
 
         $productionPlans = ProductionPlan::select([
-                '*',
-                'production_plans.id as production_plan_id',
-                'part_numbers.id as part_number_id',
-                'item_classes.id as item_class_id',
-                'workcenters.id as workcenter_id',
-                'departaments.id as departament_id',
-                'shifts.id as shift_id',
-                'statuses.id as status_id'
-            ])
+            '*',
+            'production_plans.id as production_plan_id',
+            'part_numbers.id as part_number_id',
+            'item_classes.id as item_class_id',
+            'workcenters.id as workcenter_id',
+            'departaments.id as departament_id',
+            'shifts.id as shift_id',
+            'statuses.id as status_id'
+        ])
             ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
@@ -78,7 +81,25 @@ class ProductionPlanController extends Controller
      */
     public function create()
     {
-        //
+        $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+
+        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id'])
+            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->whereIn('item_classes.abbreviation', $arrayClass)
+            ->whereIn('departaments.code', $departamentCode)
+            ->orderBy('workcenters.number', 'asc')
+            ->orderBy('part_numbers.number', 'asc')
+            ->get();
+
+        $shifts = Shift::orderBy('abbreviation', 'asc')->get();
+
+        return view(
+            'production-plan.create',
+            ['parts' => $partNumbers, 'shifts' => $shifts]
+        );
     }
 
     /**
@@ -86,7 +107,17 @@ class ProductionPlanController extends Controller
      */
     public function store(StoreProductionPlanRequest $request)
     {
-        //
+        $productionPlan = ProductionPlan::create(
+            [
+                'part_number_id' => $request->partNumber,
+                'plan_quantity' => $request->planQuantity,
+                'date' => Carbon::parse($request->date)->format('Y-m-d'),
+                'shift_id' => $request->shift,
+                'status_id' => 1
+            ]
+        );
+
+        return redirect()->back();
     }
 
     /**
