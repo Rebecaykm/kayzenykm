@@ -10,9 +10,12 @@ use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Scrap;
 use App\Models\Shift;
+use App\Models\YF020;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ScrapRecordController extends Controller
@@ -81,20 +84,48 @@ class ScrapRecordController extends Controller
      */
     public function store(StoreScrapRecordRequest $request)
     {
-        $total = 0;
+        try {
+            DB::transaction(function () use ($request) {
+                $productionPlan = ProductionPlan::findOrFail($request->production_plan_id);
+                $scrap = Scrap::findOrFail($request->scrap_id);
 
-        ScrapRecord::create([
-            'production_plan_id' => $request->production_plan_id,
-            'part_number_id' => $request->part_number_id,
-            'scrap_id' => $request->scrap_id,
-            'user_id' => Auth::id(),
-            'quantity' => $request->quantity,
-        ]);
+                $total = 0;
 
-        $productionPlan = ProductionPlan::find($request->production_plan_id);
-        $total =  $productionPlan->production_quantity + $request->quantity;
-        $productionPlan->update(['production_quantity' => $total]);
+                ScrapRecord::create([
+                    'production_plan_id' => $request->production_plan_id,
+                    'part_number_id' => $request->part_number_id,
+                    'scrap_id' => $scrap->id,
+                    'user_id' => Auth::id(),
+                    'quantity' => $request->quantity,
+                ]);
 
+                YF020::query()->insert([
+                    'YSWRKC' => $productionPlan->partNumber->workcenter->number,
+                    'YSWRKN' => $productionPlan->partNumber->workcenter->name,
+                    'YSRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
+                    'YSSHFT' => $productionPlan->shift->abbreviation,
+                    'YSPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence'),
+                    'YSPROD' => $productionPlan->partNumber->number,
+                    'YSQSCR' => $request->quantity,
+                    'YSSCRE' => $scrap->code,
+                    'YSCRDT' => Carbon::now()->format('Ymd'),
+                    'YSCRTM' => Carbon::now()->format('His'),
+                    'YSCRUS' => Auth::user()->infor ?? '',
+                    //     'YSCRWS'=>,
+                    //     'YSFIL1'=>,
+                    //     'YSFIL2'=>,
+                ]);
+
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YSF020C";
+                // $result = odbc_exec($conn, $query);
+
+                $total = $productionPlan->production_quantity + $request->quantity;
+                $productionPlan->update(['production_quantity' => $total]);
+            });
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+        }
         return redirect()->back();
     }
 
@@ -105,12 +136,42 @@ class ScrapRecordController extends Controller
             'scrap_id' => ['required', 'numeric'],
         ]);
 
-        ScrapRecord::create([
-            'part_number_id' => $request->part_number_id,
-            'scrap_id' => $request->scrap_id,
-            'user_id' => Auth::id(),
-            'quantity' => $request->quantity,
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $partNumber = PartNumber::findOrFail($request->part_number_id);
+                $scrap = Scrap::findOrFail($request->scrap_id);
+
+                ScrapRecord::create([
+                    'part_number_id' => $partNumber->id,
+                    'scrap_id' => $scrap->id,
+                    'user_id' => Auth::id(),
+                    'quantity' => $request->quantity,
+                ]);
+
+                YF020::query()->insert([
+                    'YSWRKC' => $partNumber->workcenter->number,
+                    'YSWRKN' => $partNumber->workcenter->name,
+                    // 'YSRDTE',
+                    // 'YSSHFT',
+                    // 'YSPPNO',
+                    'YSPROD' => $partNumber->number,
+                    'YSQSCR' => $request->quantity,
+                    'YSSCRE' => $scrap->code,
+                    'YSCRDT' => Carbon::now()->format('Ymd'),
+                    'YSCRTM' => Carbon::now()->format('His'),
+                    'YSCRUS' => Auth::user()->infor ?? '',
+                    // 'YSCRWS'=>,
+                    // 'YSFIL1'=>,
+                    // 'YSFIL2'=>,
+                ]);
+
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YSF020C";
+                // $result = odbc_exec($conn, $query);
+            });
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+        }
 
         return redirect()->back();
     }

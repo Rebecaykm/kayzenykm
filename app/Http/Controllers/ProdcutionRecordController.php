@@ -6,13 +6,19 @@ use App\Exports\ProdcutionRecordExport;
 use App\Models\ProdcutionRecord;
 use App\Http\Requests\StoreProdcutionRecordRequest;
 use App\Http\Requests\UpdateProdcutionRecordRequest;
+use App\Models\IPYF013;
 use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Status;
+use App\Models\YHMIC;
+use App\Models\YT4;
 use Carbon\Carbon;
+
 use Dompdf\Dompdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -188,6 +194,41 @@ class ProdcutionRecordController extends Controller
         //
     }
 
+    function rawMaterial(Request $request)
+    {
+        $request->validate([
+            'pack' => ['required', 'min:12', 'max:15']
+        ]);
+
+        try {
+            $pack = strval($request->pack);
+
+            $order = YHMIC::query()->where('YIPCNO', $pack)->first();
+
+            if ($order !== null) {
+                YT4::query()->insert([
+                    'Y4SINO' => $order->YISINO,
+                    'Y4TINO' => $pack,
+                    'Y4TQTY' => $order->YIPQTY,
+                    'Y4PROD' => $order->YIPROD,
+                    'Y4ORDN' => $order->YIORDN,
+                    'Y4TORD' => $order->YITORD,
+                    'Y4DAT' => Carbon::now()->format('Ymd'),
+                    'Y4TIM' => Carbon::now()->format('His'),
+                    'Y4USR' => Auth::user()->infor ?? '',
+                ]);
+
+                return redirect()->back()->with('success', 'Registro exitoso.');
+            } else {
+                return redirect()->back()->with('error', 'Pack number inválido.');
+            }
+        } catch (QueryException $e) {
+            Log::error('Error en la consulta de la base de datos: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Pack number inválido.');
+        }
+    }
+
     public function reprint(ProdcutionRecord $prodcutionRecord)
     {
         $data = [
@@ -271,5 +312,61 @@ class ProdcutionRecordController extends Controller
             ->toArray();
 
         return Excel::download(new ProdcutionRecordExport($prodcutionRecords), 'ProductionReport_' . date("dmY") . '.xlsx');
+    }
+
+    function cancel(ProdcutionRecord $prodcutionRecord)
+    {
+        $statusProductionPlan = $prodcutionRecord->productionPlan->status->name;
+
+        $statusInactivo = Status::query()->where('name', 'INACTIVO')->value('name');
+        $statusEnProceso = Status::query()->where('name', 'EN PROCESO')->value('name');
+        $statusCancelado = Status::query()->where('name', 'CANCELADO')->first();
+
+        if ($statusCancelado->name !== $prodcutionRecord->productionPlan->status->name) {
+
+            if ($statusInactivo === $statusProductionPlan) {
+
+                $productionPlan = $prodcutionRecord->productionPlan;
+
+                $ipyf03 = IPYF013::query()->insert([
+                    'YFWRKC' => $productionPlan->partNumber->workcenter->number,
+                    'YFWRKN' => $productionPlan->partNumber->workcenter->name,
+                    'YFRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
+                    'YFSHFT' => $productionPlan->shift->abbreviation,
+                    'YFPPNO' => $prodcutionRecord->sequence,
+                    'YFPROD' => $productionPlan->partNumber->number,
+                    // 'YFSTIM' => $timeStart,
+                    // 'YFETIM' => $timeEnd,
+                    // 'YFSDT' => $dateStart . $timeStart,
+                    // 'YFEDT' => $dateEnd . $timeEnd,
+                    'YFQPLA' => $productionPlan->plan_quantity,
+                    'YFQPRO' => -$prodcutionRecord->quantity,
+                    // 'YFQSCR' => ,
+                    // 'YFSCRE' => ,
+                    'YFCRDT' => Carbon::now()->format('Ymd'),
+                    'YFCRTM' => Carbon::now()->format('His'),
+                    'YFCRUS' => Auth::user()->infor ?? '',
+                    // 'YFCRWS' => ,
+                    // 'YFFIL1' => ,
+                    // 'YFFIL2' => ,
+                ]);
+
+                $currentQuantity = $prodcutionRecord->productionPlan->production_quantity;
+                $newQuantity = $currentQuantity - $prodcutionRecord->quantity;
+
+                $prodcutionRecord->productionPlan->update(['production_quantity' => $newQuantity]);
+                $prodcutionRecord->update(['status_id' => $statusCancelado->id]);
+            } elseif ($statusEnProceso === $statusProductionPlan) {
+
+                $currentQuantity = $prodcutionRecord->productionPlan->production_quantity;
+                $newQuantity = $currentQuantity - $prodcutionRecord->quantity;
+
+                $prodcutionRecord->productionPlan->update(['production_quantity' => $newQuantity]);
+                $prodcutionRecord->update(['status_id' => $statusCancelado->id]);
+            } else {
+                // TODO
+            }
+        }
+        return redirect()->back();
     }
 }

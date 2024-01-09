@@ -26,9 +26,10 @@
     <script src="{{ asset('js/charts-bars.js') }}" defer></script>
 
     @livewireStyles
+
     <script>
-        import Turbolinks from 'turbolinks';
-        Turbolinks.start()
+        // import Turbolinks from 'turbolinks';
+        // Turbolinks.start()
     </script>
 
     <!-- Scripts -->

@@ -65,10 +65,10 @@
                             <!-- <th class="px-4 py-3">{{ __('ID') }}</th> -->
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
+                            <th class="px-4 py-3">{{ __('SNP') }}</th>
                             <th class="px-4 py-3">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
-                            <th class="px-4 py-3">{{ __('Tipo de Item') }}</th>
-                            <th class="px-4 py-3">{{ __('SNP') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Tipo de Item') }}</th> -->
                             <th class="px-4 py-3">{{ __('Cant Planeada') }}</th>
                             <th class="px-4 py-3">{{ __('Cant Produccida') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
@@ -82,10 +82,13 @@
                                 {{ $productionPlan->production_plan_id ?? '' }}
                             </td> -->
                             <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->workcenter->name ?? '' }}
+                                {{ $productionPlan->partNumber->workcenter->number ?? '' }} - {{ $productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->number ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs">
+                                {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->date ?? '' }}
@@ -93,12 +96,9 @@
                             <td class="px-4 py-3 text-xs text-center">
                                 {{ $productionPlan->shift->abbreviation ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-xs text-center">
+                            <!-- <td class="px-4 py-3 text-xs text-center">
                                 {{ $productionPlan->partNumber->itemClass->abbreviation ?? '' }}
-                            </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3 text-xs text-center">
                                 {{ $productionPlan->plan_quantity ?? '' }}
                             </td>
@@ -130,16 +130,19 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                                         </svg>
+                                        <span class="ml-1 text-xs">Registrar</span>
                                     </a>
                                     <a href="{{ route('scrap-record.create', ['item' => $productionPlan->part_number_id, 'production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
+                                        <span class="ml-1 text-xs">Scrap</span>
                                     </a>
                                     <a href="{{ route('production-plan.disable', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                                         </svg>
+                                        <span class="ml-1 text-xs">Finalizar</span>
                                     </a>
                                 </div>
                             </td>
