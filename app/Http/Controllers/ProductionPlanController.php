@@ -181,7 +181,7 @@ class ProductionPlanController extends Controller
                     'YFEDT' => $dateEnd . $timeEnd,
                     'YFQPLA' => $productionPlan->plan_quantity,
                     'YFQPRO' => $productionPlan->production_quantity,
-                    'YFQSCR' => $productionPlan->scrapRecords->sum('quantity'),
+                    // 'YFQSCR' => $productionPlan->scrapRecords->sum('quantity'),
                     // 'YFSCRE' => ,
                     'YFCRDT' => Carbon::now()->format('Ymd'),
                     'YFCRTM' => Carbon::now()->format('His'),
