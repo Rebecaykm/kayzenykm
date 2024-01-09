@@ -116,6 +116,10 @@ class ScrapRecordController extends Controller
                     //     'YSFIL2'=>,
                 ]);
 
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YSF020C";
+                // $result = odbc_exec($conn, $query);
+
                 $total = $productionPlan->production_quantity + $request->quantity;
                 $productionPlan->update(['production_quantity' => $total]);
             });
@@ -160,6 +164,10 @@ class ScrapRecordController extends Controller
                     // 'YSFIL1'=>,
                     // 'YSFIL2'=>,
                 ]);
+
+                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+                // $query = "CALL LX834OU.YSF020C";
+                // $result = odbc_exec($conn, $query);
             });
         } catch (\Exception $e) {
             Log::info($e->getMessage());
