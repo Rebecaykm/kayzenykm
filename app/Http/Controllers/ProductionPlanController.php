@@ -36,7 +36,7 @@ class ProductionPlanController extends Controller
     public function index(Request $request)
     {
 
-        $search = $request->search ?? '';
+        $search = strtoupper($request->search) ?? '';
 
         $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');

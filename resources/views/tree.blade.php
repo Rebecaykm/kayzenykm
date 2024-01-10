@@ -18,7 +18,7 @@
 
     <form action="{{ url('tree') }}" method="get">
         <label for="search">Buscar : </label>
-        <input type="text" id="search" name="search" placeholder="Ingrese el número de parte">
+        <input type="text" id="search" name="search" placeholder="Ingrese el número de parte" autocomplete="off">
         <button type="submit">Buscar</button>
     </form>
 
