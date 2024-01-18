@@ -195,6 +195,14 @@ class ProductionPlanController extends Controller
                 // $query = "CALL LX834OU.YSF013B";
                 // $result = odbc_exec($conn, $query);
 
+                // if ($result) {
+                //     Log::info("La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+                // } else {
+                //     Log::info("Error en la consulta: " . odbc_errormsg($conn));
+                // }
+
+                // odbc_close($conn);
+
                 $productionPlan->update(['status_id' => $status->id]);
             });
         } catch (\Exception $e) {

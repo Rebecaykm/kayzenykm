@@ -17,22 +17,11 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        $data = [
-            [
-                'part_number' => 'DGH97027Q                          ',
-                'date' => '20231113'
-            ],
-            [
-                'part_number' => 'DGH971T3S                          ',
-                'date' => '20231116'
-            ],
-            [
-                'part_number' => 'DGH954570                          ',
-                'date' => '20231116'
-            ],
-        ];
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YSF020C";
+        $result = odbc_exec($conn, $query);
 
-        ProductionPlanByArrayMigrationJob::dispatch($data);
+        dd($result);
     }
 
     /**

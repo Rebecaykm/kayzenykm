@@ -31,7 +31,7 @@
 
         td {
             border: 1px solid black;
-            padding: 5px;
+            padding: 4px;
             font-size: 12px;
             font-family: 'Roboto', sans-serif;
             max-width: 25%;
@@ -44,7 +44,7 @@
         }
 
         .medium-text {
-            font-size: 12px;
+            font-size: 10px;
             font-family: 'Roboto', sans-serif;
         }
 
@@ -141,13 +141,16 @@
                 <br>
                 Y-TEC KEYLEX MÉXICO
             </td>
-            <td class="no-border text-center" colspan="4" style="max-width: 100%; max-height: 100%;">
+            <td class="no-border text-center" colspan="4" style="max-width: 80%; max-height: 80%;">
                 <img src="data:image/png;base64, {!! base64_encode($qrCode) !!}" width="75" height="75">
             </td>
         </tr>
         <tr>
-            <td class="xl-text text-center bold no-border" colspan="4">
+            <td class="large-text text-center bold no-border" colspan="2">
                 {{ $a }}
+            </td>
+            <td class="small-text text-center bold no-border" colspan="2">
+                {{ date("Y-m-d H:i:s") }}
             </td>
         </tr>
     </table>
