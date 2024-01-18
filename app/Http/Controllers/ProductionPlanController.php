@@ -36,7 +36,7 @@ class ProductionPlanController extends Controller
     public function index(Request $request)
     {
 
-        $search = $request->search ?? '';
+        $search = strtoupper($request->search) ?? '';
 
         $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
@@ -194,6 +194,14 @@ class ProductionPlanController extends Controller
                 // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
                 // $query = "CALL LX834OU.YSF013B";
                 // $result = odbc_exec($conn, $query);
+
+                // if ($result) {
+                //     Log::info("La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+                // } else {
+                //     Log::info("Error en la consulta: " . odbc_errormsg($conn));
+                // }
+
+                // odbc_close($conn);
 
                 $productionPlan->update(['status_id' => $status->id]);
             });

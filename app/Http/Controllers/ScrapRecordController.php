@@ -120,6 +120,14 @@ class ScrapRecordController extends Controller
                 // $query = "CALL LX834OU.YSF020C";
                 // $result = odbc_exec($conn, $query);
 
+                // if ($result) {
+                //     Log::info("La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+                // } else {
+                //     Log::info("Error en la consulta: " . odbc_errormsg($conn));
+                // }
+
+                // odbc_close($conn);
+
                 $total = $productionPlan->production_quantity + $request->quantity;
                 $productionPlan->update(['production_quantity' => $total]);
             });

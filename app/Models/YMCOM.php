@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class YMCOM extends Model
 {
     use HasFactory;
-    protected $connection = 'odbc-connection-lx834fu02';
-    protected $table = 'LX834FU02.YMCOM';
+    protected $connection = 'odbc-connection-lx834fu01';
+    protected $table = 'LX834FU01.YMCOM';
 }

@@ -43,9 +43,10 @@ class UserController extends Controller
         // Log::info(now());
         AddWorkCenterPartNumberJob::dispatch();
         // Log::info(now());
-        PartHierarchyMigrationJob::dispatch();
+        // PartHierarchyMigrationJob::dispatch();
         // Log::info(now());
-
+        ProductionPlanMigrationJob::dispatch();
+        // Log::info(now());
 
         return redirect('production-plan');
     }
