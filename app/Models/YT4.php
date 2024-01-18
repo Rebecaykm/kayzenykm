@@ -9,8 +9,8 @@ class YT4 extends Model
 {
     use HasFactory;
 
-    protected $connection = 'odbc-connection-lx834fu02';
-    protected $table = 'LX834FU02.YT4';
+    protected $connection = 'odbc-connection-lx834fu01';
+    protected $table = 'LX834FU01.YT4';
 
     public $timestamps = false;
 
