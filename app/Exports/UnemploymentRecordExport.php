@@ -33,7 +33,7 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             $item['inicio'] = strtoupper($item['time_start']);
             $item['fin'] = strtoupper($item['time_end']);
             $item['minutos'] = strtoupper($item['minutes']);
-            $item['fecha'] = Carbon::parse($item['created_at'])->format('d/m/Y H:i:s');
+            $item['fecha'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
             unset($item['unemployment_type']);
             unset($item['unemployment_name']);
             unset($item['departament_name']);
@@ -56,7 +56,7 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             'NO ESTACIÓN',
             'NOMBRE DE ESTACIÓN',
             'HORA INICIO',
-            'HHORA FIN',
+            'HORA FIN',
             'MINUTOS',
             'FECHA DE REGISTRO'
         ];

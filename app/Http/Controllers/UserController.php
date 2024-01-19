@@ -29,23 +29,23 @@ class UserController extends Controller
      */
     function data()
     {
-        TransactionTypeMigrationJob::dispatch();
+        // TransactionTypeMigrationJob::dispatch();
         // Log::info(now());
-        ItemClassMigrationJob::dispatch();
+        // ItemClassMigrationJob::dispatch();
         // Log::info(now());
-        StandardPackageMigrationJob::dispatch();
+        // StandardPackageMigrationJob::dispatch();
         // Log::info(now());
-        PlannerMigrationJob::dispatch();
+        // PlannerMigrationJob::dispatch();
         // Log::info(now());
-        WorkcenterMigrationJob::dispatch();
+        // WorkcenterMigrationJob::dispatch();
         // Log::info(now());
-        PartNumberMigrationJob::dispatch();
+        // PartNumberMigrationJob::dispatch();
         // Log::info(now());
-        AddWorkCenterPartNumberJob::dispatch();
+        // AddWorkCenterPartNumberJob::dispatch();
         // Log::info(now());
-        // PartHierarchyMigrationJob::dispatch();
+        PartHierarchyMigrationJob::dispatch();
         // Log::info(now());
-        ProductionPlanMigrationJob::dispatch();
+        // ProductionPlanMigrationJob::dispatch();
         // Log::info(now());
 
         return redirect('production-plan');

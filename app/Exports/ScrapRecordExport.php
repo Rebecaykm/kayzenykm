@@ -32,7 +32,7 @@ class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize,
             $item['parte'] = strtoupper($item['number_part']);
             $item['departamento'] = strtoupper($item['departament_name']);
             $item['usuario'] = strtoupper($item['user_name']);
-            $item['fecha'] = Carbon::parse($item['created_at'])->format('d/m/Y H:i:s');
+            $item['fecha'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
             unset($item['type_scrap']);
             unset($item['scrap_code']);
             unset($item['scrap_name']);

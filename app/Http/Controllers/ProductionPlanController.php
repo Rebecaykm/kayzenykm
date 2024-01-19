@@ -90,7 +90,7 @@ class ProductionPlanController extends Controller
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
             ->whereIn('item_classes.abbreviation', $arrayClass)
             ->whereIn('departaments.code', $departamentCode)
-            ->orderBy('workcenters.number', 'asc')
+            // ->orderBy('workcenters.number', 'asc')
             ->orderBy('part_numbers.number', 'asc')
             ->get();
 
