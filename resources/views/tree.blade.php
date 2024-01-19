@@ -14,8 +14,10 @@
 
         <ul class="list-none">
             @foreach ($tree as $node)
-                @include('treeNode', ['node' => $node])
+                @include('treeNode', ['node' => $node, 'level' => 0])
+                <br>
                 <hr>
+                <br>
             @endforeach
         </ul>
     </div>
