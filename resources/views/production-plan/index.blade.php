@@ -70,7 +70,7 @@
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Tipo de Item') }}</th> -->
                             <th class="px-4 py-3">{{ __('Cant Planeada') }}</th>
-                            <th class="px-4 py-3">{{ __('Cant Produccida') }}</th>
+                            <th class="px-4 py-3">{{ __('Cant Producida') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>

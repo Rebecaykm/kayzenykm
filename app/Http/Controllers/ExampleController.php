@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProductionPlanByArrayMigrationJob;
-use App\Models\PartNumber;
-use Illuminate\Cache\RateLimiting\Limit;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ExampleController extends Controller
 {
@@ -17,11 +18,55 @@ class ExampleController extends Controller
      */
     public function index()
     {
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YSF020C";
-        $result = odbc_exec($conn, $query);
+        $dataArray = [];
 
-        dd($result);
+        $dataArray = [
+            [
+                'id' => 1,
+                'departament' => 'CHASIS',
+                'projects' => ['J59J', 'J59W'],
+                'class' => 'M1',
+                'workcenterNumber' => '139050',
+                'workcenterName' => 'LSR BAT-20',
+                'partNumber' => 'BDTS28B01',
+                'date' => '2023/10/19',
+                'shift' => 'D',
+                'container' => 'CARRO',
+                'quantity' => '30',
+                'sequence' => '001',
+                'a' => '*** ORIGINAL ***'
+            ],
+            [
+                'id' => 1,
+                'departament' => 'CHASIS',
+                'projects' => ['J59J', 'J59W'],
+                'class' => 'M1',
+                'workcenterNumber' => '139050',
+                'workcenterName' => 'LSR BAT-20',
+                'partNumber' => 'BDTS28B01',
+                'date' => '2023/10/19',
+                'shift' => 'D',
+                'container' => 'CARRO',
+                'quantity' => '30',
+                'sequence' => '001',
+                'a' => '*** ORIGINAL ***'
+            ]
+        ];
+
+        $dataArrayWithQr = [];
+
+        foreach ($dataArray as $key => $data) {
+            $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
+            $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
+            $data['qrCode'] = $qrCodeData;
+
+            $dataArrayWithQr[] = $data;
+        }
+
+        // $pdf = Pdf::loadView('label', ['dataArrayWithQr' => $dataArrayWithQr])->setOptions(['defaultFont' => 'sans-serif']);
+        // return $pdf->stream('resume.pdf');
+
+        return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
     }
 
     /**

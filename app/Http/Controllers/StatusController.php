@@ -58,7 +58,13 @@ class StatusController extends Controller
      */
     public function update(UpdateStatusRequest $request, Status $status)
     {
-        $status->fill($request->validated());
+        $validatedData = $request->validated();
+
+        if (isset($validatedData['name'])) {
+            $validatedData['name'] = strtoupper($validatedData['name']);
+        }
+
+        $status->fill($validatedData);
 
         if ($status->isDirty()) {
             $status->save();

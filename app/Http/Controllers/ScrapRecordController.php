@@ -104,7 +104,7 @@ class ScrapRecordController extends Controller
                     'YSWRKN' => $productionPlan->partNumber->workcenter->name,
                     'YSRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
                     'YSSHFT' => $productionPlan->shift->abbreviation,
-                    'YSPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence'),
+                    'YSPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence') ?? '',
                     'YSPROD' => $productionPlan->partNumber->number,
                     'YSQSCR' => $request->quantity,
                     'YSSCRE' => $scrap->code,
@@ -156,7 +156,7 @@ class ScrapRecordController extends Controller
                     'quantity' => $request->quantity,
                 ]);
 
-                YF020::query()->insert([
+                $yf020 =  YF020::query()->insert([
                     'YSWRKC' => $partNumber->workcenter->number,
                     'YSWRKN' => $partNumber->workcenter->name,
                     // 'YSRDTE',
@@ -172,6 +172,10 @@ class ScrapRecordController extends Controller
                     // 'YSFIL1'=>,
                     // 'YSFIL2'=>,
                 ]);
+
+                if ($yf020) {
+                    Log::info("Inserto" . $partNumber->number);
+                }
 
                 // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
                 // $query = "CALL LX834OU.YSF020C";
@@ -258,6 +262,6 @@ class ScrapRecordController extends Controller
             ->get()
             ->toArray();
 
-        return Excel::download(new ScrapRecordExport($scrapRecords), 'ScrapReport_' . date("dmY") . '.xlsx');
+        return Excel::download(new ScrapRecordExport($scrapRecords), 'ScrapReport_' . date("dmYHis") . '.xlsx');
     }
 }

@@ -24,9 +24,18 @@ class StoreProdcutionRecordRequest extends FormRequest
         return [
             // 'production_id' => ['required', 'numeric'],
             // 'part_number_id' => ['required', 'numeric'],
-            'quantity' => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric', 'min:1', 'max:1000'],
             'time_start' => ['required', 'date_format:H:i'],
-            'time_end' => ['required', 'date_format:H:i']
+            'time_end' => ['required', 'date_format:H:i', 'after:time_start']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'quantity.min' => 'La cantidad no puede ser negativo o cero.',
+            'quantity.max' => 'La cantidad no puede ser mayor a 1000.',
+            'time_end.after' => 'La Hora de Fin no puede ser menor a la Hora de Inicio',
         ];
     }
 }

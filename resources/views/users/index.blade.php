@@ -22,10 +22,15 @@
         </div>
         @endif
 
-        <div class="flex justify-end mb-4">
-            <a href="{{ route('users.create') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                Nuevo Usuario
-            </a>
+        <div class="flex justify-end mb-4 gap-4">
+            <div>
+                <a href="{{ route('users.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                    <span class="mr-4">Nuevo Usuario</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </a>
+            </div>
         </div>
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
@@ -33,7 +38,7 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Nombre</th>
-                            <th class="px-4 py-3">Correo</th>
+                            <th class="px-4 py-3">Correo Electrónico</th>
                             <th class="px-4 py-3">Usuario de Infor</th>
                             <th class="px-4 py-3">Fecha de Creación</th>
                             <th class="px-4 py-3">Fecha de Actualización</th>
@@ -105,7 +110,7 @@
             </div>
             <div <div class="grid px-4 py-3 text-xs rounded-md font-semibold tracking-wide text-gray-700 uppercase border-t dark:border-gray-700 bg-gray-100 grid-cols-9 dark:text-gray-500 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
-                    Show {{ $users->firstItem() }} - {{ $users->lastItem() }} of {{ $users->total() }}
+                    Mostrando {{ $users->firstItem() }} - {{ $users->lastItem() }} de {{ $users->total() }}
                 </span>
                 <!-- Pagination -->
                 <span class="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
