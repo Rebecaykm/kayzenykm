@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('dashboard');
 // })->name('dashboard');
 
-Route::get('bom', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
+Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
 Route::view('raw-material', 'raw-material')->name('raw-material.create');
 Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');

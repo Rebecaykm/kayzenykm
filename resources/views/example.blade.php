@@ -10,9 +10,9 @@
         // Esperar a que la ventana se cargue completamente antes de imprimir
         ventanaImpresion.onload = function() {
             ventanaImpresion.print();
-            ventanaImpresion.onafterprint = function() {
-                ventanaImpresion.close();
-            };
+            // ventanaImpresion.onafterprint = function() {
+            //     ventanaImpresion.close();
+            // };
         };
     }
 </script>

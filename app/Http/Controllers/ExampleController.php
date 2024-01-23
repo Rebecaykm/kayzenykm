@@ -19,7 +19,6 @@ class ExampleController extends Controller
     public function index()
     {
         $dataArray = [];
-        $htmlContent = '';
 
         $dataArray = [
             [

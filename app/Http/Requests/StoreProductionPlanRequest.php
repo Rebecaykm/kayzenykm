@@ -22,17 +22,24 @@ class StoreProductionPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'partNumber' => ['required'],
-            'planQuantity' => ['required', 'integer', 'min:1'],
-            'date' => ['required'],
-            'shift' => ['required']
+            'partNumber' => ['required', 'numeric'],
+            'planQuantity' => ['required', 'integer', 'min:1', 'max:1000'],
+            'date' => ['required', 'after_or_equal:today'],
+            'shift' => ['required', 'numeric']
         ];
     }
 
     public function messages()
     {
         return [
-            'planQuantity.min' => 'La cantidad del plan no puede ser negativo o cero',
+            'partNumber.numeric' => 'Debes selecionar un número de parte.',
+            'planQuantity.required' => 'Debes ingresar una cantidad validad.',
+            'planQuantity.min' => 'La cantidad no puede ser negativo o cero.',
+            'planQuantity.max' => 'La cantidad no puede ser mayor a 1000.',
+            'date.required' => 'Debes seleccionar una fecha.',
+            'date.after_or_equal' => 'La fecha tiene que ser igual o posterior al día de hoy.',
+            'shift.numeric' => 'Debes selecionar un turno.',
+
         ];
     }
 }

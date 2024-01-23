@@ -6,17 +6,16 @@
     <style>
         @media print {
             @page {
-                size: 6in 3in;
-                /* size: 4in 3in; */
-                margin: 2px;
+                size: 152mm 76mm;
+                margin: 8px;
+                padding: 8px;
             }
         }
 
-        @page {
-            /* size: 4in 3in; */
-            size: 6in 3in;
-            margin: 2px;
-        }
+        /* @page {
+            size: 120mm 160mm;
+            margin: 8px;
+        } */
 
         body {
             margin: 0;
@@ -69,14 +68,17 @@
         .bold {
             font-weight: bold;
         }
+        .page-break {
+            page-break-before: always;
+        }
     </style>
 </head>
 
 <body>
-    @foreach ($dataArrayWithQr as $data)
 
     <table>
-        <tr>
+        @foreach ($dataArrayWithQr as $data)
+        <tr class="page-break">
             <td colspan="1">
                 <span class="small-text bold">Departamento:</span>
                 <br>
@@ -154,9 +156,9 @@
                 {{ date("Y-m-d H:i:s") }}
             </td>
         </tr>
+        @endforeach
     </table>
 
-    @endforeach
 </body>
 
 </html>
