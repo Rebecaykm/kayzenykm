@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Livewire\OpenOrders;
-use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,16 +19,18 @@ use Maatwebsite\Excel\Row;
 //     return view('dashboard');
 // })->name('dashboard');
 
-Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
+Route::get('bom', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
 Route::view('raw-material', 'raw-material')->name('raw-material.create');
 Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+
     Route::get('/', function () {
         return view('dashboard');
     });
 
+    Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('forms', 'forms')->name('forms');
     Route::view('cards', 'cards')->name('cards');
     Route::view('charts', 'charts')->name('charts');
@@ -173,7 +172,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
-    Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+    // Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+    Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'index'])->name('examples');
+    Route::view('example', 'example')->name('example');
 
     /**
      * Routes Permissions

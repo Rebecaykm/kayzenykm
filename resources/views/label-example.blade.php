@@ -73,19 +73,20 @@
 </head>
 
 <body>
+    @foreach ($dataArrayWithQr as $data)
 
     <table>
         <tr>
             <td colspan="1">
                 <span class="small-text bold">Departamento:</span>
                 <br>
-                <span class="medium-text"> {{ $departament }}</span>
+                <span class="medium-text"> {{ $data['departament'] }}</span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Proyecto:</span>
                 <br>
                 <span class="medium-text">
-                    @foreach ($projects as $project)
+                    @foreach ($data['projects'] as $project)
                     {{ $project['model'] ?? '' }}
                     @endforeach
                 </span>
@@ -93,46 +94,46 @@
             <td colspan="1">
                 <span class="small-text bold">Clase:</span>
                 <br>
-                <span class="medium-text">{{ $class }}</span>
+                <span class="medium-text">{{ $data['class'] }}</span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Estación:</span>
                 <br>
-                <span class="medium-text">{{ $workcenterName }}</span>
+                <span class="medium-text">{{ $data['workcenterName'] }}</span>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 <span class="small-text bold">No. Parte</span>
                 <br>
-                <span class="medium-text">{{ $partNumber }} </span>
+                <span class="medium-text">{{ $data['partNumber'] }} </span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Fecha</span>
                 <br>
-                <span class="medium-text">{{ $date }} </span>
+                <span class="medium-text">{{ $data['date'] }} </span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Turno</span>
                 <br>
-                <span class="medium-text">{{ $shift }} </span>
+                <span class="medium-text">{{ $data['shift'] }} </span>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 <span class="small-text bold">Secuencia</span>
                 <br>
-                <span class="medium-text">{{ $sequence }} </span>
+                <span class="medium-text">{{ $data['sequence'] }} </span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Contenedor</span>
                 <br>
-                <span class="medium-text"> {{ $container }} </span>
+                <span class="medium-text"> {{ $data['container'] }} </span>
             </td>
             <td colspan="1">
                 <span class="small-text bold">Cantidad</span>
                 <br>
-                <span class="medium-text">{{ $quantity }} </span>
+                <span class="medium-text">{{ $data['quantity'] }} </span>
             </td>
         </tr>
         <tr>
@@ -142,18 +143,20 @@
                 Y-TEC KEYLEX MÉXICO
             </td>
             <td class="no-border text-center" colspan="4" style="max-width: 80%; max-height: 80%;">
-                <img src="data:image/png;base64, {!! base64_encode($qrCode) !!}" width="75" height="75">
+                <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="75" height="75">
             </td>
         </tr>
         <tr>
             <td class="large-text text-center bold no-border" colspan="2">
-                {{ $a }}
+                {{ $data['a'] }}
             </td>
             <td class="small-text text-center bold no-border" colspan="2">
                 {{ date("Y-m-d H:i:s") }}
             </td>
         </tr>
     </table>
+
+    @endforeach
 </body>
 
 </html>

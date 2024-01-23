@@ -23,9 +23,16 @@ class StoreProductionPlanRequest extends FormRequest
     {
         return [
             'partNumber' => ['required'],
-            'planQuantity' => ['required'],
+            'planQuantity' => ['required', 'integer', 'min:1'],
             'date' => ['required'],
             'shift' => ['required']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'planQuantity.min' => 'La cantidad del plan no puede ser negativo o cero',
         ];
     }
 }
