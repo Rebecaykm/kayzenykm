@@ -58,10 +58,10 @@ class AddWorkCenterPartNumberJob implements ShouldQueue
                         if ($wc !== null) {
                             $partNumer->update(['workcenter_id' => $wc->id]);
                         } else {
-                            // Log::info('WorkCenter no encontrado : ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
+                            Log::warning('AddWorkCenterPartNumberJob.- WorkCenter no encontrado : ' . $workcenter->RPROD . ', ' . $workcenter->RWRKC);
                         }
                     } else {
-                        Log::info('PartNumber no encontrado , ' . $workcenter->RPROD . ' , ' . $workcenter->RWRKC);
+                        Log::warning('AddWorkCenterPartNumberJob.- PartNumber no encontrado , ' . $workcenter->RPROD . ' , ' . $workcenter->RWRKC);
                     }
                 }
             });

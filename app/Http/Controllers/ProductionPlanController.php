@@ -206,7 +206,7 @@ class ProductionPlanController extends Controller
                 $productionPlan->update(['status_id' => $status->id]);
             });
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
+            Log::error('ProductionPlanController: ' . $e->getMessage());
         }
         return redirect()->back();
     }

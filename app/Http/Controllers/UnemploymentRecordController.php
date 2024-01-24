@@ -157,6 +157,19 @@ class UnemploymentRecordController extends Controller
      */
     public function download(Request $request)
     {
+        $validated = $request->validate(
+            [
+                'start' => ['required'],
+                'end' => ['required', 'after:start'],
+            ],
+            [
+                'start.required' => 'La fecha inicio es necesaria',
+                'end.required' => 'La fecha final es necesaria',
+                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
+
+            ]
+        );
+
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');

@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PartNumber;
+use App\Models\ProdcutionRecord;
+use App\Models\ProductionPlan;
+use App\Models\Status;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -16,57 +22,77 @@ class ExampleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $dataArray = [];
+        try {
+            //     DB::transaction(function () use ($request) {
+            $productionPlanId = $request->productionPlanId;
+            $partNumberId = $request->partNumberId;
+            $quantity = $request->quantity;
+            $timeStart = $request->timeStart;
+            $timeEnd = $request->timeEnd;
 
-        $dataArray = [
-            [
-                'id' => 1,
-                'departament' => 'CHASIS',
-                'projects' => ['J59J', 'J59W'],
-                'class' => 'M1',
-                'workcenterNumber' => '139050',
-                'workcenterName' => 'LSR BAT-20',
-                'partNumber' => 'BDTS28B01',
-                'date' => '2023/10/19',
-                'shift' => 'D',
-                'container' => 'CARRO',
-                'quantity' => '30',
-                'sequence' => '001',
-                'a' => '*** ORIGINAL ***'
-            ],
-            [
-                'id' => 1,
-                'departament' => 'CHASIS',
-                'projects' => ['J59J', 'J59W'],
-                'class' => 'M1',
-                'workcenterNumber' => '139050',
-                'workcenterName' => 'LSR BAT-20',
-                'partNumber' => 'BDTS28B01',
-                'date' => '2023/10/19',
-                'shift' => 'D',
-                'container' => 'CARRO',
-                'quantity' => '30',
-                'sequence' => '001',
-                'a' => '*** ORIGINAL ***'
-            ]
-        ];
+            $minutes = Carbon::parse($timeStart)->diffInMinutes(Carbon::parse($timeEnd));
 
-        $dataArrayWithQr = [];
+            $partNumber = PartNumber::findOrFail($partNumberId);
 
-        foreach ($dataArray as $key => $data) {
-            $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
-            $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
-            $data['qrCode'] = $qrCodeData;
+            for ($count = 1; $quantity > 0; $count++) {
+                $productionPlan = ProductionPlan::findOrFail($productionPlanId);
 
-            $dataArrayWithQr[] = $data;
+                $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
+                    Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
+                    Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
+
+                $currentQuantity = min($quantity, $partNumber->quantity);
+
+                $result = ProdcutionRecord::storeProductionRecord(
+                    $partNumberId,
+                    $currentQuantity,
+                    $timeStart,
+                    $timeEnd,
+                    $minutes,
+                    $productionPlanId,
+                    $currentQuantity,
+                    $prodcutionRecordStatus->id
+                );
+
+                $dataArray[] = [
+                    'id' => str_pad($result->id, 6, '0', STR_PAD_LEFT),
+                    'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
+                    'workcenterNumber' => trim($partNumber->workcenter->number),
+                    'workcenterName' => trim($partNumber->workcenter->name),
+                    'partNumber' => trim($partNumber->number),
+                    'quantity' => str_pad($currentQuantity, 6, '0', STR_PAD_LEFT),
+                    'sequence' => $result->sequence,
+                    'date' => $productionPlan->date,
+                    'shift' => $productionPlan->shift->abbreviation,
+                    'container' => trim($partNumber->standardPackage->name),
+                    'snp' => str_pad($partNumber->quantity, 6, '0', STR_PAD_LEFT),
+                    'production_plan_id' => str_pad($result->production_plan_id, 6, '0', STR_PAD_LEFT),
+                    'user_id' => str_pad($result->user_id, 6, '0', STR_PAD_LEFT),
+                    'projects' => $partNumber->projects,
+                    'class' => $partNumber->itemClass->abbreviation,
+                    'a' => "*** ORIGINAL ***"
+                ];
+
+                $quantity -= $partNumber->quantity;
+            }
+
+            $dataArrayWithQr = [];
+
+            foreach ($dataArray as $key => $data) {
+                $qrData = $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
+                $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
+                $data['qrCode'] = $qrCodeData;
+
+                $dataArrayWithQr[] = $data;
+            }
+
+            return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
+            //     });
+        } catch (\Exception $e) {
+            Log::emergency('ExampleController: ' . $e->getMessage());
         }
-
-        // $pdf = Pdf::loadView('label', ['dataArrayWithQr' => $dataArrayWithQr])->setOptions(['defaultFont' => 'sans-serif']);
-        // return $pdf->stream('resume.pdf');
-
-        return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
     }
 
     /**
