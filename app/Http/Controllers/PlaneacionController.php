@@ -342,7 +342,7 @@ class PlaneacionController extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
+        $query = "CALL LX834OU01.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
