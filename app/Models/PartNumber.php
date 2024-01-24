@@ -69,8 +69,8 @@ class PartNumber extends Model
     public function mainPartNumbers()
     {
         return $this->belongsToMany(PartNumber::class, 'part_hierarchies', 'sub_part_number_id', 'main_part_number_id')
-            ->withPivot('required_quantity')
-            ->withTimestamps();
+            ->withPivot('required_quantity');
+            // ->withTimestamps();
     }
 
     /**
@@ -79,7 +79,7 @@ class PartNumber extends Model
     public function subPartNumbers()
     {
         return $this->belongsToMany(PartNumber::class, 'part_hierarchies', 'main_part_number_id', 'sub_part_number_id')
-            ->withPivot('required_quantity')
-            ->withTimestamps();
+            ->withPivot('required_quantity');
+            // ->withTimestamps();
     }
 }

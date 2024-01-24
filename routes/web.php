@@ -234,6 +234,13 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
     Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
+ Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
+ /**
+     * Planeacion prensas
+     */
+    Route::resource('pressplaning', \App\Http\Controllers\PressPlanningController::class);
+    Route::post('period', [\App\Http\Controllers\PressPlanningController::class, 'period'])->name('PressPlanningController.period');
+
 
     /**
      * ver Estructura livewird

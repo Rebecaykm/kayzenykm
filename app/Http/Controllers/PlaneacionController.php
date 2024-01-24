@@ -3,32 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use App\Models\LWK;
-use App\Models\IPB;
 use App\Models\KMR;
 use App\Models\KFP;
 use App\Models\FRT;
 use App\Models\IIM;
-use App\Models\ZCC;
 use App\Models\LOGSUP;
-use App\Models\FMA;
+
 use App\Models\ECL;
-use App\Models\MBM;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
-use App\Models\MStructure;
 use Carbon\Carbon;
-use registros;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
 use App\Exports\PlansubExport;
 use App\Jobs\ProductionPlanByArrayMigrationJob;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Input;
+
 
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
@@ -342,7 +334,7 @@ class PlaneacionController extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
+        $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
@@ -456,7 +448,7 @@ class PlaneacionController extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
+        $query = "CALL LX834OU.YMP006C";
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);

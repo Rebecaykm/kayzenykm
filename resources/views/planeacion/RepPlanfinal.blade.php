@@ -83,7 +83,7 @@
                     <tr>
                         <td rowspan="3">
                             {{ $info['parte'] }}<br>
-                            {{ $info['Wrc'] }}
+
                         </td>
 
                         <td>
@@ -92,7 +92,7 @@
                         <td>
                             {{ $info['total'] }}
                         </td>
-                        @while ($contdias < $dias)
+                        @while ($contdias <= $dias)
                             @php
                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                     $valFD = '-';

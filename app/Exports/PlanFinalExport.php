@@ -14,8 +14,9 @@ use App\Models\FMA;
 use App\Models\ECL;
 use App\Models\MBM;
 use App\Models\FSO;
+use App\Models\YMCOM;
 use App\Models\YK006;
-use App\Models\MStructure;
+
 use Illuminate\Contracts\View\View;
 
 class PlanFinalExport implements FromView
@@ -28,7 +29,7 @@ class PlanFinalExport implements FromView
     {
         // $this->id = $id;
         $this->fecha = $fecha;
-        $this->dias = $dias;
+        $this->dias = $dias+1;
         $this->TP = $tp;
     }
     public function view(): View
@@ -88,50 +89,16 @@ class PlanFinalExport implements FromView
             ])
             ->get()->toarray();
 
-        $subcom = implode("' OR  Final='",   $cadfinal);
-        $res = MStructure::query()
-            ->select('Final', 'Componente', 'Activo', 'Clase')
-            ->whereraw("(Final='" . $subcom    . "')")
-            // ->where('Final', $prod)
-            ->where([
-                ['clase', '!=', '01'],
-                ['clase', '!=', 'F1'],
-                ['Activo', '1'],
-            ])
-            ->get()->toArray();
 
-        $finalres =    array_column($res, 'Final');
-        $subcompo = array_column($res, 'Componente');
-        $cadsubsPlan = implode("' OR  FPROD='",  $subcompo);
-
-
-        $cadsubssh = implode("' OR  SPROD='",  $subcompo);
-        $valSD = FSO::query()
-            ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
-            ->whereraw("(SPROD='" .  $cadsubssh  . "')")
-            ->where('SDDTE', '>=', $hoy)
-            ->where('SDDTE', '<', $totalF)
-            ->get()->toarray();
-
-        $cadsubswrk = implode("' OR  RPROD='", $subcompo);
-        $Qa = implode("' OR  IPROD='",  $subcompo);
-
-
-        $cond = IIM::query()
-            ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN')
-            ->whereraw("(IPROD='" . $Qa  . "')")
-            ->get()->toArray();
 
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->whereraw("(RPROD='" .  $finaleswrk  . "')")
             ->get()->toarray();
-
         $prowk = array_column($WCT, 'RPROD');
         $prowrok = array_column($WCT, 'RWRKC');
-        $prodcqa = array_column($cond, 'IPROD');
-        $pqa = array_column($cond, 'IMBOXQ');
-        $minba = array_column($cond, 'IMIN');
+        // $prodcqa = array_column($cond, 'IPROD');
+        // $minba = array_column($cond, 'IMIN');
 
         foreach ($cadfinal as $prod) {
             $Tshop = 0;
@@ -221,32 +188,5 @@ class PlanFinalExport implements FromView
         return view('planeacion.RepPlanfinal', [
             'general' => $general
         ]);
-    }
-
-    function cargarF1($prod)
-    {
-        $res = MStructure::query()
-            ->select('final')
-            ->where('componente', $prod)
-            ->distinct('final')
-            ->get()->toArray();
-        return $res;
-    }
-    function contcargarF1($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final', 'componente')
-            ->where('componente', $prod)
-            ->count();
-        return $res;
-    }
-    function contcargar($prod)
-    {
-        $res = MStructure::query()
-            ->select('Final')
-            ->where('Final', $prod)
-            ->where('clase', '!=', '01')
-            ->count();
-        return $res;
     }
 }
