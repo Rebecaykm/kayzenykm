@@ -35,6 +35,8 @@ class StoreProdcutionRecordRequest extends FormRequest
         return [
             'quantity.min' => 'La cantidad no puede ser negativo o cero.',
             'quantity.max' => 'La cantidad no puede ser mayor a 1000.',
+            'time_end.time_start' => 'La hora inicio es necesario',
+            'time_end.time_end' => 'La hora fin es necesario',
             'time_end.after' => 'La Hora de Fin no puede ser menor a la Hora de Inicio',
         ];
     }

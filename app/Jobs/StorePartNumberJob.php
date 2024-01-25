@@ -202,7 +202,7 @@ class StorePartNumberJob implements ShouldQueue
                 break;
 
             default:
-                // Log::info("Sin Proyecto No. Parte : " . $this->number . ", Proyecto : " . $this->project);
+                Log::notice("StorePartNumberJob.- Sin Proyecto No. Parte : " . $this->number . ", Proyecto : " . $this->project);
                 break;
         }
     }

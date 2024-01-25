@@ -41,7 +41,8 @@ class ProdcutionRecordController extends Controller
             'workcenters.id as workcenter_id',
             'departaments.id as departament_id',
             'shifts.id as shift_id',
-            'statuses.id as status_id'
+            'statuses.id as status_id',
+            'prodcution_records.created_at'
         ])
             ->join('part_numbers', 'prodcution_records.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
@@ -223,7 +224,7 @@ class ProdcutionRecordController extends Controller
                 return redirect()->back()->with('error', 'Pack number inválido.');
             }
         } catch (QueryException $e) {
-            Log::error('Error en la consulta de la base de datos: ' . $e->getMessage());
+            Log::critical('ProdcutionRecordController: Error en la consulta de la base de datos, ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'Pack number inválido.');
         }
@@ -276,6 +277,19 @@ class ProdcutionRecordController extends Controller
 
     public function download(Request $request)
     {
+        $validated = $request->validate(
+            [
+                'start' => ['required'],
+                'end' => ['required', 'after:start'],
+            ],
+            [
+                'start.required' => 'La fecha inicio es necesaria',
+                'end.required' => 'La fecha final es necesaria',
+                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
+
+            ]
+        );
+
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');

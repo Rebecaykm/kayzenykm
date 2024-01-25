@@ -25,7 +25,7 @@ class StoreScrapRecordRequest extends FormRequest
             'production_plan_id' => ['required', 'numeric'],
             'part_number_id' => ['required', 'numeric'],
             'scrap_id' => ['required', 'numeric'],
-            'quantity' => ['required', 'integer', 'min:1', 'max:1000']
+            'quantity' => ['required', 'integer', 'min:1', 'max:99']
         ];
     }
 
@@ -40,7 +40,7 @@ class StoreScrapRecordRequest extends FormRequest
             'scrap_id.required' => 'Debes selecionar un Tipo de Scrap',
             'quantity.required' => 'Debes ingresar una cantidad validad.',
             'quantity.min' => 'La cantidad no puede ser negativo o cero.',
-            'quantity.max' => 'La cantidad no puede ser mayor a 1000.',
+            'quantity.max' => 'La cantidad no puede ser mayor a 99.',
         ];
     }
 }

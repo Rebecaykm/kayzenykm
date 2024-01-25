@@ -46,7 +46,7 @@ class ProductionPlanByArrayMigrationJob implements ShouldQueue
                 ->whereBetween('production_plans.date', [$startDate, $endDate])
                 ->delete();
 
-            $prodcutionPlans = DB::connection('odbc-connection-lx834f02')
+            $prodcutionPlans = DB::connection('odbc-connection-lx834f01')
                 ->table('LX834F01.KFP')
                 ->select('LX834F01.KFP.FPROD', 'LX834F01.KFP.FRDTE', 'LX834F01.KFP.FTYPE', 'LX834F01.KFP.FQTY', 'LX834F01.KFP.FCLAS', 'LX834F01.KFP.FDATE', 'LX834F01.KFP.FWHSE', 'LX834F01.KFP.FPCNO', 'LX834F01.IIM.IMPLC')
                 ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.KFP.FPROD')

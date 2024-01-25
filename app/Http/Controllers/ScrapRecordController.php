@@ -132,17 +132,29 @@ class ScrapRecordController extends Controller
                 $productionPlan->update(['production_quantity' => $total]);
             });
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
+            Log::error('ScrapRecordController: ' . $e->getMessage());
         }
         return redirect()->back();
     }
 
     function storeScrap(Request $request)
     {
-        $validated = $request->validate([
-            'part_number_id' => ['required', 'numeric'],
-            'scrap_id' => ['required', 'numeric'],
-        ]);
+        $validated = $request->validate(
+            [
+                'part_number_id' => ['required', 'numeric'],
+                'scrap_id' => ['required', 'numeric'],
+                'quantity' => ['required', 'integer', 'min:1', 'max:99']
+            ],
+            [
+                'part_number_id.required' => 'Debes selecionar un número de parte.',
+                'part_number_id.numeric' => 'Debes selecionar un número de parte.',
+                'scrap_id.numeric' => 'Debes selecionar un Tipo de Scrap',
+                'scrap_id.required' => 'Debes selecionar un Tipo de Scrap',
+                'quantity.required' => 'Debes ingresar una cantidad validad.',
+                'quantity.min' => 'La cantidad no puede ser negativo o cero.',
+                'quantity.max' => 'La cantidad no puede ser mayor a 99.',
+            ]
+        );
 
         try {
             DB::transaction(function () use ($request) {
@@ -174,7 +186,7 @@ class ScrapRecordController extends Controller
                 ]);
 
                 if ($yf020) {
-                    Log::info("Inserto" . $partNumber->number);
+                    Log::notice("ScrapRecordController: Inserto " . $partNumber->number);
                 }
 
                 // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
@@ -182,7 +194,7 @@ class ScrapRecordController extends Controller
                 // $result = odbc_exec($conn, $query);
             });
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
+            Log::error('ScrapRecordController :' . $e->getMessage());
         }
 
         return redirect()->back();
@@ -233,6 +245,19 @@ class ScrapRecordController extends Controller
      */
     public function download(Request $request)
     {
+        $validated = $request->validate(
+            [
+                'start' => ['required'],
+                'end' => ['required', 'after:start'],
+            ],
+            [
+                'start.required' => 'La fecha inicio es necesaria',
+                'end.required' => 'La fecha final es necesaria',
+                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
+
+            ]
+        );
+
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');

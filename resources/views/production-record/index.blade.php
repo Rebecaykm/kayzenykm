@@ -35,7 +35,7 @@
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
                             <th class="px-4 py-3">{{ __('Sequencia') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
-                            <!-- <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th> -->
+                            <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -78,10 +78,10 @@
 
                             </td>
                             @endif
-                            <!--
+
                             <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->created_at }}
-                            </td> -->
+                            </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <!-- <a href="{{ route('measurement.edit', $prodcutionRecord->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
