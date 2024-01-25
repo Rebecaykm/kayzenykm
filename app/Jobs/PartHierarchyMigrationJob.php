@@ -19,15 +19,26 @@ class PartHierarchyMigrationJob implements ShouldQueue
      */
     public function __construct()
     {
-        $parts = YMCOM::query()->select('MCFPRO', 'MCCPRO', 'MCQREQ')->orderBy('MCCCTM', 'DESC')->get();
+        // $parts = YMCOM::query()->select('MCFPRO', 'MCCPRO', 'MCQREQ')->orderBy('MCCCTM', 'ASC')->get();
 
-        foreach ($parts as $part) {
-            StorePartHierarchyJob::dispatch(
-                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCFPRO),
-                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCCPRO),
-                $part->MCQREQ
-            );
-        }
+        // foreach ($parts as $part) {
+        //     StorePartHierarchyJob::dispatch(
+        //         preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCFPRO),
+        //         preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCCPRO),
+        //         $part->MCQREQ
+        //     );
+        // }
+
+        YMCOM::query()->select('MCFPRO', 'MCCPRO', 'MCQREQ')->orderBy('MCCCTM', 'ASC')
+            ->chunk(200, function ($parts) {
+                foreach ($parts as $part) {
+                    StorePartHierarchyJob::dispatch(
+                        preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCFPRO),
+                        preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $part->MCCPRO),
+                        $part->MCQREQ
+                    );
+                }
+            });
     }
 
     /**

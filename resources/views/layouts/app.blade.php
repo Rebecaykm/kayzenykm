@@ -26,13 +26,14 @@
     <script src="{{ asset('js/charts-bars.js') }}" defer></script>
 
     @livewireStyles
+
     <script>
         import Turbolinks from 'turbolinks';
         Turbolinks.start()
     </script>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.js" defer></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.js" defer></script> -->
 </head>
 
 <body>

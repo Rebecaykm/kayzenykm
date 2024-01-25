@@ -9,6 +9,7 @@ use App\Jobs\PartNumberMigrationJob;
 use App\Jobs\PlannerMigrationJob;
 use App\Jobs\ProductionPlanMigrationJob;
 use App\Jobs\StandardPackageMigrationJob;
+use App\Jobs\TransactionTypeMigrationJob;
 use App\Jobs\WorkcenterMigrationJob;
 use App\Models\Departament;
 use App\Models\Module;
@@ -28,20 +29,21 @@ class UserController extends Controller
      */
     function data()
     {
+        // TransactionTypeMigrationJob::dispatch();
         // Log::info(now());
-        ItemClassMigrationJob::dispatch();
+        // ItemClassMigrationJob::dispatch();
         // Log::info(now());
-        StandardPackageMigrationJob::dispatch();
+        // StandardPackageMigrationJob::dispatch();
         // Log::info(now());
-        PlannerMigrationJob::dispatch();
+        // PlannerMigrationJob::dispatch();
         // Log::info(now());
-        WorkcenterMigrationJob::dispatch();
+        // WorkcenterMigrationJob::dispatch();
         // Log::info(now());
-        PartNumberMigrationJob::dispatch();
+        // PartNumberMigrationJob::dispatch();
         // Log::info(now());
-        AddWorkCenterPartNumberJob::dispatch();
+        // AddWorkCenterPartNumberJob::dispatch();
         // Log::info(now());
-        // PartHierarchyMigrationJob::dispatchAfterResponse();
+        PartHierarchyMigrationJob::dispatch();
         // Log::info(now());
         // ProductionPlanMigrationJob::dispatch();
         // Log::info(now());

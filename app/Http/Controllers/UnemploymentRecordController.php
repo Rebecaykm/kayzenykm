@@ -157,6 +157,19 @@ class UnemploymentRecordController extends Controller
      */
     public function download(Request $request)
     {
+        $validated = $request->validate(
+            [
+                'start' => ['required'],
+                'end' => ['required', 'after:start'],
+            ],
+            [
+                'start.required' => 'La fecha inicio es necesaria',
+                'end.required' => 'La fecha final es necesaria',
+                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
+
+            ]
+        );
+
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
@@ -172,6 +185,7 @@ class UnemploymentRecordController extends Controller
                 'unemployment_records.time_start',
                 'unemployment_records.time_end',
                 'unemployment_records.minutes',
+                'unemployment_records.created_at'
             ])
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
@@ -183,8 +197,6 @@ class UnemploymentRecordController extends Controller
             ->get()
             ->toArray();
 
-            dd($unemploymentRecords);
-
-        return Excel::download(new UnemploymentRecordExport($unemploymentRecords), 'UnemploymentReport_' . date("dmY") . '.xlsx');
+        return Excel::download(new UnemploymentRecordExport($unemploymentRecords), 'UnemploymentReport_' . date("dmYHis") . '.xlsx');
     }
 }

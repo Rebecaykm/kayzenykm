@@ -22,16 +22,18 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     {
         return collect($this->data)->map(function ($item) {
             $item['area'] = strtoupper(trim($item['name_departament']));
-            $item['estacion'] = strtoupper(trim($item['number_workcenter'] . ' ' . $item['name_workcenter']));
+            $item['no_estacion'] = strtoupper(trim($item['number_workcenter']));
+            $item['estacion'] = strtoupper(trim($item['name_workcenter']));
             $item['no_parte'] = strtoupper(trim($item['number_part_number']));
             $item['secuencia'] = strtoupper(trim($item['sequence']));
             $item['cantidad'] = strtoupper(trim($item['quantity']));
-            $item['fecha'] = strtoupper(trim(Carbon::parse($item['date_production'])->format('d-m') . ' / ' . $item['abbreviation_shift']));
+            $item['fecha'] = strtoupper(trim(Carbon::parse($item['date_production'])->format('d-m-Y')));
+            $item['turno'] = strtoupper(trim($item['abbreviation_shift']));
             $item['inicio'] = strtoupper(trim($item['time_start']));
             $item['fin'] = strtoupper(trim($item['time_end']));
             // $item['CANT. MINUTOS'] = strtoupper($item['minutes']);
-            $item['registro'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
             $item['estado'] = strtoupper(trim($item['name_status']));
+            $item['registro'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
             unset($item['name_departament']);
             unset($item['number_workcenter']);
             unset($item['name_workcenter']);
@@ -53,16 +55,18 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     {
         return [
             'ÁREA',
+            'NO. ESTACIÓN',
             'ESTACIÓN',
             'NO. DE PARTE',
             'SECUENCIA',
             'CANTIDAD',
             'FECHA',
+            'TURNO',
             'HORA DE INICIO',
             'HORA DE FIN',
             // 'CANT. MINUTOS',
+            'ESTADO',
             'FECHA DE REGISTRO',
-            'ESTADO'
         ];
     }
 

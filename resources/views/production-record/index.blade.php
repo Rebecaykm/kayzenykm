@@ -19,7 +19,7 @@
         <div class="flex justify-end mb-4">
             <a href="{{ route('prodcution-record.report') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Reporte') }}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
             </a>
@@ -35,7 +35,7 @@
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
                             <th class="px-4 py-3">{{ __('Sequencia') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
-                            <!-- <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th> -->
+                            <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -67,15 +67,21 @@
                                     Excedente de Planeación
                                 </span>
                             </td>
+                            @elseif ($prodcutionRecord->status->name == 'CANCELADO')
+                            <td class="px-4 py-3 text-xs">
+                                <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                    Etiqueta Cancelada
+                                </span>
+                            </td>
                             @else
                             <td class="px-4 py-3 text-xs">
 
                             </td>
                             @endif
-<!-- 
+
                             <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->created_at }}
-                            </td> -->
+                            </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <!-- <a href="{{ route('measurement.edit', $prodcutionRecord->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -93,11 +99,36 @@
                                             </svg>
                                         </button>
                                     </form> -->
-                                    <a href="{{ route('prodcution-record.reprint', $prodcutionRecord->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    @if ($prodcutionRecord->status->name != 'CANCELADO')
+                                    <a href="{{ route('prodcution-record.reprint', $prodcutionRecord->prodcution_record_id) }}" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Reimprimir">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                         </svg>
+                                        {{ __('Imprimir') }}
                                     </a>
+                                    @else
+                                    <span class="flex items-center justify-between text-xs font-medium leading-tight text-gray-500 bg-gray-200 rounded-full dark:text-gray-400 dark:bg-gray-700 px-2 py-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                        </svg>
+                                        {{ __('Imprimir') }}
+                                    </span>
+                                    @endif
+                                    @if ($prodcutionRecord->status->name != 'CANCELADO')
+                                    <a href="{{ route('prodcution-record.cancel', $prodcutionRecord->prodcution_record_id) }}" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {{ __('Cancelar') }}
+                                    </a>
+                                    @else
+                                    <span class="flex items-center justify-between text-xs font-medium leading-tight text-gray-500 bg-gray-200 rounded-full dark:text-gray-400 dark:bg-gray-700 px-2 py-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {{ __('Cancelar') }}
+                                    </span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

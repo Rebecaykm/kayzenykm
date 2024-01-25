@@ -87,11 +87,12 @@ class PartNumberController extends Controller
         $tree = [];
 
         if ($search != '') {
-            $partNumbers = PartNumber::query()
+            $partNumbers = PartNumber::
             // whereHas('itemClass', function ($query) {
             //     $query->where('abbreviation', 'F1');
             // })
-                ->where('number', 'LIKE', '%' . $search . '%')
+            //     ->
+                where('number', 'LIKE', '%' . $search . '%')
                 ->get();
 
             foreach ($partNumbers as $partNumber) {

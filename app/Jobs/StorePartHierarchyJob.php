@@ -40,9 +40,9 @@ class StorePartHierarchyJob implements ShouldQueue
         if ($mainPart && $subPart) {
             $mainPart->subPartNumbers()->syncWithoutDetaching([$subPart->id => ['required_quantity' => $this->qty]]);
         } elseif (!$mainPart) {
-            Log::info("Número de parte no encontrado: " . $this->main);
+            Log::warning("StorePartHierarchyJob.- Número de parte no encontrado: " . $this->main);
         } else {
-            Log::info("Número de parte no encontrada: " . $this->sub);
+            Log::warning("StorePartHierarchyJob.- Número de parte no encontrada: " . $this->sub);
         }
     }
 }

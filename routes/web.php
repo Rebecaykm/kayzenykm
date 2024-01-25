@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Livewire\OpenOrders;
-use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +21,16 @@ use Maatwebsite\Excel\Row;
 
 Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
+Route::view('raw-material', 'raw-material')->name('raw-material.create');
+Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
+
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+
     Route::get('/', function () {
         return view('dashboard');
     });
+
+    Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('forms', 'forms')->name('forms');
     Route::view('cards', 'cards')->name('cards');
     Route::view('charts', 'charts')->name('charts');
@@ -35,7 +38,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    Route::view('production', 'production')->name('production');
     Route::view('label', 'label')->name('label');
 
     /**
@@ -149,6 +151,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
+
+    Route::get('prodcution-record/{prodcution_record}/cancel', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancel'])->name('prodcution-record.cancel');
+
     Route::get('prodcution-report', [\App\Http\Controllers\ProdcutionRecordController::class, 'report'])->name('prodcution-record.report');
     Route::post('prodcution-report/download', [\App\Http\Controllers\ProdcutionRecordController::class, 'download'])->name('prodcution-record.download');
 
@@ -162,7 +167,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
-    Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+    Route::resource('transaction-type', \App\Http\Controllers\TransactionTypeController::class);
+
+    /**
+     *
+     */
+    // Route::resource('examples', \App\Http\Controllers\ExampleController::class);
+    Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'index'])->name('examples');
+    Route::view('example', 'example')->name('example');
 
     /**
      * Routes Permissions
