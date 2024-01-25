@@ -206,14 +206,20 @@ class ProdcutionRecordController extends Controller
         ]);
 
         try {
-            $pack = strval($request->pack);
+            $pack = trim(strval($request->pack));
 
-            $order = YHMIC::query()->where('YIPCNO', $pack)->first();
-
+            if (strlen($pack) === 15) {
+                $order = YHMIC::query()->where('YIPCNO', 'LIKE', $pack)->first();
+            } else {
+                $order = YHMIC::query()->where('YIPCNO', 'LIKE', $pack . '%')->first();
+            }
             if ($order !== null) {
-                $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack)->first();
+                if (strlen($pack) === 15) {
+                    $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack)->first();
+                } else {
+                    $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack . '%')->first();
+                }
                 if ($yt4 === null) {
-                    dd($yt4);
                     YT4::query()->insert([
                         'Y4SINO' => $order->YISINO,
                         'Y4TINO' => $pack,
