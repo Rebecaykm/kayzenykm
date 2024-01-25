@@ -198,7 +198,11 @@ class ProdcutionRecordController extends Controller
     function rawMaterial(Request $request)
     {
         $request->validate([
-            'pack' => ['required', 'min:12', 'max:15']
+            'pack' => ['required', 'min:9', 'max:15']
+        ], [
+            'pack.required' => 'Se requiere ingresar el Pack Numer',
+            'pack.min' => 'Mínimo deben ser 9 dígitos',
+            'pack.max' => 'Máximo deben ser 15 dígitos'
         ]);
 
         try {
@@ -207,19 +211,24 @@ class ProdcutionRecordController extends Controller
             $order = YHMIC::query()->where('YIPCNO', $pack)->first();
 
             if ($order !== null) {
-                YT4::query()->insert([
-                    'Y4SINO' => $order->YISINO,
-                    'Y4TINO' => $pack,
-                    'Y4TQTY' => $order->YIPQTY,
-                    'Y4PROD' => $order->YIPROD,
-                    'Y4ORDN' => $order->YIORDN,
-                    'Y4TORD' => $order->YITORD,
-                    'Y4DAT' => Carbon::now()->format('Ymd'),
-                    'Y4TIM' => Carbon::now()->format('His'),
-                    'Y4USR' => Auth::user()->infor ?? '',
-                ]);
-
-                return redirect()->back()->with('success', 'Registro exitoso.');
+                $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack)->first();
+                if ($yt4 === null) {
+                    dd($yt4);
+                    YT4::query()->insert([
+                        'Y4SINO' => $order->YISINO,
+                        'Y4TINO' => $pack,
+                        'Y4TQTY' => $order->YIPQTY,
+                        'Y4PROD' => $order->YIPROD,
+                        'Y4ORDN' => $order->YIORDN,
+                        'Y4TORD' => $order->YITORD,
+                        'Y4DAT' => Carbon::now()->format('Ymd'),
+                        'Y4TIM' => Carbon::now()->format('His'),
+                        'Y4USR' => Auth::user()->infor ?? '',
+                    ]);
+                    return redirect()->back()->with('success', 'Registro exitoso.');
+                } else {
+                    return redirect()->back()->with('error', 'Pack number ya registrado.');
+                }
             } else {
                 return redirect()->back()->with('error', 'Pack number inválido.');
             }
