@@ -24,8 +24,8 @@ class StoreUnemploymentRecordRequest extends FormRequest
         return [
             'workcenter_id' => ['required', 'numeric'],
             'unemployment_id' => ['required', 'numeric'],
-            'time_start' => ['required', 'date_format:H:i'],
-            'time_end' => ['required', 'date_format:H:i', 'after:time_start']
+            'time_start' => ['required', 'date_format:Y-m-d\TH:i'],
+            'time_end' => ['required', 'date_format:Y-m-d\TH:i', 'after:time_start']
         ];
     }
 

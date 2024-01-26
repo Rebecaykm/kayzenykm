@@ -172,8 +172,8 @@ class UnemploymentRecordController extends Controller
 
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
-        $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
-        $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
+        $start = Carbon::parse($request->start)->format('Y-d-m H:i:s');
+        $end = Carbon::parse($request->end)->format('Y-d-m H:i:s');
 
         $unemploymentRecords = UnemploymentRecord::query()
             ->select([

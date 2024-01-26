@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fpo extends Model
 {
     use HasFactory;
+
     protected $connection = 'odbc-connection-lx834f01';
     protected $table = 'LX834F01.FPO';
 }
