@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProdcutionRecordRequest;
 use App\Models\IPYF013;
 use App\Models\PartNumber;
 use App\Models\ProductionPlan;
+use App\Models\RYT4;
 use App\Models\Status;
 use App\Models\YHMIC;
 use App\Models\YT4;
@@ -209,28 +210,34 @@ class ProdcutionRecordController extends Controller
             $pack = trim(strval($request->pack));
 
             if (strlen($pack) === 15) {
-                $order = YHMIC::query()->where('YIPCNO', 'LIKE', $pack)->first();
+                $yhmic = YHMIC::query()->where('YIPCNO', 'LIKE', $pack)->first();
             } else {
-                $order = YHMIC::query()->where('YIPCNO', 'LIKE', $pack . '%')->first();
+                $yhmic = YHMIC::query()->where('YIPCNO', 'LIKE', $pack . '%')->first();
             }
-            if ($order !== null) {
+
+            $ryt4 = RYT4::query()->where('R4TINO', $pack)->first();
+
+            if (isset($yhmic) && is_null($ryt4)) {
+
                 if (strlen($pack) === 15) {
                     $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack)->first();
                 } else {
                     $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack . '%')->first();
                 }
-                if ($yt4 === null) {
+
+                if (is_null($yt4)) {
                     YT4::query()->insert([
-                        'Y4SINO' => $order->YISINO,
+                        'Y4SINO' => $yhmic->YISINO,
                         'Y4TINO' => $pack,
-                        'Y4TQTY' => $order->YIPQTY,
-                        'Y4PROD' => $order->YIPROD,
-                        'Y4ORDN' => $order->YIORDN,
-                        'Y4TORD' => $order->YITORD,
+                        'Y4TQTY' => $yhmic->YIPQTY,
+                        'Y4PROD' => $yhmic->YIPROD,
+                        'Y4ORDN' => $yhmic->YIORDN,
+                        'Y4TORD' => $yhmic->YITORD,
                         'Y4DAT' => Carbon::now()->format('Ymd'),
                         'Y4TIM' => Carbon::now()->format('His'),
                         'Y4USR' => Auth::user()->infor ?? '',
                     ]);
+                    Log::notice("Raw Material: Registro con Éxito. Pack Number: " . $pack);
                     return redirect()->back()->with('success', 'Registro exitoso.');
                 } else {
                     return redirect()->back()->with('error', 'Pack number ya registrado.');
