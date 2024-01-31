@@ -1,12 +1,12 @@
-<x-app-layout title="Registro de Scrap">
+<x-app-layout title="{{ __('Registro de Scrap') }}">
     <div class="xl:container lg:container md:container sm:container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {{ __('Registro de Scrap')}}
+            {{ __('Registro de Scrap') }}
         </h2>
 
         @if ($errors->any())
         <div class="mb-4">
-            <div class="font-medium text-red-600">¡Oh no! Algo salió mal.</div>
+            <div class="font-medium text-red-600">{{ __('¡Oh no! Algo salió mal.') }}</div>
 
             <ul class="mt-3 text-sm text-red-600 list-disc list-inside">
                 @foreach ($errors->all() as $error)
@@ -60,7 +60,7 @@
                                 {{ $scrapRecord->quantity_scrap ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $scrapRecord->created_at ?? '' }}
+                                {{ $scrapRecord->created_at->format('d-m-Y H:i:s') ?? '' }}
                             </td>
                             <!-- <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">

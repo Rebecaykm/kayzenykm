@@ -122,7 +122,7 @@
                     <span class="text-gray-700 dark:text-gray-400">{{__('Hora de Inicio')}}</span>
                     <!-- focus-within sets the color for the icon when input is focused -->
                     <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                        <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" type="time" id="time_start_input" name="time_start" />
+                        <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" type="datetime-local" id="time_start_input" name="time_start" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -138,7 +138,7 @@
                     <span class="text-gray-700 dark:text-gray-400">{{__('Hora de Fin')}}</span>
                     <!-- focus-within sets the color for the icon when input is focused -->
                     <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                        <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" type="time" id="time_end_input" name="time_end" />
+                        <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" type="datetime-local" id="time_end_input" name="time_end" />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -149,6 +149,7 @@
                         <!-- Mensaje de error se mostrará aquí -->
                     </span>
                 </label>
+
             </div>
             <div class="flex justify-end mt-4 gap-4">
                 <a href="{{ route('production-plan.index') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray" type="submit">
@@ -198,7 +199,7 @@
 
             // Validación de cantidad
             var quantity = quantityInput.value;
-            if (!quantity || isNaN(quantity) || quantity <= 0 || quantity > 1000) {
+            if (!quantity || isNaN(quantity) || quantity <= 0 || quantity > 10000) {
                 // Mostrar mensaje de error y aplicar estilo al input y al span
                 quantityError.textContent = 'La cantidad debe ser un número mayor a cero y menor o igual a mil.';
                 quantityInput.classList.add('border-red-600');
@@ -212,30 +213,26 @@
 
             // Validación de hora de inicio
             var timeStart = timeStartInput.value;
-            if (!timeStart || !/^([01]\d|2[0-3]):([0-5]\d)$/.test(timeStart)) {
-                // Mostrar mensaje de error y aplicar estilo al input
-                timeStartError.textContent = 'La hora de inicio debe es requerida.'
+            if (!timeStart) {
+                timeStartError.textContent = 'La hora de inicio es requerida.';
                 timeStartInput.classList.add('border-red-600');
                 timeStartError.classList.remove('hidden');
-                return; // Salir de la función si la validación no pasa
+                return;
             } else {
-                // Remover el estilo de error si la validación pasa
                 timeStartInput.classList.remove('border-red-600');
-                timeStartError.classList.remove('hidden');
+                timeStartError.classList.add('hidden');
             }
 
             // Validación de hora de fin
             var timeEnd = timeEndInput.value;
-            if (!timeEnd || !/^([01]\d|2[0-3]):([0-5]\d)$/.test(timeEnd) || timeEnd <= timeStart) {
-                // Mostrar mensaje de error y aplicar estilo al input
-                timeEndError.textContent = 'La hora de fin es requerida y debe ser mayor a la hora de inicio.'
+            if (!timeEnd || timeEnd <= timeStart) {
+                timeEndError.textContent = 'La hora de fin es requerida y debe ser mayor a la hora de inicio.';
                 timeEndInput.classList.add('border-red-600');
                 timeEndError.classList.remove('hidden');
-                return; // Salir de la función si la validación no pasa
+                return;
             } else {
-                // Remover el estilo de error si la validación pasa
                 timeEndInput.classList.remove('border-red-600');
-                timeEndError.classList.remove('hidden');
+                timeEndError.classList.add('hidden');
             }
 
 

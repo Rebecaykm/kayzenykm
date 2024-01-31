@@ -32,13 +32,13 @@ class StoreUnemploymentRecordRequest extends FormRequest
     public function messages()
     {
         return [
-            'workcenter_id.required' => 'Debes seleccionar una estación de trabajo.',
-            'workcenter_id.numeric' => 'Debes seleccionar una estación de trabajo.',
-            'unemployment_id.required' => 'Debes seleccionar un paro.',
-            'unemployment_id.numeric' => 'Debes selecionar un número de parte.',
-            'time_start.required' => 'La hora inicio es necesaria',
-            'time_end.required' => 'La hora fin es necesaria',
-            'time_end.after' => 'La Hora Fin no puede ser menor a la Hora Inicio',
+            'workcenter_id.required' => 'Selecciona una estación de trabajo.',
+            'workcenter_id.numeric' => 'La estación de trabajo debe ser un número.',
+            'unemployment_id.required' => 'Selecciona un motivo de paro.',
+            'unemployment_id.numeric' => 'El motivo de paro debe ser un número.',
+            'time_start.required' => 'La hora de inicio es obligatoria.',
+            'time_end.required' => 'La hora de finalización es obligatoria.',
+            'time_end.after' => 'La hora de finalización debe ser posterior a la hora de inicio.',
         ];
     }
 }

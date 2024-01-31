@@ -32,15 +32,16 @@ class StoreScrapRecordRequest extends FormRequest
     public function messages()
     {
         return [
-            'production_plan_id.required' => 'Debes tener un plan.',
-            'production_plan_id.numeric' => 'Debes tener un plan.',
-            'part_number_id.required' => 'Debes selecionar un número de parte.',
-            'part_number_id.numeric' => 'Debes selecionar un número de parte.',
-            'scrap_id.numeric' => 'Debes selecionar un Tipo de Scrap',
-            'scrap_id.required' => 'Debes selecionar un Tipo de Scrap',
-            'quantity.required' => 'Debes ingresar una cantidad validad.',
-            'quantity.min' => 'La cantidad no puede ser negativo o cero.',
+            'production_plan_id.required' => 'Selecciona un plan de producción.',
+            'production_plan_id.numeric' => 'El plan de producción debe ser un número válido.',
+            'part_number_id.required' => 'Selecciona un número de parte.',
+            'part_number_id.numeric' => 'El número de parte debe ser un número válido.',
+            'scrap_id.required' => 'Selecciona un tipo de scrap.',
+            'scrap_id.numeric' => 'El tipo de scrap debe ser un número válido.',
+            'quantity.required' => 'Ingresa una cantidad válida.',
+            'quantity.min' => 'La cantidad debe ser mayor que cero.',
             'quantity.max' => 'La cantidad no puede ser mayor a 99.',
+
         ];
     }
 }
