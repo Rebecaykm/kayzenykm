@@ -116,7 +116,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
     Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
-    Route::get('production-plan-disable', [\App\Http\Controllers\ProductionPlanController::class, 'disable'])->name('production-plan.disable');
+    Route::get('production-plan-finish', [\App\Http\Controllers\ProductionPlanController::class, 'finish'])->name('production-plan.finish');
 
     /**
      *
