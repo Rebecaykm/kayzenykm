@@ -33,7 +33,7 @@
 
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <label class="block text-sm">
-                    <span class="text-gray-700 dark:text-gray-400"> {{__('Número de Parte')}} </span>
+                    <span class="text-gray-700 dark:text-gray-400"> {{ __('Número de Parte') }} </span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $partNumber->number }}" disabled />
                 </label>
                 <input type="hidden" name="production_plan_id" value="{{ $productionPlan->id }}">
@@ -51,7 +51,7 @@
                 </label>
 
                 <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">Cantidad de Scrap</span>
+                    <span class="text-gray-700 dark:text-gray-400">{{ __('Cantidad de Scrap') }} ({{ __('Piezas') }})</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="number" name="quantity" />
                 </label>
 

@@ -91,8 +91,8 @@ class UnemploymentRecordController extends Controller
                 'user_id' => Auth::id(),
                 'workcenter_id' => $request->workcenter_id,
                 'unemployment_id' => $request->unemployment_id,
-                'time_start' => $start,
-                'time_end' => $end,
+                'time_start' => $start->format('Ymd H:i:s.v'),
+                'time_end' => $end->format('Ymd H:i:s.v'),
                 'minutes' => $minutes,
             ]);
 
@@ -115,8 +115,8 @@ class UnemploymentRecordController extends Controller
                 'user_id' => Auth::id(),
                 'workcenter_id' => $request->workcenter_id,
                 'unemployment_id' => $request->unemployment_id,
-                'time_start' => $start,
-                'time_end' => $end,
+                'time_start' => $start->format('Ymd H:i:s.v'),
+                'time_end' => $end->format('Ymd H:i:s.v'),
                 'minutes' => $minutes,
             ]);
 
