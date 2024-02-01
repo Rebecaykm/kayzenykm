@@ -28,11 +28,11 @@ class ExampleController extends Controller
             //     DB::transaction(function () use ($request) {
             $productionPlanId = $request->productionPlanId;
             $partNumberId = $request->partNumberId;
-            $quantity = $request->quantity;
-            $timeStart = $request->timeStart;
-            $timeEnd = $request->timeEnd;
+            $quantity = floor($request->quantity);
+            $timeStart = Carbon::parse($request->timeStart);
+            $timeEnd = Carbon::parse( $request->timeEnd);
 
-            $minutes = Carbon::parse($timeStart)->diffInMinutes(Carbon::parse($timeEnd));
+            $minutes = $timeEnd->diffInMinutes($timeStart);
 
             $partNumber = PartNumber::findOrFail($partNumberId);
 
@@ -48,8 +48,8 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $timeStart,
-                    $timeEnd,
+                    $timeStart->format('Ymd H:i:s.v'),
+                    $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlanId,
                     $currentQuantity,
