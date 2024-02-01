@@ -107,18 +107,24 @@ class ProductionPlanController extends Controller
      */
     public function store(StoreProductionPlanRequest $request)
     {
-        $productionPlan = ProductionPlan::create(
-            [
-                'part_number_id' => $request->partNumber,
-                'plan_quantity' => $request->planQuantity,
-                'date' => Carbon::parse($request->date)->format('Y-m-d'),
-                'shift_id' => $request->shift,
-                'status_id' => 1
-            ]
-        );
+        try {
+            $productionPlan = ProductionPlan::create(
+                [
+                    'part_number_id' => $request->partNumber,
+                    'plan_quantity' => $request->planQuantity,
+                    'date' => Carbon::parse($request->date)->format('Y-m-d'),
+                    'shift_id' => $request->shift,
+                    'status_id' => 1
+                ]
+            );
+            return redirect()->back()->with('success', '¡Registro exitoso! Se registró correctamente en el No. Parte ' . $productionPlan->partNumber->number);
+        } catch (\Exception $e) {
+            Log::error('ProductionPlanController - Error en el registro del plan de producción: ' . $e->getMessage());
 
-        return redirect()->back();
+            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el registro del plan de producción. Por favor, revisa los detalles en los registros.');
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -151,7 +157,7 @@ class ProductionPlanController extends Controller
     {
     }
 
-    public function disable(Request $request)
+    public function finish(Request $request)
     {
         try {
             DB::transaction(function ()  use ($request) {
@@ -205,9 +211,11 @@ class ProductionPlanController extends Controller
 
                 $productionPlan->update(['status_id' => $status->id]);
             });
+            return redirect()->back()->with('success', 'Finalización de producción exitosa.');
         } catch (\Exception $e) {
             Log::error('ProductionPlanController: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
         }
-        return redirect()->back();
     }
 }

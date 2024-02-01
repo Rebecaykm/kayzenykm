@@ -131,10 +131,13 @@ class ScrapRecordController extends Controller
                 $total = $productionPlan->production_quantity + $request->quantity;
                 $productionPlan->update(['production_quantity' => $total]);
             });
+
+            return redirect()->back()->with('success', '¡Registro de scrap exitoso!');
         } catch (\Exception $e) {
             Log::error('ScrapRecordController: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', '¡Error! Fallo en el registro de scrap.');
         }
-        return redirect()->back();
     }
 
     function storeScrap(Request $request)
@@ -146,13 +149,14 @@ class ScrapRecordController extends Controller
                 'quantity' => ['required', 'integer', 'min:1', 'max:99']
             ],
             [
-                'part_number_id.required' => 'Debes selecionar un número de parte.',
-                'part_number_id.numeric' => 'Debes selecionar un número de parte.',
-                'scrap_id.numeric' => 'Debes selecionar un Tipo de Scrap',
-                'scrap_id.required' => 'Debes selecionar un Tipo de Scrap',
-                'quantity.required' => 'Debes ingresar una cantidad validad.',
-                'quantity.min' => 'La cantidad no puede ser negativo o cero.',
+                'part_number_id.required' => 'Debes seleccionar un número de parte.',
+                'part_number_id.numeric' => 'Debes seleccionar un número de parte.',
+                'scrap_id.numeric' => 'Debes seleccionar un Tipo de Scrap.',
+                'scrap_id.required' => 'Debes seleccionar un Tipo de Scrap.',
+                'quantity.required' => 'Debes ingresar una cantidad válida.',
+                'quantity.min' => 'La cantidad no puede ser negativa o cero.',
                 'quantity.max' => 'La cantidad no puede ser mayor a 99.',
+
             ]
         );
 
@@ -193,11 +197,13 @@ class ScrapRecordController extends Controller
                 // $query = "CALL LX834OU.YSF020C";
                 // $result = odbc_exec($conn, $query);
             });
+
+            return redirect()->back()->with('success', '¡Registro de scrap exitoso!');
         } catch (\Exception $e) {
             Log::error('ScrapRecordController :' . $e->getMessage());
-        }
 
-        return redirect()->back();
+            return redirect()->back()->with('error', '¡Error! Fallo en el registro de scrap.');
+        }
     }
 
     /**

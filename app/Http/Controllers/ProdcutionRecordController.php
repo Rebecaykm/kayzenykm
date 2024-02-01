@@ -305,9 +305,9 @@ class ProdcutionRecordController extends Controller
                 'end' => ['required', 'after:start'],
             ],
             [
-                'start.required' => 'La fecha inicio es necesaria',
-                'end.required' => 'La fecha final es necesaria',
-                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
+                'start.required' => 'La fecha de inicio es necesaria.',
+                'end.required' => 'La fecha final es necesaria.',
+                'end.after' => 'La fecha final debe ser posterior a la fecha de inicio.',
 
             ]
         );

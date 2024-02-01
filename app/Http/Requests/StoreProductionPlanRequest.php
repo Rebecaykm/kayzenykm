@@ -32,14 +32,13 @@ class StoreProductionPlanRequest extends FormRequest
     public function messages()
     {
         return [
-            'partNumber.numeric' => 'Debes selecionar un número de parte.',
-            'planQuantity.required' => 'Debes ingresar una cantidad validad.',
-            'planQuantity.min' => 'La cantidad no puede ser negativo o cero.',
+            'partNumber.numeric' => 'Selecciona un número de parte válido.',
+            'planQuantity.required' => 'Ingresa una cantidad válida.',
+            'planQuantity.min' => 'La cantidad debe ser mayor que cero.',
             'planQuantity.max' => 'La cantidad no puede ser mayor a 1000.',
-            'date.required' => 'Debes seleccionar una fecha.',
-            'date.after_or_equal' => 'La fecha tiene que ser igual o posterior al día de hoy.',
-            'shift.numeric' => 'Debes selecionar un turno.',
-
+            'date.required' => 'Selecciona una fecha.',
+            'date.after_or_equal' => 'La fecha debe ser igual o posterior al día de hoy.',
+            'shift.numeric' => 'Selecciona un turno válido.',
         ];
     }
 }

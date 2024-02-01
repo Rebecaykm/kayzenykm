@@ -11,6 +11,7 @@ use App\Models\Workcenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UnemploymentRecordController extends Controller
@@ -81,38 +82,50 @@ class UnemploymentRecordController extends Controller
      */
     public function store(StoreUnemploymentRecordRequest $request)
     {
-        $start = new Carbon($request->time_start);
-        $end = new Carbon($request->time_end);
-        $minutes = $end->diffInMinutes($start);
+        try {
+            $start = Carbon::parse($request->time_start);
+            $end = Carbon::parse($request->time_end);
+            $minutes = $end->diffInMinutes($start);
 
-        UnemploymentRecord::create([
-            'user_id' => Auth::id(),
-            'workcenter_id' => $request->workcenter_id,
-            'unemployment_id' => $request->unemployment_id,
-            'time_start' => $start,
-            'time_end' => $end,
-            'minutes' => $minutes,
-        ]);
+            $unemploymentRecord = UnemploymentRecord::create([
+                'user_id' => Auth::id(),
+                'workcenter_id' => $request->workcenter_id,
+                'unemployment_id' => $request->unemployment_id,
+                'time_start' => $start,
+                'time_end' => $end,
+                'minutes' => $minutes,
+            ]);
 
-        return redirect()->back();
+            return redirect()->back()->with('success', 'Registro de paro exitoso en la estacion: ' . $unemploymentRecord->workcenter->number . " - " .  $unemploymentRecord->workcenter->name);
+        } catch (\Exception $e) {
+            Log::error('UnemploymentRecordController.- Error en el registro: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el registro del paro. Por favor, revisa los detalles en los registros.');
+        }
     }
 
     function save(StoreUnemploymentRecordRequest $request)
     {
-        $start = new Carbon($request->time_start);
-        $end = new Carbon($request->time_end);
-        $minutes = $end->diffInMinutes($start);
+        try {
+            $start = Carbon::parse($request->time_start);
+            $end = Carbon::parse($request->time_end);
+            $minutes = $end->diffInMinutes($start);
 
-        UnemploymentRecord::create([
-            'user_id' => Auth::id(),
-            'workcenter_id' => $request->workcenter_id,
-            'unemployment_id' => $request->unemployment_id,
-            'time_start' => $start,
-            'time_end' => $end,
-            'minutes' => $minutes,
-        ]);
+            $unemploymentRecord = UnemploymentRecord::create([
+                'user_id' => Auth::id(),
+                'workcenter_id' => $request->workcenter_id,
+                'unemployment_id' => $request->unemployment_id,
+                'time_start' => $start,
+                'time_end' => $end,
+                'minutes' => $minutes,
+            ]);
 
-        return redirect()->back();
+            return redirect()->back()->with('success', 'Registro de paro exitoso en la estacion: ' . $unemploymentRecord->workcenter->number . " - " .  $unemploymentRecord->workcenter->name);
+        } catch (\Exception $e) {
+            Log::error('UnemploymentRecordController.- Error en el registro: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el registro del paro. Por favor, revisa los detalles en los registros.');
+        }
     }
 
     /**
@@ -163,10 +176,9 @@ class UnemploymentRecordController extends Controller
                 'end' => ['required', 'after:start'],
             ],
             [
-                'start.required' => 'La fecha inicio es necesaria',
-                'end.required' => 'La fecha final es necesaria',
-                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
-
+                'start.required' => 'La fecha de inicio es obligatoria.',
+                'end.required' => 'La fecha de finalización es obligatoria.',
+                'end.after' => 'La fecha de finalización debe ser posterior a la fecha de inicio.',
             ]
         );
 
