@@ -314,8 +314,8 @@ class ProdcutionRecordController extends Controller
 
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
-        $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
-        $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
+        $start = Carbon::parse($request->start)->format('Ymd H:i:s.v');
+        $end = Carbon::parse($request->end)->format('Ymd H:i:s.v');
 
         $prodcutionRecords = ProdcutionRecord::query()
             ->select(
