@@ -14,7 +14,7 @@ class ProductionPlan extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id'
+        'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id', 'scrap_quantity'
     ];
 
     public function partNumber(): BelongsTo

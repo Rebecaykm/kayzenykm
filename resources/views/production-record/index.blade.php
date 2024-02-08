@@ -49,7 +49,7 @@
                                 {{ $prodcutionRecord->productionPlan->partNumber->number }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $prodcutionRecord->quantity }}
+                                {{ $prodcutionRecord->quantity_produced }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->sequence }}
@@ -83,12 +83,12 @@
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     @if ($prodcutionRecord->status->name != 'CANCELADO')
-                                    <a href="{{ route('prodcution-record.reprint', $prodcutionRecord->prodcution_record_id) }}" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Reimprimir') }}">
+                                    <button onclick="imprimir('{{ $prodcutionRecord->prodcution_record_id }}')" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Reimprimir') }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                         </svg>
                                         {{ __('Imprimir') }}
-                                    </a>
+                                    </button>
                                     @else
                                     <span class="flex items-center justify-between text-xs font-medium leading-tight text-gray-500 bg-gray-200 rounded-full dark:text-gray-400 dark:bg-gray-700 px-2 py-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -139,4 +139,15 @@
             @endif
         </div>
     </div>
+    <script>
+        function imprimir(prodcutionRecordId) {
+
+            var ventanaImpresion = window.open('{{ url("prodcution-record") }}/' + prodcutionRecordId + '/reprint');
+
+            ventanaImpresion.onload = function() {
+                ventanaImpresion.print();
+                window.location.reload();
+            };
+        }
+    </script>
 </x-app-layout>
