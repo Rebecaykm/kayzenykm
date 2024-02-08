@@ -33,7 +33,7 @@
             padding: 4px;
             font-size: 12px;
             font-family: 'Roboto', sans-serif;
-            max-width: 25%;
+            /* max-width: 25%; */
             word-wrap: break-word;
         }
 
@@ -80,63 +80,63 @@
     <table>
         @foreach ($dataArrayWithQr as $data)
         <tr class="page-break">
-            <td colspan="1">
+            <td colspan="2">
                 <span class="small-text bold">{{ __('Departamento') }}:</span>
                 <br>
-                <span class="medium-text"> {{ $data['departament'] }}</span>
+                <span class="xl-text"> {{ $data['departament'] }}</span>
             </td>
-            <td colspan="1">
+            <td>
+                <span class="small-text bold">{{ __('Estación') }}:</span>
+                <br>
+                <span class="xl-text">{{ $data['workcenterName'] }}</span>
+            </td>
+            <td>
                 <span class="small-text bold">{{ __('Proyecto') }}:</span>
                 <br>
-                <span class="medium-text">
+                <span class="xl-text">
                     @foreach ($data['projects'] as $project)
                     {{ $project['model'] ?? '' }}
                     @endforeach
                 </span>
-            </td>
-            <td colspan="1">
-                <span class="small-text bold">{{ __('Clase') }}:</span>
-                <br>
-                <span class="medium-text">{{ $data['class'] }}</span>
-            </td>
-            <td colspan="1">
-                <span class="small-text bold">{{ __('Estación') }}:</span>
-                <br>
-                <span class="medium-text">{{ $data['workcenterName'] }}</span>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 <span class="small-text bold">{{ __('No. Parte') }}</span>
                 <br>
-                <span class="medium-text">{{ $data['partNumber'] }} </span>
+                <span class="xl-text">{{ $data['partNumber'] }} </span>
             </td>
-            <td colspan="1">
-                <span class="small-text bold">{{ __('Fecha') }}</span>
+            <td>
+                <span class="small-text bold">{{ __('Fecha Plan') }}</span>
                 <br>
-                <span class="medium-text">{{ $data['date'] }} </span>
+                <span class="xl-text">{{ \Carbon\Carbon::parse($data['date'])->format('d-m-Y') }} </span>
             </td>
-            <td colspan="1">
-                <span class="small-text bold">{{ __('Turno') }}</span>
+            <td>
+                <span class="small-text bold">{{ __('Turno Plan') }}</span>
                 <br>
-                <span class="medium-text">{{ $data['shift'] }} </span>
+                <span class="xl-text">{{ $data['shift'] }} </span>
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <span class="small-text bold">{{ __('Secuencia') }}</span>
-                <br>
-                <span class="medium-text">{{ $data['sequence'] }} </span>
-            </td>
-            <td colspan="1">
+            <td>
                 <span class="small-text bold">{{ __('Contenedor') }}</span>
                 <br>
-                <span class="medium-text"> {{ $data['container'] }} </span>
+                <span class="xl-text"> {{ $data['container'] }} </span>
             </td>
-            <td colspan="1">
-                <span class="small-text bold">{{ __('Cantidad') }}</span>
+            <td>
+                <span class="small-text bold">{{ __('SNP') }}</span>
                 <br>
-                <span class="medium-text">{{ $data['quantity'] }} </span>
+                <span class="xl-text">{{ $data['snp'] }} </span>
+            </td>
+            <td>
+                <span class="small-text bold">{{ __('Cant. Produccido') }}</span>
+                <br>
+                <span class="xl-text">{{ $data['quantity'] }} </span>
+            </td>
+            <td>
+                <span class="small-text bold">{{ __('Secuencia') }}</span>
+                <br>
+                <span class="xl-text">{{ $data['sequence'] }} </span>
             </td>
         </tr>
         <tr>
@@ -145,7 +145,7 @@
                 <br>
                 {{ __('Y-TEC KEYLEX MÉXICO') }}
             </td>
-            <td class="no-border text-center" colspan="4" style="max-width: 80%; max-height: 80%;">
+            <td class="no-border text-center" colspan="2" style="max-width: 80%; max-height: 80%;">
                 <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="75" height="75">
             </td>
         </tr>
@@ -154,7 +154,9 @@
                 {{ $data['a'] }}
             </td>
             <td class="small-text text-center bold no-border" colspan="2">
-                {{ date("Y-m-d H:i:s") }}
+                {{ __('FECHA DE IMPRESIÓN') }}
+                <br>
+                {{ date("d-m-Y H:i:s") }}
             </td>
         </tr>
         @endforeach

@@ -25,12 +25,12 @@ class ExampleController extends Controller
     public function index(Request $request)
     {
         try {
-            //     DB::transaction(function () use ($request) {
+
             $productionPlanId = $request->productionPlanId;
             $partNumberId = $request->partNumberId;
-            $quantity = floor($request->quantity);
+            $quantity = $request->quantity;
             $timeStart = Carbon::parse($request->timeStart);
-            $timeEnd = Carbon::parse( $request->timeEnd);
+            $timeEnd = Carbon::parse($request->timeEnd);
 
             $minutes = $timeEnd->diffInMinutes($timeStart);
 
@@ -57,21 +57,20 @@ class ExampleController extends Controller
                 );
 
                 $dataArray[] = [
-                    'id' => str_pad($result->id, 6, '0', STR_PAD_LEFT),
+                    'id' => $result->id,
                     'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
                     'workcenterNumber' => trim($partNumber->workcenter->number),
                     'workcenterName' => trim($partNumber->workcenter->name),
                     'partNumber' => trim($partNumber->number),
-                    'quantity' => str_pad($currentQuantity, 6, '0', STR_PAD_LEFT),
+                    'quantity' => $currentQuantity,
                     'sequence' => $result->sequence,
                     'date' => $productionPlan->date,
                     'shift' => $productionPlan->shift->abbreviation,
                     'container' => trim($partNumber->standardPackage->name),
-                    'snp' => str_pad($partNumber->quantity, 6, '0', STR_PAD_LEFT),
-                    'production_plan_id' => str_pad($result->production_plan_id, 6, '0', STR_PAD_LEFT),
-                    'user_id' => str_pad($result->user_id, 6, '0', STR_PAD_LEFT),
+                    'snp' => $partNumber->quantity,
+                    'production_plan_id' => $result->production_plan_id,
+                    'user_id' => $result->user_id,
                     'projects' => $partNumber->projects,
-                    'class' => $partNumber->itemClass->abbreviation,
                     'a' => "*** ORIGINAL ***"
                 ];
 
@@ -89,7 +88,7 @@ class ExampleController extends Controller
             }
 
             return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
-            //     });
+
         } catch (\Exception $e) {
             Log::emergency('ExampleController: ' . $e->getMessage());
         }

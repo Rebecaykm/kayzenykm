@@ -255,41 +255,30 @@ class ProdcutionRecordController extends Controller
     public function reprint(ProdcutionRecord $prodcutionRecord)
     {
         $data = [
-            'id' => str_pad($prodcutionRecord->id, 6, '0', STR_PAD_LEFT),
+            'id' => $prodcutionRecord->id,
             'departament' => strtoupper(trim($prodcutionRecord->productionPlan->PartNumber->workcenter->departament->name)),
             'workcenterNumber' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->number),
             'workcenterName' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->name),
             'partNumber' => trim($prodcutionRecord->productionPlan->PartNumber->number),
-            'quantity' => str_pad($prodcutionRecord->quantity, 6, '0', STR_PAD_LEFT),
+            'quantity' => $prodcutionRecord->quantity,
             'sequence' => $prodcutionRecord->sequence,
             'date' => $prodcutionRecord->productionPlan->date,
             'shift' => $prodcutionRecord->productionPlan->shift->abbreviation,
             'container' => trim($prodcutionRecord->productionPlan->partNumber->standardPackage->name),
-            'snp' => str_pad($prodcutionRecord->productionPlan->partNumber->quantity, 6, '0', STR_PAD_LEFT),
-            'production_plan_id' => str_pad($prodcutionRecord->production_plan_id, 6, '0', STR_PAD_LEFT),
-            'user_id' => str_pad($prodcutionRecord->user_id, 6, '0', STR_PAD_LEFT),
+            'snp' => $prodcutionRecord->productionPlan->partNumber->quantity,
+            'production_plan_id' => $prodcutionRecord->production_plan_id,
+            'user_id' => $prodcutionRecord->user_id,
             'projects' => $prodcutionRecord->productionPlan->partNumber->projects,
-            'class' => $prodcutionRecord->productionPlan->partNumber->itemClass->abbreviation,
             'a' => "*** REIMPRESIÓN ***"
         ];
 
         $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
         $qrCodeData = QrCode::size(600)->generate($qrData);
         $data['qrCode'] = $qrCodeData;
-        $view = View::make('label', $data);
-        $htmlContent = $view->render();
 
-        $pdf = new Dompdf();
-        $pdf->loadHtml($htmlContent);
-        $pdf->setPaper(array(0, 0, 216, 432), 'portrait');
-        $pdf->render();
+        $dataArrayWithQr[] = $data;
 
-        $output = $pdf->output();
-
-        return response($output, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
-        ]);
+        return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
     }
 
     public function report()
