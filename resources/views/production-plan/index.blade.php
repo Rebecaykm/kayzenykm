@@ -68,12 +68,13 @@
                             <!-- <th class="px-4 py-3">{{ __('ID') }}</th> -->
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
-                            <th class="px-4 py-3">{{ __('SNP') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('SNP') }}</th> -->
                             <th class="px-4 py-3">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Tipo de Item') }}</th> -->
-                            <th class="px-4 py-3">{{ __('Cant Planeada') }}</th>
-                            <th class="px-4 py-3">{{ __('Cant Producida') }}</th>
+                            <th class="px-4 py-3 text-center">{{ __('Cant Planeada') }}</th>
+                            <th class="px-4 py-3 text-center">{{ __('Cant Producida') }}</th>
+                            <th class="px-4 py-3 text-center">{{ __('Scrap') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
@@ -84,29 +85,57 @@
                             <!-- <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->production_plan_id ?? '' }}
                             </td> -->
+
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->workcenter->number ?? '' }} - {{ $productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>
+
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->number ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
+
+                            <!-- <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
-                            </td>
+                            </td> -->
+
                             <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->date ? \Carbon\Carbon::parse($productionPlan->date)->format('d-m-Y') : '' }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
+
+                            <td class="px-4 py-3 text-xs text-center">
                                 {{ $productionPlan->shift->abbreviation ?? '' }}
                             </td>
+
                             <!-- <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->itemClass->abbreviation ?? '' }}
                             </td> -->
-                            <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->plan_quantity ?? '' }}
+
+                            <td class="px-4 py-3 text-xs text-center">
+                                <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                    {{ $productionPlan->plan_quantity ?? '' }}
+                                </span>
                             </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->production_quantity ?? '' }}
+
+                            <td class="px-4 py-3 text-xs text-center">
+                                @if ( $productionPlan->plan_quantity < $productionPlan->production_quantity )
+                                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                                        {{ $productionPlan->production_quantity ?? '' }}
+                                    </span>
+                                    @elseif ($productionPlan->plan_quantity == $productionPlan->production_quantity )
+                                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
+                                        {{ $productionPlan->production_quantity ?? '' }}
+                                    </span>
+                                    @else
+                                    <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                        {{ $productionPlan->production_quantity ?? '' }}
+                                    </span>
+                                    @endif
+                            </td>
+
+                            <td class="px-4 py-3 text-xs text-center">
+                                <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
+                                    {{ $productionPlan->scrap_quantity }}
+                                </span>
                             </td>
 
                             @if ($productionPlan->status->name == 'PENDIENTE')
@@ -117,7 +146,7 @@
                             </td>
                             @elseif ($productionPlan->status->name == 'EN PROCESO')
                             <td class="px-4 py-3 text-xs">
-                                <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-white dark:bg-blue-600">
+                                <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-blue-100">
                                     {{ __('En Proceso') }}
                                 </span>
                             </td>

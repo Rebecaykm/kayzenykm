@@ -128,8 +128,8 @@ class ScrapRecordController extends Controller
 
                 // odbc_close($conn);
 
-                $total = $productionPlan->production_quantity + $request->quantity;
-                $productionPlan->update(['production_quantity' => $total]);
+                $total = $productionPlan->scrap_quantity + $request->quantity;
+                $productionPlan->update(['scrap_quantity' => $total]);
             });
 
             return redirect()->back()->with('success', '¡Registro de scrap exitoso!');

@@ -43,7 +43,8 @@ class ProdcutionRecordController extends Controller
             'departaments.id as departament_id',
             'shifts.id as shift_id',
             'statuses.id as status_id',
-            'prodcution_records.created_at'
+            'prodcution_records.created_at',
+            'prodcution_records.quantity as quantity_produced'
         ])
             ->join('part_numbers', 'prodcution_records.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')

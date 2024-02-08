@@ -49,7 +49,7 @@
                                 {{ $prodcutionRecord->productionPlan->partNumber->number }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $prodcutionRecord->quantity }}
+                                {{ $prodcutionRecord->quantity_produced }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->sequence }}
