@@ -2,15 +2,15 @@
 
 namespace App\Exports;
 
-use App\Models\ScrapRecord;
-use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles
+class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     protected $data;
 
@@ -63,6 +63,13 @@ class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize,
     {
         return [
             1    => ['font' => ['bold' => true]],
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'B' => NumberFormat::FORMAT_TEXT, 
         ];
     }
 }
