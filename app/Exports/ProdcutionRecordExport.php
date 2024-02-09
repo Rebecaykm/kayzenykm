@@ -29,11 +29,11 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
             $item['cantidad'] = strtoupper(trim($item['quantity']));
             $item['fecha'] = strtoupper(trim(Carbon::parse($item['date_production'])->format('d-m-Y')));
             $item['turno'] = strtoupper(trim($item['abbreviation_shift']));
-            $item['inicio'] = strtoupper(trim($item['time_start']));
-            $item['fin'] = strtoupper(trim($item['time_end']));
-            // $item['CANT. MINUTOS'] = strtoupper($item['minutes']);
+            $item['inicio'] = date('d-m-Y H:i:s', strtotime($item['time_start']));
+            $item['fin'] = date('d-m-Y H:i:s', strtotime($item['time_end']));
+            $item['minutos'] = strtoupper($item['minutes']);
             $item['estado'] = strtoupper(trim($item['name_status']));
-            $item['registro'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
+            $item['registro'] = date('d-m-Y H:i:s', strtotime($item['created_at']));
             unset($item['name_departament']);
             unset($item['number_workcenter']);
             unset($item['name_workcenter']);
@@ -44,7 +44,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
             unset($item['abbreviation_shift']);
             unset($item['time_start']);
             unset($item['time_end']);
-            // unset($item['minutes']);
+            unset($item['minutes']);
             unset($item['created_at']);
             unset($item['name_status']);
             return $item;
@@ -64,7 +64,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
             'TURNO',
             'HORA DE INICIO',
             'HORA DE FIN',
-            // 'CANT. MINUTOS',
+            'CANT. MINUTOS',
             'ESTADO',
             'FECHA DE REGISTRO',
         ];

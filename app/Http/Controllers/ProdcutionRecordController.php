@@ -319,7 +319,7 @@ class ProdcutionRecordController extends Controller
                 'shifts.abbreviation as abbreviation_shift',
                 'prodcution_records.time_start',
                 'prodcution_records.time_end',
-                // 'prodcution_records.minutes',
+                'prodcution_records.minutes',
                 'prodcution_records.created_at',
                 'statuses.name as name_status',
             )
@@ -337,7 +337,7 @@ class ProdcutionRecordController extends Controller
             ->get()
             ->toArray();
 
-        return Excel::download(new ProdcutionRecordExport($prodcutionRecords), 'ProductionReport_' . date("dmY") . '.xlsx');
+        return Excel::download(new ProdcutionRecordExport($prodcutionRecords), 'ProductionReport_' . date("dmYHis") . '.xlsx');
     }
 
     function cancel(ProdcutionRecord $prodcutionRecord)

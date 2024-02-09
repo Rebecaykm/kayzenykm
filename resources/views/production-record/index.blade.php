@@ -62,7 +62,7 @@
                             </td>
                             @elseif ($prodcutionRecord->status->name == 'EXCEDENTE DE PLANEACIÓN')
                             <td class="px-4 py-3 text-xs">
-                                <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
+                                <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-yellow-100 dark:bg-yellow-700">
                                     {{ __('Excedente de Planeación') }}
                                 </span>
                             </td>

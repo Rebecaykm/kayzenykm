@@ -20,8 +20,8 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return collect($this->data)->map(function ($item) {
@@ -30,10 +30,10 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             $item['departamento'] = strtoupper($item['departament_name']);
             $item['estacion'] = strtoupper($item['workcenter_number']);
             $item['nom'] = strtoupper($item['workcenter_name']);
-            $item['inicio'] = strtoupper($item['time_start']);
-            $item['fin'] = strtoupper($item['time_end']);
-            $item['minutos'] = strtoupper($item['minutes']);
-            $item['fecha'] = Carbon::parse($item['created_at'])->format('d-m-Y H:i:s');
+            $item['inicio'] = date('d-m-Y H:i:s', strtotime($item['time_start']));
+            $item['fin'] = date('d-m-Y H:i:s', strtotime($item['time_end']));
+            $item['minutos'] = $item['minutes'];
+            $item['fecha'] = date('d-m-Y H:i:s', strtotime($item['created_at']));
             unset($item['unemployment_type']);
             unset($item['unemployment_name']);
             unset($item['departament_name']);
