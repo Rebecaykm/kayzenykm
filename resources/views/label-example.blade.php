@@ -3,24 +3,23 @@
 
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:100,400,400i,600,800">
     <style>
         @media print {
             @page {
-                size: 178mm 76mm;
+                size: 152mm 76mm;
                 margin: 0;
                 /* padding: 8px; */
             }
         }
 
         @page {
-            size: 178mm 76mm;
+            size: 152mm 76mm;
             margin: 0;
         }
 
         body {
             margin: 0;
-            font-family: Arial, 'Roboto', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         table {
@@ -42,19 +41,19 @@
         }
 
         .medium-text {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .large-text {
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .xl-text {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .xxl-text {
-            font-size: 40px;
+            font-size: 36px;
             font-weight: 800;
         }
 
@@ -66,8 +65,12 @@
             border: none;
         }
 
-        .bold {
+        .semi-bold {
             font-weight: 600;
+        }
+
+        .bold {
+            font-weight: 800;
         }
 
         .page-break {
@@ -75,7 +78,8 @@
         }
 
         .vertical {
-            transform: rotate(270deg);
+            writing-mode: vertical-lr;
+            text-orientation: upright;
         }
     </style>
 </head>
@@ -88,83 +92,95 @@
             <td>
                 <span class="small-text">{{ __('Departamento') }}:</span>
                 <br>
-                <span class="medium-text"> {{ $data['departament'] }}</span>
+                <span class="medium-text semi-bold"> {{ $data['departament'] }}</span>
             </td>
             <td>
                 <span class="small-text">{{ __('Estación') }}:</span>
                 <br>
-                <span class="medium-text">{{ $data['workcenterName'] }}</span>
+                <span class="medium-text semi-bold">{{ $data['workcenterName'] }}</span>
             </td>
             <td>
                 <span class="small-text">{{ __('Proyecto') }}:</span>
-                <span class="medium-text">
+                <br>
+                <span class="medium-text semi-bold">
                     @foreach ($data['projects'] as $project)
                     {{ $project['model'] ?? '' }}
                     @endforeach
                 </span>
             </td>
+            <!-- <td rowspan="2" class="small-text bold vertical no-border">
+                {{ __('IDENTIFICATION CARD') }}
+                <br>
+                {{ __('Y-TEC KEYLEX MÉXICO') }}
+                <br>
+
+            </td> -->
         </tr>
         <tr>
             <td colspan="3">
                 <span class="small-text">{{ __('No. Parte') }}:</span>
                 <br>
-                <span class="xxl-text bold">{{ $data['partNumber'] }} </span>
+                <span class="xxl-text semi-bold">{{ $data['partNumber'] }} </span>
             </td>
         </tr>
         <tr>
             <td>
                 <span class="small-text">{{ __('Fecha Plan') }}:</span>
                 <br>
-                <span class="medium-text">{{ \Carbon\Carbon::parse($data['date'])->format('d/m/Y') }}</span>
+                <span class="medium-text semi-bold">{{ \Carbon\Carbon::parse($data['date'])->format('d/m/Y') }}</span>
             </td>
             <td>
                 <span class="small-text">{{ __('Turno Plan') }}:</span>
                 <br>
-                <span class="medium-text">{{ $data['shift'] }}</span>
+                <span class="medium-text semi-bold">{{ $data['shift'] }}</span>
             </td>
             <td>
                 <span class="small-text">{{ __('Contenedor') }}:</span>
                 <br>
-                <span class="medium-text"> {{ $data['container'] }}</span>
+                <span class="medium-text semi-bold"> {{ $data['container'] }}</span>
             </td>
+            <!-- <td rowspan="2" class="no-border">
+                <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="60" height="60">
+            </td> -->
         </tr>
         <tr>
             <td>
                 <span class="small-text">{{ __('Cantidad SNP') }}:</span>
                 <br>
-                <span class="medium-text">{{ $data['snp'] }}</span>
+                <span class="medium-text semi-bold">{{ $data['snp'] }}</span>
             </td>
             <td>
                 <span class="small-text">{{ __('Cantidad Produccido') }}:</span>
                 <br>
-                <span class="medium-text">{{ $data['quantity'] }} </span>
+                <span class="medium-text semi-bold">{{ $data['quantity'] }} </span>
             </td>
             <td>
                 <span class="small-text">{{ __('Secuencia') }}:</span>
                 <br>
-                <span class="medium-text">{{ $data['sequence'] }} </span>
+                <span class="medium-text semi-bold">{{ $data['sequence'] }} </span>
             </td>
         </tr>
         <tr>
             <td class="medium-text text-center bold no-border">
                 {{ __('IDENTIFICATION CARD') }}
-                <br>
-                {{ $data['a'] }}
             </td>
             <td class="medium-text text-center bold no-border">
                 {{ __('Y-TEC KEYLEX MÉXICO') }}
-                <br>
-                <span class="small-text">
-                    {{ __('FECHA DE IMPRESIÓN') }}
-                    <br>
-                    {{ date("d-m-Y H:i:s") }}
-                </span>
             </td>
-            <td class="no-border text-center" rowspan="2">
+            <td class="no-border text-center" style="max-width: 80%; max-height: 80%;" rowspan="2">
                 <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="40" height="40">
             </td>
         </tr>
-        <br>
+        <tr>
+            <td class="medium-text text-center bold no-border">
+                {{ $data['a'] }}
+            </td>
+            <td class="small-text text-center bold no-border">
+                {{ __('FECHA DE IMPRESIÓN') }}
+                <br>
+                {{ date("d-m-Y H:i:s") }}
+            </td>
+        </tr>
         @endforeach
     </table>
 
