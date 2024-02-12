@@ -30,56 +30,115 @@
         }
 
         td {
-            border: 1px solid black;
-            padding: 4px;
-            /* max-width: 25%; */
+            padding: 0 2px;
+            margin: 0;
             word-wrap: break-word;
+            border-style: solid;
+            border-width: thin;
+            border-radius: 5px;
         }
 
-        .small-text {
-            font-size: 6px;
+        .left-align {
+            text-align: left;
         }
 
-        .medium-text {
-            font-size: 14px;
-        }
-
-        .large-text {
-            font-size: 18px;
-        }
-
-        .xl-text {
-            font-size: 22px;
-        }
-
-        .xxl-text {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
-        .text-center {
+        .center-align {
             text-align: center;
+        }
+
+        .vertical-center {
+            display: flex;
+            align-items: center;
         }
 
         .no-border {
             border: none;
         }
 
-        .semi-bold {
+        .text-3xs {
+            font-size: 0.375rem;
+            line-height: 0.25rem;
+        }
+
+        .text-25xs {
+            font-size: 0.5rem;
+            line-height: 0.5rem;
+        }
+
+        .text-2xs {
+            font-size: 0.625rem;
+            line-height: 0.75rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .text-base {
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+
+        .text-3xl {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .font-extralight {
+            font-weight: 200;
+        }
+
+        .font-light {
+            font-weight: 300;
+        }
+
+        .font-normal {
+            font-weight: 400;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .font-semibold {
             font-weight: 600;
         }
 
-        .bold {
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-extrabold {
             font-weight: 800;
+        }
+
+        .font-black {
+            font-weight: 900;
         }
 
         .page-break {
             page-break-before: always;
-        }
-
-        .vertical {
-            writing-mode: vertical-lr;
-            text-orientation: upright;
         }
     </style>
 </head>
@@ -90,95 +149,72 @@
         @foreach ($dataArrayWithQr as $data)
         <tr class="page-break">
             <td>
-                <span class="small-text">{{ __('Departamento') }}:</span>
-                <br>
-                <span class="medium-text semi-bold"> {{ $data['departament'] }}</span>
+                <span class="text-3xs font-extralight"> {{ __('Departamento') }}: </span>
+                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;"> {{ $data['departament'] }} </span>
             </td>
             <td>
-                <span class="small-text">{{ __('Estación') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ $data['workcenterName'] }}</span>
+                <span class="text-3xs font-extralight"> {{ __('Estación') }}: </span>
+                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;"> {{ $data['workcenterName'] }} </span>
             </td>
             <td>
-                <span class="small-text">{{ __('Proyecto') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">
+                <span class="text-3xs font-extralight"> {{ __('Proyecto') }}: </span>
+                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">
                     @foreach ($data['projects'] as $project)
                     {{ $project['model'] ?? '' }}
                     @endforeach
                 </span>
             </td>
-            <!-- <td rowspan="2" class="small-text bold vertical no-border">
-                {{ __('IDENTIFICATION CARD') }}
-                <br>
-                {{ __('Y-TEC KEYLEX MÉXICO') }}
-                <br>
-
-            </td> -->
         </tr>
         <tr>
-            <td colspan="3">
-                <span class="small-text">{{ __('No. Parte') }}:</span>
-                <br>
-                <span class="xxl-text semi-bold">{{ $data['partNumber'] }} </span>
+            <td colspan="3" class="left-align">
+                <span class="text-3xs font-extralight"> {{ __('No. Parte') }}: </span>
+                <span class="text-3xl font-bold center-align" style="display: inline-block; width: 100%;"> {{ $data['partNumber'] }} </span>
             </td>
         </tr>
         <tr>
-            <td>
-                <span class="small-text">{{ __('Fecha Plan') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ \Carbon\Carbon::parse($data['date'])->format('d/m/Y') }}</span>
+            <td colspan="2">
+                <span class="text-3xs font-extralight"> {{ __('Contenedor') }}: </span>
+                <span class="text-xl font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['container'] }}</span>
             </td>
             <td>
-                <span class="small-text">{{ __('Turno Plan') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ $data['shift'] }}</span>
+                <span class="text-3xs font-extralight"> {{ __('Fecha de Producción') }}: </span>
+                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">
+                    {{ \Carbon\Carbon::parse($data['date'])->format('d/m/Y') }} &nbsp;&nbsp; {{ $data['shift'] }}
+                </span>
             </td>
-            <td>
-                <span class="small-text">{{ __('Contenedor') }}:</span>
-                <br>
-                <span class="medium-text semi-bold"> {{ $data['container'] }}</span>
-            </td>
-            <!-- <td rowspan="2" class="no-border">
-                <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="60" height="60">
-            </td> -->
         </tr>
-        <tr>
+        <tr class="left-align">
             <td>
-                <span class="small-text">{{ __('Cantidad SNP') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ $data['snp'] }}</span>
+                <span class="text-3xs font-extralight"> {{ __('S N P') }}:</span>
+                <span class="text-lg font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['snp'] }} </span>
             </td>
             <td>
-                <span class="small-text">{{ __('Cantidad Produccido') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ $data['quantity'] }} </span>
+                <span class="text-3xs font-extralight">{{ __('Cantidad Produccido') }}:</span>
+                <span class="text-lg font-semibold center-align" style="display: inline-block; width: 100%;">{{ $data['quantity'] }} </span>
             </td>
             <td>
-                <span class="small-text">{{ __('Secuencia') }}:</span>
-                <br>
-                <span class="medium-text semi-bold">{{ $data['sequence'] }} </span>
+                <span class="text-3xs font-extralight">{{ __('Secuencia') }}:</span>
+                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">{{ $data['sequence'] }} </span>
             </td>
         </tr>
         <tr>
-            <td class="medium-text text-center bold no-border">
+            <td class="text-sm  font-semibold center-align no-border">
                 {{ __('IDENTIFICATION CARD') }}
             </td>
-            <td class="medium-text text-center bold no-border">
+            <td class="text-sm font-semibold center-align no-border">
                 {{ __('Y-TEC KEYLEX MÉXICO') }}
             </td>
-            <td class="no-border text-center" style="max-width: 80%; max-height: 80%;" rowspan="2">
-                <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="40" height="40">
+            <td class="center-align no-border" style="max-width: 100%; max-height: 100%;" rowspan="2">
+                <img src="data:image/svg+xml;base64, {!! base64_encode($data['qrCode']) !!}" width="50" height="50">
             </td>
         </tr>
         <tr>
-            <td class="medium-text text-center bold no-border">
+            <td class="text-xs font-semibold center-align no-border">
                 {{ $data['a'] }}
             </td>
-            <td class="small-text text-center bold no-border">
-                {{ __('FECHA DE IMPRESIÓN') }}
-                <br>
-                {{ date("d-m-Y H:i:s") }}
+            <td class="center-align no-border">
+                <span class="text-25xs font-light" style="display: block;"> {{ __('FECHA DE IMPRESIÓN') }} </span>
+                <span class="text-25xs font-light" style="display: block;"> {{ date("d-m-Y H:i:s") }} </span>
             </td>
         </tr>
         @endforeach
