@@ -23,7 +23,7 @@ class StoreProductionPlanRequest extends FormRequest
     {
         return [
             'partNumber' => ['required', 'numeric'],
-            'planQuantity' => ['required', 'integer', 'min:1', 'max:1000'],
+            'planQuantity' => ['required', 'integer', 'min:1', 'max:9999'],
             'date' => ['required', 'after_or_equal:today'],
             'shift' => ['required', 'numeric']
         ];

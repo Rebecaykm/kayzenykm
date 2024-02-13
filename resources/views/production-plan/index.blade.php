@@ -112,29 +112,29 @@
 
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                                    {{ $productionPlan->plan_quantity ?? '' }}
+                                    {{ intval($productionPlan->plan_quantity) ?? '' }}
                                 </span>
                             </td>
 
                             <td class="px-4 py-3 text-xs text-center">
                                 @if ( $productionPlan->plan_quantity < $productionPlan->production_quantity )
                                     <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                        {{ $productionPlan->production_quantity ?? '' }}
+                                        {{ intval($productionPlan->production_quantity) ?? '' }}
                                     </span>
                                     @elseif ($productionPlan->plan_quantity == $productionPlan->production_quantity )
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
-                                        {{ $productionPlan->production_quantity ?? '' }}
+                                        {{ intval($productionPlan->production_quantity) ?? '' }}
                                     </span>
                                     @else
                                     <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        {{ $productionPlan->production_quantity ?? '' }}
+                                        {{ intval($productionPlan->production_quantity) ?? '' }}
                                     </span>
                                     @endif
                             </td>
 
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                                    {{ $productionPlan->scrap_quantity }}
+                                    {{ intval($productionPlan->scrap_quantity) ?? '' }}
                                 </span>
                             </td>
 

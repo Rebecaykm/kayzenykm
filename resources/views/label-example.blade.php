@@ -30,8 +30,8 @@
         }
 
         td {
-            padding: 0 2px;
-            margin: 0;
+            padding: 0 8px;
+            margin: 0 2px;
             word-wrap: break-word;
             border-style: solid;
             border-width: thin;
@@ -100,6 +100,11 @@
             line-height: 2rem;
         }
 
+        .text-25xl {
+            font-size: 1.625rem;
+            line-height: 1;
+        }
+
         .text-3xl {
             font-size: 3rem;
             line-height: 1;
@@ -145,20 +150,20 @@
 
 <body>
 
-    <table>
+    <table class="center-align">
         @foreach ($dataArrayWithQr as $data)
         <tr class="page-break">
             <td>
-                <span class="text-3xs font-extralight"> {{ __('Departamento') }}: </span>
-                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;"> {{ $data['departament'] }} </span>
+                <span class="text-3xs font-light"> {{ __('Departamento') }}: </span>
+                <span class="text-xs font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['departament'] }} </span>
             </td>
             <td>
-                <span class="text-3xs font-extralight"> {{ __('Estación') }}: </span>
-                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;"> {{ $data['workcenterName'] }} </span>
+                <span class="text-3xs font-light"> {{ __('Estación') }}: </span>
+                <span class="text-xs font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['workcenterName'] }} </span>
             </td>
             <td>
-                <span class="text-3xs font-extralight"> {{ __('Proyecto') }}: </span>
-                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">
+                <span class="text-3xs font-light"> {{ __('Proyecto') }}: </span>
+                <span class="text-xs font-semibold center-align" style="display: inline-block; width: 100%;">
                     @foreach ($data['projects'] as $project)
                     {{ $project['model'] ?? '' }}
                     @endforeach
@@ -167,41 +172,43 @@
         </tr>
         <tr>
             <td colspan="3" class="left-align">
-                <span class="text-3xs font-extralight"> {{ __('No. Parte') }}: </span>
+                <span class="text-3xs font-light"> {{ __('No. Parte') }}: </span>
                 <span class="text-3xl font-bold center-align" style="display: inline-block; width: 100%;"> {{ $data['partNumber'] }} </span>
             </td>
         </tr>
         <tr>
+
             <td colspan="2">
-                <span class="text-3xs font-extralight"> {{ __('Contenedor') }}: </span>
-                <span class="text-xl font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['container'] }}</span>
-            </td>
-            <td>
-                <span class="text-3xs font-extralight"> {{ __('Fecha de Producción') }}: </span>
-                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">
+                <span class="text-3xs font-light"> {{ __('Fecha de Producción') }}: </span>
+                <span class="text-xs font-semibold center-align" style="display: inline-block; width: 100%;">
                     {{ \Carbon\Carbon::parse($data['date'])->format('d/m/Y') }} &nbsp;&nbsp; {{ $data['shift'] }}
                 </span>
+            </td>
+            <td>
+                <span class="text-3xs font-light">{{ __('Secuencia') }}:</span>
+                <span class="text-xs font-semibold center-align" style="display: inline-block; width: 100%;">{{ $data['sequence'] }} </span>
             </td>
         </tr>
         <tr class="left-align">
             <td>
-                <span class="text-3xs font-extralight"> {{ __('S N P') }}:</span>
-                <span class="text-lg font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['snp'] }} </span>
+                <span class="text-3xs font-light"> {{ __('Contenedor') }}: </span>
+                <span class="{{ strlen($data['container']) > 8 ? 'text-lg' : 'text-25xl' }} font-semibold center-align" style="display: inline-block; width: 100%;"> {{ $data['container'] }} </span>
             </td>
             <td>
-                <span class="text-3xs font-extralight">{{ __('Cantidad Produccido') }}:</span>
-                <span class="text-lg font-semibold center-align" style="display: inline-block; width: 100%;">{{ $data['quantity'] }} </span>
+                <span class="text-3xs font-light"> {{ __('S N P') }}:</span>
+                <span class="text-25xl font-semibold center-align" style="display: inline-block; width: 100%;"> {{ intval($data['snp']) }} </span>
             </td>
             <td>
-                <span class="text-3xs font-extralight">{{ __('Secuencia') }}:</span>
-                <span class="text-base font-medium center-align" style="display: inline-block; width: 100%;">{{ $data['sequence'] }} </span>
+                <span class="text-3xs font-light">{{ __('Cantidad Produccido') }}:</span>
+                <span class="text-25xl font-semibold center-align" style="display: inline-block; width: 100%;">{{ intval($data['quantity']) }} </span>
             </td>
+
         </tr>
         <tr>
-            <td class="text-sm  font-semibold center-align no-border">
+            <td class="text-xs  font-base center-align no-border">
                 {{ __('IDENTIFICATION CARD') }}
             </td>
-            <td class="text-sm font-semibold center-align no-border">
+            <td class="text-xs font-base center-align no-border">
                 {{ __('Y-TEC KEYLEX MÉXICO') }}
             </td>
             <td class="center-align no-border" style="max-width: 100%; max-height: 100%;" rowspan="2">
@@ -209,7 +216,7 @@
             </td>
         </tr>
         <tr>
-            <td class="text-xs font-semibold center-align no-border">
+            <td class="text-2xs font-base center-align no-border">
                 {{ $data['a'] }}
             </td>
             <td class="center-align no-border">

@@ -66,7 +66,7 @@ class ProductionPlanController extends Controller
             ->where('production_plans.status_id', '!=', $status->id)
             ->whereIn('item_classes.abbreviation', $arrayClass)
             ->whereIn('departaments.code', $departamentCode)
-            ->whereBetween('production_plans.date', [$startWeek, $endWeek])
+            // ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
             ->orderBy('shifts.abbreviation', 'asc')
             ->orderBy('part_numbers.number')
