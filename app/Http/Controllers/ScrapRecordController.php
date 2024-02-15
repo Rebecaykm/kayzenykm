@@ -138,17 +138,35 @@ class ScrapRecordController extends Controller
                 $partNumber = PartNumber::findOrFail($request->part_number_id);
                 $scrap = Scrap::findOrFail($request->scrap_id);
 
-                ScrapRecord::create([
+                $scrapRecord = ScrapRecord::create([
                     'part_number_id' => $partNumber->id,
                     'scrap_id' => $scrap->id,
                     'user_id' => Auth::id(),
                     'quantity' => $request->quantity,
+                    'flag' => 1
+                ]);
+
+                $yf020 =  YF020::query()->insert([
+                    'YSWRKC' => $partNumber->workcenter->number,
+                    'YSWRKN' => $partNumber->workcenter->name,
+                    // 'YSRDTE' => ,
+                    // 'YSSHFT' => ,
+                    // 'YSPPNO' => ,
+                    'YSPROD' => $partNumber->number,
+                    'YSQSCR' => $request->quantity,
+                    'YSSCRE' => $scrap->code,
+                    'YSCRDT' => Carbon::now()->format('Ymd'),
+                    'YSCRTM' => Carbon::now()->format('His'),
+                    'YSCRUS' => Auth::user()->infor ?? '',
+                    // 'YSCRWS' => ,
+                    // 'YSFIL1' => ,
+                    // 'YSFIL2' => ,
                 ]);
             });
 
             return redirect()->back()->with('success', '¡Registro de scrap exitoso!');
         } catch (\Exception $e) {
-            Log::error('ScrapRecordController :' . $e->getMessage());
+            Log::error('Error en ScrapRecordController :' . $e->getMessage());
 
             return redirect()->back()->with('error', '¡Error! Fallo en el registro de scrap.');
         }
@@ -177,7 +195,13 @@ class ScrapRecordController extends Controller
      */
     public function update(UpdateScrapRecordRequest $request, ScrapRecord $scrapRecord)
     {
-        //
+        $scrapRecord->fill($request->validated());
+
+        if ($scrapRecord->isDirty()) {
+            $scrapRecord->save();
+        }
+
+        return redirect()->back()->with('success', '¡Actualización exitosa!');
     }
 
     /**

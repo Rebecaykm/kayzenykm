@@ -34,7 +34,7 @@
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400"> {{ __('Número de Parte') }} </span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $scrapRecord->partNumber->number }}" disabled />
+                    <input name="part_number" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" value="{{ $scrapRecord->partNumber->number }}" disabled />
                 </label>
 
                 <label class="block mt-4 text-sm">
@@ -44,7 +44,6 @@
                     <select name="scrap_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                         <option>{{ __('Seleccione una Opción') }}</option>
                         @foreach ($scraps as $scrap)
-                        <option value="{{ $scrap->id }}">{{ $scrap->code }} - {{ $scrap->name }}</option>
                         <option {{ $scrapRecord->scrap_id == $scrap->id ? "selected" : "" }} value="{{ $scrap->id }}">{{ $scrap->code }} - {{ $scrap->name }}</option>
                         @endforeach
                     </select>
