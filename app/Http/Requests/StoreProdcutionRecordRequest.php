@@ -24,7 +24,7 @@ class StoreProdcutionRecordRequest extends FormRequest
         return [
             // 'production_id' => ['required', 'numeric'],
             // 'part_number_id' => ['required', 'numeric'],
-            'quantity' => ['required', 'numeric', 'min:1', 'max:1000'],
+            'quantity' => ['required', 'numeric', 'min:1', 'max:9999'],
             'time_start' => ['required', 'date_format:H:i'],
             'time_end' => ['required', 'date_format:H:i', 'after:time_start']
         ];

@@ -14,12 +14,9 @@ use App\Jobs\WorkcenterMigrationJob;
 use App\Models\Departament;
 use App\Models\Module;
 use App\Models\User;
-use Carbon\Carbon;
-use Database\Seeders\WorkcenterSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller

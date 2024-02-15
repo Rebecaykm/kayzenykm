@@ -25,7 +25,7 @@ class StoreScrapRecordRequest extends FormRequest
             'production_plan_id' => ['required', 'numeric'],
             'part_number_id' => ['required', 'numeric'],
             'scrap_id' => ['required', 'numeric'],
-            'quantity' => ['required', 'integer', 'min:1', 'max:99']
+            'quantity' => ['required', 'integer', 'min:1', 'max:9999']
         ];
     }
 

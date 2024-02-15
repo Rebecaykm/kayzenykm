@@ -13,7 +13,7 @@ class ScrapRecord extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'production_plan_id', 'part_number_id', 'scrap_id', 'user_id', 'quantity',
+        'production_plan_id', 'part_number_id', 'scrap_id', 'user_id', 'quantity', 'flag'
     ];
 
     public function productionPlan(): BelongsTo

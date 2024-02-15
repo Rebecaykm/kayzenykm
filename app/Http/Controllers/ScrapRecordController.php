@@ -31,9 +31,11 @@ class ScrapRecordController extends Controller
             ->select([
                 '*',
                 // 'production_plans.id as production_plan_id',
+                'workcenters.id as workcenter_id',
                 'part_numbers.id as part_number_id',
                 'scraps.id as scrap_id',
-                'scrap_records.quantity as quantity_scrap'
+                'scrap_records.quantity as quantity_scrap',
+                'scrap_records.id as id'
             ])
             // ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
             ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
@@ -99,35 +101,6 @@ class ScrapRecordController extends Controller
                     'quantity' => $request->quantity,
                 ]);
 
-                YF020::query()->insert([
-                    'YSWRKC' => $productionPlan->partNumber->workcenter->number,
-                    'YSWRKN' => $productionPlan->partNumber->workcenter->name,
-                    'YSRDTE' => Carbon::parse($productionPlan->date)->format('Ymd'),
-                    'YSSHFT' => $productionPlan->shift->abbreviation,
-                    'YSPPNO' => $productionPlan->productionRecords()->latest('sequence')->value('sequence') ?? '',
-                    'YSPROD' => $productionPlan->partNumber->number,
-                    'YSQSCR' => $request->quantity,
-                    'YSSCRE' => $scrap->code,
-                    'YSCRDT' => Carbon::now()->format('Ymd'),
-                    'YSCRTM' => Carbon::now()->format('His'),
-                    'YSCRUS' => Auth::user()->infor ?? '',
-                    //     'YSCRWS'=>,
-                    //     'YSFIL1'=>,
-                    //     'YSFIL2'=>,
-                ]);
-
-                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-                // $query = "CALL LX834OU.YSF020C";
-                // $result = odbc_exec($conn, $query);
-
-                // if ($result) {
-                //     Log::info("La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-                // } else {
-                //     Log::info("Error en la consulta: " . odbc_errormsg($conn));
-                // }
-
-                // odbc_close($conn);
-
                 $total = $productionPlan->scrap_quantity + $request->quantity;
                 $productionPlan->update(['scrap_quantity' => $total]);
             });
@@ -165,42 +138,35 @@ class ScrapRecordController extends Controller
                 $partNumber = PartNumber::findOrFail($request->part_number_id);
                 $scrap = Scrap::findOrFail($request->scrap_id);
 
-                ScrapRecord::create([
+                $scrapRecord = ScrapRecord::create([
                     'part_number_id' => $partNumber->id,
                     'scrap_id' => $scrap->id,
                     'user_id' => Auth::id(),
                     'quantity' => $request->quantity,
+                    'flag' => 1
                 ]);
 
                 $yf020 =  YF020::query()->insert([
                     'YSWRKC' => $partNumber->workcenter->number,
                     'YSWRKN' => $partNumber->workcenter->name,
-                    // 'YSRDTE',
-                    // 'YSSHFT',
-                    // 'YSPPNO',
+                    // 'YSRDTE' => ,
+                    // 'YSSHFT' => ,
+                    // 'YSPPNO' => ,
                     'YSPROD' => $partNumber->number,
                     'YSQSCR' => $request->quantity,
                     'YSSCRE' => $scrap->code,
                     'YSCRDT' => Carbon::now()->format('Ymd'),
                     'YSCRTM' => Carbon::now()->format('His'),
                     'YSCRUS' => Auth::user()->infor ?? '',
-                    // 'YSCRWS'=>,
-                    // 'YSFIL1'=>,
-                    // 'YSFIL2'=>,
+                    // 'YSCRWS' => ,
+                    // 'YSFIL1' => ,
+                    // 'YSFIL2' => ,
                 ]);
-
-                if ($yf020) {
-                    Log::notice("ScrapRecordController: Inserto " . $partNumber->number);
-                }
-
-                // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-                // $query = "CALL LX834OU.YSF020C";
-                // $result = odbc_exec($conn, $query);
             });
 
             return redirect()->back()->with('success', '¡Registro de scrap exitoso!');
         } catch (\Exception $e) {
-            Log::error('ScrapRecordController :' . $e->getMessage());
+            Log::error('Error en ScrapRecordController :' . $e->getMessage());
 
             return redirect()->back()->with('error', '¡Error! Fallo en el registro de scrap.');
         }
@@ -219,7 +185,9 @@ class ScrapRecordController extends Controller
      */
     public function edit(ScrapRecord $scrapRecord)
     {
-        //
+        $scraps = Scrap::orderBy('code', 'ASC')->get();
+
+        return view('scrap-record.edit', ['scrapRecord' => $scrapRecord, 'scraps' => $scraps]);
     }
 
     /**
@@ -227,7 +195,13 @@ class ScrapRecordController extends Controller
      */
     public function update(UpdateScrapRecordRequest $request, ScrapRecord $scrapRecord)
     {
-        //
+        $scrapRecord->fill($request->validated());
+
+        if ($scrapRecord->isDirty()) {
+            $scrapRecord->save();
+        }
+
+        return redirect()->back()->with('success', '¡Actualización exitosa!');
     }
 
     /**

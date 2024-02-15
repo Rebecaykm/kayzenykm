@@ -49,7 +49,7 @@
                                 {{ $prodcutionRecord->productionPlan->partNumber->number }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $prodcutionRecord->quantity_produced }}
+                                {{ intval($prodcutionRecord->quantity_produced) }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->sequence }}
@@ -78,7 +78,7 @@
                             </td>
                             @endif
                             <td class="px-4 py-3 text-xs">
-                                {{ $prodcutionRecord->created_at->format('Y-m-d H:i:s') }}
+                                {{ $prodcutionRecord->created_at->format('d-m-Y H:i:s') }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
