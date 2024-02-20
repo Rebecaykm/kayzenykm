@@ -7,14 +7,10 @@ use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
 use App\Jobs\CompletionProductionPlan;
 use App\Jobs\ProductionPlanMigrationJob;
-use App\Jobs\StoreIPYF013Job;
-use App\Models\IPYF013;
 use App\Models\PartNumber;
-use App\Models\ProdcutionRecord;
 use App\Models\Shift;
 use App\Models\Status;
 use Carbon\Carbon;
-use Database\Seeders\ShiftSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +64,7 @@ class ProductionPlanController extends Controller
             ->where('production_plans.status_id', '!=', $status->id)
             ->whereIn('item_classes.abbreviation', $arrayClass)
             ->whereIn('departaments.code', $departamentCode)
-            // ->whereBetween('production_plans.date', [$startWeek, $endWeek])
+            ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
             ->orderBy('shifts.abbreviation', 'asc')
             ->orderBy('part_numbers.number')

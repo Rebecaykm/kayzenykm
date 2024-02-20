@@ -34,6 +34,14 @@ class Departament extends Model
     }
 
     /**
+     *
+     */
+    public function workcenters(): HasMany
+    {
+        return $this->hasMany(Workcenter::class);
+    }
+
+    /**
      * @param $value
      * @return string|null
      */
