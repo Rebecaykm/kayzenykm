@@ -160,13 +160,13 @@ class ProductionPlanController extends Controller
         try {
             $productionPlan = ProductionPlan::findOrFail($request->production);
 
-            if ($productionPlan->production_quantity > 0) {
+            if ($productionPlan->production_quantity > 0 || $productionPlan->scrap_quantity > 0) {
                 DB::transaction(function () use ($productionPlan) {
                     CompletionProductionPlan::dispatch($productionPlan);
                 });
                 return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
             } else {
-                return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con un valor de cero.');
+                return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
             }
         } catch (\Exception $e) {
             Log::error('ProductionPlanController: ' . $e->getMessage());

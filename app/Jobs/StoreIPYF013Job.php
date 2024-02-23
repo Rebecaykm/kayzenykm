@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\IPYF013;
 use App\Models\ProductionPlan;
+use App\Models\ScrapRecord;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,23 +47,32 @@ class StoreIPYF013Job implements ShouldQueue
     public function handle(): void
     {
         try {
-            $ipyf03 = IPYF013::query()->insert([
-                'YFWRKC' => $this->productionPlan->partNumber->workcenter->number,
-                'YFWRKN' => $this->productionPlan->partNumber->workcenter->name,
-                'YFRDTE' => Carbon::parse($this->productionPlan->date)->format('Ymd'),
-                'YFSHFT' => $this->productionPlan->shift->abbreviation,
-                'YFPPNO' => $this->productionPlan->productionRecords()->latest('sequence')->value('sequence'),
-                'YFPROD' => $this->productionPlan->partNumber->number,
-                'YFSTIM' => $this->timeStart,
-                'YFETIM' => $this->timeEnd,
-                'YFSDT' => $this->dateStart . $this->timeStart,
-                'YFEDT' => $this->dateEnd . $this->timeEnd,
-                'YFQPLA' => $this->productionPlan->plan_quantity,
-                'YFQPRO' => $this->productionPlan->production_quantity,
-                // 'YFQSCR' => ,
-                // 'YFSCRE' => ,
-                'YFCRDT' => Carbon::now()->format('Ymd'),
-                'YFCRTM' => Carbon::now()->format('His'),
+
+            if ($this->productionPlan->scrap_quantity > 0) {
+                $maxQuantityScrapRecord = ScrapRecord::query()
+                    ->where('production_plan_id', $this->productionPlan->id)
+                    ->orderByDesc('quantity')
+                    ->orderByDesc('created_at')
+                    ->first();
+            }
+
+            IPYF013::query()->insert([
+                'YFWRKC' => $this->productionPlan->partNumber->workcenter->number ?? '',
+                'YFWRKN' => $this->productionPlan->partNumber->workcenter->name ?? '',
+                'YFRDTE' => Carbon::parse($this->productionPlan->date)->format('Ymd') ?? '',
+                'YFSHFT' => $this->productionPlan->shift->abbreviation ?? '',
+                'YFPPNO' => $this->productionPlan->productionRecords()->latest('sequence')->value('sequence') ?? '',
+                'YFPROD' => $this->productionPlan->partNumber->number ?? '',
+                'YFSTIM' => $this->timeStart ?? '',
+                'YFETIM' => $this->timeEnd ?? '',
+                'YFSDT' => $this->dateStart . $this->timeStart ?? '',
+                'YFEDT' => $this->dateEnd . $this->timeEnd ?? '',
+                'YFQPLA' => $this->productionPlan->plan_quantity ?? '',
+                'YFQPRO' => $this->productionPlan->production_quantity ?? '',
+                'YFQSCR' => $this->productionPlan->scrap_quantity ?? '',
+                'YFSCRE' => $maxQuantityScrapRecord->scrap->code ?? '',
+                'YFCRDT' => Carbon::now()->format('Ymd') ?? '',
+                'YFCRTM' => Carbon::now()->format('His') ?? '',
                 'YFCRUS' => Auth::user()->infor ?? '',
                 // 'YFCRWS' => ,
                 // 'YFFIL1' => ,
