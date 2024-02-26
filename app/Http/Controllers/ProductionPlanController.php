@@ -39,7 +39,8 @@ class ProductionPlanController extends Controller
         $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
-        $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+        $classArray = ['M1', 'M2', 'M3', 'M4'];
+        // $stationArray = ['111010', '122070', '139220', '139450', '139450', '138860'];
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $status = Status::where('name', 'INACTIVO')->first();
@@ -62,7 +63,8 @@ class ProductionPlanController extends Controller
             ->join('statuses', 'production_plans.status_id', '=', 'statuses.id')
             ->where('part_numbers.number', 'LIKE', '%' . $search . '%')
             ->where('production_plans.status_id', '!=', $status->id)
-            ->whereIn('item_classes.abbreviation', $arrayClass)
+            // ->whereIn('workcenters.number', $stationArray)
+            ->whereIn('item_classes.abbreviation', $classArray)
             ->whereIn('departaments.code', $departamentCode)
             ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')

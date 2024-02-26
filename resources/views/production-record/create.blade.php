@@ -98,9 +98,10 @@
                         </div>
                     </div>
                 </label>
-                <label class="block text-sm">
+
+                <!-- <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Plan')}}</span>
-                    <!-- focus-within sets the color for the icon when input is focused -->
+
                     <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                         <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" value="{{ intval($productionPlan->plan_quantity) }}" disabled />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
@@ -109,11 +110,20 @@
                             </svg>
                         </div>
                     </div>
-                </label>
+                </label> -->
 
                 <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Plan')}}</span>
+                    <div>
+                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"">
+                            {{ intval($productionPlan->plan_quantity) }}
+                        </span>
+                    </div>
+                </label>
+
+                <!-- <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Producido')}}</span>
-                    <!-- focus-within sets the color for the icon when input is focused -->
+
                     <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                         <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" value="{{ intval($productionPlan->production_quantity) }}" disabled />
                         <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
@@ -122,7 +132,45 @@
                             </svg>
                         </div>
                     </div>
+                </label> -->
+
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Producido')}}</span>
+                    <div>
+                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"">
+                            {{ intval($productionPlan->production_quantity) }}
+                        </span>
+                    </div>
                 </label>
+
+                @if (intval($productionPlan->production_quantity) == intval($productionPlan->plan_quantity))
+                <label class=" block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
+                    <div>
+                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600">
+                            {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
+                        </span>
+                    </div>
+                </label>
+                @elseif (intval($productionPlan->production_quantity) > intval($productionPlan->plan_quantity))
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
+                    <div>
+                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                            {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
+                        </span>
+                    </div>
+                </label>
+                @else
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
+                    <div>
+                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                            {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
+                        </span>
+                    </div>
+                </label>
+                @endif
 
                 <input type="hidden" name="production_plan_id" value="{{ $productionPlan->id }}">
                 <input type="hidden" name="part_number_id" value="{{ $productionPlan->partNumber->id }}">
