@@ -49,9 +49,9 @@ class CompletionProductionPlan implements ShouldQueue
             $dateEnd,
         );
 
-        StoreYF020Job::dispatch(
-            $this->productionPlan
-        );
+        // StoreYF020Job::dispatch(
+        //     $this->productionPlan
+        // );
 
         $this->productionPlan->update(['status_id' => $status->id]);
     }
