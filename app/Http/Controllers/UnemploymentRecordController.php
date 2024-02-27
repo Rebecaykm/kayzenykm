@@ -67,12 +67,15 @@ class UnemploymentRecordController extends Controller
 
     function record()
     {
-        $user = Auth::user()->departaments->pluck('id')->toArray();
+        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $stationArray = ['111010', '122030', '138210'];
 
-        $workcenters = Workcenter::whereHas('departament', function ($query) use ($user) {
-            $query->whereIn('departaments.id', $user);
-        })
-            ->orderBy('number', 'asc')
+        $workcenters = Workcenter::query()
+            ->select('workcenters.id', 'workcenters.number', 'workcenters.name')
+            ->join('departaments', 'workcenters.departament_id', 'departaments.id')
+            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $stationArray)
+            ->orderBy('workcenters.name', 'asc')
             ->get();
 
         $unemployments = Unemployment::orderBy('name', 'asc')->get();
