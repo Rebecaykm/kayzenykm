@@ -103,7 +103,7 @@
                         </li> -->
                         @endif
 
-                        <div class="border-t border-gray-100"></div>
+                        <!-- <div class="border-t border-gray-100"></div> -->
 
                         <!-- Team Management -->
                         @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())

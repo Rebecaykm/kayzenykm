@@ -115,7 +115,7 @@
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Plan')}}</span>
                     <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"">
+                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-700"">
                             {{ intval($productionPlan->plan_quantity) }}
                         </span>
                     </div>
@@ -137,7 +137,7 @@
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Producido')}}</span>
                     <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"">
+                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700"">
                             {{ intval($productionPlan->production_quantity) }}
                         </span>
                     </div>
@@ -147,7 +147,7 @@
                 <label class=" block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
                     <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600">
+                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600">
                             {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
                         </span>
                     </div>
@@ -156,7 +156,7 @@
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
                     <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
+                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
                             {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
                         </span>
                     </div>
@@ -165,7 +165,7 @@
                 <label class="block text-sm">
                     <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
                     <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-2xl text-center font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-white dark:bg-red-600">
                             {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
                         </span>
                     </div>

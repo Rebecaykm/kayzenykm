@@ -20,6 +20,8 @@
             @livewire('profile.update-password-form')
         </div>
 
+        @can('admin')
+
         @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
         <x-section-border />
 
@@ -51,6 +53,8 @@
 
             @livewire('profile.delete-user-form')
         </div>
+
+        @endcan
 
     </div>
 </x-app-layout>

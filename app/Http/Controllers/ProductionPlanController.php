@@ -33,14 +33,13 @@ class ProductionPlanController extends Controller
      */
     public function index(Request $request)
     {
-
         $search = strtoupper($request->search) ?? '';
 
-        $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
+        $startWeek = Carbon::now()->subWeek()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
-        $classArray = ['M1', 'M2', 'M3', 'M4'];
-        // $stationArray = ['111010', '122070', '139220', '139450', '139450', '138860'];
+        // $classArray = ['M1', 'M2', 'M3', 'M4'];
+        $stationArray = ['111010', '122030', '138210'];
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $status = Status::where('name', 'INACTIVO')->first();
@@ -61,10 +60,12 @@ class ProductionPlanController extends Controller
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('statuses', 'production_plans.status_id', '=', 'statuses.id')
-            ->where('part_numbers.number', 'LIKE', '%' . $search . '%')
             ->where('production_plans.status_id', '!=', $status->id)
-            // ->whereIn('workcenters.number', $stationArray)
-            ->whereIn('item_classes.abbreviation', $classArray)
+            ->where(function ($query) use ($search) {
+                $query->where('part_numbers.number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('workcenters.name', 'LIKE', '%' . $search . '%');
+            })
+            ->whereIn('workcenters.number', $stationArray)
             ->whereIn('departaments.code', $departamentCode)
             ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
@@ -81,14 +82,16 @@ class ProductionPlanController extends Controller
      */
     public function create()
     {
-        $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+        // $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+        $stationArray = ['111010', '122030', '138210'];
         $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
 
         $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id'])
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
-            ->whereIn('item_classes.abbreviation', $arrayClass)
+            ->whereIn('workcenters.number', $stationArray)
+            // ->whereIn('item_classes.abbreviation', $arrayClass)
             ->whereIn('departaments.code', $departamentCode)
             // ->orderBy('workcenters.number', 'asc')
             ->orderBy('part_numbers.number', 'asc')
