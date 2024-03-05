@@ -215,16 +215,30 @@
                                                                 } else {
                                                                     $valFN = $info['For' . $hoy . 'N'];
                                                                 }
-                                                                if (array_key_exists('F' . $hoy . 'D', $info) == false) {
-                                                                    $valFiD = $valFD;
-                                                                } else {
-                                                                    $valFiD = $info['F' . $hoy . 'D'];
+
+                                                                if (array_key_exists('F',$info) == false)
+                                                                {
+
+                                                                    $valFiD = $valFD ;
+                                                                    $valFiN = $valFN ;
+                                                                }else {
+
+
+                                                                    $firme=$info['F'];
+
+                                                                    if (array_key_exists('F' . $hoy . 'D', $firme) == false) {
+                                                                        $valFiD = 0;
+                                                                    } else {
+                                                                        $valFiD = $firme['F' . $hoy . 'D'];
+                                                                    }
+                                                                    if (array_key_exists('F' . $hoy . 'N', $firme) == false) {
+                                                                        $valFiN = 0;
+                                                                    } else {
+                                                                        $valFiN = $firme['F' . $hoy . 'N'];
+                                                                    }
+
                                                                 }
-                                                                if (array_key_exists('F' . $hoy . 'N', $info) == false) {
-                                                                    $valFiN = $valFN;
-                                                                } else {
-                                                                    $valFiN = $info['F' . $hoy . 'N'];
-                                                                }
+
                                                                 if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
                                                                     $valeclD = 0;
                                                                 } else {
