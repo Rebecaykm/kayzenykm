@@ -66,8 +66,8 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <!-- <th class="px-4 py-3">{{ __('ID') }}</th> -->
-                            <th class="px-4 py-3 sticky left-0 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Estación') }}</th>
-                            <th class="px-4 py-3 sticky left-20 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Número de Parte') }}</th>
+                            <th class="px-4 py-3">{{ __('Estación') }}</th>
+                            <th class="px-4 py-3 sticky left-0 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Número de Parte') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('SNP') }}</th> -->
                             <th class="px-4 py-3">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
@@ -86,11 +86,11 @@
                                 {{ $productionPlan->production_plan_id ?? '' }}
                             </td> -->
 
-                            <td class="px-4 py-3 text-xs sticky left-0 bg-white dark:bg-gray-800">
+                            <td class="px-4 py-3 text-xs">
                                 {{ $productionPlan->partNumber->workcenter->name ?? '' }}
                             </td>
 
-                            <td class="px-4 py-3 text-xs sticky left-20 bg-white dark:bg-gray-800">
+                            <td class="px-4 py-3 text-xs sticky left-0 bg-white dark:bg-gray-800">
                                 {{ $productionPlan->partNumber->number ?? '' }}
                             </td>
 

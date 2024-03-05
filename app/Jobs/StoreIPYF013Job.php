@@ -47,37 +47,34 @@ class StoreIPYF013Job implements ShouldQueue
     public function handle(): void
     {
         try {
+            $maxQuantityScrapRecord = ScrapRecord::query()
+                ->where('production_plan_id', $this->productionPlan->id)
+                ->orderByDesc('quantity')
+                ->orderByDesc('created_at')
+                ->first();
 
-            if ($this->productionPlan->scrap_quantity > 0) {
-                $maxQuantityScrapRecord = ScrapRecord::query()
-                    ->where('production_plan_id', $this->productionPlan->id)
-                    ->orderByDesc('quantity')
-                    ->orderByDesc('created_at')
-                    ->first();
-
-                IPYF013::query()->insert([
-                    'YFWRKC' => $this->productionPlan->partNumber->workcenter->number ?? '',
-                    'YFWRKN' => $this->productionPlan->partNumber->workcenter->name ?? '',
-                    'YFRDTE' => Carbon::parse($this->productionPlan->date)->format('Ymd') ?? '',
-                    'YFSHFT' => $this->productionPlan->shift->abbreviation ?? '',
-                    'YFPPNO' => $this->productionPlan->productionRecords()->latest('sequence')->value('sequence') ?? '',
-                    'YFPROD' => $this->productionPlan->partNumber->number ?? '',
-                    'YFSTIM' => $this->timeStart ?? '',
-                    'YFETIM' => $this->timeEnd ?? '',
-                    'YFSDT' => $this->dateStart . $this->timeStart ?? '',
-                    'YFEDT' => $this->dateEnd . $this->timeEnd ?? '',
-                    'YFQPLA' => $this->productionPlan->plan_quantity ?? '',
-                    'YFQPRO' => $this->productionPlan->production_quantity ?? '',
-                    'YFQSCR' => $this->productionPlan->scrap_quantity ?? '',
-                    'YFSCRE' => $maxQuantityScrapRecord->scrap->code ?? '',
-                    'YFCRDT' => Carbon::now()->format('Ymd') ?? '',
-                    'YFCRTM' => Carbon::now()->format('His') ?? '',
-                    'YFCRUS' => Auth::user()->infor ?? '',
-                    // 'YFCRWS' => ,
-                    // 'YFFIL1' => ,
-                    // 'YFFIL2' => ,
-                ]);
-            }
+            $status = IPYF013::query()->insert([
+                'YFWRKC' => $this->productionPlan->partNumber->workcenter->number ?? '',
+                'YFWRKN' => $this->productionPlan->partNumber->workcenter->name ?? '',
+                'YFRDTE' => Carbon::parse($this->productionPlan->date)->format('Ymd') ?? '',
+                'YFSHFT' => $this->productionPlan->shift->abbreviation ?? '',
+                'YFPPNO' => $this->productionPlan->productionRecords()->latest('sequence')->value('sequence') ?? '',
+                'YFPROD' => $this->productionPlan->partNumber->number ?? '',
+                'YFSTIM' => $this->timeStart ?? '',
+                'YFETIM' => $this->timeEnd ?? '',
+                'YFSDT' => $this->dateStart . $this->timeStart ?? '',
+                'YFEDT' => $this->dateEnd . $this->timeEnd ?? '',
+                'YFQPLA' => $this->productionPlan->plan_quantity ?? '',
+                'YFQPRO' => $this->productionPlan->production_quantity ?? '',
+                'YFQSCR' => $this->productionPlan->scrap_quantity ?? '',
+                'YFSCRE' => $maxQuantityScrapRecord->scrap->code ?? '',
+                'YFCRDT' => Carbon::now()->format('Ymd') ?? '',
+                'YFCRTM' => Carbon::now()->format('His') ?? '',
+                'YFCRUS' => Auth::user()->infor ?? '',
+                // 'YFCRWS' => ,
+                // 'YFFIL1' => ,
+                // 'YFFIL2' => ,
+            ]);
 
             // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
             // $query = "CALL LX834OU.YSF013B";
