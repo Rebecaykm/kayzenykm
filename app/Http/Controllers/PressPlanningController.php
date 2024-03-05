@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\KFP;
 use App\Models\FSO;
 use App\Models\HPO;
+use App\Models\IIM;
 
 class PressPlanningController extends Controller
 {
@@ -86,17 +87,20 @@ class PressPlanningController extends Controller
             ->where('SDDTE', '>=', $hoy)
             ->where('SDDTE', '<', $totalF)
             ->get()->toarray();
-            $ifso = Array_column($valPDp, 'SPROD');
+        $ifso = Array_column($valPDp, 'SPROD');
 
-        $ultfso = FSO::query()
-            ->select('SPROD', FSO::raw('MAX(SDDTE) AS SDDTE1 '), FSO::raw(' max(SOCNO) AS SOCNO'), FSO::raw('MAX(SQREQ) AS SREQ'), FSO::raw('MAX(SQFIN) AS REAL'))
-            ->wherein('SPROD', $part)
-            ->where('SDDTE', '<=', $totalF)
-            ->ORDERBY('SDDTE1', 'DESC')
-            ->groupBy('SPROD')
+        //         $ultfso = FSO::select('SPROD', 'SQREQ', 'SQFIN')
+        //         ->selectRaw('MAX(SDDTE) AS SDDTE')
+        //         ->wherein('SPROD', $part)
+        //         ->groupBy('SPROD', 'SQREQ', 'SQFIN')
+        //         ->orderByDesc('SDDTE')
+        //         ->get()->toarray();
+
+        // dd(  $ultfso );
+        //         $itemfso = Array_column($ultfso, 'SPROD');
+        $consumo = IIM::query()->select('IPROD','IMNNWU','ICLAS')
+        ->wherein('IPROD',array_column($rel, 'Mat'))
             ->get()->toarray();
-
-        $itemfso = Array_column($ultfso, 'SPROD');
 
         $valHPO = HPO::query()
             ->select('PORD', 'PLINE', 'PPROD', 'PQORD', 'PQREC', 'PDDTE')
@@ -106,107 +110,151 @@ class PressPlanningController extends Controller
             ->get()->toarray();
         $itemHPO = Array_column($valHPO, 'PPROD');
 
-        $ultHPo = HPO::query()
-            ->select('PPROD', HPO::raw('MAX(PDDTE) AS PDDTE1 '), HPO::raw(' max(PORD) AS PORD'), HPO::raw('MAX(PQORD) AS PQREC'), HPO::raw('MAX(PQREC) AS REAL'), HPO::raw('MAX(PLINE) AS PLINE'))
-            ->wherein('PPROD', array_column($rel, 'Mat'))
-            ->where('PDDTE', '<=', $totalF)
-            ->ORDERBY('PDDTE1', 'DESC')
-            ->groupBy('PPROD')
-            ->get()->toarray();
-        $itemultHPO = Array_column($ultHPo, 'PPROD');
+        // $ultHPo = HPO::query()
+        //     ->select('PPROD', HPO::raw('MAX(PDDTE) AS PDDTE1 '), HPO::raw(' max(PORD) AS PORD'), HPO::raw('MAX(PQORD) AS PQREC'), HPO::raw('MAX(PQREC) AS REAL'), HPO::raw('MAX(PLINE) AS PLINE'))
+        //     ->wherein('PPROD', array_column($rel, 'Mat'))
+        //     ->where('PDDTE', '<=', $totalF)
+        //     ->ORDERBY('PDDTE1', 'DESC')
+        //     ->groupBy('PPROD')
+        //     ->get()->toarray();
+        // $itemultHPO = Array_column($ultHPo, 'PPROD');
 
 
         $bom = [];
 
 
         foreach ($rel as $arre) {
-            $data = [];
 
+            $data = [];
             $datos = [];
             $fechaval = [];
-            $pos = array_search($arre['Mat'],   $itemultHPO);
+
             $parts = [];
             $parts += ["mat" => $arre['Mat']];
-            if ($pos !== false) {
-                $datos = $ultHPo[$pos];
-                $fechaval += ['Fecha' => $datos['PDDTE1']];
-                $fechaval += ['R' => $datos['PQREC']];
-                $fechaval += ['F' => $datos['REAL']];
-                $fechaval += ['orden' => $datos['PORD']];
-                $fechaval += ['LINEA' => $datos['PLINE']];
-                $parts += ["ultimaorden" => $fechaval];
+            $datos = HPO::query()
+                ->select('PPROD', 'PDDTE', 'PORD', 'PQORD', 'PQREC', 'PLINE')
+                ->where('PPROD', $arre['Mat'])
+                ->where('PDDTE', '<=',  $hoy)
+                ->ORDERBYDESC('PDDTE')
+                ->first();
+            $datval=array_search($arre['Mat'],array_column($consumo, 'IPROD'));
+            $datavalo=$consumo[$datval];
+            $fechaval += ['Peso' =>$datavalo['IMNNWU']];
+            $fechaval += ['Clase' =>$datavalo['ICLAS']];
+            if (!is_null($datos)) {
+                $fechaval += ['Fecha' => $datos->PDDTE];
 
-            }else
-            {$fechaval += ['Fecha' => ''];
+                $fechaval += ['R' => $datos->PQORD];
+                $fechaval += ['F' => $datos->PQREC];
+                $fechaval += ['orden' => $datos->PORD];
+                $fechaval += ['LINEA' => $datos->PLINE];
+                $parts += ["ultimaorden" => $fechaval];
+            } else {
+                $fechaval += ['Fecha' => ''];
                 $fechaval += ['R' => ''];
                 $fechaval += ['F' => ''];
-                $fechaval += ['orden' =>''];
+                $fechaval += ['orden' => ''];
                 $fechaval += ['LINEA' => ''];
                 $parts += ["ultimaorden" => $fechaval];
             }
 
+            $totalsemana = [];
+            $semana = [];
 
-            $totalsemana=[];
-            $semana=[];
-            while($vl=array_search($arre['Mat'],  $itemHPO)!==false)
-            {
-                $semana=[];
+
+
+            while ($vl = array_search($arre['Mat'],  $itemHPO) !== false) {
+                $semana = [];
                 // echo  $arre['Mat'].'<br>';
-                $pos=array_search($arre['Mat'],  $itemHPO);
-                $valarre= $valHPO[$pos];
-                $semana += [ 'R' =>   $valarre['PQORD']];
-                $semana += [  'F' =>  $valarre['PQREC']];
-                $semana+= ['orden' =>   $valarre['PORD']];
+
+                $pos = array_search($arre['Mat'],  $itemHPO);
+                $valarre = $valHPO[$pos];
+                $semana += ['R' =>   $valarre['PQORD']];
+                $semana += ['F' =>  $valarre['PQREC']];
+                $semana += ['orden' =>   $valarre['PORD']];
                 $semana += ['LINEA' =>   $valarre['PLINE']];
                 unset($itemHPO[$pos]);
-               $totalsemana+=[$valarre['PDDTE']=>$semana];
+                $totalsemana += [$valarre['PDDTE'] => $semana];
             }
 
-            $semana=[];
+            $semana = [];
 
-            $parts += ["semana" =>$totalsemana];
+            $parts += ["semana" => $totalsemana];
             $data += ["Mat" => $parts];
 
             $itemHPO = Array_column($valHPO, 'PPROD');
             $fechaval = [];
             $hijo = [];
+            $parts = [];
             foreach ($arre['parts'] as $part1) {
                 $parts = [];
-                $pos1 = array_search($part1,   $itemfso);
-                $dat = $ultfso[$pos1];
+                $ultfso = FSO::select('SPROD', 'SQREQ', 'SQFIN', 'SDDTE')
+                    ->where('SPROD', $part1)
+                    ->where('SDDTE', '<=',  $hoy)
+                    ->orderByDesc('SDDTE')
+                    ->first();
                 $parts += ['parte' => $part1];
-                $fechaval = ['Fecha' => $dat['SDDTE1']];
-                $fechaval += ["R" => $dat['SREQ']];
-                $fechaval += ["F" => $dat['REAL']];
-                $fechaval += ["TURNO" => $dat['SOCNO']];
-                $parts += ['ultimaorden' => $fechaval];
 
-
-                $totalsemana=[];
-
-                while($vl1=array_search($part1,    $ifso )!==false)
-                {
-
-                    $semana=[];
-                    // echo  $part1.'<br>';
-                    $pos=array_search($part1, $ifso);
-                    $valarre= $valPDp[$pos];
-                    $semana += [  'R' =>   $valarre['SQREQ']];
-                    $semana += [  'F' =>  $valarre['SQFIN']];
-                    unset( $ifso[$pos]);
-                    $totalsemana+=[$valarre['SDDTE']=>$semana];
+                if (!is_null($ultfso)) {
+                    $fechaval = ['Fecha' => $ultfso->SDDTE];
+                    $fechaval += ["R" => $ultfso->SQREQ];
+                    $fechaval += ["F" => $ultfso->SQFIN];
+                } else {
+                    $fechaval = ['Fecha' => '0'];
+                    $fechaval += ["R" => '0'];
+                    $fechaval += ["F" => '0'];
                 }
-                $parts += ["semana" =>$totalsemana];
-                array_push($hijo,  $parts);
-                $ifso = Array_column($valPDp, 'SPROD');
+                $parts += ['ultimaorden' => $fechaval];
+                //             $ultfso = FSO::select('SPROD', 'SQREQ', 'SQFIN')
+                //             ->selectRaw('MAX(SDDTE) AS SDDTE')
+                //            ->where('SPROD', $part)
+                //            ->groupBy('SPROD', 'SQREQ', 'SQFIN')
+                //            ->where('PDDTE', '<=', $totalF)
+                //            ->orderByDesc('SDDTE')
+                //            ->firts()->toarray();
+                //    dd();
 
+                //             $parts = [];
+                //             $pos1 = array_search($part1,   $itemfso);
+                //             $dat = $ultfso[$pos1];
+                //             $parts += ['parte' => $part1];
+                //             $fechaval = ['Fecha' => $dat['SDDTE1']];
+                //             $fechaval += ["R" => $dat['SREQ']];
+                //             $fechaval += ["F" => $dat['REAL']];
+                //             // $fechaval += ["TURNO" => $dat['SOCNO']];
+                //             $parts += ['ultimaorden' => $fechaval];
+                //             if($part1=='DA6A538C1                          ')
+                //             {
+                // dd('hola',$pos1,$ultfso, $ultfso[$pos1]  , $dat);
+                //             }
+
+                $totalsemana = [];
+
+                while ($vl1 = array_search($part1,    $ifso) !== false) {
+
+                    $semana = [];
+                    // echo  $part1.'<br>';
+                    $pos = array_search($part1, $ifso);
+                    $valarre = $valPDp[$pos];
+
+                    $semana += ['R' =>   $valarre['SQREQ']];
+                    $semana += ['F' =>  $valarre['SQFIN']];
+                    unset($ifso[$pos]);
+                    $totalsemana += [$valarre['SDDTE'] => $semana];
+                }
+                $parts += ["semana" => $totalsemana];
+
+                array_push($hijo,  $parts);
+
+                $ifso = Array_column($valPDp, 'SPROD');
             }
 
             $data += ["hijo" =>  $hijo];
+
             array_push($bom, $data);
             $ifso = Array_column($valPDp, 'SPROD');
-        }
 
+        }
 
 
 

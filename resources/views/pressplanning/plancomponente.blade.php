@@ -64,6 +64,10 @@
                     <tr class="text-gray-700 dark:text-gray-400   text-xs ">
                         <td class="px-2 py-1 text-xs bg-teal-300 ">
                             {{ $info['mat'] }}
+                            <br>
+                            Consumo:{{floatval($orden['Peso'])}}
+                            <br>
+                            Clase:{{$orden['Clase']}}
                         </td>
                         <td class="px-2 py-1 text-xs  ">
                             <div>
@@ -72,15 +76,19 @@
                             <div>
                                 Número de orden {{ $orden['orden'] }}
                             </div>
+                            @php
+                                $p=$orden['R'];
+                                $f=$orden['F'];
 
+                            @endphp
                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                 <label
                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                    {{ $orden['R'] }}
+                                    {{  intval($p)}}
                                 </label>
                                 <label
                                     class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                    {{ $orden['F'] }}
+                                    {{ intval($f) }}
                                 </label>
                             </div>
                         </td>
@@ -140,15 +148,19 @@
                         <td class="px-2 py-1 text-xs  ">
                             <div>
                                 Fecha: {{ $orden['Fecha'] }}
+                                @php
+                                    $p=$orden['R'] ;
+                                   $f= $orden['F']
+                                @endphp
                             </div>
                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                 <label
                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                    {{ $orden['R'] }}
+                                    {{ intval($p) }}
                                 </label>
                                 <label
                                     class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                    {{ $orden['F'] }}
+                                    {{intval($f) }}
                                 </label>
                             </div>
                         </td>

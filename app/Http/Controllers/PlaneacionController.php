@@ -332,7 +332,6 @@ class PlaneacionController extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
-
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
@@ -664,7 +663,6 @@ class PlaneacionController extends Controller
                 $total = 0;
                 foreach ($valfinales as $reg4) {
                     if ($reg4['MPROD'] == $prod['IPROD']) {
-
                         $dia = $reg4['MRDTE'];
                         $turno = $reg4['MRCNO'];
                         $total = $reg4['MQTY'] + 0;
@@ -689,6 +687,7 @@ class PlaneacionController extends Controller
             $padre += ['total' => $totalP];
 
             if (count($valPDp) > 0) {
+                $firme=[];
                 $total = 0;
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
@@ -704,7 +703,8 @@ class PlaneacionController extends Controller
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
-                        $planpadre += [$tipo . $dia . $valt => $total];
+                        $firme+= [$tipo . $dia . $valt => $total];
+                        // $planpadre += [$tipo . $dia . $valt => $total];
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
                         } else {
@@ -713,6 +713,8 @@ class PlaneacionController extends Controller
                         }
                     }
                 }
+                $planpadre += $firme;
+
             }
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
@@ -721,10 +723,8 @@ class PlaneacionController extends Controller
             $padre += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'], $prowk);
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
-
-
             $padre += $forcastp;
-            $padre += $planpadre;
+            $padre+= ['F'=>$planpadre];
             // dd( $padre);
             $inF1 += ['padre' => $padre];
 
