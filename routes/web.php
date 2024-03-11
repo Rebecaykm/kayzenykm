@@ -174,6 +174,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::resource('examples', \App\Http\Controllers\ExampleController::class);
     Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'index'])->name('examples');
+    Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'printipl'])->name('examples');
     Route::view('example', 'example')->name('example');
 
     /**
@@ -268,4 +269,17 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('planeacionview/exportfinal', [\App\Http\Controllers\planeacionviewController::class, 'exportfinal'])->name('planeacionview.exportfinal');
     Route::get('planeacionview/exportsubcomponentes', [\App\Http\Controllers\planeacionviewController::class, 'exportsubcomponentes'])->name('planeacionview.exportsubcomponentes');
     Route::post('planeacionview/siguiente', [\App\Http\Controllers\planeacionviewController::class, 'siguiente'])->name('planeacionview.siguiente');
+
+
+    // --------------------------------------- reportes Power bi
+    Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
+
+
+
+
+
+
+
+
+
 });

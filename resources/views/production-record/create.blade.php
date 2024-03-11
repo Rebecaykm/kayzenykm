@@ -16,8 +16,8 @@
         </div>
         @endif
 
-        <!-- <form action="{{ route('prodcution-record.store') }}" method="post">
-            @csrf -->
+       <form action="{{ route('prodcution-record.store') }}" method="post">
+            @csrf
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div class="grid grid-cols-3 gap-4">
@@ -246,7 +246,7 @@
             </div>
         </div>
 
-        <!-- </form> -->
+        </form>
     </div>
     <script>
         // var pdfData = "{{ session('pdfData') }}";
@@ -319,13 +319,13 @@
             var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd, '_blank');
 
             // Esperar a que la ventana se cargue completamente antes de imprimir
-            ventanaImpresion.onload = function() {
-                ventanaImpresion.print();
-                // ventanaImpresion.onafterprint = function() {
-                //     ventanaImpresion.close();
-                // };
-                window.location.reload();
-            };
+            // ventanaImpresion.onload = function() {
+            //     ventanaImpresion.print();
+            //     // ventanaImpresion.onafterprint = function() {
+            //     //     ventanaImpresion.close();
+            //     // };
+            //     window.location.reload();
+            // };
         }
     </script>
 

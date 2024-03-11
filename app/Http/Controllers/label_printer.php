@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
- require  'C:\label\eps.php'; //Nota: si renombraste la carpeta a algo diferente de "ticket" cambia el nombre en esta línea
+// require  'C:\label\eps.php'; //Nota: si renombraste la carpeta a algo diferente de "ticket" cambia el nombre en esta línea
 // require __DIR__ . '/vendor/autoload.php';
 use Mike42\Escpos\EscposImage;
 use Illuminate\Http\Request;
+use Illuminate\Queue\SerializesModels;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-
-
-
-
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\Printer;
-
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class label_printer extends Controller
@@ -27,75 +23,60 @@ class label_printer extends Controller
     {
 
         // $nombre_impresora = 'Intermec';
-        $nombre_impresora='testipl';
-// $connector = new NetworkPrintConnector("192.168.130.104", 9100);
-$connector = new WindowsPrintConnector($nombre_impresora);
+        $nombre_impresora = 'testipl';
+        // $connector = new NetworkPrintConnector('192.168.180.163', 'USB003');
+
+        // $connector = new NetworkPrintConnector("192.168.120.44", 9100);
+
+
         try {
-
-
+            $connector = new WindowsPrintConnector('2500');
 
             $printer = new Printer($connector);
-       $command='RCW1175hPF*H1;f1;o34,1174;c28;b0;h11;w6;d3,DEPARTAMENTO H2;f3;o651,16;c28;b0;h11;w22;d3,CARROCERIAH3;f3;o651,304;c28;b0;h11;w6;d3, D0Rl13E*,111
-       ';
-               //    $command = '
+            dd( $printer );
+            $command = '
 
-        //     <STX><ESC>C<SI>W1154<SI>H1000<ETX>
-        //     <STX><ESC>P<ETX><STX>F*<ETX>
-        //     <STX>H1;f3;o796,9;c69;b0;h18;w19;d3,Line production<ETX>
-        //     <STX>L2;f0;o752,408;l50;w2<ETX>
-        //     <STX>L3;f1;o801,409;l409;w2<ETX>
-        //     <STX>L4;f1;o753,409;l409;w2<ETX>
-        //     <STX>B5;f3;o276,51;c0,6;w7;h120;r0;d3,12345678<ETX>
-        //     <STX>H6;f3;o144,498;c66;b0;h17;w16;d3,12345678<ETX>
-        //     <STX>H7;f3;o604,51;c66;b0;h21;w40;d3,umero de parte<ETX>
-        //     <STX>H8;f3;o872,10;c69;b0;h17;w17;d3,Production Date<ETX>
-        //     <STX>L9;f0;o830,261;l49;w2<ETX>
-        //     <STX>L10;f1;o878,262;l262;w2<ETX>
-        //     <STX>L11;f1;o831,262;l262;w2<ETX>
-        //     <STX>H12;f3;o867,540;c69;b0;h17;w17;d3,Shop order No.<ETX>
-        //     <STX>W13;f0;o825,506;h291;l48;w2<ETX>
-        //     <STX>H14;f3;o651,491;c69;b0;h17;w17;d3,Parts number <ETX>
-        //     <STX>L15;f0;o634,10;l23;w2<ETX>
-        //     <STX>L16;f1;o657,34;l23;w2<ETX>
-        //     <STX>L17;f1;o657,1154;l1120;w2<ETX>
-        //     <STX>L18;f1;o657,1177;l23;w2<ETX>
-        //     <STX>L19;f0;o634,1176;l23;w2<ETX>
-        //     <STX>L20;f0;o611,1176;l22;w2<ETX>
-        //     <STX>L21;f1;o611,1177;l23;w2<ETX>
-        //     <STX>L22;f1;o611,1154;l1120;w2<ETX>
-        //     <STX>L23;f1;o611,34;l23;w2<ETX>
-        //     <STX>L24;f0;o611,10;l22;w2<ETX>
-        //     <STX>H25;f3;o493,51;c66;b0;h21;w40;d3,umero de parte<ETX>
-        //     <STX>H26;f3;o727,49;c66;b0;h21;w38;d3,umero de partekw wknkwnknwkn<ETX>
-        //     <STX>H27;f3;o867,294;c66;b0;h21;w41;d3,06/09<ETX>
-        //     <STX>H28;f3;o867,840;c66;b0;h21;w41;d3,12345678<ETX>
-        //     <STX>H29;f3;o541,489;c69;b0;h17;w17;d3,Parts name <ETX>
-        //     <STX>L30;f0;o500,1159;l48;w2<ETX>
-        //     <STX>L31;f1;o547,1160;l1160;w2<ETX>
-        //     <STX>L32;f1;o501,1160;l1160;w2<ETX>
-        //     <STX>H33;f3;o427,917;c69;b0;h19;w19;d3,Seq<ETX>
-        //     <STX>W34;f0;o380,732;h426;l53;w2<ETX>
-        //     <STX>H35;f3;o427,320;c69;b0;h19;w19;d3,NSP<ETX>
-        //     <STX>W36;f0;o380,204;h288;l53;w2<ETX>
-        //     <STX>H37;f3;o429,71;c69;b0;h20;w21;d3,R/L<ETX>
-        //     <STX>L38;f0;o380,204;l53;w2<ETX>
-        //     <STX>L39;f1;o432,205;l205;w2<ETX>
-        //     <STX>L40;f1;o381,205;l205;w2<ETX>
-        //     <STX>H41;f3;o427,546;c69;b0;h19;w19;d3,Pack -c<ETX>
-        //     <STX>W42;f0;o380,490;h244;l53;w2<ETX>
-        //     <STX>H43;f3;o355,58;c66;b0;h34;w67;d3,R<ETX>
-        //     <STX>H44;f3;o355,306;c66;b0;h34;w67;d3,R<ETX>
-        //     <STX>H45;f3;o355,569;c66;b0;h34;w67;d3,R<ETX>
-        //     <STX>H46;f3;o352,764;c66;b0;h29;w57;d3,001-999<ETX>
-        //     <STX>H47;f3;o58,47;c66;b0;h25;w25;d3,Identifaction Card <ETX>
-        //     <STX>H48;f3;o50,662;c66;b0;h15;w14;d3,Y-tec Keylex Mexico S.A de C.V <ETX>
-        //     <STX>D0<ETX>
-        //     <STX>R<ETX>
-        //     <STX><SI>l13<ETX>
-        //     <STX><ESC>E*,1<CAN><ETX>
-        //     <STX><RS>1<US>1<ETB><ETX>    ;
+       R CW816 PF*
+       H1;f3;o558,22;c61;b0;h12;w14;d3,Departamento
+       H2;f3;o526,34;c61;b0;h20;w10;d3,%Departamento%
 
-        //     ';
+       L50;f0;o481,345;l100;w3
+       H3;f3;o558,350;c61;b0;h12;w14;d3,Estacion
+       H4;f3;o526,350;c61;b0;;h20;w10;d3,%Estacion%
+       L51;f0;o481,580;l100;w3
+       H5;f3;o558,584;c61;b0;h12;w14;d3,Proyecto
+       H6;f3;o526,584;c61;b0;;h20;w10;d3,%Proyecto%
+       L25;f1;o481,809;l787;w3
+       H7;f3;o480,22;c61;b0;;h20;w10;d3,Part number
+       H8;f3;o440,100;c68;b0;h26;w26;d3,%Part number %
+       L26;f1;o381,809;l787;w3
+       H9;f3;o380,22;c61;b0;h12;w14;d3,Fecha de produccion
+       H10;f3;o350,22;c61;b0;h20;w10;d3,%20/03/2024 D%
+       L52;f0;o306,415;l80;w3
+       H11;f3;o380,420;c61;b0;h12;w14;d3,Consecutivo
+       H12;f3;o350,420;c61;b0;h20;w10;d3,%001%
+       L27;f1;o306,809;l787;w3
+       H13;f3;o305,22;c61;b0;h12;w14;d3,Contenedor
+       H14;f3;o280,34;c61;b0;h20;w10;d3,%rollpack%
+       L53;f0;o231,345;l80;w3
+       H15;f3;o305,350;c61;b0;h12;w14;d3,SNP
+       H16;f3;o280,350;c61;b0;;h20;w10;d3,%SPN%
+       L28;f1;o231,809;l787;w3
+       H17;f3;o230,22;c61;b0;h12;w14;d3,Cantidad producida
+       H18;f3;o210,22;c61;b0;;h20;w10;d3,%1500%
+       H19;f3;o120,22;c61;b0;h8;w14;d3,IDENTIFATION CARD
+       H20;f3;o100,22;c61;b0;;h10;w10;d3,%REIMPRESION%
+       H21;f3;o80,22;c61;b0;;h8;w10;d3,%FECHA DE IMPRESION %
+       H23;f3;o60,22;c61;b0;h10;w14;d3,%2024/03/20 18:15:20%
+       H22;f3;o20,22;c61;b0;h8;w14;d3,Y-TEC KEYLEX MEXICO
+       B24;o0,450;c17,200,0;w5;h5;d3,%SERIAL%%part_number%%estacion%
+       D0
+       R
+       l13
+       E*,1
+       1
+       1
+          ';
             $printer->getPrintConnector()->write($command);
             $printer->getPrintConnector()->finalize();
         } catch (\Exception $e) {
