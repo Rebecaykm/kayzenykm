@@ -16,8 +16,8 @@
         </div>
         @endif
 
-       <form action="{{ route('prodcution-record.store') }}" method="post">
-            @csrf
+        <!-- <form action="{{ route('prodcution-record.store') }}" method="post">
+            @csrf -->
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div class="grid grid-cols-3 gap-4">
@@ -121,17 +121,17 @@
                     </div>
                 </label>
 
-                <!-- <label class="block text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Producido')}}</span>
+                <!-- <label class=" block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">{{__('Cantidad Producido')}}</span>
 
-                    <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                        <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" value="{{ intval($productionPlan->production_quantity) }}" disabled />
-                        <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
-                            </svg>
-                        </div>
-                    </div>
+                            <div class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                <input class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" value="{{ intval($productionPlan->production_quantity) }}" disabled />
+                                <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+                                    </svg>
+                                </div>
+                            </div>
                 </label> -->
 
                 <label class="block text-sm">
@@ -145,12 +145,12 @@
 
                 @if (intval($productionPlan->production_quantity) == intval($productionPlan->plan_quantity))
                 <label class=" block text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
-                    <div>
-                        <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600">
-                            {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
-                        </span>
-                    </div>
+                            <span class="text-gray-700 dark:text-gray-400">{{__('Diferencia')}}</span>
+                            <div>
+                                <span class="block w-full mt-1 px-2 py-1 text-lg text-center font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600">
+                                    {{ intval($productionPlan->production_quantity) - intval($productionPlan->plan_quantity) }}
+                                </span>
+                            </div>
                 </label>
                 @elseif (intval($productionPlan->production_quantity) > intval($productionPlan->plan_quantity))
                 <label class="block text-sm">
@@ -246,7 +246,7 @@
             </div>
         </div>
 
-        </form>
+        <!-- </form> -->
     </div>
     <script>
         // var pdfData = "{{ session('pdfData') }}";
@@ -318,14 +318,22 @@
             // Abrir una nueva ventana para la impresión
             var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd, '_blank');
 
-            // Esperar a que la ventana se cargue completamente antes de imprimir
-            // ventanaImpresion.onload = function() {
-            //     ventanaImpresion.print();
-            //     // ventanaImpresion.onafterprint = function() {
-            //     //     ventanaImpresion.close();
-            //     // };
-            //     window.location.reload();
-            // };
+            var printer = '{{ $productionPlan->partNumber->workcenter->printer }}';
+
+            if (printer == null) {
+                ventanaImpresion.onload = function() {
+                    ventanaImpresion.print();
+                    // ventanaImpresion.onafterprint = function() {
+                    //     ventanaImpresion.close();
+                    // };
+                    window.location.reload();
+                };
+            } else {
+                ventanaImpresion.onload = function() {
+                    ventanaImpresion.close();
+                    window.location.reload();
+                };
+            }
         }
     </script>
 

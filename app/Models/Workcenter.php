@@ -14,7 +14,7 @@ class Workcenter extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'number', 'name', 'description', 'departament_id'
+        'number', 'name', 'description', 'departament_id', 'printer_id'
     ];
 
     public function departament(): BelongsTo
@@ -30,5 +30,10 @@ class Workcenter extends Model
     public function unemploymentRecords(): HasMany
     {
         return $this->hasMany(UnemploymentRecord::class, 'workcenter_id');
+    }
+
+    public function printer(): BelongsTo
+    {
+        return $this->belongsTo(Printer::class);
     }
 }

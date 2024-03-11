@@ -174,7 +174,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::resource('examples', \App\Http\Controllers\ExampleController::class);
     Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'index'])->name('examples');
-    Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'printipl'])->name('examples');
     Route::view('example', 'example')->name('example');
 
     /**
@@ -247,8 +246,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::get('Search', [\App\Http\Livewire\Search::class, 'render'])->name('search');
     Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
- Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
- /**
+    Route::get('print', [\App\Http\Controllers\label_printer::class, 'index'])->name('print.index');
+    /**
      * Planeacion prensas
      */
     Route::resource('pressplaning', \App\Http\Controllers\PressPlanningController::class);
@@ -273,13 +272,4 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     // --------------------------------------- reportes Power bi
     Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
-
-
-
-
-
-
-
-
-
 });
