@@ -88,4 +88,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ScrapRecord::class, 'user_id');
     }
+
+    public function madeCycleInventories(): HasMany
+    {
+        return $this->hasMany(CycleInventory::class, 'user_made_id');
+    }
+
+    public function validatingCycleInventories(): HasMany
+    {
+        return $this->hasMany(CycleInventory::class, 'user_validating_id');
+    }
 }

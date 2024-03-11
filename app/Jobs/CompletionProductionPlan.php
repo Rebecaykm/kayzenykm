@@ -55,15 +55,15 @@ class CompletionProductionPlan implements ShouldQueue
 
         $this->productionPlan->update(['status_id' => $status->id]);
 
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YSF013B";
-        $result = odbc_exec($conn, $query);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU.YSF013B";
+        // $result = odbc_exec($conn, $query);
 
-        if ($result) {
-            Log::info("LX834OU.YSF013B.- La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-        } else {
-            Log::alert("LX834OU.YSF013B.- Error en la consulta: " . odbc_errormsg($conn));
-        }
-        odbc_close($conn);
+        // if ($result) {
+        //     Log::info("LX834OU.YSF013B.- La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+        // } else {
+        //     Log::alert("LX834OU.YSF013B.- Error en la consulta: " . odbc_errormsg($conn));
+        // }
+        // odbc_close($conn);
     }
 }

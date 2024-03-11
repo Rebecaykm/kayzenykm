@@ -82,4 +82,9 @@ class PartNumber extends Model
             ->withPivot('required_quantity');
             // ->withTimestamps();
     }
+
+    public function inventoryLogs(): HasMany
+    {
+        return $this->hasMany(InventoryLog::class, 'part_number_id');
+    }
 }

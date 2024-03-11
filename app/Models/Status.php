@@ -25,4 +25,9 @@ class Status extends Model
     {
         return $this->hasMany(ProductionPlan::class);
     }
+
+    public function cycleInventories(): HasMany
+    {
+        return $this->hasMany(CycleInventory::class);
+    }
 }
