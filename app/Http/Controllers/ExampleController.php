@@ -78,7 +78,7 @@ class ExampleController extends Controller
 
                     $nombre_impresora = 'testipl';
 
-                    $connector = new NetworkPrintConnector($printer->ip, 9100);
+                    $connector = new NetworkPrintConnector($printer->ip, $printer->port);
 
                     try {
                         $printer = new Printer($connector);

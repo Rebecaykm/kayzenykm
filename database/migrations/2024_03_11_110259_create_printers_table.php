@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('printers', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('ip')->nullable();
             $table->string('model')->nullable();
+            $table->string('ip')->nullable();
+            $table->string('port')->nullable();
             $table->timestamps();
         });
     }

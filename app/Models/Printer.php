@@ -10,8 +10,10 @@ class Printer extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
-        'name', 'ip', 'model'
+        'name', 'model', 'ip', 'port'
     ];
 
     public function workcenters(): HasMany
