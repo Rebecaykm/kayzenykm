@@ -314,23 +314,20 @@
                 timeEndError.classList.add('hidden');
             }
 
+            var printer = "{{ $productionPlan->partNumber->workcenter->printer->ip ?? '' }}";
 
-            // Abrir una nueva ventana para la impresión
-            var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd, '_blank');
+            if (printer) {
+                window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd;
+                // var ventanaImpresion = window.open('{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd, '_blank');
+            } else {
+                // Abrir una nueva ventana para la impresión
+                var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity + '&timeStart=' + timeStart + '&timeEnd=' + timeEnd, '_blank');
 
-            var printer = '{{ $productionPlan->partNumber->workcenter->printer }}';
-
-            if (printer == null) {
                 ventanaImpresion.onload = function() {
                     ventanaImpresion.print();
                     // ventanaImpresion.onafterprint = function() {
                     //     ventanaImpresion.close();
                     // };
-                    window.location.reload();
-                };
-            } else {
-                ventanaImpresion.onload = function() {
-                    ventanaImpresion.close();
                     window.location.reload();
                 };
             }

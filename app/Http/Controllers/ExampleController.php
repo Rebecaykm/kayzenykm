@@ -29,6 +29,7 @@ class ExampleController extends Controller
      */
     public function index(Request $request)
     {
+
         try {
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
             $partNumberId = $request->partNumberId;
@@ -37,52 +38,102 @@ class ExampleController extends Controller
             $timeEnd = Carbon::parse($request->timeEnd);
             $minutes = $timeEnd->diffInMinutes($timeStart);
             $partNumber = PartNumber::findOrFail($partNumberId);
-            $printer = $productionPlan->partNumber->workcenter->printer;
 
-            if ($printer) {
-                for ($count = 1; $quantity > 0; $count++) {
-                    $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
-                        Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
-                        Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
+            for ($count = 1; $quantity > 0; $count++) {
 
-                    $currentQuantity = min($quantity, $partNumber->quantity);
+                $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
+                    Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
+                    Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
 
-                    $result = ProdcutionRecord::storeProductionRecord(
-                        $partNumberId,
-                        $currentQuantity,
-                        $timeStart->format('Ymd H:i:s.v'),
-                        $timeEnd->format('Ymd H:i:s.v'),
-                        $minutes,
-                        $productionPlan->id,
-                        $currentQuantity,
-                        $prodcutionRecordStatus->id
-                    );
+                $currentQuantity = min($quantity, $partNumber->quantity);
 
-                    $dataArray[] = [
-                        'id' => $result->id,
-                        'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
-                        'workcenterNumber' => trim($partNumber->workcenter->number),
-                        'workcenterName' => trim($partNumber->workcenter->name),
-                        'partNumber' => trim($partNumber->number),
-                        'quantity' => $currentQuantity,
-                        'sequence' => $result->sequence,
-                        'date' => $productionPlan->date,
-                        'shift' => $productionPlan->shift->abbreviation,
-                        'container' => trim($partNumber->standardPackage->name),
-                        'snp' => $partNumber->quantity,
-                        'production_plan_id' => $result->production_plan_id,
-                        'user_id' => $result->user_id,
-                        'projects' => $partNumber->projects,
-                        'a' => "*** ORIGINAL ***"
-                    ];
+                $result = ProdcutionRecord::storeProductionRecord(
+                    $partNumberId,
+                    $currentQuantity,
+                    $timeStart->format('Ymd H:i:s.v'),
+                    $timeEnd->format('Ymd H:i:s.v'),
+                    $minutes,
+                    $productionPlan->id,
+                    $currentQuantity,
+                    $prodcutionRecordStatus->id
+                );
 
-                    $nombre_impresora = 'testipl';
+                $dataArray[] = [
+                    'id' => $result->id,
+                    'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
+                    'workcenterNumber' => trim($partNumber->workcenter->number),
+                    'workcenterName' => trim($partNumber->workcenter->name),
+                    'partNumber' => trim($partNumber->number),
+                    'quantity' => $currentQuantity,
+                    'sequence' => $result->sequence,
+                    'date' => $productionPlan->date,
+                    'shift' => $productionPlan->shift->abbreviation,
+                    'container' => trim($partNumber->standardPackage->name),
+                    'snp' => $partNumber->quantity,
+                    'production_plan_id' => $result->production_plan_id,
+                    'user_id' => $result->user_id,
+                    'projects' => $partNumber->projects,
+                    'a' => "*** ORIGINAL ***"
+                ];
 
-                    $connector = new NetworkPrintConnector($printer->ip, $printer->port);
+                $quantity -= $partNumber->quantity;
+            }
+            $dataArrayWithQr = [];
+            foreach ($dataArray as $key => $data) {
+                $qrData = $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
+                $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
+                $data['qrCode'] = $qrCodeData;
 
-                    try {
-                        $printer = new Printer($connector);
-                        $command = '
+                $dataArrayWithQr[] = $data;
+            }
+
+            return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
+        } catch (\Exception $e) {
+            Log::emergency('ExampleController: ' . $e->getMessage());
+        }
+    }
+
+    public function printipl(Request $request)
+    {
+        try {
+            $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
+
+            $x = $productionPlan->partNumber->workcenter->printer;
+
+            $partNumberId = $request->partNumberId;
+            $quantity = $request->quantity;
+            $timeStart = Carbon::parse($request->timeStart);
+            $timeEnd = Carbon::parse($request->timeEnd);
+
+            $minutes = $timeEnd->diffInMinutes($timeStart);
+
+            $partNumber = PartNumber::findOrFail($partNumberId);
+
+            $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
+
+            for ($count = 1; $quantity > 0; $count++) {
+
+                $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
+                    Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
+                    Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
+
+                $currentQuantity = min($quantity, $partNumber->quantity);
+
+                $result = ProdcutionRecord::storeProductionRecord(
+                    $partNumberId,
+                    $currentQuantity,
+                    $timeStart->format('Ymd H:i:s.v'),
+                    $timeEnd->format('Ymd H:i:s.v'),
+                    $minutes,
+                    $productionPlan->id,
+                    $currentQuantity,
+                    $prodcutionRecordStatus->id
+                );
+
+                try {
+                    $connector = new NetworkPrintConnector($x->ip, $x->port);
+                    $printer = new Printer($connector);
+                    $command = '
                             R CW816 PF*
                             H1;f3;o558,22;c61;b0;h12;w14;d3,Departamento
                             H2;f3;o526,34;c61;b0;h20;w10;d3,' . strtoupper(trim($partNumber->workcenter->departament->name)) . '
@@ -91,7 +142,7 @@ class ExampleController extends Controller
                             H4;f3;o526,350;c61;b0;;h20;w10;d3,' . trim($partNumber->workcenter->name) . '
                             L51;f0;o481,580;l100;w3
                             H5;f3;o558,584;c61;b0;h12;w14;d3,Proyecto
-                            H6;f3;o526,584;c61;b0;;h20;w10;d3,' . $partNumber->projects . '
+                            H6;f3;o526,584;c61;b0;;h20;w10;d3,' . $models . '
                             L25;f1;o481,809;l787;w3
                             H7;f3;o480,22;c61;b0;;h20;w10;d3,Part number
                             H8;f3;o440,100;c68;b0;h26;w26;d3,' . trim($partNumber->number) . '
@@ -124,65 +175,15 @@ class ExampleController extends Controller
                             1
                             1
                         ';
-                        $printer->getPrintConnector()->write($command);
-                        $printer->getPrintConnector()->finalize();
-                    } catch (\Exception $e) {
-                        return "No se pudo establecer la conexión con la impresora: " . $e->getMessage();
-                    }
-                    $quantity -= $partNumber->quantity;
-                }
-                return redirect()->back();
-            } else {
-                for ($count = 1; $quantity > 0; $count++) {
-
-                    $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
-                        Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
-                        Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
-
-                    $currentQuantity = min($quantity, $partNumber->quantity);
-
-                    $result = ProdcutionRecord::storeProductionRecord(
-                        $partNumberId,
-                        $currentQuantity,
-                        $timeStart->format('Ymd H:i:s.v'),
-                        $timeEnd->format('Ymd H:i:s.v'),
-                        $minutes,
-                        $productionPlan->id,
-                        $currentQuantity,
-                        $prodcutionRecordStatus->id
-                    );
-
-                    $dataArray[] = [
-                        'id' => $result->id,
-                        'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
-                        'workcenterNumber' => trim($partNumber->workcenter->number),
-                        'workcenterName' => trim($partNumber->workcenter->name),
-                        'partNumber' => trim($partNumber->number),
-                        'quantity' => $currentQuantity,
-                        'sequence' => $result->sequence,
-                        'date' => $productionPlan->date,
-                        'shift' => $productionPlan->shift->abbreviation,
-                        'container' => trim($partNumber->standardPackage->name),
-                        'snp' => $partNumber->quantity,
-                        'production_plan_id' => $result->production_plan_id,
-                        'user_id' => $result->user_id,
-                        'projects' => $partNumber->projects,
-                        'a' => "*** ORIGINAL ***"
-                    ];
-
-                    $quantity -= $partNumber->quantity;
-                }
-                $dataArrayWithQr = [];
-                foreach ($dataArray as $key => $data) {
-                    $qrData = $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
-                    $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
-                    $data['qrCode'] = $qrCodeData;
-
-                    $dataArrayWithQr[] = $data;
+                    $printer->getPrintConnector()->write($command);
+                    $printer->getPrintConnector()->finalize();
+                } catch (\Exception $e) {
+                    return "No se pudo establecer la conexión con la impresora: " . $e->getMessage();
                 }
 
-                return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
+                $quantity -= $partNumber->quantity;
             }
+            return redirect()->back();
         } catch (\Exception $e) {
             Log::emergency('ExampleController: ' . $e->getMessage());
         }

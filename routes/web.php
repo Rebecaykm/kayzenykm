@@ -174,6 +174,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     // Route::resource('examples', \App\Http\Controllers\ExampleController::class);
     Route::get('examples', [\App\Http\Controllers\ExampleController::class, 'index'])->name('examples');
+    Route::get('printipl', [\App\Http\Controllers\ExampleController::class, 'printipl'])->name('printipl');
     Route::view('example', 'example')->name('example');
 
     /**
