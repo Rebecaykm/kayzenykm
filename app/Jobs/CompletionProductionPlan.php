@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\ProdcutionRecord;
 use App\Models\ProductionPlan;
+use App\Models\ScrapRecord;
 use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -52,6 +53,12 @@ class CompletionProductionPlan implements ShouldQueue
         // StoreYF020Job::dispatch(
         //     $this->productionPlan
         // );
+
+        $scrapRecords = ScrapRecord::where('production_plan_id', $this->productionPlan->id)->get();
+
+        foreach ($scrapRecords as $scrapRecord) {
+            $scrapRecord->update(['flag' => 1]);
+        }
 
         $this->productionPlan->update(['status_id' => $status->id]);
 
