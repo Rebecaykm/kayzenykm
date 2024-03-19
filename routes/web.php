@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -273,4 +274,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     // --------------------------------------- reportes Power bi
     Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
+
+    Route::resource('chart', \App\Http\Controllers\ChartController::class);
 });
