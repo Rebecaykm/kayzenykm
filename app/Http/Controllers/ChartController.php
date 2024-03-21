@@ -7,6 +7,7 @@ use App\Models\ProdcutionRecord;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
@@ -19,7 +20,7 @@ class ChartController extends Controller
 
         $departamentCodes = Auth::user()->departaments->pluck('code')->toArray();
 
-        $startWeek = Carbon::now()->startOfWeek()->format('Ymd H:i:s.v');
+        $startWeek = Carbon::now()->subWeek()->startOfWeek()->format('Ymd H:i:s.v');
         $endWeek = Carbon::now()->endOfWeek()->format('Ymd H:i:s.v');
 
         $prodcutionRecords = ProdcutionRecord::select([
@@ -49,43 +50,57 @@ class ChartController extends Controller
             ->join('statuses', 'statuses.id', '=', 'prodcution_records.status_id')
             ->whereIn('departaments.code', $departamentCodes)
             ->whereBetween('prodcution_records.created_at', [$startWeek, $endWeek])
-            ->orderByDesc('prodcution_records.created_at')
+
+            ->orderBy('prodcution_records.created_at')
             ->get();
 
-        $arrayDepartament = [];
+
+        $arrayProduction = [];
 
         foreach ($departaments as $departament) {
             $productionByDepartament = $prodcutionRecords->where('departament', $departament->name);
 
-            $arrayDepartament[$departament->name] = [];
+            $arrayProduction[$departament->name] = [];
 
             foreach ($productionByDepartament as $prodcutionRecord) {
                 $noParte = $prodcutionRecord['noParte'];
                 $quantityProduced = (float) $prodcutionRecord['quantityProduced']; // Convertir a flotante
                 $dateRecorded = Carbon::parse($prodcutionRecord['dateRecorded']); // Obtener la fecha y hora completa
 
-                // Obtener la fecha y hora del registro
-                $dateRecordedDay = $dateRecorded->toDateString(); // Obtener solo la fecha
-                $hour = $dateRecorded->hour; // Obtener la hora
+                // Redondear la hora al inicio de la hora
+                $hourlyDateTime = $dateRecorded->copy()->startOfHour()->format('Y-m-d H:00:00');
 
                 // Verificar si el número de parte ya existe en el array
-                if (!isset($arrayDepartament[$departament->name][$noParte])) {
-                    // Inicializar el arreglo del número de parte
-                    $arrayDepartament[$departament->name][$noParte] = [];
+                if (!isset($arrayProduction[$departament->name][$noParte][$hourlyDateTime])) {
+                    // Inicializar el arreglo del número de parte para esa hora
+                    $arrayProduction[$departament->name][$noParte][$hourlyDateTime] = 0;
                 }
 
-                // Verificar si la fecha ya existe en el arreglo del número de parte
-                if (!isset($arrayDepartament[$departament->name][$noParte][$dateRecordedDay])) {
-                    // Inicializar el arreglo de la fecha
-                    $arrayDepartament[$departament->name][$noParte][$dateRecordedDay] = [];
-                }
-
-                // Agregar la cantidad producida a la hora correspondiente
-                $arrayDepartament[$departament->name][$noParte][$dateRecordedDay][$hour] = $quantityProduced;
+                // Sumar la cantidad producida para esa hora
+                $arrayProduction[$departament->name][$noParte][$hourlyDateTime] += $quantityProduced;
             }
         }
-        dd($arrayDepartament);
+
+        // Limpiar y reestructurar los datos
+        $cleanedArrayProduction = [];
+
+        foreach ($arrayProduction as $departament => $partData) {
+            foreach ($partData as $partNumber => $hourlyData) {
+                // Filtrar los datos para eliminar las horas sin producción
+                $filteredHourlyData = array_filter($hourlyData);
+
+                if (!empty($filteredHourlyData)) {
+                    $cleanedArrayProduction[$departament][$partNumber] = [
+                        'label' => array_keys($filteredHourlyData),
+                        'data' => array_values($filteredHourlyData)
+                    ];
+                }
+            }
+        }
+
+        return view('chart.index', compact('cleanedArrayProduction'));
     }
+
 
     /**
      * Show the form for creating a new resource.
