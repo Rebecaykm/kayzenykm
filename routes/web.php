@@ -22,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
-Route::view('raw-material', 'raw-material')->name('raw-material.create');
-Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
+Route::resource('raw-material', \App\Http\Controllers\RawMaterial::class);
+
+// Route::view('raw-material', 'raw-material')->name('raw-material.create');
+// Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
