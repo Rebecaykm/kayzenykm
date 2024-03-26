@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartNumberTree']);
 
-Route::view('raw-material', 'raw-material')->name('raw-material.create');
-Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
+Route::resource('raw-material', \App\Http\Controllers\RawMaterial::class);
+
+// Route::view('raw-material', 'raw-material')->name('raw-material.create');
+// Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
@@ -273,4 +276,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     // --------------------------------------- reportes Power bi
     Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
+
+    Route::resource('chart', \App\Http\Controllers\ChartController::class);
+    Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
 });

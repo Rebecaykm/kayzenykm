@@ -197,62 +197,6 @@ class ProdcutionRecordController extends Controller
         //
     }
 
-    function rawMaterial(Request $request)
-    {
-        $request->validate([
-            'pack' => ['required', 'min:9', 'max:15']
-        ], [
-            'pack.required' => 'Se requiere ingresar el Pack Numer',
-            'pack.min' => 'Mínimo deben ser 9 dígitos',
-            'pack.max' => 'Máximo deben ser 15 dígitos'
-        ]);
-
-        try {
-            $pack = trim(strval($request->pack));
-
-            if (strlen($pack) === 15) {
-                $yhmic = YHMIC::query()->where('YIPCNO', 'LIKE', $pack)->first();
-            } else {
-                $yhmic = YHMIC::query()->where('YIPCNO', 'LIKE', $pack . '%')->first();
-            }
-
-            $ryt4 = RYT4::query()->where('R4TINO', $pack)->first();
-
-            if (isset($yhmic) && is_null($ryt4)) {
-
-                if (strlen($pack) === 15) {
-                    $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack)->first();
-                } else {
-                    $yt4 = YT4::query()->where('Y4TINO', 'LIKE', $pack . '%')->first();
-                }
-
-                if (is_null($yt4)) {
-                    YT4::query()->insert([
-                        'Y4SINO' => $yhmic->YISINO,
-                        'Y4TINO' => $pack,
-                        'Y4TQTY' => $yhmic->YIPQTY,
-                        'Y4PROD' => $yhmic->YIPROD,
-                        'Y4ORDN' => $yhmic->YIORDN,
-                        'Y4TORD' => $yhmic->YITORD,
-                        'Y4DAT' => Carbon::now()->format('Ymd'),
-                        'Y4TIM' => Carbon::now()->format('His'),
-                        'Y4USR' => Auth::user()->infor ?? '',
-                    ]);
-                    Log::notice("Raw Material: Registro con Éxito. Pack Number: " . $pack);
-                    return redirect()->back()->with('success', 'Registro exitoso.');
-                } else {
-                    return redirect()->back()->with('error', 'Pack number ya registrado.');
-                }
-            } else {
-                return redirect()->back()->with('error', 'Pack number inválido.');
-            }
-        } catch (QueryException $e) {
-            Log::critical('ProdcutionRecordController: Error en la consulta de la base de datos, ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'Pack number inválido.');
-        }
-    }
-
     public function reprint(ProdcutionRecord $prodcutionRecord)
     {
         $data = [

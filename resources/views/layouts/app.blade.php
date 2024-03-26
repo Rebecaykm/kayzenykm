@@ -24,13 +24,15 @@
     <script src="{{ asset('js/charts-lines.js') }}" defer></script>
     <script src="{{ asset('js/charts-pie.js') }}" defer></script>
     <script src="{{ asset('js/charts-bars.js') }}" defer></script>
+    <script src="{{ asset('js/production-records.js') }}" defer></script>
+    <script src="{{ asset('js/production-plan.js') }}" defer></script>
 
     @livewireStyles
 
-    <script>
+    <!-- <script>
         import Turbolinks from 'turbolinks';
         Turbolinks.start()
-    </script>
+    </script> -->
 
     <!-- Scripts -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.js" defer></script> -->
