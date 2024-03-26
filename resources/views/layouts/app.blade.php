@@ -25,6 +25,7 @@
     <script src="{{ asset('js/charts-pie.js') }}" defer></script>
     <script src="{{ asset('js/charts-bars.js') }}" defer></script>
     <script src="{{ asset('js/production-records.js') }}" defer></script>
+    <script src="{{ asset('js/production-plan.js') }}" defer></script>
 
     @livewireStyles
 

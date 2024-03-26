@@ -278,4 +278,5 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
 
     Route::resource('chart', \App\Http\Controllers\ChartController::class);
+    Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
 });
