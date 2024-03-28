@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductionPlan;
 use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
+use App\Imports\ProductionPlanImport;
 use App\Jobs\CompletionProductionPlan;
 use App\Jobs\ProductionPlanMigrationJob;
 use App\Models\PartNumber;
@@ -16,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProductionPlanController extends Controller
 {
@@ -159,6 +162,25 @@ class ProductionPlanController extends Controller
      */
     public function destroy(ProductionPlan $productionPlan)
     {
+    }
+
+    public function uploadFile(Request $request)
+    {
+        try {
+            $file = $request->file('plan_file');
+
+            Excel::import(new ProductionPlanImport, $file);
+
+            return redirect()->back()->with('success', 'Documento Importado Exitosamente');
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+
+            return redirect()->back()->withErrors($failures);
+        } catch (\Exception $e) {
+            Log::error('Error al importar el archivo: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Ocurrió un error al importar el archivo. Por favor, inténtelo de nuevo más tarde.');
+        }
     }
 
     public function finish(Request $request)
