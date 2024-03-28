@@ -11,6 +11,7 @@ use App\Models\PartNumber;
 use App\Models\Shift;
 use App\Models\Status;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -177,6 +178,32 @@ class ProductionPlanController extends Controller
             Log::error('ProductionPlanController: ' . $e->getMessage());
 
             return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
+        }
+    }
+
+    public function loadToInfor()
+    {
+        try {
+            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+
+            if ($conn === false) {
+                throw new Exception("Error al conectar con la base de datos Infor.");
+            }
+
+            $query = "CALL LX834OU02.YSF013C";
+            $result = odbc_exec($conn, $query);
+
+            if ($result) {
+                Log::info("LX834OU02.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+            } else {
+                throw new Exception("LX834OU02.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
+            }
+        } catch (Exception $e) {
+            Log::alert($e->getMessage());
+        } finally {
+            if (isset($conn)) {
+                odbc_close($conn);
+            }
         }
     }
 }
