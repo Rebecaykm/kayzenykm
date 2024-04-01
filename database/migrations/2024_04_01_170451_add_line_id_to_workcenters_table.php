@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('workcenters', function (Blueprint $table) {
-            $table->dropForeign(['departament_id']);
-            $table->dropColumn('departament_id');
+            $table->foreignId('line_id')->nullable()->constrained('lines');
         });
     }
 
@@ -23,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('workcenters', function (Blueprint $table) {
-            $table->bigInteger('departament_id')->nullable()->after('description');
-            $table->foreign('departament_id')->references('id')->on('departaments');
+            $table->dropForeign(['line_id']);
+            $table->dropColumn('line_id');
         });
     }
 };

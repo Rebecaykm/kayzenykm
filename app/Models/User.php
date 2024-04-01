@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,7 +33,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'email_verified_at', 'password', 'infor',
+        'name', 'email', 'email_verified_at', 'password', 'infor', 'line_id'
     ];
 
     /**
@@ -95,5 +96,13 @@ class User extends Authenticatable
     public function validatingCycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class, 'user_validating_id');
+    }
+
+    /**
+     *
+     */
+    public function line(): BelongsTo
+    {
+        return $this->belongsTo(Line::class);
     }
 }

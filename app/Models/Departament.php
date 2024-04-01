@@ -24,4 +24,12 @@ class Departament extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    /**
+     *
+     */
+    public function lines(): HasMany
+    {
+        return $this->hasMany(Line::class);
+    }
 }

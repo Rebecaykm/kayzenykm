@@ -14,7 +14,7 @@ class Workcenter extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'number', 'name', 'description', 'departament_id', 'printer_id'
+        'number', 'name', 'description', 'departament_id', 'printer_id', 'line_id'
     ];
 
     /**
@@ -39,5 +39,13 @@ class Workcenter extends Model
     public function printer(): BelongsTo
     {
         return $this->belongsTo(Printer::class);
+    }
+
+    /**
+     *
+     */
+    public function line(): BelongsTo
+    {
+        return $this->belongsTo(Line::class);
     }
 }
