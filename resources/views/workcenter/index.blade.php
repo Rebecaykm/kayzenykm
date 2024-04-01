@@ -33,7 +33,7 @@
                             <th class="px-4 py-3">{{ __('Número') }}</th>
                             <th class="px-4 py-3">{{ __('Nombre') }}</th>
                             <th class="px-4 py-3">{{ __('Descripción') }}</th>
-                            <th class="px-4 py-3">{{ __('Departamento') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Departamento') }}</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -48,9 +48,9 @@
                             <td class="px-4 py-3 text-sm">
                                 {{ $workcenter->description }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ $workcenter->departament->name }}
-                            </td>
+                            <!-- <td class="px-4 py-3 text-sm">
+                                {{ $workcenter->departament->name ?? '' }}
+                            </td> -->
                             <!-- <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <a href="{{ route('workcenter.edit', $workcenter->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">

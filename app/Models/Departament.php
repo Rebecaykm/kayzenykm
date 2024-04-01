@@ -32,21 +32,4 @@ class Departament extends Model
     {
         return $this->hasMany(Project::class);
     }
-
-    /**
-     *
-     */
-    public function workcenters(): HasMany
-    {
-        return $this->hasMany(Workcenter::class);
-    }
-
-    /**
-     * @param $value
-     * @return string|null
-     */
-    // public function fromDateTime($value)
-    // {
-    //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-    // }
 }
