@@ -20,14 +20,6 @@ class Departament extends Model
     /**
      *
      */
-    public function users()
-    {
-        return $this->belongsToMany('App\Models\User');
-    }
-
-    /**
-     *
-     */
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);

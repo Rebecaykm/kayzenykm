@@ -65,35 +65,33 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function departaments()
-    {
-        return $this->belongsToMany('App\Models\Departament');
-    }
-
     /**
-     * @param $value
-     * @return string|null
+     *
      */
-    // public function fromDateTime($value)
-    // {
-    //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-    // }
-
     public function unemploymentRecords(): HasMany
     {
         return $this->hasMany(UnemploymentRecord::class, 'user_id');
     }
 
+    /**
+     *
+     */
     public function scrapRecords(): HasMany
     {
         return $this->hasMany(ScrapRecord::class, 'user_id');
     }
 
+    /**
+     *
+     */
     public function madeCycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class, 'user_made_id');
     }
 
+    /**
+     *
+     */
     public function validatingCycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class, 'user_validating_id');
