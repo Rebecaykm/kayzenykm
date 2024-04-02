@@ -54,16 +54,16 @@
                             </select>
                         </label>
                         <label class="block text-sm mt-4">
-                            <span class="text-gray-700 dark:text-gray-400">Departamentos</span>
+                            <span class="text-gray-700 dark:text-gray-400">Líneas</span>
                             <div class="grid grid-cols-6">
-                                @foreach ($departaments as $departament)
+                                @foreach ($lines as $lines)
                                 <div class="flex col-span-2 p-2 text-sm">
                                     <label class="flex items-center p-2 dark:text-gray-400">
-                                        <input type="checkbox" value="{{ $departament->id }}" name="departament[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($user->departaments) && $user->departaments->contains('id', $departament->id))
+                                        <input type="checkbox" value="{{ $lines->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($user->lines) && $user->lines->contains('id', $lines->id))
                                         checked
                                         @endif
                                         />
-                                        <span class="ml-2">{{ $departament->name }}</span>
+                                        <span class="ml-2">{{ $lines->name }}</span>
                                     </label>
                                 </div>
                                 @endforeach

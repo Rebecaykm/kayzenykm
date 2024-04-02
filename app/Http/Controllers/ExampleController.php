@@ -60,7 +60,7 @@ class ExampleController extends Controller
 
                 $dataArray[] = [
                     'id' => $result->id,
-                    'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
+                    'departament' => strtoupper(trim($partNumber->workcenter->line->departament->name)),
                     'workcenterNumber' => trim($partNumber->workcenter->number),
                     'workcenterName' => trim($partNumber->workcenter->name),
                     'partNumber' => trim($partNumber->number),

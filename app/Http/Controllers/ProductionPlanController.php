@@ -43,8 +43,9 @@ class ProductionPlanController extends Controller
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
         // $classArray = ['M1', 'M2', 'M3', 'M4'];
-        $stationArray = ['111010', '122030', '138210'];
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $status = Status::where('name', 'INACTIVO')->first();
 
@@ -54,6 +55,7 @@ class ProductionPlanController extends Controller
             'part_numbers.id as part_number_id',
             'item_classes.id as item_class_id',
             'workcenters.id as workcenter_id',
+            'lines.id as line_id',
             'departaments.id as departament_id',
             'shifts.id as shift_id',
             'statuses.id as status_id'
@@ -61,7 +63,8 @@ class ProductionPlanController extends Controller
             ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('statuses', 'production_plans.status_id', '=', 'statuses.id')
             ->where('production_plans.status_id', '!=', $status->id)
@@ -69,8 +72,7 @@ class ProductionPlanController extends Controller
                 $query->where('part_numbers.number', 'LIKE', '%' . $search . '%')
                     ->orWhere('workcenters.name', 'LIKE', '%' . $search . '%');
             })
-            ->whereIn('workcenters.number', $stationArray)
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
             ->orderBy('shifts.abbreviation', 'asc')
@@ -81,23 +83,22 @@ class ProductionPlanController extends Controller
         return view('production-plan.index', ['productionPlans' => $productionPlans]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        // $arrayClass = ['M1', 'M2', 'M3', 'M4'];
-        $stationArray = ['111010', '122030', '138210'];
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id'])
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
-            ->whereIn('workcenters.number', $stationArray)
-            // ->whereIn('item_classes.abbreviation', $arrayClass)
-            ->whereIn('departaments.code', $departamentCode)
-            // ->orderBy('workcenters.number', 'asc')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('part_numbers.number', 'asc')
             ->get();
 

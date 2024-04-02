@@ -59,7 +59,7 @@
                         @foreach ($unemploymentRecords as $unemploymentRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->workcenter->departament->name ?? '' }}
+                                {{ $unemploymentRecord->workcenter->line->departament->name ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $unemploymentRecord->workcenter->number ?? '' }} - {{ $unemploymentRecord->workcenter->name ?? '' }}

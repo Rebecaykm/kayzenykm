@@ -25,7 +25,9 @@ class ScrapRecordController extends Controller
      */
     public function index()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $scrapRecords = ScrapRecord::query()
             ->select([
@@ -40,9 +42,10 @@ class ScrapRecordController extends Controller
             // ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
             ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('scraps', 'scrap_records.scrap_id', '=', 'scraps.id')
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('scrap_records.created_at', 'DESC')
             ->paginate(10);
 
@@ -238,10 +241,12 @@ class ScrapRecordController extends Controller
             ]
         );
 
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
-        $start = Carbon::parse($request->start)->format('Y-d-m H:i:s');
-        $end = Carbon::parse($request->end)->format('Y-d-m H:i:s');
+        $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
+        $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
 
         $scrapRecords = ScrapRecord::query()
             ->select([
@@ -259,13 +264,18 @@ class ScrapRecordController extends Controller
             ->join('type_scraps', 'scraps.type_scrap_id', '=', 'type_scraps.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('users', 'scrap_records.user_id', '=', 'users.id')
             ->whereBetween('scrap_records.created_at', [$start, $end])
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('scrap_records.created_at', 'DESC')
             ->get()
             ->toArray();
+
+        if (empty($scrapRecords)) {
+            return back()->with('error', 'No se encontraron registros de scrap para las fechas seleccionadas.');
+        }
 
         return Excel::download(new ScrapRecordExport($scrapRecords), 'ScrapReport_' . date("dmYHis") . '.xlsx');
     }
