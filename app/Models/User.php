@@ -70,6 +70,14 @@ class User extends Authenticatable
     /**
      *
      */
+    public function departaments(): BelongsToMany
+    {
+        return $this->belongsToMany(Departament::class);
+    }
+
+    /**
+     *
+     */
     public function unemploymentRecords(): HasMany
     {
         return $this->hasMany(UnemploymentRecord::class, 'user_id');

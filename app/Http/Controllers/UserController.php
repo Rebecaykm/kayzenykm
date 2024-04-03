@@ -69,10 +69,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        $lines = Line::all();
+        $departaments = Departament::all();
         $roles = Role::all();
+        $lines = Line::all();
 
-        return view('users.create', ['roles' => $roles, 'lines' => $lines]);
+        return view('users.create', ['roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
 
     /**
@@ -97,6 +98,10 @@ class UserController extends Controller
 
         if ($request->has('role_id')) {
             $user->roles()->sync([$request->role_id]);
+        }
+
+        if ($request->has('departaments')) {
+            $user->departaments()->sync($request->departaments);
         }
 
         if ($request->has('lines')) {
@@ -125,10 +130,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $lines = Line::all();
         $roles = Role::all();
+        $departaments = Departament::all();
+        $lines = Line::all();
 
-        return view('users.edit', ['user' => $user, 'roles' => $roles, 'lines' => $lines]);
+        return view('users.edit', ['user' => $user, 'roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
 
     /**
@@ -142,24 +148,23 @@ class UserController extends Controller
     {
         $data = $request->except('password', 'role_id');
 
-        if ($request->filled('password')) {
+        if (!empty($request->password)) {
             $data['password'] = Hash::make($request->password);
         }
 
         $user->fill($data);
 
         if ($user->isDirty()) {
-
             $user->save();
-
-            if ($request->has('role_id')) {
-                $user->roles()->sync([$request->role_id]);
-            }
-
-            if ($request->has('lines')) {
-                $user->lines()->sync($request->lines);
-            }
         }
+
+        if (!empty($request->role_id)) {
+            $user->roles()->sync([$request->role_id]);
+        }
+
+        $user->departaments()->sync($request->departament);
+
+        $user->lines()->sync($request->lines);
 
         return redirect()->back()->with('status', 'Usuario actualizado con éxito');
     }
