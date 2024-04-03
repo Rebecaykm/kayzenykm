@@ -132,6 +132,8 @@ class ExampleController extends Controller
 
                 try {
                     if ($partNumber->workcenter->printer->name == 'ZEBRA') {
+                        $codeQr = $result->id . '-' . trim($partNumber->number) . '-' . $currentQuantity . '-' . $result->sequence . '-' . Carbon::parse($productionPlan->date)->format('Ymd') . '-' . $productionPlan->shift->abbreviation;
+
                         $zplData = '^XA
                         ^FO480,50
                         ^GB120,400,2^FS
@@ -244,7 +246,12 @@ class ExampleController extends Controller
                         ^A0N,50,50
                         ^FWR
                         ^FD' . $currentQuantity . '^FS
+                        ^FO20,950
+                        ^BQN,2,5
+                        ^FDMM,' . $codeQr . '^FS
                         ^XZ';
+
+                        Log::alert($zplData);
 
                         $printerIp = $partNumber->workcenter->printer->ip;
 
