@@ -32,7 +32,7 @@
                         </label>
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Usuario de Infor</span>
-                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="YKMS000" type="text" name="infor" required />
+                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="YKMS000" type="text" name="infor" />
                         </label>
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Correo Electrónico</span>
@@ -61,9 +61,26 @@
                                 @foreach ($departaments as $departament)
                                 <div class="flex col-span-2 p-2 text-sm">
                                     <label class="flex items-center p-2 dark:text-gray-400">
-                                        <input type="checkbox" value="{{ $departament->id }}" name="departament[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
+                                        <input type="checkbox" value="{{ $departament->id }}" name="departaments[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
                                         <span class="ml-2">
                                             {{ $departament->name }}
+                                        </span>
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                        </label>
+                        <label class="block text-sm mt-4">
+                            <span>
+                                Líneas
+                            </span>
+                            <div class="grid grid-cols-6">
+                                @foreach ($lines as $line)
+                                <div class="flex col-span-2 p-2 text-sm">
+                                    <label class="flex items-center p-2 dark:text-gray-400">
+                                        <input type="checkbox" value="{{ $line->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
+                                        <span class="ml-2">
+                                            {{ $line->name }}
                                         </span>
                                     </label>
                                 </div>
@@ -89,12 +106,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function app() {
-            return {
-                role: 1,
-            }
-        }
-    </script>
-
 </x-app-layout>

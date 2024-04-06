@@ -21,7 +21,9 @@ class UnemploymentRecordController extends Controller
      */
     public function index()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $unemploymentRecords = UnemploymentRecord::query()
             ->select([
@@ -33,10 +35,11 @@ class UnemploymentRecordController extends Controller
                 'unemployment_records.created_at as created_at'
             ])
             ->join('workcenters', 'unemployment_records.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('unemployment_records.created_at', 'DESC')
             ->paginate(10);
 
@@ -48,15 +51,16 @@ class UnemploymentRecordController extends Controller
      */
     public function create()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
-        $stationArray = ['111010', '122030', '138210'];
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
 
         $workcenters = Workcenter::query()
             ->select('workcenters.id', 'workcenters.number', 'workcenters.name')
-            ->join('departaments', 'workcenters.departament_id', 'departaments.id')
-            ->whereIn('departaments.code', $departamentCode)
-            ->whereIn('workcenters.number', $stationArray)
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('workcenters.name', 'asc')
             ->get();
 
@@ -67,14 +71,15 @@ class UnemploymentRecordController extends Controller
 
     function record()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
-        $stationArray = ['111010', '122030', '138210'];
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $workcenters = Workcenter::query()
             ->select('workcenters.id', 'workcenters.number', 'workcenters.name')
-            ->join('departaments', 'workcenters.departament_id', 'departaments.id')
-            ->whereIn('departaments.code', $departamentCode)
-            ->whereIn('workcenters.number', $stationArray)
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('workcenters.name', 'asc')
             ->get();
 
@@ -189,10 +194,12 @@ class UnemploymentRecordController extends Controller
             ]
         );
 
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
-        $start = Carbon::parse($request->start)->format('Y-d-m H:i:s');
-        $end = Carbon::parse($request->end)->format('Y-d-m H:i:s');
+        $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
+        $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
 
         $unemploymentRecords = UnemploymentRecord::query()
             ->select([
@@ -209,12 +216,17 @@ class UnemploymentRecordController extends Controller
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
             ->join('workcenters', 'unemployment_records.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->whereBetween('unemployment_records.created_at', [$start, $end])
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('unemployment_records.created_at', 'DESC')
             ->get()
             ->toArray();
+
+        if (empty($unemploymentRecords)) {
+            return back()->with('error', 'No se encontraron registros de scrap para las fechas seleccionadas.');
+        }
 
         return Excel::download(new UnemploymentRecordExport($unemploymentRecords), 'UnemploymentReport_' . date("dmYHis") . '.xlsx');
     }

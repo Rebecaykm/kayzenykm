@@ -31,7 +31,9 @@ class ProdcutionRecordController extends Controller
      */
     public function index()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+            return $line->workcenters->pluck('number')->all();
+        });
 
         $prodcutionRecords = ProdcutionRecord::select([
             '*',
@@ -49,11 +51,12 @@ class ProdcutionRecordController extends Controller
             ->join('part_numbers', 'prodcution_records.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
-            ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('production_plans', 'prodcution_records.production_plan_id', '=', 'production_plans.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('statuses', 'prodcution_records.status_id', '=', 'statuses.id')
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('prodcution_records.created_at', 'DESC')
             ->orderBy('prodcution_records.sequence', 'DESC')
             ->paginate(10);
@@ -201,7 +204,7 @@ class ProdcutionRecordController extends Controller
     {
         $data = [
             'id' => $prodcutionRecord->id,
-            'departament' => strtoupper(trim($prodcutionRecord->productionPlan->PartNumber->workcenter->departament->name)),
+            'departament' => strtoupper(trim($prodcutionRecord->productionPlan->PartNumber->workcenter->line->departament->name)),
             'workcenterNumber' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->number),
             'workcenterName' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->name),
             'partNumber' => trim($prodcutionRecord->productionPlan->PartNumber->number),
@@ -334,7 +337,7 @@ class ProdcutionRecordController extends Controller
                 $prodcutionRecord->productionPlan->update(['production_quantity' => $newQuantity]);
                 $prodcutionRecord->update(['status_id' => $statusCancelado->id]);
             } else {
-                // TODO
+                // :TODO
             }
         }
         return redirect()->back();

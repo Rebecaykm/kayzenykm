@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,7 +34,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'email_verified_at', 'password', 'infor',
+        'name', 'email', 'email_verified_at', 'password', 'infor', 'line_id'
     ];
 
     /**
@@ -65,37 +67,51 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function departaments()
+    /**
+     *
+     */
+    public function departaments(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Departament');
+        return $this->belongsToMany(Departament::class);
     }
 
     /**
-     * @param $value
-     * @return string|null
+     *
      */
-    // public function fromDateTime($value)
-    // {
-    //     return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-    // }
-
     public function unemploymentRecords(): HasMany
     {
         return $this->hasMany(UnemploymentRecord::class, 'user_id');
     }
 
+    /**
+     *
+     */
     public function scrapRecords(): HasMany
     {
         return $this->hasMany(ScrapRecord::class, 'user_id');
     }
 
+    /**
+     *
+     */
     public function madeCycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class, 'user_made_id');
     }
 
+    /**
+     *
+     */
     public function validatingCycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class, 'user_validating_id');
+    }
+
+    /**
+     *
+     */
+    public function lines(): BelongsToMany
+    {
+        return $this->belongsToMany(Line::class);
     }
 }

@@ -12,11 +12,13 @@ use App\Jobs\StandardPackageMigrationJob;
 use App\Jobs\TransactionTypeMigrationJob;
 use App\Jobs\WorkcenterMigrationJob;
 use App\Models\Departament;
+use App\Models\Line;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -69,8 +71,9 @@ class UserController extends Controller
     {
         $departaments = Departament::all();
         $roles = Role::all();
+        $lines = Line::all();
 
-        return view('users.create', ['roles' => $roles, 'departaments' => $departaments]);
+        return view('users.create', ['roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
 
     /**
@@ -82,18 +85,29 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required'],
-            'email' => ['required'],
-            'password' => ['required'],
-            'infor' => ['required']
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         $data = $request->only(['name', 'email', 'password', 'infor']);
         $data['password'] = bcrypt($data['password']);
         $data['email_verified_at'] = now();
+
         $user = User::create($data);
-        $user->roles()->sync($request->role_id);
-        $user->departaments()->sync($request->departament);
+
+        if ($request->has('role_id')) {
+            $user->roles()->sync([$request->role_id]);
+        }
+
+        if ($request->has('departaments')) {
+            $user->departaments()->sync($request->departaments);
+        }
+
+        if ($request->has('lines')) {
+            $user->lines()->sync($request->lines);
+        }
+
         return redirect('users')->with('success', 'Usuario creado con éxito');
     }
 
@@ -116,10 +130,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $departaments = Departament::all();
         $roles = Role::all();
+        $departaments = Departament::all();
+        $lines = Line::all();
 
-        return view('users.edit', ['user' => $user, 'roles' => $roles, 'departaments' => $departaments]);
+        return view('users.edit', ['user' => $user, 'roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
 
     /**
@@ -132,17 +147,24 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->except('password', 'role_id');
+
         if (!empty($request->password)) {
             $data['password'] = Hash::make($request->password);
         }
+
         $user->fill($data);
+
         if ($user->isDirty()) {
             $user->save();
         }
+
         if (!empty($request->role_id)) {
-            $user->roles()->sync($request->role_id);
+            $user->roles()->sync([$request->role_id]);
         }
+
         $user->departaments()->sync($request->departament);
+
+        $user->lines()->sync($request->lines);
 
         return redirect()->back()->with('status', 'Usuario actualizado con éxito');
     }

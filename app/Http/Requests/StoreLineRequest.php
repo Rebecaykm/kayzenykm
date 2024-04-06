@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePrinterRequest extends FormRequest
+class StoreLineRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class StorePrinterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand' => ['nullable', 'string'],
-            'model' => ['nullable', 'string'],
-            'ip' => ['nullable', 'string'],
-            'port' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'workcenters' => ['nullable', 'array'],
+            'name' => ['required', 'string', 'max:255'],
+            'departament_id' => ['required', 'numeric', 'exists:departaments,id'],
+            'workcenters' => ['required', 'array', 'min:1'],
             'workcenters.*' => ['exists:workcenters,id'],
         ];
     }

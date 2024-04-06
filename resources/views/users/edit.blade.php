@@ -69,6 +69,22 @@
                                 @endforeach
                             </div>
                         </label>
+                        <label class="block text-sm mt-4">
+                            <span class="text-gray-700 dark:text-gray-400">Líneas</span>
+                            <div class="grid grid-cols-6">
+                                @foreach ($lines as $lines)
+                                <div class="flex col-span-2 p-2 text-sm">
+                                    <label class="flex items-center p-2 dark:text-gray-400">
+                                        <input type="checkbox" value="{{ $lines->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($user->lines) && $user->lines->contains('id', $lines->id))
+                                        checked
+                                        @endif
+                                        />
+                                        <span class="ml-2">{{ $lines->name }}</span>
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                        </label>
                         <div class="flex justify-end mt-4 gap-4">
                             <a href="{{ route('users.index') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray" type="submit">
                                 <span>{{ __('Regresar')}}</span>

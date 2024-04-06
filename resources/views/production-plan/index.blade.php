@@ -69,7 +69,7 @@
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3 sticky left-0 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Número de Parte') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('SNP') }}</th> -->
-                            <th class="px-4 py-3">{{ __('Fecha') }}</th>
+                            <th class="px-4 py-3 sticky left-20 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
                             <!-- <th class="px-4 py-3">{{ __('Tipo de Item') }}</th> -->
                             <th class="px-4 py-3 text-center">{{ __('Cant Planeada') }}</th>
@@ -98,7 +98,7 @@
                                 {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
                             </td> -->
 
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs sticky left-28 bg-white dark:bg-gray-800">
                                 {{ $productionPlan->date ? \Carbon\Carbon::parse($productionPlan->date)->format('d-m-Y') : '' }}
                             </td>
 

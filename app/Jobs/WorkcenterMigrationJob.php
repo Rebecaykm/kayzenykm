@@ -36,7 +36,7 @@ class WorkcenterMigrationJob implements ShouldQueue
             StoreWorkcenterJob::dispatch(
                 $workcenter->WWRKC,
                 $workcenter->WDESC,
-                substr($workcenter->WDEPT, 0, 2)
+                // substr($workcenter->WDEPT, 0, 2)
             );
         }
     }

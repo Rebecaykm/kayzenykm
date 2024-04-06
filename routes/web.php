@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('production-plan', \App\Http\Controllers\ProductionPlanController::class);
+    Route::post('production-plan-upload-file', [\App\Http\Controllers\ProductionPlanController::class, 'uploadFile'])->name('production-plan.upload-file');
     Route::get('production-plan-data-upload', [\App\Http\Controllers\ProductionPlanController::class, 'dataUpload'])->name('production-plan.data-upload');
     Route::get('production-plan-finish', [\App\Http\Controllers\ProductionPlanController::class, 'finish'])->name('production-plan.finish');
     Route::get('production-plan-load-to-infor', [\App\Http\Controllers\ProductionPlanController::class, 'loadToInfor'])->name('production-plan.load-to-infor');
@@ -278,6 +279,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     // --------------------------------------- reportes Power bi
     Route::get('powerbi', [\App\Http\Controllers\powerbiController::class, 'HPO'])->name('powerbi.HPO');
 
+    /**
+     *
+     */
     Route::resource('chart', \App\Http\Controllers\ChartController::class);
     Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
+
+    /**
+     *
+     */
+    Route::resource('line', \App\Http\Controllers\LineController::class);
+
+    /**
+     *
+     */
+    Route::resource('printer', \App\Http\Controllers\PrinterController::class);
 });

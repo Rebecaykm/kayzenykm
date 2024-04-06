@@ -17,16 +17,16 @@ class StoreWorkcenterJob implements ShouldQueue
 
     private $number;
     private $name;
-    private $departament;
+    // private $departament;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($number, $name, $departament)
+    public function __construct($number, $name)
     {
         $this->number = $number;
         $this->name = $name;
-        $this->departament = $departament;
+        // $this->departament = $departament;
     }
 
     /**
@@ -34,20 +34,29 @@ class StoreWorkcenterJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $departament = Departament::query()
-            ->where('code', 'LIKE', $this->departament . '%')
-            ->first();
+        // $departament = Departament::query()
+        //     ->where('code', 'LIKE', $this->departament . '%')
+        //     ->first();
 
-        if ($departament !== null) {
-            Workcenter::updateOrCreate(
-                [
-                    'number' => $this->number
-                ],
-                [
-                    'name' => $this->name,
-                    'departament_id' => $departament->id
-                ]
-            );
-        }
+        // if ($departament !== null) {
+        //     Workcenter::updateOrCreate(
+        //         [
+        //             'number' => $this->number
+        //         ],
+        //         [
+        //             'name' => $this->name,
+        //             'departament_id' => $departament->id
+        //         ]
+        //     );
+        // }
+
+        Workcenter::updateOrCreate(
+            [
+                'number' => $this->number
+            ],
+            [
+                'name' => $this->name
+            ]
+        );
     }
 }

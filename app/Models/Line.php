@@ -2,21 +2,36 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Departament extends Model
+class Line extends Model
 {
     use HasFactory;
 
-    protected $dateFormat = 'Ymd H:i:s.v';
-
     protected $fillable = [
-        'code', 'name',
+        'name',
+        'departament_id'
     ];
+
+    /**
+     *
+     */
+    public function departament(): BelongsTo
+    {
+        return $this->belongsTo(Departament::class);
+    }
+
+    /**
+     *
+     */
+    public function workcenters(): HasMany
+    {
+        return $this->hasMany(Workcenter::class);
+    }
 
     /**
      *
@@ -24,21 +39,5 @@ class Departament extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
-    }
-
-    /**
-     *
-     */
-    public function projects(): HasMany
-    {
-        return $this->hasMany(Project::class);
-    }
-
-    /**
-     *
-     */
-    public function lines(): HasMany
-    {
-        return $this->hasMany(Line::class);
     }
 }
