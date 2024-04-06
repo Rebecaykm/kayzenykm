@@ -28,6 +28,7 @@
             @endif
         </div>
 
+        @if(Auth::user()->departaments->contains('name', 'Estampado'))
         <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <form action="{{ route('production-plan.upload-file') }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -41,6 +42,7 @@
                 </label>
             </form>
         </div>
+        @endif
 
         <form action="{{ route('production-plan.store') }}" method="post">
             @csrf
