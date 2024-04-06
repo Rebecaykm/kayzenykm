@@ -120,14 +120,20 @@ class LineController extends Controller
                 $line->save();
             }
 
-            foreach ($line->workcenters as $workcenter) {
-                $workcenter->update(['line_id' => null]);
+            $line->load('workcenters');
+
+            if ($line->workcenters) {
+                foreach ($line->workcenters as $workcenter) {
+                    $workcenter->update(['line_id' => null]);
+                }
             }
 
-            foreach ($request->workcenters as $workcenterId) {
-                $workcenter = Workcenter::find($workcenterId);
-                if ($workcenter) {
-                    $line->workcenters()->save($workcenter);
+            if ($request->workcenters) {
+                foreach ($request->workcenters as $workcenterId) {
+                    $workcenter = Workcenter::find($workcenterId);
+                    if ($workcenter) {
+                        $line->workcenters()->save($workcenter);
+                    }
                 }
             }
 

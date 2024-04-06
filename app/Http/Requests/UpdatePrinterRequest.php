@@ -11,7 +11,7 @@ class UpdatePrinterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdatePrinterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'brand' => ['nullable', 'string'],
+            'model' => ['nullable', 'string'],
+            'ip' => ['nullable', 'string'],
+            'port' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'workcenters' => ['nullable', 'array'],
+            'workcenters.*' => ['exists:workcenters,id'],
         ];
     }
 }

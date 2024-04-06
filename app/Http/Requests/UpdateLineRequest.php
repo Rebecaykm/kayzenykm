@@ -22,9 +22,9 @@ class UpdateLineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
             'departament_id' => ['numeric', 'exists:departaments,id'],
-            'workcenters' => ['array', 'min:1'],
+            'workcenters' => ['nullable', 'array'],
             'workcenters.*' => ['exists:workcenters,id'],
         ];
     }

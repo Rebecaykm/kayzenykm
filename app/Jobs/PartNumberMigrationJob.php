@@ -30,8 +30,8 @@ class PartNumberMigrationJob implements ShouldQueue
     {
         //                                  Nombre,  Numero,  Balance, Medida, Tipo,   Clase,   Paquete,   Cantidad, Planeador, Projecto, Creacion dia y hora
         $partNumbers = IIM::query()
-            ->select('IDESC', 'IPROD', 'IOPB', 'IUMS', 'IITYP', 'ICLAS', 'IMSPKT', 'IMBOXQ', 'IBUYC', 'IREF04', 'IMENDT', 'IMENTM')
-            ->where([['IID', '!=', 'IZ'], ['IMPLC', '!=', 'OBSOLETE']])
+            ->select('IDESC', 'IPROD', 'IOPB', 'IUMS', 'IITYP', 'ICLAS', 'IMSPKT', 'IMBOXQ', 'IBUYC', 'IREF04', 'IMENDT', 'IMENTM', 'IMPLC')
+            // ->where([['IID', '!=', 'IZ'], ['IMPLC', '!=', 'OBSOLETE']])
             ->orderBy('IMENDT', 'ASC')
             ->get();
 
@@ -49,6 +49,7 @@ class PartNumberMigrationJob implements ShouldQueue
                 $partNumber->IREF04,
                 // $partNumber->IMENDT,
                 // $partNumber->IMENTM
+                $partNumber->IMPLC
             );
         }
     }
