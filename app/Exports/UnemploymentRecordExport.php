@@ -30,6 +30,7 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             $item['departamento'] = strtoupper($item['departament_name']);
             $item['estacion'] = strtoupper($item['workcenter_number']);
             $item['nom'] = strtoupper($item['workcenter_name']);
+            $item['descripcion'] = strtoupper($item['description']);
             $item['inicio'] = date('d-m-Y H:i:s', strtotime($item['time_start']));
             $item['fin'] = date('d-m-Y H:i:s', strtotime($item['time_end']));
             $item['minutos'] = $item['minutes'];
@@ -39,6 +40,7 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             unset($item['departament_name']);
             unset($item['workcenter_number']);
             unset($item['workcenter_name']);
+            unset($item['description']);
             unset($item['time_start']);
             unset($item['time_end']);
             unset($item['minutes']);
@@ -55,6 +57,7 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             'DEPARTAMENTO',
             'NO ESTACIÓN',
             'NOMBRE DE ESTACIÓN',
+            'DESCRIPCION',
             'HORA INICIO',
             'HORA FIN',
             'MINUTOS',

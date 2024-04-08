@@ -87,6 +87,11 @@
                     </span>
                 </label>
 
+                <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">{{ __('Descripción') }}</span>
+                    <textarea name="description" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Ingresar motivo del paro"></textarea>
+                </label>
+
                 <div class="flex justify-end mt-4 gap-4">
                     <a href="{{ route('production-plan.index') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray" type="submit">
                         <span>{{ __('Regresar')}}</span>

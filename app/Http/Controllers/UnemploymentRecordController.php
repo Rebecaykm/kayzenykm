@@ -106,6 +106,7 @@ class UnemploymentRecordController extends Controller
                 'time_start' => $start->format('Ymd H:i:s.v'),
                 'time_end' => $end->format('Ymd H:i:s.v'),
                 'minutes' => $minutes,
+                'description' => $request->description ?? ''
             ]);
 
             return redirect()->back()->with('success', 'Registro de paro exitoso en la estacion: ' . $unemploymentRecord->workcenter->number . " - " .  $unemploymentRecord->workcenter->name);
@@ -130,6 +131,7 @@ class UnemploymentRecordController extends Controller
                 'time_start' => $start->format('Ymd H:i:s.v'),
                 'time_end' => $end->format('Ymd H:i:s.v'),
                 'minutes' => $minutes,
+                'description' => $request->description ?? ''
             ]);
 
             return redirect()->back()->with('success', 'Registro de paro exitoso en la estacion: ' . $unemploymentRecord->workcenter->number . " - " .  $unemploymentRecord->workcenter->name);
@@ -211,7 +213,8 @@ class UnemploymentRecordController extends Controller
                 'unemployment_records.time_start',
                 'unemployment_records.time_end',
                 'unemployment_records.minutes',
-                'unemployment_records.created_at'
+                'unemployment_records.created_at',
+                'unemployment_records.description',
             ])
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')

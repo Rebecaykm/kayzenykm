@@ -13,7 +13,7 @@ class UnemploymentRecord extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'user_id', 'workcenter_id', 'unemployment_id', 'time_start', 'time_end', 'minutes',
+        'user_id', 'workcenter_id', 'unemployment_id', 'time_start', 'time_end', 'minutes', 'description'
     ];
 
     public function user(): BelongsTo

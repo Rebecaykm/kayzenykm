@@ -42,8 +42,9 @@ class ChartController extends Controller
             'prodcution_records.created_at AS dateRecorded'
         ])
             ->join('part_numbers', 'part_numbers.id', '=', 'prodcution_records.part_number_id')
-            ->join('workcenters', 'workcenters.id', '=', 'part_numbers.workcenter_id')
-            ->join('departaments', 'departaments.id', '=', 'workcenters.departament_id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('production_plans', 'production_plans.id', '=', 'prodcution_records.production_plan_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
@@ -127,8 +128,9 @@ class ChartController extends Controller
             'production_plans.created_at AS created_at'
         ])
             ->join('part_numbers', 'part_numbers.id', '=', 'production_plans.part_number_id')
-            ->join('workcenters', 'workcenters.id', '=', 'part_numbers.workcenter_id')
-            ->join('departaments', 'departaments.id', '=', 'workcenters.departament_id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
             ->join('statuses', 'statuses.id', '=', 'production_plans.status_id')
