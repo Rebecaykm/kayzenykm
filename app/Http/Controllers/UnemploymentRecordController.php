@@ -51,22 +51,37 @@ class UnemploymentRecordController extends Controller
      */
     public function create()
     {
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
-
-
         $workcenters = Workcenter::query()
             ->select('workcenters.id', 'workcenters.number', 'workcenters.name')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('workcenters.number', Auth::user()->lines->flatMap->workcenters->pluck('number')->all())
             ->orderBy('workcenters.name', 'asc')
             ->get();
 
-        $unemployments = Unemployment::orderBy('name', 'asc')->get();
+        $userRoles = Auth::user()->roles->pluck('name')->toArray();
+        $userRole = in_array('Operador', $userRoles) ? 'Operador' : null;
 
-        return view('unemployment-record.create', ['workcenters' => $workcenters, 'unemployments' => $unemployments]);
+        $departmentAbbreviations = [
+            'Carrocería' => 'CR',
+            'Chasis' => 'CH',
+            'Pintura' => 'PT',
+            'Estampado' => 'PR'
+        ];
+
+        $abbreviations = Auth::user()->departaments->pluck('name')
+            ->filter(fn ($department) => isset($departmentAbbreviations[$department]))
+            ->map(fn ($department) => $departmentAbbreviations[$department])
+            ->toArray();
+
+        if ($userRole !== null && in_array('PR', $abbreviations)) {
+            $unemployments = Unemployment::whereIn('abbreviation', $abbreviations)->orderBy('name', 'asc')->get();
+        } else {
+            $abbreviations[] = 'CA';
+            $unemployments = Unemployment::whereIn('abbreviation', $abbreviations)->orderBy('name', 'asc')->get();
+        }
+
+        return view('unemployment-record.create', compact('workcenters', 'unemployments'));
     }
 
     function record()

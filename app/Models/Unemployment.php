@@ -14,7 +14,7 @@ class Unemployment extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'name', 'unemployment_type_id'
+        'name', 'unemployment_type_id', 'abbreviation'
     ];
 
     public function unemploymentType(): BelongsTo
