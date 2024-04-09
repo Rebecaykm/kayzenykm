@@ -193,14 +193,17 @@ class ProductionPlanController extends Controller
                 DB::transaction(function () use ($productionPlan) {
                     CompletionProductionPlan::dispatch($productionPlan);
                 });
-                return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
+                return redirect('production-plan')->with('success', 'La finalización de producción se ha realizado correctamente.');
+                // return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
             } else {
-                return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
+                return redirect('production-plan')->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
+                // return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
             }
         } catch (\Exception $e) {
             Log::error('ProductionPlanController: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
+            return redirect('production-plan')->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
+            // return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
         }
     }
 

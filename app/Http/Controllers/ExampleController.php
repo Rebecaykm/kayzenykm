@@ -29,15 +29,14 @@ class ExampleController extends Controller
      */
     public function index(Request $request)
     {
-
         try {
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
             $partNumberId = $request->partNumberId;
-            $quantity = $request->quantity;
-            $timeStart = Carbon::parse($request->timeStart);
-            $timeEnd = Carbon::parse($request->timeEnd);
-            $minutes = $timeEnd->diffInMinutes($timeStart);
             $partNumber = PartNumber::findOrFail($partNumberId);
+            $quantity = $partNumber->quantity;
+            $timeStart = Carbon::parse($productionPlan->updated_at);
+            $timeEnd = Carbon::now();
+            $minutes = $timeEnd->diffInMinutes($timeStart);
 
             for ($count = 1; $quantity > 0; $count++) {
 

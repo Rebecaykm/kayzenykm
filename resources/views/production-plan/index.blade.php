@@ -158,7 +158,13 @@
 
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-xs">
-                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Edit') }}">
+                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span class="ml-1 text-xs">{{ __('Producción') }}</span>
+                                    </a>
+                                    <!-- <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Edit') }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
@@ -175,7 +181,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                         </svg>
                                         <span class="ml-1 text-xs">{{ __('Finalizar') }}</span>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </td>
                         </tr>
@@ -204,3 +210,4 @@
         </div>
     </div>
 </x-app-layout>
+
