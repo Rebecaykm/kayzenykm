@@ -155,6 +155,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
+    Route::get('prodcution-record-bais', [\App\Http\Controllers\ProdcutionRecordController::class, 'bais'])->name('prodcution-record.bais');
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
 
     Route::get('prodcution-record/{prodcution_record}/cancel', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancel'])->name('prodcution-record.cancel');
@@ -296,4 +297,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('printer', \App\Http\Controllers\PrinterController::class);
+
+    Route::get('test-printer', [\App\Http\Controllers\ExampleController::class, 'testPrint'])->name('example.test');
 });

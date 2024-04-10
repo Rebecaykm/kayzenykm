@@ -354,4 +354,11 @@ class ProdcutionRecordController extends Controller
         }
         return redirect()->back();
     }
+
+    public function bais(Request $request)
+    {
+        $productionPlan = ProductionPlan::findOrFail($request->production);
+
+        return view('production-record.bias', ['productionPlan' => $productionPlan]);
+    }
 }

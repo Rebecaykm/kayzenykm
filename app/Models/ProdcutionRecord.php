@@ -36,7 +36,7 @@ class ProdcutionRecord extends Model
     /**
      *
      */
-    public static function storeProductionRecord(int $partNumberId, int $snpQuantity, string $timeStart, string $timeEnd, int $minutes, int $productionPlanId, int $quantity, int $prodcutionRecordStatus)
+    public static function storeProductionRecord(int $partNumberId, int $snpQuantity, string $timeStart, string $timeEnd, string $minutes, int $productionPlanId, int $quantity, int $prodcutionRecordStatus)
     {
         $prodcutionRecord = ProdcutionRecord::where('production_plan_id', $productionPlanId)->first();
 
