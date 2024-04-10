@@ -93,12 +93,13 @@ class ProductionPlanController extends Controller
             return $line->workcenters->pluck('number')->all();
         });
 
-        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id'])
+        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id', 'workcenters.name as wc_name'])
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->whereIn('workcenters.number', $workcenterNumbers)
+            ->orderBy('workcenters.name', 'asc')
             ->orderBy('part_numbers.number', 'asc')
             ->get();
 
@@ -193,14 +194,17 @@ class ProductionPlanController extends Controller
                 DB::transaction(function () use ($productionPlan) {
                     CompletionProductionPlan::dispatch($productionPlan);
                 });
-                return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
+                return redirect('production-plan')->with('success', 'La finalización de producción se ha realizado correctamente.');
+                // return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
             } else {
-                return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
+                return redirect('production-plan')->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
+                // return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
             }
         } catch (\Exception $e) {
             Log::error('ProductionPlanController: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
+            return redirect('production-plan')->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
+            // return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
         }
     }
 

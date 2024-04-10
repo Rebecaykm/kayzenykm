@@ -9,6 +9,7 @@ use App\Models\Status;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,15 +30,18 @@ class ExampleController extends Controller
      */
     public function index(Request $request)
     {
-
         try {
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
             $partNumberId = $request->partNumberId;
-            $quantity = $request->quantity;
-            $timeStart = Carbon::parse($request->timeStart);
-            $timeEnd = Carbon::parse($request->timeEnd);
-            $minutes = $timeEnd->diffInMinutes($timeStart);
             $partNumber = PartNumber::findOrFail($partNumberId);
+            $quantity = $request->quantity ?? $partNumber->quantity;
+            $timeStart = Carbon::parse($productionPlan->updated_at);
+            $timeEnd = Carbon::now();
+            $seconds = $timeEnd->diffInSeconds($timeStart);
+            $minutes = ceil($seconds / 60 * 100) / 100;
+            $minutesString = number_format($minutes, 2);
+
+            Log::info($minutes);
 
             for ($count = 1; $quantity > 0; $count++) {
 
@@ -52,7 +56,7 @@ class ExampleController extends Controller
                     $currentQuantity,
                     $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
-                    $minutes,
+                    $minutesString,
                     $productionPlan->id,
                     $currentQuantity,
                     $prodcutionRecordStatus->id
@@ -98,16 +102,16 @@ class ExampleController extends Controller
         try {
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
 
-            $x = $productionPlan->partNumber->workcenter->printer;
+            $printer = $productionPlan->partNumber->workcenter->printer;
 
             $partNumberId = $request->partNumberId;
-            $quantity = $request->quantity;
-            $timeStart = Carbon::parse($request->timeStart);
-            $timeEnd = Carbon::parse($request->timeEnd);
-
-            $minutes = $timeEnd->diffInMinutes($timeStart);
-
             $partNumber = PartNumber::findOrFail($partNumberId);
+            $quantity = $request->quantity ?? $partNumber->quantity;
+            $timeStart = Carbon::parse($productionPlan->updated_at);
+            $timeEnd = Carbon::now();
+            $seconds = $timeEnd->diffInSeconds($timeStart);
+            $minutes = ceil($seconds / 60 * 100) / 100;
+            $minutesString = number_format($minutes, 2);
 
             $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
 
@@ -124,145 +128,141 @@ class ExampleController extends Controller
                     $currentQuantity,
                     $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
-                    $minutes,
+                    $minutesString,
                     $productionPlan->id,
                     $currentQuantity,
                     $prodcutionRecordStatus->id
                 );
 
                 try {
-                    if ($partNumber->workcenter->printer->name == 'ZEBRA') {
+                    if ($printer->brand == 'ZEBRA') {
                         $codeQr = $result->id . '-' . trim($partNumber->number) . '-' . $currentQuantity . '-' . $result->sequence . '-' . Carbon::parse($productionPlan->date)->format('Ymd') . '-' . $productionPlan->shift->abbreviation;
 
-                        $zplData = '^XA
-                        ^FO480,50
-                        ^GB120,400,2^FS
-                        ^FO570,50
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDDepartamento:^FS
-                        ^FO480,460
-                        ^GB120,400,2^FS
-                        ^FO570,500
-                        ^A0N,20,30
-                        ^FWr
-                        ^FDEstación:^FS
-                        ^FO480,870
-                        ^GB120,300,2^FS
-                        ^FO570,900
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDProyecto:^FS
-                        ^FO500,50
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . strtoupper(trim($partNumber->workcenter->line->departament->name)) . '^FS
-                        ^FO500,500
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . trim($partNumber->workcenter->name) . '^FS
-                        ^FO500,900
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . $models . '^FS
-                        ^FO350,50
-                        ^GB120,1120,2^FS
-                        ^FO450,50
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDNo. Parte:^FS
-                        ^FO350,300
-                        ^A0N,100,100
-                        ^FWR
-                        ^FD' . trim($partNumber->number) . '^FS
-                        ^FO240,50
-                        ^GB100,700,2^FS
-                        ^FO310,300
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDFecha de Producción^FS
-                        ^FO250,300
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . $productionPlan->date . '^FS
-                        ^FO240,760
-                        ^GB100,410,2^FS
-                        ^FO310,800
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDSecuencia:^FS
-                        ^FO250,800
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . $result->sequence . '^FS
-                        ^FO130,50
-                        ^GB100,400,2^FS
-                        ^FO200,50
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDContenedor:^FS
-                        ^FO130,460
-                        ^GB100,400,2^FS
-                        ^FO200,500
-                        ^A0N,20,30
-                        ^FWr
-                        ^FDS N P:^FS
-                        ^FO130,870
-                        ^GB100,300,2^FS
-                        ^FO200,900
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDCantidad Producida:^FS
-                        ^FO100,50
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDIdentification Card^FS
-                        ^FO50,50
-                        ^A0N,20,30
-                        ^FWR
-                        ^FD*** ORIGINAL ***^FS
-                        ^FO100,500
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDY-TEC KEYLEX MÉXICO^FS
-                        ^FO60,500
-                        ^A0N,20,30
-                        ^FWR
-                        ^FDFECHA DE IMPRESION^FS
-                        ^FO30,500
-                        ^A0N,20,30
-                        ^FWR
-                        ^Fd' . now() . '^FS
-                        ^FO140,50
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . trim($partNumber->standardPackage->name) . '^FS
-                        ^FO140,500
-                        ^A0N,50,50
-                        ^FWr
-                        ^FD' . $partNumber->quantity . '^FS
-
-                        ^FO140,950
-                        ^A0N,50,50
-                        ^FWR
-                        ^FD' . $currentQuantity . '^FS
-                        ^FO20,950
-                        ^BQN,2,5
-                        ^FDMM,' . $codeQr . '^FS
-                        ^XZ';
-
-                        Log::alert($zplData);
-
-                        $printerIp = $partNumber->workcenter->printer->ip;
-
-                        $connector = new NetworkPrintConnector($printerIp);
+                        $connector = new NetworkPrintConnector($printer->ip);
 
                         $printer = new Printer($connector);
 
-                        $printer->text($zplData);
-                    } else {
+                        $zplText = '^XA
+                            ^FO480,50
+                            ^GB120,400,2^FS
+                            ^FO570,50
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDDepartamento:^FS
+                            ^FO480,460
+                            ^GB120,400,2^FS
+                            ^FO570,500
+                            ^A0N,20,30
+                            ^FWr
+                            ^FDEstación:^FS
+                            ^FO480,870
+                            ^GB120,300,2^FS
+                            ^FO570,900
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDProyecto:^FS
+                            ^FO500,50
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . strtoupper(trim($partNumber->workcenter->line->departament->name)) . '^FS
+                            ^FO500,500
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . trim($partNumber->workcenter->name) . '^FS
+                            ^FO500,900
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . $models . '^FS
+                            ^FO350,50
+                            ^GB120,1120,2^FS
+                            ^FO450,50
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDNo. Parte:^FS
+                            ^FO350,300
+                            ^A0N,100,100
+                            ^FWR
+                            ^FD' . trim($partNumber->number) . '^FS
+                            ^FO240,50
+                            ^GB100,700,2^FS
+                            ^FO310,300
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDFecha de Producción^FS
+                            ^FO250,300
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . $productionPlan->date . '^FS
+                            ^FO240,760
+                            ^GB100,410,2^FS
+                            ^FO310,800
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDSecuencia:^FS
+                            ^FO250,800
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . $result->sequence . '^FS
+                            ^FO130,50
+                            ^GB100,400,2^FS
+                            ^FO200,50
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDContenedor:^FS
+                            ^FO130,460
+                            ^GB100,400,2^FS
+                            ^FO200,500
+                            ^A0N,20,30
+                            ^FWr
+                            ^FDS N P:^FS
+                            ^FO130,870
+                            ^GB100,300,2^FS
+                            ^FO200,900
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDCantidad Producida:^FS
+                            ^FO100,50
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDIdentification Card^FS
+                            ^FO50,50
+                            ^A0N,20,30
+                            ^FWR
+                            ^FD*** ORIGINAL ***^FS
+                            ^FO100,500
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDY-TEC KEYLEX MÉXICO^FS
+                            ^FO60,500
+                            ^A0N,20,30
+                            ^FWR
+                            ^FDFECHA DE IMPRESION^FS
+                            ^FO30,500
+                            ^A0N,20,30
+                            ^FWR
+                            ^Fd' . now() . '^FS
+                            ^FO140,50
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . trim($partNumber->standardPackage->name) . '^FS
+                            ^FO140,500
+                            ^A0N,50,50
+                            ^FWr
+                            ^FD' . $partNumber->quantity . '^FS
+                            ^FO140,950
+                            ^A0N,50,50
+                            ^FWR
+                            ^FD' . $currentQuantity . '^FS
+                            ^FO20,950
+                            ^BQN,2,5
+                            ^FDMM,' . $codeQr . '^FS
+                            ^XZ';
 
-                        $connector = new NetworkPrintConnector($x->ip, $x->port);
+                        $printer->textRaw($zplText);
+
+                        $printer->close();
+                    } else {
+                        $connector = new NetworkPrintConnector($printer->ip, $printer->port);
                         $printer = new Printer($connector);
                         $command = '
                                 R CW816 PF*
@@ -310,14 +310,14 @@ class ExampleController extends Controller
                         $printer->getPrintConnector()->finalize();
                     }
                 } catch (\Exception $e) {
-                    return "No se pudo establecer la conexión con la impresora: " . $e->getMessage();
+                    Log::error('Error al imprimir etiqueta: ' . $e->getMessage());
                 }
 
                 $quantity -= $partNumber->quantity;
             }
             return redirect()->back();
         } catch (\Exception $e) {
-            Log::emergency('ExampleController: ' . $e->getMessage());
+            Log::error('ExampleController.- Error en la impresión: ' . $e->getMessage());
         }
     }
 

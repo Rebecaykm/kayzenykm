@@ -74,6 +74,17 @@ class ProdcutionRecordController extends Controller
         return view('production-record.create', ['productionPlan' => $productionPlan]);
     }
 
+    public function chageStatus(Request $request)
+    {
+        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+
+        $statusEnProceso = Status::query()->where('name', 'EN PROCESO')->first();
+
+        $statusProductionPlan->update(['status_id' => $statusEnProceso->id]);
+
+        return redirect()->back();
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -342,5 +353,12 @@ class ProdcutionRecordController extends Controller
             }
         }
         return redirect()->back();
+    }
+
+    public function bais(Request $request)
+    {
+        $productionPlan = ProductionPlan::findOrFail($request->production);
+
+        return view('production-record.bias', ['productionPlan' => $productionPlan]);
     }
 }
