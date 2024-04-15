@@ -20,6 +20,18 @@
             @csrf
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">
+                        {{ __('Abreviatura') }}
+                    </span>
+                    <select name="abbreviation" class="block w-full text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                        <option>{{ __('Seleccione una Abreviatura') }}</option>
+                        <option value="PR">{{ __('CA - CALIDAD') }}</option>
+                        <option value="PR">{{ __('PR - ESTAMPADO') }}</option>
+                        <option value="PR">{{ __('CR - CARROCERÍA') }}</option>
+                        <option value="PR">{{ __('CH - CHASIS') }}</option>
+                    </select>
+                </label>
+                <label class="block text-sm mt-4">
                     <span class="text-gray-700 dark:text-gray-400">{{ __('Nombre') }}</span>
                     <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="name" autocomplete="off" />
                 </label>
@@ -28,7 +40,7 @@
                         {{ __('Tipo de Paro') }}
                     </span>
                     <select name="unemployment_type_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        <option>{{ __('Seleccione un Tipo de Paro') }}</option>
+                        <option value="">{{ __('Seleccione un Tipo de Paro') }}</option>
                         @foreach ($unemploymentTypes as $unemploymentType)
                         <option value="{{ $unemploymentType->id }}">{{ $unemploymentType->name }}</option>
                         @endforeach

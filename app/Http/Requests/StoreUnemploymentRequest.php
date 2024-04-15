@@ -22,8 +22,9 @@ class StoreUnemploymentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'abbreviation' => ['required', 'string'],
             'name' => ['required', 'string'],
-            'unemployment_type_id' => ['required', 'string']
+            'unemployment_type_id' => ['nullable']
         ];
     }
 }

@@ -38,7 +38,7 @@ class UnemploymentRecordController extends Controller
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
-            ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
+            ->leftJoin('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
             ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('unemployment_records.created_at', 'DESC')
             ->paginate(10);
@@ -232,7 +232,7 @@ class UnemploymentRecordController extends Controller
                 'unemployment_records.description',
             ])
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
-            ->join('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
+            ->leftJoin('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
             ->join('workcenters', 'unemployment_records.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
