@@ -31,6 +31,8 @@ class ExampleController extends Controller
     public function index(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
             $partNumberId = $request->partNumberId;
             $partNumber = PartNumber::findOrFail($partNumberId);
@@ -38,10 +40,7 @@ class ExampleController extends Controller
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
             $seconds = $timeEnd->diffInSeconds($timeStart);
-            $minutes = ceil($seconds / 60 * 100) / 100;
-            $minutesString = number_format($minutes, 2);
-
-            Log::info($minutes);
+            $minutes = round($seconds / 60, 2);
 
             for ($count = 1; $quantity > 0; $count++) {
 
@@ -56,7 +55,7 @@ class ExampleController extends Controller
                     $currentQuantity,
                     $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
-                    $minutesString,
+                    $minutes,
                     $productionPlan->id,
                     $currentQuantity,
                     $prodcutionRecordStatus->id
@@ -90,9 +89,11 @@ class ExampleController extends Controller
 
                 $dataArrayWithQr[] = $data;
             }
+            DB::commit();
 
             return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
         } catch (\Exception $e) {
+            DB::rollback();
             Log::emergency('ExampleController: ' . $e->getMessage());
         }
     }
@@ -100,6 +101,8 @@ class ExampleController extends Controller
     public function printipl(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $productionPlan = ProductionPlan::findOrFail($request->productionPlanId);
 
             $printer = $productionPlan->partNumber->workcenter->printer;
@@ -110,8 +113,7 @@ class ExampleController extends Controller
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
             $seconds = $timeEnd->diffInSeconds($timeStart);
-            $minutes = ceil($seconds / 60 * 100) / 100;
-            $minutesString = number_format($minutes, 2);
+            $minutes = round($seconds / 60, 2);
 
             $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
 
@@ -128,7 +130,7 @@ class ExampleController extends Controller
                     $currentQuantity,
                     $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
-                    $minutesString,
+                    $minutes,
                     $productionPlan->id,
                     $currentQuantity,
                     $prodcutionRecordStatus->id
@@ -311,12 +313,17 @@ class ExampleController extends Controller
                     }
                 } catch (\Exception $e) {
                     Log::error('Error al imprimir etiqueta: ' . $e->getMessage());
+
+                    DB::rollback();
                 }
 
                 $quantity -= $partNumber->quantity;
             }
+            DB::commit();
+
             return redirect()->back();
         } catch (\Exception $e) {
+            DB::rollback();
             Log::error('ExampleController.- Error en la impresión: ' . $e->getMessage());
         }
     }

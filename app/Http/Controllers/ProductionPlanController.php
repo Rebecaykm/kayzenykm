@@ -93,7 +93,7 @@ class ProductionPlanController extends Controller
             return $line->workcenters->pluck('number')->all();
         });
 
-        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id', 'workcenters.name as wc_name'])
+        $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id', 'workcenters.name as wc_name', 'part_numbers.quantity'])
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')

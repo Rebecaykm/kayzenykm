@@ -55,7 +55,7 @@
                         <select name="partNumber" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                             <option>Seleccione un Número de Parte</option>
                             @foreach ($parts as $part)
-                            <option value="{{ $part->part_number_id }}">{{ $part->wc_name ?? '' }} - {{ $part->number ?? ''}}</option>
+                            <option value="{{ $part->part_number_id }}">{{ __('Estación:') }} {{ $part->wc_name ?? '' }} &ensp;&ensp; {{ __('No. Parte:') }} {{ $part->number ?? ''}} &ensp;&ensp; {{ __('SNP:') }} {{ $part->quantity ?? '' }}</option>
                             @endforeach
                         </select>
                     </label>
