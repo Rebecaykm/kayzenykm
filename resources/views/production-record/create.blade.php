@@ -39,7 +39,7 @@
             </a>
         </div>
 
-        <div class="grid gap-2 mb-2 grid-cols-3">
+        <div class="grid gap-2 mb-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
             <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                 <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
                     {{__('Cantidad Plan')}}
@@ -180,31 +180,25 @@
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div class="mt-2">
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     @if ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA')
-                    <div class="block text-sm col-span-3 mt-8">
+                    <div class="block md:col-span-3 lg:grid-cols-3">
                         <form action="{{ route('prodcution-record.start-production') }}" method="POST">
                             @csrf
                             <input type="hidden" name="productionPlananId" value="{{ $productionPlan->id }}">
-                            <button type="submit" class="w-full px-10 py-2 text-lg font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:bg-purple-700 dark:text-white">
+                            <button type="submit" class="w-full md:w-auto lg:w-auto px-10 py-2 text-lg font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:bg-purple-700 dark:text-white">
                                 <div class="flex justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
-                                    <span class="ml-2">
-                                        Iniciar Producción
-                                    </span>
+                                    <span class="ml-2">Iniciar Producción</span>
                                 </div>
                             </button>
                         </form>
                     </div>
                     @else
-                    <div class="flex w-full col-span-3">
-                        <span class="text-sm text-gray-700 dark:text-gray-400">{{__('Acciones')}}</span>
-                    </div>
-
                     <div class="block">
-                        <button id="etiquetaButton" onclick="imprimirPDF()" class="w-full px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
+                        <button id="etiquetaButton" onclick="imprimirPDF()" class="w-full md:w-auto lg:w-auto px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
                             <div class="flex justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
@@ -215,7 +209,7 @@
                     </div>
                     <div class="block">
                         <a href="{{ route('prodcution-record.bais', ['production' => $productionPlan->id]) }}">
-                            <button class="w-full px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
+                            <button class="w-full md:w-auto lg:w-auto px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
                                 <div class="flex justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" />
@@ -227,7 +221,7 @@
                     </div>
                     <div class="block">
                         <a href="{{ route('production-plan.finish', ['production' => $productionPlan->id]) }}">
-                            <button class="w-full px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
+                            <button id="finalizarButton" onclick="finalizarProduccion()" class="w-full md:w-auto lg:w-auto px-10 py-2 font-semibold leading-tight text-purple-700 transition-colors duration-150 bg-purple-100 border border-transparent rounded-lg active:bg-purple-100 hover:bg-purple-100 focus:outline-none focus:shadow-outline-purple dark:text-purple-100 dark:bg-purple-700">
                                 <div class="flex justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -238,37 +232,37 @@
                         </a>
                     </div>
 
-                    <div class="block col-span-2">
-                        <form action="{{ route('prodcution-record.stop-production') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="productionPlananId" value="{{ $productionPlan->id }}">
-                            <button type="submit" class="w-full px-10 py-2 font-semibold leading-tight text-yellow-700 transition-colors duration-150 bg-yellow-100 border border-transparent rounded-lg active:bg-yellow-100 hover:bg-yellow-100 focus:outline-none focus:shadow-outline-yellow dark:text-yellow-100 dark:bg-yellow-700">
-                                <div class="flex justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                    </svg>
-                                    <span class="ml-2">Detener Producción</span>
-                                </div>
-                            </button>
-                        </form>
-                    </div>
-
                     <div class="block">
                         <a href="{{ route('production-plan.index') }}">
-                            <button class="w-full px-10 py-2 font-semibold leading-tight text-gray-700 transition-colors duration-150 bg-gray-200 border border-transparent rounded-lg active:bg-gray-200 hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray dark:text-white dark:bg-gray-500">
+                            <button class="w-full md:w-auto lg:w-auto px-10 py-2 font-semibold leading-tight text-gray-700 transition-colors duration-150 bg-gray-200 border border-transparent rounded-lg active:bg-gray-200 hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray dark:text-white dark:bg-gray-500">
                                 <div class="flex justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
                                     </svg>
-                                    <span class="ml-2">Regresar</span>
+                                    <span class="ml-2">{{ __('Regresar') }}</span>
                                 </div>
                             </button>
                         </a>
                     </div>
 
+                    <div class="block md:col-span-1 lg:col-span-2">
+                        <form action="{{ route('prodcution-record.stop-production') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="productionPlananId" value="{{ $productionPlan->id }}">
+                            <button type="submit" class="w-full md:w-auto lg:w-auto px-10 py-2 font-semibold leading-tight text-yellow-700 transition-colors duration-150 bg-yellow-100 border border-transparent rounded-lg active:bg-yellow-100 hover:bg-yellow-100 focus:outline-none focus:shadow-outline-yellow dark:text-yellow-100 dark:bg-yellow-700">
+                                <div class="flex justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                    <span class="ml-2">{{ __('Detener Producción') }}</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
                     @endif
                 </div>
             </div>
+
             @if ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA')
             <div class="flex justify-end col-span-1 mt-4">
                 <a href="{{ route('production-plan.index') }}" class="flex px-10 py-2 items-center justify-end text-gray-700 text-md font-semibold leading-5 transition-colors duration-150 bg-gray-300 border border-transparent rounded-lg active:bg-gray-300 hover:bg-gray-300 focus:outline-none focus:shadow-outline-gray dark:bg-gray-600 dark:text-white">
@@ -282,8 +276,13 @@
         </div>
     </div>
     <script>
+        function finalizarProduccion() {
+            document.getElementById("finalizarButton").disabled = true;
+        }
+
         function imprimirPDF() {
             document.getElementById("etiquetaButton").disabled = true;
+
 
             var productionPlanId = '{{ $productionPlan->id }}';
             var partNumberId = '{{ $productionPlan->partNumber->id }}';
