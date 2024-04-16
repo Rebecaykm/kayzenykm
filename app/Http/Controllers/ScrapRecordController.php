@@ -73,6 +73,7 @@ class ScrapRecordController extends Controller
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('departaments', 'workcenters.departament_id', '=', 'departaments.id')
+            ->where('obsolete', '!=', true)
             ->whereIn('item_classes.abbreviation', $arrayClass)
             ->whereIn('departaments.code', $departamentCode)
             ->orderBy('workcenters.number')

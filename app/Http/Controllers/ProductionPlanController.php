@@ -98,6 +98,7 @@ class ProductionPlanController extends Controller
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
+            ->where('obsolete', '!=', true)
             ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('workcenters.name', 'asc')
             ->orderBy('part_numbers.number', 'asc')

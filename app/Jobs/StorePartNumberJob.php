@@ -32,11 +32,12 @@ class StorePartNumberJob implements ShouldQueue
     private $project;
     // private $createdDate;
     // private $createdTime;
+    private $obsolete;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($name, $number, $measurementUnit, $itemType, $itemClass, $standardPackage, $boxQuantity, $plannerCode, $project)
+    public function __construct($name, $number, $measurementUnit, $itemType, $itemClass, $standardPackage, $boxQuantity, $plannerCode, $project, $obsolete)
     {
         $this->name = $name;
         $this->number = $number;
@@ -47,6 +48,7 @@ class StorePartNumberJob implements ShouldQueue
         $this->boxQuantity = $boxQuantity;
         $this->plannerCode = $plannerCode;
         $this->project = $project;
+        $this->obsolete = $obsolete;
     }
 
     /**
@@ -71,6 +73,7 @@ class StorePartNumberJob implements ShouldQueue
                 'standard_package_id' => $package->id ?? null,
                 'quantity' => $this->boxQuantity ?? null,
                 'planner_id' => $planner->id ?? null,
+                'obsolete' => ($this->obsolete == "OBSOLETE") ? true : false,
             ]);
         } else {
             $item = PartNumber::create([
@@ -82,6 +85,7 @@ class StorePartNumberJob implements ShouldQueue
                 'standard_package_id' => $package->id ?? null,
                 'quantity' => $this->boxQuantity ?? null,
                 'planner_id' => $planner->id ?? null,
+                'obsolete' => ($this->obsolete == "OBSOLETE") ? true : false,
             ]);
         }
 
