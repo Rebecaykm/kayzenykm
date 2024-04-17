@@ -27,7 +27,7 @@ class PartNumberController extends Controller
     {
         $search = strtoupper($request->search) ?? '';
 
-        $partNumbers = PartNumber::query()->where('number', 'LIKE', '%' . $search . '%')->orderBy('updated_at', 'DESC')->paginate(10);
+        $partNumbers = PartNumber::query()->where([['obsolete', '!=', true], ['number', 'LIKE', '%' . $search . '%']])->orderBy('updated_at', 'DESC')->paginate(10);
 
         return view('part-number.index', ['partNumbers' => $partNumbers]);
     }
@@ -88,10 +88,10 @@ class PartNumberController extends Controller
 
         if ($search != '') {
             $partNumbers = PartNumber::
-            // whereHas('itemClass', function ($query) {
-            //     $query->where('abbreviation', 'F1');
-            // })
-            //     ->
+                // whereHas('itemClass', function ($query) {
+                //     $query->where('abbreviation', 'F1');
+                // })
+                //     ->
                 where('number', 'LIKE', '%' . $search . '%')
                 ->get();
 

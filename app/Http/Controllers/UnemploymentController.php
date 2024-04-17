@@ -34,7 +34,11 @@ class UnemploymentController extends Controller
      */
     public function store(StoreUnemploymentRequest $request)
     {
-        $unemployment =  Unemployment::create($request->validated());
+        $unemployment =  Unemployment::create([
+            'abbreviation' => $request->abbreviation,
+            'name' => $request->name,
+            'unemployment_type_id' => $request->unemployment_type_id ?? null
+        ]);
 
         return redirect()->route('unemployment.index');
     }
@@ -54,7 +58,7 @@ class UnemploymentController extends Controller
     {
         $unemploymentTypes = UnemploymentType::query()->orderBy('name', 'DESC')->get();
 
-        return view('unemployment.edit', ['unemployment' => $unemployment,'unemploymentTypes' => $unemploymentTypes]);
+        return view('unemployment.edit', ['unemployment' => $unemployment, 'unemploymentTypes' => $unemploymentTypes]);
     }
 
     /**

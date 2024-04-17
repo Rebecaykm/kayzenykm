@@ -32,6 +32,7 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                            <th class="px-4 py-3">{{ __('Abreviatura') }}</th>
                             <th class="px-4 py-3">{{ __('Nombre') }}</th>
                             <th class="px-4 py-3">{{ __('Tipo de Paro') }}</th>
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
@@ -40,6 +41,9 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($unemployments as $unemployment)
                         <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm">
+                                {{ $unemployment->abbreviation ?? '' }}
+                            </td>
                             <td class="px-4 py-3 text-sm">
                                 {{ $unemployment->name ?? '' }}
                             </td>

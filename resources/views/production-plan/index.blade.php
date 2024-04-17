@@ -150,9 +150,11 @@
                                     {{ __('En Proceso') }}
                                 </span>
                             </td>
-                            @else
+                            @elseif ($productionPlan->status->name == 'PRODUCCIÓN DETENIDA')
                             <td class="px-4 py-3 text-xs">
-
+                                <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
+                                    {{__('Producción Detenida   ') }}
+                                </span>
                             </td>
                             @endif
 
@@ -210,4 +212,3 @@
         </div>
     </div>
 </x-app-layout>
-

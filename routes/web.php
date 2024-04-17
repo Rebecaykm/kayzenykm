@@ -165,7 +165,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('clear-pdf-session-data', [\App\Http\Controllers\ProdcutionRecordController::class, 'clearPDFSessionData'])->name('clear-pdf-session-data');
 
-    Route::post('prodcution-record/chage-status', [\App\Http\Controllers\ProdcutionRecordController::class, 'chageStatus'])->name('prodcution-record.change-status');
+    Route::post('prodcution-record/start-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'startProduction'])->name('prodcution-record.start-production');
+    Route::post('prodcution-record/stop-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'stopProduction'])->name('prodcution-record.stop-production');
 
     /**
      *

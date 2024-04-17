@@ -15,7 +15,7 @@ class PartNumber extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'name', 'number', 'measurement_id', 'type_id', 'item_class_id', 'standard_package_id', 'quantity', 'workcenter_id', 'planner_id', 'project_id'
+        'name', 'number', 'measurement_id', 'type_id', 'item_class_id', 'standard_package_id', 'quantity', 'workcenter_id', 'planner_id', 'project_id', 'obsolete'
     ];
 
     public function measurement(): BelongsTo

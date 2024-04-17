@@ -74,7 +74,10 @@ class ProdcutionRecordController extends Controller
         return view('production-record.create', ['productionPlan' => $productionPlan]);
     }
 
-    public function chageStatus(Request $request)
+    /**
+     *
+     */
+    public function startProduction(Request $request)
     {
         $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
 
@@ -83,6 +86,19 @@ class ProdcutionRecordController extends Controller
         $statusProductionPlan->update(['status_id' => $statusEnProceso->id]);
 
         return redirect()->back();
+    }
+
+    /**
+     *
+     */
+    public function stopProduction(Request $request) {
+        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+
+        $statusProduccionDetenida = Status::query()->where('name', 'PRODUCCIÓN DETENIDA')->first();
+
+        $statusProductionPlan->update(['status_id' => $statusProduccionDetenida->id]);
+
+        return redirect('production-plan');
     }
 
     /**

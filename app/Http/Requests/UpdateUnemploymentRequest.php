@@ -22,8 +22,9 @@ class UpdateUnemploymentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'abbreviation' => ['string'],
             'name' => ['string'],
-            'unemployment_type_id' => ['string']
+            'unemployment_type_id' => ['nullable']
         ];
     }
 }
