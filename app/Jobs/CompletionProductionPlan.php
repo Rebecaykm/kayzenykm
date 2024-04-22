@@ -7,6 +7,7 @@ use App\Models\ProductionPlan;
 use App\Models\ScrapRecord;
 use App\Models\Status;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -62,15 +63,29 @@ class CompletionProductionPlan implements ShouldQueue
 
         $this->productionPlan->update(['status_id' => $status->id]);
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU.YSF013B";
-        // $result = odbc_exec($conn, $query);
+        //
 
-        // if ($result) {
-        //     Log::info("LX834OU.YSF013B.- La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-        // } else {
-        //     Log::alert("LX834OU.YSF013B.- Error en la consulta: " . odbc_errormsg($conn));
-        // }
-        // odbc_close($conn);
+        try {
+            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+
+            if ($conn === false) {
+                throw new Exception("Error al conectar con la base de datos Infor.");
+            }
+
+            $query = "CALL LX834OU02.YSF013C";
+            $result = odbc_exec($conn, $query);
+
+            if ($result) {
+                Log::info("LX834OU02.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+            } else {
+                throw new Exception("LX834OU02.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
+            }
+        } catch (Exception $e) {
+            Log::alert($e->getMessage());
+        } finally {
+            if (isset($conn)) {
+                odbc_close($conn);
+            }
+        }
     }
 }

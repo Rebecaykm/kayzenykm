@@ -196,42 +196,13 @@ class ProductionPlanController extends Controller
                     CompletionProductionPlan::dispatch($productionPlan);
                 });
                 return redirect('production-plan')->with('success', 'La finalización de producción se ha realizado correctamente.');
-                // return redirect()->back()->with('success', 'La finalización de producción se ha realizado correctamente.');
             } else {
                 return redirect('production-plan')->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
-                // return redirect()->back()->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');
             }
         } catch (\Exception $e) {
             Log::error('ProductionPlanController: ' . $e->getMessage());
 
             return redirect('production-plan')->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
-            // return redirect()->back()->with('error', '¡Error! Hubo un problema durante el cierre de la Producción. Por favor, contactarse con el departamento de IT.');
-        }
-    }
-
-    public function loadToInfor()
-    {
-        try {
-            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-
-            if ($conn === false) {
-                throw new Exception("Error al conectar con la base de datos Infor.");
-            }
-
-            $query = "CALL LX834OU02.YSF013C";
-            $result = odbc_exec($conn, $query);
-
-            if ($result) {
-                Log::info("LX834OU02.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-            } else {
-                throw new Exception("LX834OU02.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
-            }
-        } catch (Exception $e) {
-            Log::alert($e->getMessage());
-        } finally {
-            if (isset($conn)) {
-                odbc_close($conn);
-            }
         }
     }
 }
