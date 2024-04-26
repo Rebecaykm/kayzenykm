@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\RYT4;
 use App\Models\YHMIC;
+use App\Models\YT4;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,6 +35,14 @@ class CheckPackNumberJob implements ShouldQueue
 
             if (!$yhmicData->isEmpty()) {
                 foreach ($yhmicData as $key => $yhmic) {
+                    $yt4 = YT4::where([
+                        ['Y4SINO', 'LIKE', $yhmic->YISINO . '%'],
+                        ['Y4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
+                        ['Y4TQTY', 'LIKE', $yhmic->YIPQTY . '%'],
+                        ['Y4PROD', 'LIKE', $yhmic->YIPROD . '%'],
+                        ['Y4ORDN', 'LIKE', $yhmic->YIORDN . '%']
+                    ])->first();
+
                     $ryt4 = RYT4::where([
                         ['R4SINO', 'LIKE', $yhmic->YISINO . '%'],
                         ['R4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
@@ -42,7 +51,7 @@ class CheckPackNumberJob implements ShouldQueue
                         ['R4ORDN', 'LIKE', $yhmic->YIORDN . '%']
                     ])->first();
 
-                    if (is_null($ryt4)) {
+                    if (is_null($yt4) && is_null($ryt4)) {
                         StorePackNumberJob::dispatch(
                             $yhmic->YISINO,
                             $yhmic->YIPCNO,

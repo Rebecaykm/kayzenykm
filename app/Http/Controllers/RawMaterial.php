@@ -36,7 +36,7 @@ class RawMaterial extends Controller
             'pack.max' => 'El número de pack no puede tener más de 15 dígitos'
         ]);
 
-        $packNumber = trim(strval($request->pack));
+        $packNumber = strtoupper(trim(strval($request->pack)));
 
         CheckPackNumberJob::dispatch(
             $packNumber
