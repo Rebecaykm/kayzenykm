@@ -39,7 +39,7 @@ class ProductionPlanController extends Controller
     {
         $search = strtoupper($request->search) ?? '';
 
-        $startWeek = Carbon::now()->subWeek()->startOfWeek()->format('Y-m-d');
+        $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
         // $classArray = ['M1', 'M2', 'M3', 'M4'];

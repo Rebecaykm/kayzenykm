@@ -40,7 +40,7 @@ class UnemploymentController extends Controller
             'unemployment_type_id' => $request->unemployment_type_id ?? null
         ]);
 
-        return redirect()->route('unemployment.index');
+        return redirect()->back();
     }
 
     /**
