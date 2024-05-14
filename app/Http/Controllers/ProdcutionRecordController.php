@@ -101,6 +101,16 @@ class ProdcutionRecordController extends Controller
         return redirect('production-plan');
     }
 
+    public function cancelProduction(Request $request) {
+        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+
+        $statusProduccionDetenida = Status::query()->where('name', 'CANCELADO')->first();
+
+        $statusProductionPlan->update(['status_id' => $statusProduccionDetenida->id]);
+
+        return redirect('production-plan');
+    }
+
     /**
      * Store a newly created resource in storage.
      */

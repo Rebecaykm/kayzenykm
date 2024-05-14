@@ -42,12 +42,12 @@ class ProductionPlanController extends Controller
         $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
-        // $classArray = ['M1', 'M2', 'M3', 'M4'];
+        $classArray = ['M1', 'M2', 'M3', 'M4'];
         $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
             return $line->workcenters->pluck('number')->all();
         });
 
-        $status = Status::where('name', 'INACTIVO')->first();
+        $statusIds = Status::whereIn('name', ['INACTIVO', 'CANCELADO'])->pluck('id')->toArray();
 
         $productionPlans = ProductionPlan::select([
             '*',
@@ -67,12 +67,13 @@ class ProductionPlanController extends Controller
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('statuses', 'production_plans.status_id', '=', 'statuses.id')
-            ->where('production_plans.status_id', '!=', $status->id)
+            ->whereNotIn('production_plans.status_id', $statusIds)
             ->where(function ($query) use ($search) {
                 $query->where('part_numbers.number', 'LIKE', '%' . $search . '%')
                     ->orWhere('workcenters.name', 'LIKE', '%' . $search . '%');
             })
             ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('item_classes.abbreviation', $classArray)
             ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date', 'asc')
             ->orderBy('shifts.abbreviation', 'asc')
@@ -93,12 +94,15 @@ class ProductionPlanController extends Controller
             return $line->workcenters->pluck('number')->all();
         });
 
+        $classArray = ['M1', 'M2', 'M3', 'M4'];
+
         $partNumbers = PartNumber::select(['part_numbers.number', 'part_numbers.id as part_number_id', 'workcenters.name as wc_name', 'part_numbers.quantity'])
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->where('obsolete', '!=', true)
+            ->whereIn('item_classes.abbreviation', $classArray)
             ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('workcenters.name', 'asc')
             ->orderBy('part_numbers.number', 'asc')
