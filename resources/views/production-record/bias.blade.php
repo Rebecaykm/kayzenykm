@@ -222,7 +222,6 @@
 
         function imprimirPDF() {
             var snp = '{{ intval($productionPlan->partNumber->quantity) }}';
-            console.log(snp);
             var productionPlanId = '{{ $productionPlan->id }}';
             var partNumberId = '{{ $productionPlan->partNumber->id }}';
             var quantityInput = document.getElementById('quantity_input');
