@@ -86,11 +86,16 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['nullable', 'string', 'max:255', Rule::unique('users')],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:table_name'],
             'password' => ['required', 'string', 'min:8'],
+            'infor' => ['nullable', 'string'],
+            'role_id' => ['required', 'integer'],
+            'departaments' => ['required', 'array'],
+            'lines' => ['required', 'array']
         ]);
 
-        $data = $request->only(['name', 'email', 'password', 'infor']);
+        $data = $request->only(['name', 'username', 'email', 'password', 'infor']);
         $data['password'] = bcrypt($data['password']);
         $data['email_verified_at'] = now();
 

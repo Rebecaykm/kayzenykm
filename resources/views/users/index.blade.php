@@ -73,13 +73,13 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $user->username }}
+                                {{ $user->username ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $user->email }}
+                                {{ $user->email ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $user->infor }}
+                                {{ $user->infor ?? "-" }}
                             </td>
                             <!-- <td class="px-4 py-3 text-xs">
                                 {{ $user->created_at }}
