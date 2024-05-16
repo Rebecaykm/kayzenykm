@@ -38,10 +38,11 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Nombre</th>
+                            <th class="px-4 py-3">Usuario</th>
                             <th class="px-4 py-3">Correo Electrónico</th>
                             <th class="px-4 py-3">Usuario de Infor</th>
-                            <th class="px-4 py-3">Fecha de Creación</th>
-                            <th class="px-4 py-3">Fecha de Actualización</th>
+                            <!-- <th class="px-4 py-3">Fecha de Creación</th>
+                            <th class="px-4 py-3">Fecha de Actualización</th> -->
                             <th class="px-4 py-3">Acciones</th>
                         </tr>
                     </thead>
@@ -72,17 +73,20 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $user->email }}
+                                {{ $user->username ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $user->infor }}
+                                {{ $user->email ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-xs">
+                                {{ $user->infor ?? "-" }}
+                            </td>
+                            <!-- <td class="px-4 py-3 text-xs">
                                 {{ $user->created_at }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $user->updated_at }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <a href="{{ route('users.edit', $user->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-blue-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">

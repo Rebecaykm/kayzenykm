@@ -221,14 +221,14 @@
         // }
 
         function imprimirPDF() {
-            var snp = '{{ $productionPlan->partNumber->quantity }}';
+            var snp = '{{ intval($productionPlan->partNumber->quantity) }}';
             var productionPlanId = '{{ $productionPlan->id }}';
             var partNumberId = '{{ $productionPlan->partNumber->id }}';
             var quantityInput = document.getElementById('quantity_input');
 
             // Validación de cantidad
             var quantity = quantityInput.value;
-            if (!quantity || isNaN(quantity) || quantity <= 0 || quantity > snp) {
+            if (!quantity || isNaN(quantity) || quantity <= 0 || quantity >= snp) {
                 // Mostrar mensaje de error y aplicar estilo al input y al span
                 quantityError.textContent = 'La cantidad debe ser un número mayor a cero y menor al SNP.';
                 quantityInput.classList.add('border-red-600');

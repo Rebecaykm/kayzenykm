@@ -27,32 +27,38 @@
                     @csrf
                     @method('PUT')
                     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Nombre</span>
-                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Jane Doe" type="text" name="name" value=" {{ $user->name }} " />
-                        </label>
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Usuario de Infor</span>
-                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="YKMS000" type="infor" name="infor" value=" {{ $user->infor }} " />
-                        </label>
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Correo Electrónico</span>
-                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="test@example.com" type="email" name="email" value=" {{ $user->email }} " />
-                        </label>
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Contraseña</span>
-                            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="***************" type="password" name="password" />
-                        </label>
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">
-                                Rol
-                            </span>
-                            <select name="role_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                                @foreach ($roles as $key => $role)
-                                <option {{ $user->roles->contains('id', $role->id) ? 'selected' : '' }} value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Nombre</span>
+                                <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Jane Doe" type="text" name="name" value="{{ $user->name }}" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Usuario</span>
+                                <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="User" type="text" name="username" value="{{ $user->username }}" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Correo Electrónico</span>
+                                <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="test@example.com" type="email" name="email" value="{{ $user->email }}" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Contraseña</span>
+                                <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="***************" type="password" name="password" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Usuario de Infor</span>
+                                <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="YKMS000" type="text" name="infor" value="{{ $user->infor }}" />
+                            </label>
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">
+                                    Rol
+                                </span>
+                                <select name="role_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                                    @foreach ($roles as $key => $role)
+                                    <option {{ $user->roles->contains('id', $role->id) ? 'selected' : '' }} value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </div>
                         <label class="block text-sm mt-4">
                             <span class="text-gray-700 dark:text-gray-400">Departamentos</span>
                             <div class="grid grid-cols-6">

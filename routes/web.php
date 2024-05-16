@@ -167,6 +167,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::post('prodcution-record/start-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'startProduction'])->name('prodcution-record.start-production');
     Route::post('prodcution-record/stop-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'stopProduction'])->name('prodcution-record.stop-production');
+    Route::post('prodcution-record/cancel-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancelProduction'])->name('prodcution-record.cancel-production');
 
     /**
      *
