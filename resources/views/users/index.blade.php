@@ -38,9 +38,9 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Nombre</th>
+                            <th class="px-4 py-3">Departamento</th>
                             <th class="px-4 py-3">Usuario</th>
                             <th class="px-4 py-3">Correo Electrónico</th>
-                            <th class="px-4 py-3">Usuario de Infor</th>
                             <!-- <th class="px-4 py-3">Fecha de Creación</th>
                             <th class="px-4 py-3">Fecha de Actualización</th> -->
                             <th class="px-4 py-3">Acciones</th>
@@ -73,13 +73,13 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-xs">
+                                {{ $user->departaments->pluck('name')->implode(', ') ?: '-' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs">
                                 {{ $user->username ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 {{ $user->email ?? "-" }}
-                            </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $user->infor ?? "-" }}
                             </td>
                             <!-- <td class="px-4 py-3 text-xs">
                                 {{ $user->created_at }}
