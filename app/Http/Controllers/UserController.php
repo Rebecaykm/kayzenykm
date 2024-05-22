@@ -69,10 +69,16 @@ class UserController extends Controller
      */
     public function create()
     {
-        $departaments = Departament::all();
+        $departaments = Departament::orderBy('name', 'ASC')->get();
         $roles = Role::all();
-        $lines = Line::all();
-
+        $lines = Line::with('departament')
+            ->orderBy(function ($query) {
+                $query->select('name')
+                    ->from('departaments')
+                    ->whereColumn('lines.departament_id', 'departaments.id');
+            })
+            ->orderBy('name')
+            ->get();
         return view('users.create', ['roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
 
@@ -113,7 +119,7 @@ class UserController extends Controller
             $user->lines()->sync($request->lines);
         }
 
-        return redirect('users')->with('success', 'Usuario creado con éxito');
+        return redirect()->back()->with('success', 'Usuario creado con éxito');
     }
 
     /**
@@ -136,8 +142,15 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-        $departaments = Departament::all();
-        $lines = Line::all();
+        $departaments = Departament::orderBy('name', 'ASC')->get();
+        $lines = Line::with('departament')
+            ->orderBy(function ($query) {
+                $query->select('name')
+                    ->from('departaments')
+                    ->whereColumn('lines.departament_id', 'departaments.id');
+            })
+            ->orderBy('name')
+            ->get();
 
         return view('users.edit', ['user' => $user, 'roles' => $roles, 'departaments' => $departaments, 'lines' => $lines]);
     }
@@ -184,5 +197,35 @@ class UserController extends Controller
     {
         $user->delete();
         return redirect()->back();
+    }
+
+    /**
+     * Función para iniciar sesión.
+     */
+    public function signIn(Request $request)
+    {
+        // Buscar al usuario por su nombre de usuario o correo electrónico
+        $user = User::query()
+            ->where('username', $request->email)
+            ->orWhere('email', $request->email)
+            ->first();
+
+        // Verificar si el usuario no existe
+        if ($user == null) {
+            return redirect()->back()->withErrors('Usuario no encontrado. Verifique sus credenciales e intente de nuevo.');
+        }
+
+        // Verificar la contraseña
+        $password = $request->password;
+
+        if (!\Hash::check($password, $user->password)) {
+            return redirect()->back()->withErrors('Contraseña incorrecta. Verifique sus credenciales e intente de nuevo.');
+        }
+
+        // Iniciar sesión del usuario
+        \Auth::login($user);
+
+        // Redireccionar al panel de control después del inicio de sesión exitoso
+        return redirect()->route('dashboard');
     }
 }

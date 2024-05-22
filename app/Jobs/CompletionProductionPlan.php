@@ -70,13 +70,13 @@ class CompletionProductionPlan implements ShouldQueue
                 throw new Exception("Error al conectar con la base de datos Infor.");
             }
 
-            $query = "CALL LX834OU02.YSF013C";
+            $query = "CALL LX834OU.YSF013C";
             $result = odbc_exec($conn, $query);
 
             if ($result) {
-                Log::info("LX834OU02.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+                Log::info("LX834OU.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
             } else {
-                throw new Exception("LX834OU02.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
+                throw new Exception("LX834OU.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
             }
         } catch (Exception $e) {
             Log::alert($e->getMessage());

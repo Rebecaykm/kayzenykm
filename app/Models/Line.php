@@ -12,6 +12,8 @@ class Line extends Model
 {
     use HasFactory;
 
+    protected $dateFormat = 'Ymd H:i:s.v';
+
     protected $fillable = [
         'name',
         'departament_id'
@@ -22,7 +24,7 @@ class Line extends Model
      */
     public function departament(): BelongsTo
     {
-        return $this->belongsTo(Departament::class);
+        return $this->belongsTo(Departament::class, 'departament_id', 'id');
     }
 
     /**

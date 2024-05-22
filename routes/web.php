@@ -24,8 +24,7 @@ Route::get('tree', [\App\Http\Controllers\PartNumberController::class, 'getPartN
 
 Route::resource('raw-material', \App\Http\Controllers\RawMaterial::class);
 
-// Route::view('raw-material', 'raw-material')->name('raw-material.create');
-// Route::post('raw-material', [\App\Http\Controllers\ProdcutionRecordController::class, 'rawMaterial'])->name('raw-material.store');
+Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'signIn'])->name('signIn');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 

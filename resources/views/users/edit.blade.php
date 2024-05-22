@@ -59,7 +59,7 @@
                                 </select>
                             </label>
                         </div>
-                        <label class="block text-sm mt-4">
+                        <label class="block text-sm uppercase mt-4">
                             <span class="text-gray-700 dark:text-gray-400">Departamentos</span>
                             <div class="grid grid-cols-6">
                                 @foreach ($departaments as $departament)
@@ -78,14 +78,14 @@
                         <label class="block text-sm mt-4">
                             <span class="text-gray-700 dark:text-gray-400">Líneas</span>
                             <div class="grid grid-cols-6">
-                                @foreach ($lines as $lines)
+                                @foreach ($lines as $line)
                                 <div class="flex col-span-2 p-2 text-sm">
                                     <label class="flex items-center p-2 dark:text-gray-400">
-                                        <input type="checkbox" value="{{ $lines->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($user->lines) && $user->lines->contains('id', $lines->id))
+                                        <input type="checkbox" value="{{ $line->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" @if (isset($user->lines) && $user->lines->contains('id', $line->id))
                                         checked
                                         @endif
                                         />
-                                        <span class="ml-2">{{ $lines->name }}</span>
+                                        <span class="ml-2 uppercase">{{ $line->departament->name }} - {{ $line->name }}</span>
                                     </label>
                                 </div>
                                 @endforeach

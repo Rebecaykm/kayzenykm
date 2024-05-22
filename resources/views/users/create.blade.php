@@ -67,7 +67,7 @@
                             </span>
                             <div class="grid grid-cols-6">
                                 @foreach ($departaments as $departament)
-                                <div class="flex col-span-2 p-2 text-sm">
+                                <div class="flex col-span-2 p-2 text-sm uppercase">
                                     <label class="flex items-center p-2 dark:text-gray-400">
                                         <input type="checkbox" value="{{ $departament->id }}" name="departaments[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
                                         <span class="ml-2">
@@ -85,10 +85,10 @@
                             <div class="grid grid-cols-6">
                                 @foreach ($lines as $line)
                                 <div class="flex col-span-2 p-2 text-sm">
-                                    <label class="flex items-center p-2 dark:text-gray-400">
+                                    <label class="flex items-center p-2 uppercase dark:text-gray-400">
                                         <input type="checkbox" value="{{ $line->id }}" name="lines[]" class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />
                                         <span class="ml-2">
-                                            {{ $line->name }}
+                                            {{ $line->departament->name }} - {{ $line->name }}
                                         </span>
                                     </label>
                                 </div>
