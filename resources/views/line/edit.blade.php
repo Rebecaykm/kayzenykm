@@ -56,7 +56,7 @@
                                 checked
                                 @endif
                                 />
-                                <span class="ml-2">{{ $workcenter->name }}</span>
+                                <span class="ml-2">{{ $workcenter->number }} - {{ $workcenter->name }}</span>
                             </label>
                         </div>
                         @endforeach

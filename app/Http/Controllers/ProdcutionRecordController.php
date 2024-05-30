@@ -91,7 +91,8 @@ class ProdcutionRecordController extends Controller
     /**
      *
      */
-    public function stopProduction(Request $request) {
+    public function stopProduction(Request $request)
+    {
         $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
 
         $statusProduccionDetenida = Status::query()->where('name', 'PRODUCCIÓN DETENIDA')->first();
@@ -101,7 +102,8 @@ class ProdcutionRecordController extends Controller
         return redirect('production-plan');
     }
 
-    public function cancelProduction(Request $request) {
+    public function cancelProduction(Request $request)
+    {
         $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
 
         $statusProduccionDetenida = Status::query()->where('name', 'CANCELADO')->first();
@@ -286,7 +288,7 @@ class ProdcutionRecordController extends Controller
             ]
         );
 
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $lineNames = Auth::user()->lines->pluck('name')->toArray();
 
         $start = Carbon::parse($request->start)->format('Ymd H:i:s.v');
         $end = Carbon::parse($request->end)->format('Ymd H:i:s.v');
@@ -294,6 +296,7 @@ class ProdcutionRecordController extends Controller
         $prodcutionRecords = ProdcutionRecord::query()
             ->select(
                 'departaments.name as name_departament',
+                'lines.name as name_line',
                 'workcenters.number as number_workcenter',
                 'workcenters.name as name_workcenter',
                 'part_numbers.number as number_part_number',
@@ -316,7 +319,7 @@ class ProdcutionRecordController extends Controller
             ->join('production_plans', 'prodcution_records.production_plan_id', '=', 'production_plans.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->whereBetween('prodcution_records.created_at', [$start, $end])
-            ->whereIn('departaments.code', $departamentCode)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('prodcution_records.created_at', 'DESC')
             ->orderBy('prodcution_records.sequence', 'DESC')
             ->get()

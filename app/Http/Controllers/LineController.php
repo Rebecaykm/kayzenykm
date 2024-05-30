@@ -19,13 +19,10 @@ class LineController extends Controller
      */
     public function index()
     {
-        $departamentCode = Auth::user()->departaments->pluck('code')->toArray();
+        $departamentId = Auth::user()->departaments->pluck('id')->toArray();
 
-        $lines = Line::whereIn('departament_id', function ($query) use ($departamentCode) {
-            $query->select('id')
-                ->from('departaments')
-                ->whereIn('code', $departamentCode);
-        })
+        $lines = Line::whereIn('departament_id', $departamentId)
+            ->orderBy('departament_id', 'asc')
             ->orderBy('name', 'asc')
             ->paginate(10);
 
@@ -46,7 +43,7 @@ class LineController extends Controller
                 $query->orWhere('number', 'LIKE', $code . '%');
             }
         })
-            ->orderBy('name', 'asc')
+            ->orderBy('number', 'asc')
             ->get();
 
         return view('line.create', ['workcenters' => $workcenters, 'departaments' => $departaments]);
@@ -100,7 +97,7 @@ class LineController extends Controller
                 $query->orWhere('number', 'LIKE', $code . '%');
             }
         })
-            ->orderBy('name', 'asc')
+            ->orderBy('number', 'asc')
             ->get();
 
         return view('line.edit', ['line' => $line, 'workcenters' => $workcenters, 'departaments' => $departaments]);

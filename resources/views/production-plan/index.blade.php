@@ -28,7 +28,7 @@
             @endif
         </div>
 
-        <div class="flex justify-end px-4 gap-4">
+        <div class="flex justify-end px-4 mb-2 gap-4">
             <div>
                 <a href="{{ route('production-plan.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     <span class="mr-4">{{ __('Agregar a Plan') }}</span>
@@ -47,17 +47,31 @@
             </div>
         </div>
 
-        <div class="px-4 py-3 gap-x-2 my-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
-            <label class="block text-sm">
-                <div class="relative text-gray-500 focus-within:text-purple-600">
-                    <form action="{{ route('production-plan.index') }}" method="get">
-                        <input name="search" class="block w-full pr-20 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" autocomplete="off" />
-                        <button class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-r-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                            {{ __('Buscar') }}
+        <div class="px-4 py-2 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <form action="{{ route('production-plan.index') }}" method="get">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div class="mb-4 md:mb-0 flex-grow flex-shrink mr-4">
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">{{ __('Número de Parte') }}</span>
+                            <input name="part_number" type="text" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" autocomplete="off" />
+                        </label>
+                    </div>
+                    <div class="mb-4 md:mb-0 flex-grow flex-shrink mr-4">
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">{{ __('Fecha') }}</span>
+                            <input name="date" type="date" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                        </label>
+                    </div>
+                    <div>
+                        <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            <span class="mr-2">{{ __('Buscar')}}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </button>
-                    </form>
+                    </div>
                 </div>
-            </label>
+            </form>
         </div>
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -65,13 +79,10 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <!-- <th class="px-4 py-3">{{ __('ID') }}</th> -->
                             <th class="px-4 py-3">{{ __('Estación') }}</th>
                             <th class="px-4 py-3 sticky left-0 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Número de Parte') }}</th>
-                            <!-- <th class="px-4 py-3">{{ __('SNP') }}</th> -->
                             <th class="px-4 py-3 sticky left-20 z-10 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">{{ __('Fecha') }}</th>
                             <th class="px-4 py-3">{{ __('Turno') }}</th>
-                            <!-- <th class="px-4 py-3">{{ __('Tipo de Item') }}</th> -->
                             <th class="px-4 py-3 text-center">{{ __('Cant Planeada') }}</th>
                             <th class="px-4 py-3 text-center">{{ __('Cant Producida') }}</th>
                             <th class="px-4 py-3 text-center">{{ __('Scrap') }}</th>
@@ -82,42 +93,25 @@
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($productionPlans as $productionPlan)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <!-- <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->production_plan_id ?? '' }}
-                            </td> -->
-
                             <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->workcenter->name ?? '' }}
+                                {{ $productionPlan->workcenter_name ?? '' }}
                             </td>
-
                             <td class="px-4 py-3 text-xs sticky left-0 bg-white dark:bg-gray-800">
-                                {{ $productionPlan->partNumber->number ?? '' }}
+                                {{ $productionPlan->part_number ?? '' }}
                             </td>
-
-                            <!-- <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->standardPackage->name ?? '' }} - {{ $productionPlan->partNumber->quantity ?? '' }}
-                            </td> -->
-
                             <td class="px-4 py-3 text-xs sticky left-28 bg-white dark:bg-gray-800">
                                 {{ $productionPlan->date ? \Carbon\Carbon::parse($productionPlan->date)->format('d-m-Y') : '' }}
                             </td>
-
                             <td class="px-4 py-3 text-xs text-center">
-                                {{ $productionPlan->shift->abbreviation ?? '' }}
+                                {{ $productionPlan->shift_abbreviation ?? '' }}
                             </td>
-
-                            <!-- <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->partNumber->itemClass->abbreviation ?? '' }}
-                            </td> -->
-
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
                                     {{ intval($productionPlan->plan_quantity) ?? '' }}
                                 </span>
                             </td>
-
                             <td class="px-4 py-3 text-xs text-center">
-                                @if ( $productionPlan->plan_quantity < $productionPlan->production_quantity )
+                                @if ($productionPlan->plan_quantity < $productionPlan->production_quantity )
                                     <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
                                         {{ intval($productionPlan->production_quantity) ?? '' }}
                                     </span>
@@ -131,33 +125,26 @@
                                     </span>
                                     @endif
                             </td>
-
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
                                     {{ intval($productionPlan->scrap_quantity) ?? '' }}
                                 </span>
                             </td>
-
-                            @if ($productionPlan->status->name == 'PENDIENTE')
                             <td class="px-4 py-3 text-xs">
+                                @if ($productionPlan->status_name == 'PENDIENTE')
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
                                     {{ __('Pendiente') }}
                                 </span>
-                            </td>
-                            @elseif ($productionPlan->status->name == 'EN PROCESO')
-                            <td class="px-4 py-3 text-xs">
+                                @elseif ($productionPlan->status_name == 'EN PROCESO')
                                 <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-blue-100">
                                     {{ __('En Proceso') }}
                                 </span>
-                            </td>
-                            @elseif ($productionPlan->status->name == 'PRODUCCIÓN DETENIDA')
-                            <td class="px-4 py-3 text-xs">
+                                @elseif ($productionPlan->status_name == 'PRODUCCIÓN DETENIDA')
                                 <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
-                                    {{__('Producción Detenida   ') }}
+                                    {{ __('Producción Detenida') }}
                                 </span>
+                                @endif
                             </td>
-                            @endif
-
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-xs">
                                     <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex w-full items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
@@ -166,29 +153,12 @@
                                         </svg>
                                         <span class="ml-1 text-xs">{{ __('Producción') }}</span>
                                     </a>
-                                    <!-- <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Edit') }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                        <span class="ml-1 text-xs">{{ __('Producción') }}</span>
-                                    </a>
-                                    <a href="{{ route('scrap-record.create', ['item' => $productionPlan->part_number_id, 'production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Edit') }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                        <span class="ml-1 text-xs">{{ __('Scrap') }}</span>
-                                    </a>
-                                    <a href="{{ route('production-plan.finish', ['production' => $productionPlan->production_plan_id]) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Edit') }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                        </svg>
-                                        <span class="ml-1 text-xs">{{ __('Finalizar') }}</span>
-                                    </a> -->
                                 </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
             @if ($productionPlans->count())
