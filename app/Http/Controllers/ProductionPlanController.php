@@ -37,12 +37,19 @@ class ProductionPlanController extends Controller
      */
     public function index(Request $request)
     {
-        $search = strtoupper($request->search) ?? '';
+        $search = strtoupper($request->part_number) ?? '';
 
-        $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
-        $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
+        if (is_null($request->date)) {
+            $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
+            // $startWeek = Carbon::now()->subWeek()->startOfWeek()->format('Y-m-d');
+            $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
+        } else {
+            $startWeek = Carbon::parse($request->date)->format('Y-m-d');
+            $endWeek = Carbon::parse($request->date)->format('Y-m-d');
+        }
 
         $classArray = ['M1', 'M2', 'M3', 'M4'];
+
         $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
             return $line->workcenters->pluck('number')->all();
         });
@@ -50,15 +57,22 @@ class ProductionPlanController extends Controller
         $statusIds = Status::whereIn('name', ['INACTIVO', 'CANCELADO'])->pluck('id')->toArray();
 
         $productionPlans = ProductionPlan::select([
-            '*',
             'production_plans.id as production_plan_id',
+            'production_plans.date',
+            'production_plans.plan_quantity',
+            'production_plans.production_quantity',
+            'production_plans.scrap_quantity',
             'part_numbers.id as part_number_id',
+            'part_numbers.number as part_number',
             'item_classes.id as item_class_id',
             'workcenters.id as workcenter_id',
+            'workcenters.name as workcenter_name',
             'lines.id as line_id',
             'departaments.id as departament_id',
             'shifts.id as shift_id',
-            'statuses.id as status_id'
+            'shifts.abbreviation as shift_abbreviation',
+            'statuses.id as status_id',
+            'statuses.name as status_name'
         ])
             ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')

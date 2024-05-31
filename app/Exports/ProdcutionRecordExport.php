@@ -22,6 +22,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     {
         return collect($this->data)->map(function ($item) {
             $item['area'] = strtoupper(trim($item['name_departament']));
+            $item['linea'] = strtoupper(trim($item['name_line']));
             $item['no_estacion'] = strtoupper(trim($item['number_workcenter']));
             $item['estacion'] = strtoupper(trim($item['name_workcenter']));
             $item['no_parte'] = strtoupper(trim($item['number_part_number']));
@@ -35,6 +36,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
             $item['estado'] = strtoupper(trim($item['name_status']));
             $item['registro'] = date('d-m-Y H:i:s', strtotime($item['created_at']));
             unset($item['name_departament']);
+            unset($item['name_line']);
             unset($item['number_workcenter']);
             unset($item['name_workcenter']);
             unset($item['number_part_number']);
@@ -55,6 +57,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     {
         return [
             'ÁREA',
+            'LÍNEA',
             'NO. ESTACIÓN',
             'ESTACIÓN',
             'NO. DE PARTE',

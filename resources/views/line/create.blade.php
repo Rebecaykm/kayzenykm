@@ -58,7 +58,7 @@
                             <label class="flex items-center p-2 dark:text-gray-400">
                                 <input type="checkbox" value="{{ $workcenter->id }}" name="workcenters[]" class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" />
                                 <span class="ml-2">
-                                    {{ $workcenter->name }}
+                                    {{ $workcenter-> number }} - {{ $workcenter->name }}
                                 </span>
                             </label>
                         </div>
