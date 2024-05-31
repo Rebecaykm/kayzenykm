@@ -31,9 +31,11 @@ class ProdcutionRecordController extends Controller
      */
     public function index()
     {
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
+        // $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
+        //     return $line->workcenters->pluck('number')->all();
+        // });
+
+        $lineNames = Auth::user()->lines->pluck('name')->toArray();
 
         $prodcutionRecords = ProdcutionRecord::select([
             '*',
@@ -56,7 +58,7 @@ class ProdcutionRecordController extends Controller
             ->join('production_plans', 'prodcution_records.production_plan_id', '=', 'production_plans.id')
             ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
             ->join('statuses', 'prodcution_records.status_id', '=', 'statuses.id')
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('prodcution_records.created_at', 'DESC')
             ->orderBy('prodcution_records.sequence', 'DESC')
             ->paginate(10);
