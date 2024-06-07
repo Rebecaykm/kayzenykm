@@ -4,14 +4,14 @@
             {{ __('Plan de Producción') }}
         </h2>
         <div class="grid gap-6 mb-8">
-            @foreach ($arrayPlan as $departament => $departamentData)
-                @foreach ($departamentData as $planDate => $shifts)
+            @foreach ($arrayPlan as $line => $lineData)
+                @foreach ($lineData as $planDate => $shifts)
                     @foreach ($shifts as $shift => $records)
                         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                             <h4 class="mb-4 font-semibold uppercase text-center text-gray-800 dark:text-gray-300">
-                                {{ $departament }} - {{ $planDate }} - {{ $shift }}
+                                {{ $line }} - {{ $planDate }} - {{ $shift }}
                             </h4>
-                            <canvas id="chart_{{ $departament }}_{{ $planDate }}_{{ $shift }}"></canvas>
+                            <canvas id="chart_{{ $line }}_{{ $planDate }}_{{ $shift }}"></canvas>
                         </div>
                     @endforeach
                 @endforeach

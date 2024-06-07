@@ -279,14 +279,13 @@ class ProdcutionRecordController extends Controller
     {
         $validated = $request->validate(
             [
-                'start' => ['required'],
-                'end' => ['required', 'after:start'],
+                'start' => ['required', 'date'],
+                'end' => ['required', 'date', 'after:start'],
             ],
             [
                 'start.required' => 'La fecha de inicio es necesaria.',
                 'end.required' => 'La fecha final es necesaria.',
                 'end.after' => 'La fecha final debe ser posterior a la fecha de inicio.',
-
             ]
         );
 
@@ -296,7 +295,7 @@ class ProdcutionRecordController extends Controller
         $end = Carbon::parse($request->end)->format('Ymd H:i:s.v');
 
         $prodcutionRecords = ProdcutionRecord::query()
-            ->select(
+            ->select([
                 'departaments.name as name_departament',
                 'lines.name as name_line',
                 'workcenters.number as number_workcenter',
@@ -311,7 +310,7 @@ class ProdcutionRecordController extends Controller
                 'prodcution_records.minutes',
                 'prodcution_records.created_at',
                 'statuses.name as name_status',
-            )
+            ])
             ->join('part_numbers', 'prodcution_records.part_number_id', '=', 'part_numbers.id')
             ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
@@ -329,6 +328,7 @@ class ProdcutionRecordController extends Controller
 
         return Excel::download(new ProdcutionRecordExport($prodcutionRecords), 'ProductionReport_' . date("dmYHis") . '.xlsx');
     }
+
 
     function cancel(ProdcutionRecord $prodcutionRecord)
     {

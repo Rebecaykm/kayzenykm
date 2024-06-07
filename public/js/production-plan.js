@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    for (const [departament, departamentData] of Object.entries(arrayPlan)) {
-        for (const [planDate, shifts] of Object.entries(departamentData)) {
+    for (const [line, lineData] of Object.entries(arrayPlan)) {
+        for (const [planDate, shifts] of Object.entries(lineData)) {
             for (const [shift, records] of Object.entries(shifts)) {
                 const data = records;
-                const ctx = document.getElementById(`chart_${departament}_${planDate}_${shift}`);
+                const ctx = document.getElementById(`chart_${line}_${planDate}_${shift}`);
                 if (ctx) {
                     const chart = new Chart(ctx, {
                         type: 'bar',
@@ -27,17 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             scales: {
                                 x: {
                                     display: true,
-                                    scaleLabel: {
-                                        beginAtZero: true,
-                                        display: true,
-                                    }
+                                    beginAtZero: true,
                                 },
                                 y: {
                                     display: true,
-                                    scaleLabel: {
-                                        beginAtZero: true,
-                                        display: true,
-                                    }
+                                    beginAtZero: true,
                                 }
                             }
                         }

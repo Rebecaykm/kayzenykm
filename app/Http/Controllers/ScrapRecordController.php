@@ -25,32 +25,38 @@ class ScrapRecordController extends Controller
      */
     public function index()
     {
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
+        // Obtener los nombres de las líneas del usuario autenticado
+        $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
+        // Consulta optimizada
         $scrapRecords = ScrapRecord::query()
             ->select([
-                '*',
-                // 'production_plans.id as production_plan_id',
-                'workcenters.id as workcenter_id',
-                'part_numbers.id as part_number_id',
-                'scraps.id as scrap_id',
+                'scrap_records.id',
                 'scrap_records.quantity as quantity_scrap',
-                'scrap_records.id as id'
+                'scrap_records.created_at',
+                'workcenters.id as workcenter_id',
+                'workcenters.number as workcenter_number',
+                'workcenters.name as workcenter_name',
+                'lines.id as line_id',
+                'lines.name as line_name',
+                'part_numbers.id as part_number_id',
+                'part_numbers.number as part_number',
+                'scraps.id as scrap_id',
+                'scraps.name as scrap_name',
+                'departaments.name as departament_name'
             ])
-            // ->join('production_plans', 'scrap_records.production_plan_id', '=', 'production_plans.id')
             ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('scraps', 'scrap_records.scrap_id', '=', 'scraps.id')
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('scrap_records.created_at', 'DESC')
             ->paginate(10);
 
         return view('scrap-record.index', ['scrapRecords' => $scrapRecords]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -231,20 +237,17 @@ class ScrapRecordController extends Controller
     {
         $validated = $request->validate(
             [
-                'start' => ['required'],
-                'end' => ['required', 'after:start'],
+                'start' => ['required', 'date'],
+                'end' => ['required', 'date', 'after:start'],
             ],
             [
                 'start.required' => 'La fecha inicio es necesaria',
                 'end.required' => 'La fecha final es necesaria',
-                'end.after' => 'La fecha final no puede se una fecha igual o posterior a la fecha inicio',
-
+                'end.after' => 'La fecha final no puede ser una fecha igual o posterior a la fecha inicio',
             ]
         );
 
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
+        $lineNames = Auth::user()->lines->pluck('name')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-d-m H:i:s');
         $end = Carbon::parse($request->end)->format('Y-d-m H:i:s');
@@ -254,22 +257,24 @@ class ScrapRecordController extends Controller
                 'type_scraps.name as type_scrap',
                 'scraps.code as scrap_code',
                 'scraps.name as scrap_name',
-                'scrap_records.quantity as scrap_quatity',
+                'scrap_records.quantity as scrap_quantity',
                 'part_numbers.number as number_part',
                 'departaments.name as departament_name',
+                'workcenters.number as workcenter_number',
+                'workcenters.name as workcenter_name',
+                'lines.name as line_name',
                 'users.name as user_name',
                 'scrap_records.created_at as created_at'
             ])
             ->join('part_numbers', 'scrap_records.part_number_id', '=', 'part_numbers.id')
             ->join('scraps', 'scrap_records.scrap_id', '=', 'scraps.id')
             ->join('type_scraps', 'scraps.type_scrap_id', '=', 'type_scraps.id')
-            ->join('item_classes', 'part_numbers.item_class_id', '=', 'item_classes.id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('users', 'scrap_records.user_id', '=', 'users.id')
             ->whereBetween('scrap_records.created_at', [$start, $end])
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('scrap_records.created_at', 'DESC')
             ->get()
             ->toArray();
