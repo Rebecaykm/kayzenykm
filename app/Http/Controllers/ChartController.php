@@ -26,7 +26,6 @@ class ChartController extends Controller
         // Obtener los registros de producción
         $productionRecords = ProdcutionRecord::select([
             'part_numbers.number AS noParte',
-            'item_classes.abbreviation AS class',
             'workcenters.number AS noWorkCenter',
             'workcenters.name AS workCenter',
             'lines.name AS lineName',
@@ -44,7 +43,6 @@ class ChartController extends Controller
             ->join('part_numbers', 'part_numbers.id', '=', 'prodcution_records.part_number_id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('production_plans', 'production_plans.id', '=', 'prodcution_records.production_plan_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
             ->join('users', 'users.id', '=', 'prodcution_records.user_id')
@@ -60,42 +58,65 @@ class ChartController extends Controller
         // Recorrer los registros de producción para procesar los datos
         foreach ($productionRecords as $record) {
             $lineName = $record->lineName;
+            $workCenter = $record->workCenter;
             $noParte = $record->noParte;
             $quantityProduced = (float) $record->quantityProduced;
             $dateRecorded = Carbon::parse($record->dateRecorded);
 
             // Redondear la hora al inicio de la hora
-            $hourlyDateTime = $dateRecorded->copy()->startOfHour()->format('Y-m-d H:00:00');
+            $hourlyDateTime = $dateRecorded->copy()->ceilHour()->format('Y-m-d H:00:00');
 
             // Verificar si el número de parte ya existe en el array
-            if (!isset($arrayProduction[$lineName][$noParte][$hourlyDateTime])) {
+            if (!isset($arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime])) {
                 // Inicializar el arreglo del número de parte para esa hora
-                $arrayProduction[$lineName][$noParte][$hourlyDateTime] = 0;
+                $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] = 0;
             }
 
             // Sumar la cantidad producida para esa hora
-            $arrayProduction[$lineName][$noParte][$hourlyDateTime] += $quantityProduced;
+            $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] += $quantityProduced;
         }
 
         // Limpiar y reestructurar los datos
         $cleanedArrayProduction = [];
 
-        foreach ($arrayProduction as $lineName => $partData) {
-            foreach ($partData as $partNumber => $hourlyData) {
-                // Filtrar los datos para eliminar las horas sin producción
-                $filteredHourlyData = array_filter($hourlyData);
+        foreach ($arrayProduction as $lineName => $workCenters) {
+            foreach ($workCenters as $workCenter => $partData) {
+                $cleanedArrayProduction[$lineName][$workCenter] = [
+                    'labels' => [],
+                    'datasets' => []
+                ];
 
-                if (!empty($filteredHourlyData)) {
-                    $cleanedArrayProduction[$lineName][$partNumber] = [
-                        'label' => array_keys($filteredHourlyData),
-                        'data' => array_values($filteredHourlyData)
-                    ];
+                foreach ($partData as $partNumber => $hourlyData) {
+                    // Filtrar los datos para eliminar las horas sin producción
+                    $filteredHourlyData = array_filter($hourlyData);
+
+                    if (!empty($filteredHourlyData)) {
+                        // Crear el dataset para el número de parte
+                        $dataset = [
+                            'label' => $partNumber,
+                            'data' => [],
+                            'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
+                            'borderColor' => 'rgba(54, 162, 235, 1)',
+                            'fill' => false
+                        ];
+
+                        // Agregar las horas y los valores de producción
+                        foreach ($filteredHourlyData as $time => $quantity) {
+                            if (!in_array($time, $cleanedArrayProduction[$lineName][$workCenter]['labels'])) {
+                                $cleanedArrayProduction[$lineName][$workCenter]['labels'][] = $time;
+                            }
+                            $dataset['data'][] = $quantity;
+                        }
+
+                        $cleanedArrayProduction[$lineName][$workCenter]['datasets'][] = $dataset;
+                    }
                 }
             }
         }
 
         return view('chart.index', compact('cleanedArrayProduction'));
     }
+
 
     public function productionPlanChart()
     {
