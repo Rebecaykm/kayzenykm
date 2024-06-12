@@ -19,9 +19,9 @@ class ChartController extends Controller
         // Obtener los nombres de las líneas del usuario autenticado
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        // Obtener la fecha de inicio y fin de la semana actual
-        $startWeek = Carbon::now()->startOfWeek()->format('Ymd H:i:s.v');
-        $endWeek = Carbon::now()->endOfWeek()->format('Ymd H:i:s.v');
+        // Obtener la fecha de inicio y fin de las últimas 12 horas
+        $start = Carbon::now()->subDay()->format('Ymd H:i:s.v');
+        $end = Carbon::now()->addHour()->format('Ymd H:i:s.v');
 
         // Obtener los registros de producción
         $productionRecords = ProdcutionRecord::select([
@@ -48,7 +48,7 @@ class ChartController extends Controller
             ->join('users', 'users.id', '=', 'prodcution_records.user_id')
             ->join('statuses', 'statuses.id', '=', 'prodcution_records.status_id')
             ->whereIn('lines.name', $lineNames)
-            ->whereBetween('prodcution_records.created_at', [$startWeek, $endWeek])
+            ->whereBetween('prodcution_records.created_at', [$start, $end])
             ->orderBy('prodcution_records.created_at')
             ->get();
 
@@ -63,8 +63,8 @@ class ChartController extends Controller
             $quantityProduced = (float) $record->quantityProduced;
             $dateRecorded = Carbon::parse($record->dateRecorded);
 
-            // Redondear la hora al inicio de la hora
-            $hourlyDateTime = $dateRecorded->copy()->ceilHour()->format('Y-m-d H:00:00');
+            // Redondear la hora al inicio de la hora y formatear la fecha
+            $hourlyDateTime = $dateRecorded->copy()->startOfHour()->format('d/m/y H:00');
 
             // Verificar si el número de parte ya existe en el array
             if (!isset($arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime])) {
@@ -76,46 +76,48 @@ class ChartController extends Controller
             $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] += $quantityProduced;
         }
 
+        // Generar las últimas 12 horas
+        $allTimes = [];
+        $current = Carbon::now()->startOfHour();
+        for ($i = 0; $i < 12; $i++) {
+            $allTimes[] = $current->subHour()->format('d/m/y H:00');
+        }
+        $allTimes = array_reverse($allTimes);  // Revertimos para tener el orden correcto
+
         // Limpiar y reestructurar los datos
         $cleanedArrayProduction = [];
 
         foreach ($arrayProduction as $lineName => $workCenters) {
             foreach ($workCenters as $workCenter => $partData) {
                 $cleanedArrayProduction[$lineName][$workCenter] = [
-                    'labels' => [],
+                    'labels' => $allTimes,
                     'datasets' => []
                 ];
 
                 foreach ($partData as $partNumber => $hourlyData) {
-                    // Filtrar los datos para eliminar las horas sin producción
-                    $filteredHourlyData = array_filter($hourlyData);
+                    // Crear el dataset para el número de parte
+                    $dataset = [
+                        'label' => $partNumber,
+                        'data' => [],
+                        'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
+                        'borderColor' => 'rgba(54, 162, 235, 1)',
+                        'fill' => false
+                    ];
 
-                    if (!empty($filteredHourlyData)) {
-                        // Crear el dataset para el número de parte
-                        $dataset = [
-                            'label' => $partNumber,
-                            'data' => [],
-                            'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
-                            'borderColor' => 'rgba(54, 162, 235, 1)',
-                            'fill' => false
-                        ];
-
-                        // Agregar las horas y los valores de producción
-                        foreach ($filteredHourlyData as $time => $quantity) {
-                            if (!in_array($time, $cleanedArrayProduction[$lineName][$workCenter]['labels'])) {
-                                $cleanedArrayProduction[$lineName][$workCenter]['labels'][] = $time;
-                            }
-                            $dataset['data'][] = $quantity;
-                        }
-
-                        $cleanedArrayProduction[$lineName][$workCenter]['datasets'][] = $dataset;
+                    // Agregar las horas y los valores de producción
+                    foreach ($allTimes as $hour) {
+                        $dataset['data'][] = $hourlyData[$hour] ?? 0;
                     }
+
+                    $cleanedArrayProduction[$lineName][$workCenter]['datasets'][] = $dataset;
                 }
             }
         }
 
         return view('chart.index', compact('cleanedArrayProduction'));
     }
+
+
 
 
     public function productionPlanChart()
