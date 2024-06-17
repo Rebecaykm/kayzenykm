@@ -29,10 +29,10 @@ Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'signIn'])-
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('/', function () {
-        return view('dashboard');
+        return redirect()->route('chart.index');
     });
 
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    // Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('forms', 'forms')->name('forms');
     Route::view('cards', 'cards')->name('cards');
     Route::view('charts', 'charts')->name('charts');
@@ -286,7 +286,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     /**
      *
      */
-    Route::resource('chart', \App\Http\Controllers\ChartController::class);
+    // Route::resource('chart', \App\Http\Controllers\ChartController::class);
+    Route::get('chart', [\App\Http\Controllers\ChartController::class, 'index'])->name('chart.index');
     Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
 
     /**

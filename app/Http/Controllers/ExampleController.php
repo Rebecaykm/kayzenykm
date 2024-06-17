@@ -40,7 +40,7 @@ class ExampleController extends Controller
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
             $seconds = $timeEnd->diffInSeconds($timeStart);
-            $minutes = sprintf('%02d:%02d', floor($seconds / 60), $seconds % 60);
+            $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
 
             for ($count = 1; $quantity > 0; $count++) {
 
@@ -113,7 +113,7 @@ class ExampleController extends Controller
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
             $seconds = $timeEnd->diffInSeconds($timeStart);
-            $minutes = sprintf('%02d:%02d', floor($seconds / 60), $seconds % 60);
+            $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
 
             $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
 

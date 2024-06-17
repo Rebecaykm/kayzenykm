@@ -21,25 +21,26 @@ class UnemploymentRecordController extends Controller
      */
     public function index()
     {
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
+        $lineNames = Auth::user()->lines->pluck('name')->toArray();
 
         $unemploymentRecords = UnemploymentRecord::query()
             ->select([
-                '*',
-                'workcenters.id as workcenter_id',
-                'departaments.id as departament_id',
-                'unemployments.id as unemployment_id',
-                'unemployment_types.id as unemployment_type_id',
-                'unemployment_records.created_at as created_at'
+                'unemployment_records.id',
+                'unemployment_records.time_start',
+                'unemployment_records.time_end',
+                'unemployment_records.minutes',
+                'workcenters.number as workcenter_number',
+                'workcenters.name as workcenter_name',
+                'lines.name as line_name',
+                'unemployments.name as unemployment_name',
+                'unemployment_types.name as unemployment_type_name',
+                'unemployment_records.created_at'
             ])
             ->join('workcenters', 'unemployment_records.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->leftJoin('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('unemployment_records.created_at', 'DESC')
             ->paginate(10);
 
@@ -189,6 +190,9 @@ class UnemploymentRecordController extends Controller
         //
     }
 
+    /**
+     *
+     */
     public function report()
     {
         return view('unemployment-record.report');
@@ -201,8 +205,8 @@ class UnemploymentRecordController extends Controller
     {
         $validated = $request->validate(
             [
-                'start' => ['required'],
-                'end' => ['required', 'after:start'],
+                'start' => ['required', 'date'],
+                'end' => ['required', 'date', 'after:start'],
             ],
             [
                 'start.required' => 'La fecha de inicio es obligatoria.',
@@ -211,9 +215,7 @@ class UnemploymentRecordController extends Controller
             ]
         );
 
-        $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {
-            return $line->workcenters->pluck('number')->all();
-        });
+        $lineNames = Auth::user()->lines->pluck('name')->toArray();
 
         $start = Carbon::parse($request->start)->format('Y-d-m H:i:s');
         $end = Carbon::parse($request->end)->format('Y-d-m H:i:s');
@@ -223,6 +225,7 @@ class UnemploymentRecordController extends Controller
                 'unemployment_types.name AS unemployment_type',
                 'unemployments.name AS unemployment_name',
                 'departaments.name AS departament_name',
+                'lines.name AS line_name',
                 'workcenters.number AS workcenter_number',
                 'workcenters.name AS workcenter_name',
                 'unemployment_records.time_start',
@@ -237,7 +240,7 @@ class UnemploymentRecordController extends Controller
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
             ->whereBetween('unemployment_records.created_at', [$start, $end])
-            ->whereIn('workcenters.number', $workcenterNumbers)
+            ->whereIn('lines.name', $lineNames)
             ->orderBy('unemployment_records.created_at', 'DESC')
             ->get()
             ->toArray();

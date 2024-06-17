@@ -16,27 +16,26 @@ class ChartController extends Controller
      */
     public function index()
     {
-        $departaments = Departament::select('name')->get();
+        // Obtener los nombres de las líneas del usuario autenticado
+        $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        $departamentCodes = Auth::user()->departaments->pluck('code')->toArray();
-        $stationArray = ['111010', '122030', '138210'];
+        // Obtener la fecha de inicio y fin de las últimas 12 horas
+        $start = Carbon::now()->subDay()->format('Ymd H:i:s.v');
+        $end = Carbon::now()->addHour()->format('Ymd H:i:s.v');
 
-        $startWeek = Carbon::now()->startOfWeek()->format('Ymd H:i:s.v');
-        $endWeek = Carbon::now()->endOfWeek()->format('Ymd H:i:s.v');
-
-        $prodcutionRecords = ProdcutionRecord::select([
+        // Obtener los registros de producción
+        $productionRecords = ProdcutionRecord::select([
             'part_numbers.number AS noParte',
-            'item_classes.abbreviation AS class',
             'workcenters.number AS noWorkCenter',
             'workcenters.name AS workCenter',
-            'departaments.name AS departament',
+            'lines.name AS lineName',
             'production_plans.date AS datePlan',
             'shifts.name AS shiftPlan',
             'prodcution_records.quantity AS quantityProduced',
             'prodcution_records.sequence AS sequence',
             'statuses.name AS status',
-            'prodcution_records.time_start AS HORA_INICIO',
-            'prodcution_records.time_end AS HORA_FIN',
+            'prodcution_records.time_start AS horaInicio',
+            'prodcution_records.time_end AS horaFin',
             'prodcution_records.minutes AS minutes',
             'users.name AS user',
             'prodcution_records.created_at AS dateRecorded'
@@ -44,58 +43,73 @@ class ChartController extends Controller
             ->join('part_numbers', 'part_numbers.id', '=', 'prodcution_records.part_number_id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
-            ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('production_plans', 'production_plans.id', '=', 'prodcution_records.production_plan_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
             ->join('users', 'users.id', '=', 'prodcution_records.user_id')
             ->join('statuses', 'statuses.id', '=', 'prodcution_records.status_id')
-            ->whereIn('departaments.code', $departamentCodes)
-            ->whereIn('workcenters.number', $stationArray)
-            ->whereBetween('prodcution_records.created_at', [$startWeek, $endWeek])
+            ->whereIn('lines.name', $lineNames)
+            ->whereBetween('prodcution_records.created_at', [$start, $end])
             ->orderBy('prodcution_records.created_at')
             ->get();
 
-
+        // Inicializar el arreglo para almacenar los datos de producción
         $arrayProduction = [];
 
-        foreach ($departaments as $departament) {
-            $productionByDepartament = $prodcutionRecords->where('departament', $departament->name);
+        // Recorrer los registros de producción para procesar los datos
+        foreach ($productionRecords as $record) {
+            $lineName = $record->lineName;
+            $workCenter = $record->workCenter;
+            $noParte = $record->noParte;
+            $quantityProduced = (float) $record->quantityProduced;
+            $dateRecorded = Carbon::parse($record->dateRecorded);
 
-            $arrayProduction[$departament->name] = [];
+            // Redondear la hora al inicio de la hora y formatear la fecha
+            $hourlyDateTime = $dateRecorded->copy()->startOfHour()->format('d/m/y H:00');
 
-            foreach ($productionByDepartament as $prodcutionRecord) {
-                $noParte = $prodcutionRecord['noParte'];
-                $quantityProduced = (float) $prodcutionRecord['quantityProduced']; // Convertir a flotante
-                $dateRecorded = Carbon::parse($prodcutionRecord['dateRecorded']); // Obtener la fecha y hora completa
-
-                // Redondear la hora al inicio de la hora
-                $hourlyDateTime = $dateRecorded->copy()->startOfHour()->format('Y-m-d H:00:00');
-
-                // Verificar si el número de parte ya existe en el array
-                if (!isset($arrayProduction[$departament->name][$noParte][$hourlyDateTime])) {
-                    // Inicializar el arreglo del número de parte para esa hora
-                    $arrayProduction[$departament->name][$noParte][$hourlyDateTime] = 0;
-                }
-
-                // Sumar la cantidad producida para esa hora
-                $arrayProduction[$departament->name][$noParte][$hourlyDateTime] += $quantityProduced;
+            // Verificar si el número de parte ya existe en el array
+            if (!isset($arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime])) {
+                // Inicializar el arreglo del número de parte para esa hora
+                $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] = 0;
             }
+
+            // Sumar la cantidad producida para esa hora
+            $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] += $quantityProduced;
         }
+
+        // Generar las últimas 12 horas
+        $allTimes = [];
+        $current = Carbon::now()->startOfHour();
+        for ($i = 0; $i < 12; $i++) {
+            $allTimes[] = $current->subHour()->format('d/m/y H:00');
+        }
+        $allTimes = array_reverse($allTimes);  // Revertimos para tener el orden correcto
 
         // Limpiar y reestructurar los datos
         $cleanedArrayProduction = [];
 
-        foreach ($arrayProduction as $departament => $partData) {
-            foreach ($partData as $partNumber => $hourlyData) {
-                // Filtrar los datos para eliminar las horas sin producción
-                $filteredHourlyData = array_filter($hourlyData);
+        foreach ($arrayProduction as $lineName => $workCenters) {
+            foreach ($workCenters as $workCenter => $partData) {
+                $cleanedArrayProduction[$lineName][$workCenter] = [
+                    'labels' => $allTimes,
+                    'datasets' => []
+                ];
 
-                if (!empty($filteredHourlyData)) {
-                    $cleanedArrayProduction[$departament][$partNumber] = [
-                        'label' => array_keys($filteredHourlyData),
-                        'data' => array_values($filteredHourlyData)
+                foreach ($partData as $partNumber => $hourlyData) {
+                    // Crear el dataset para el número de parte
+                    $dataset = [
+                        'label' => $partNumber,
+                        'data' => [],
+                        'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
+                        'borderColor' => 'rgba(54, 162, 235, 1)',
+                        'fill' => false
                     ];
+
+                    // Agregar las horas y los valores de producción
+                    foreach ($allTimes as $hour) {
+                        $dataset['data'][] = $hourlyData[$hour] ?? 0;
+                    }
+
+                    $cleanedArrayProduction[$lineName][$workCenter]['datasets'][] = $dataset;
                 }
             }
         }
@@ -103,18 +117,21 @@ class ChartController extends Controller
         return view('chart.index', compact('cleanedArrayProduction'));
     }
 
+
+
+
     public function productionPlanChart()
     {
-        $departaments = Departament::select('name')->get();
+        // Obtener los nombres de las líneas del usuario autenticado
+        $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        $departamentCodes = Auth::user()->departaments->pluck('code')->toArray();
-        $stationArray = ['111010', '122030', '138210'];
+        // Obtener la fecha de inicio y fin de la semana actual
+        $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
+        $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d H:i:s');
 
-        $startWeek = Carbon::now()->startOfWeek()->format('Ymd H:i:s.v');
-        $endWeek = Carbon::now()->endOfWeek()->format('Ymd H:i:s.v');
-
+        // Consulta optimizada
         $productionPlans = ProductionPlan::select([
-            'departaments.name AS name_departament',
+            'lines.name AS name_line',
             'workcenters.number AS number_workcenter',
             'workcenters.name AS name_workcenter',
             'part_numbers.number AS part_number',
@@ -123,38 +140,33 @@ class ChartController extends Controller
             'production_plans.scrap_quantity AS scrap_quantity',
             'production_plans.date AS plan_date',
             'shifts.name AS shift',
-            'statuses.name AS status',
-            'production_plans.created_at AS created_at',
-            'production_plans.created_at AS created_at'
+            'statuses.name AS status'
         ])
             ->join('part_numbers', 'part_numbers.id', '=', 'production_plans.part_number_id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
-            ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
             ->join('statuses', 'statuses.id', '=', 'production_plans.status_id')
-            // ->where('production_plans.status_id', '!=', 1)
-            ->whereIn('departaments.code', $departamentCodes)
-            ->whereIn('workcenters.number', $stationArray)
+            ->whereIn('lines.name', $lineNames)
             ->whereBetween('production_plans.date', [$startWeek, $endWeek])
             ->orderBy('production_plans.date')
             ->orderBy('shifts.name')
-            // ->orderBy('production_plans.updated_at')
             ->get();
 
+        // Inicializar el arreglo para almacenar los datos de producción
         $arrayPlan = [];
 
+        // Recorrer los planes de producción para procesar los datos
         foreach ($productionPlans as $productionPlan) {
-            $departament = $productionPlan->name_departament;
+            $line = $productionPlan->name_line;
             $planDate = $productionPlan->plan_date;
             $shift = $productionPlan->shift;
             $partNumber = $productionPlan->part_number;
             $planQuantity = $productionPlan->plan_quantity;
             $productionQuantity = $productionPlan->production_quantity;
 
-            if (!isset($arrayPlan[$departament][$planDate][$shift][$partNumber])) {
-                $arrayPlan[$departament][$planDate][$shift][$partNumber] = [
+            if (!isset($arrayPlan[$line][$planDate][$shift][$partNumber])) {
+                $arrayPlan[$line][$planDate][$shift][$partNumber] = [
                     'planQuantity' => $planQuantity,
                     'productionQuantity' => $productionQuantity
                 ];
@@ -163,7 +175,6 @@ class ChartController extends Controller
 
         return view('chart.production-plan-chart', compact('arrayPlan'));
     }
-
 
     /**
      * Show the form for creating a new resource.

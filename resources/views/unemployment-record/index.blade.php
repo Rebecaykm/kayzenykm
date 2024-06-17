@@ -7,7 +7,6 @@
         @if ($errors->any())
         <div class="mb-4">
             <div class="font-medium text-red-600">¡Oh no! Algo salió mal.</div>
-
             <ul class="mt-3 text-sm text-red-600 list-disc list-inside">
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -16,17 +15,8 @@
         </div>
         @endif
 
-        <!-- <div class="flex justify-end mb-4">
-            <a href="{{ route('unemployment-record.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                {{ __('Registrar Paro') }}
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </a>
-        </div> -->
-
         <div class="flex justify-end mb-4 gap-4">
-        <a href="{{ route('unemployment-record.report') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            <a href="{{ route('unemployment-record.report') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Reporte de Paros') }}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -45,39 +35,38 @@
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">{{ __('Departamento') }}</th>
+                            <th class="px-4 py-3">{{ __('Línea') }}</th>
                             <th class="px-4 py-3">{{ __('Estación de Trabajo') }}</th>
                             <th class="px-4 py-3">{{ __('Tipo de Paro') }}</th>
                             <th class="px-4 py-3">{{ __('Paro') }}</th>
                             <th class="px-4 py-3">{{ __('Hora de Inicio') }}</th>
                             <th class="px-4 py-3">{{ __('Hora de Fin') }}</th>
                             <th class="px-4 py-3">{{ __('Minutos') }}</th>
-                            <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y uppercase dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($unemploymentRecords as $unemploymentRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->workcenter->line->departament->name ?? '' }}
+                                {{ $unemploymentRecord->line_name }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->workcenter->number ?? '' }} - {{ $unemploymentRecord->workcenter->name ?? '' }}
+                                {{ $unemploymentRecord->workcenter_name }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->unemployment->unemploymentType->name ?? '-' }}
+                                {{ $unemploymentRecord->unemployment_type_name ?? '-' }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->unemployment->name ?? '' }}
+                                {{ $unemploymentRecord->unemployment_name }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->time_start ?? '' }}
+                                {{ $unemploymentRecord->time_start }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->time_end ?? '' }}
+                                {{ $unemploymentRecord->time_end }}
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                {{ $unemploymentRecord->minutes ?? '' }}
+                                {{ $unemploymentRecord->minutes }}
                             </td>
                         </tr>
                         @endforeach
@@ -90,7 +79,6 @@
                     {{ __('Mostrando') }} {{ $unemploymentRecords->firstItem() }} - {{ $unemploymentRecords->lastItem() }} {{ __('de') }} {{ $unemploymentRecords->total() }}
                 </span>
                 <span class="col-span-2"></span>
-                <!-- Pagination -->
                 <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
                     <nav aria-label="Table navigation">
                         {{ $unemploymentRecords->withQueryString()->links() }}

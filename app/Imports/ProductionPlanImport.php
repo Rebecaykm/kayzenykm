@@ -24,12 +24,11 @@ class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts,
     public function model(array $row)
     {
         try {
-            $partNumber = PartNumber::whereRaw('TRIM(number) = ?', [trim($row['no_parte'])])->first();
+            $partNumber = PartNumber::whereRaw('LTRIM(RTRIM(number)) = ?', [trim($row['no_parte'])])->first();
             $quantity = $row['cantidad'];
             $date = Date::excelToDateTimeObject($row['fecha'])->format('Ymd H:i:s.v');
             $shift = Shift::where('abbreviation', trim($row['turno']))->first();
             $status = Status::where('name', 'PENDIENTE')->first();
-
 
             if (!$partNumber) {
                 throw new \Exception('Número de parte no encontrado para: ' . $row['no_parte']);

@@ -25,35 +25,34 @@ class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize,
     public function collection()
     {
         return collect($this->data)->map(function ($item) {
-            $item['tipo'] = strtoupper($item['type_scrap']);
-            $item['codigo'] = strtoupper($item['scrap_code']);
-            $item['nombre'] = strtoupper($item['scrap_name']);
-            $item['cantidad'] = strtoupper($item['scrap_quatity']);
-            $item['parte'] = strtoupper($item['number_part']);
-            $item['departamento'] = strtoupper($item['departament_name']);
-            $item['usuario'] = strtoupper($item['user_name']);
-            $item['fecha'] = date('d-m-Y H:i:s', strtotime($item['created_at']));
-            unset($item['type_scrap']);
-            unset($item['scrap_code']);
-            unset($item['scrap_name']);
-            unset($item['scrap_quatity']);
-            unset($item['number_part']);
-            unset($item['departament_name']);
-            unset($item['user_name']);
-            unset($item['created_at']);
-            return $item;
+            return [
+                'departamento' => strtoupper($item['departament_name']),
+                'linea' => strtoupper($item['line_name']),
+                'estacion' => strtoupper($item['workcenter_number']),
+                'nom' => strtoupper($item['workcenter_name']),
+                'parte' => strtoupper($item['number_part']),
+                'tipo' => strtoupper($item['type_scrap']),
+                'codigo' => strtoupper($item['scrap_code']),
+                'nombre' => strtoupper($item['scrap_name']),
+                'cantidad' => strtoupper($item['scrap_quantity']),
+                'usuario' => strtoupper($item['user_name']),
+                'fecha' => date('d-m-Y H:i:s', strtotime($item['created_at'])),
+            ];
         });
     }
 
     public function headings(): array
     {
         return [
+            'DEPARTAMENTO',
+            'LÍNEA',
+            'NO ESTACIÓN',
+            'NOMBRE DE ESTACIÓN',
+            'NÚMERO DE PARTE',
             'TIPO',
             'CÓDIGO',
             'NOMBRE',
             'CANTIDAD',
-            'NÚMERO DE PARTE',
-            'DEPARTAMENTO',
             'USUARIO',
             'FECHA DE REGISTRO'
         ];
@@ -62,14 +61,14 @@ class ScrapRecordExport implements FromCollection, WithHeadings, ShouldAutoSize,
     public function styles(Worksheet $sheet)
     {
         return [
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'B' => NumberFormat::FORMAT_TEXT, 
+            'G' => NumberFormat::FORMAT_TEXT,
         ];
     }
 }

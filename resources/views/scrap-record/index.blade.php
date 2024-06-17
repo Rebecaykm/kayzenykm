@@ -35,33 +35,36 @@
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
-                <table class="w-full whitespace-no-wrap table-fixed">
+                <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">{{ __('Estación') }}</th>
+                            <th class="px-4 py-3">{{ __('Línea') }}</th>
+                            <th class="px-4 py-3">{{ __('Estación de Trabajo') }}</th>
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
-                            <th class="px-4 py-3">{{ __('Scrap') }}</th>
+                            <th class="px-4 py-3">{{ __('Tipo de Scrap') }}</th>
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
-                            <th class="px-4 py-3">{{ __('Fecha') }}</th>
-                            <th class="px-4 py-3 text-center">{{ __('Acciones') }}</th>
+                            <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 uppercase dark:bg-gray-800">
                         @foreach ($scrapRecords as $scrapRecord)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-xs">
-                                {{ $scrapRecord->partNumber->workcenter->number ?? '' }} - {{ $scrapRecord->partNumber->workcenter->name ?? '' }}
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
+                                {{ $scrapRecord->line_name }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
-                                {{ $scrapRecord->partNumber->number ?? '' }}
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
+                                {{ $scrapRecord->workcenter_number }} - {{ $scrapRecord->workcenter_name }}
                             </td>
-                            <td class="px-4 py-3 text-xs truncate">
-                                {{ $scrapRecord->scrap->code ?? '' }} - {{ $scrapRecord->scrap->name ?? '' }}
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
+                                {{ $scrapRecord->part_number ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
-                                {{ intval($scrapRecord->quantity_scrap) ?? '' }}
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
+                                {{ $scrapRecord->scrap_name ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
+                                {{ $scrapRecord->quantity_scrap ?? '' }}
+                            </td>
+                            <td class="px-4 py-3 text-xs whitespace-pre-line">
                                 {{ $scrapRecord->created_at->format('d-m-Y H:i:s') ?? '' }}
                             </td>
                             <td class="px-4 py-3">
@@ -94,7 +97,6 @@
                     {{ __('Mostrando') }} {{ $scrapRecords->firstItem() }} - {{ $scrapRecords->lastItem() }} {{ __('de') }} {{ $scrapRecords->total() }}
                 </span>
                 <span class="col-span-2"></span>
-                <!-- Pagination -->
                 <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
                     <nav aria-label="Table navigation">
                         {{ $scrapRecords->withQueryString()->links() }}
