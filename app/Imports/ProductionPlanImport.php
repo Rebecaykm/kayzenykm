@@ -8,19 +8,21 @@ use App\Models\Shift;
 use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
+class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading, WithEvents
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
+    use RegistersEventListeners;
+
+    protected $notFoundParts = [];
+
     public function model(array $row)
     {
         try {
@@ -31,7 +33,8 @@ class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts,
             $status = Status::where('name', 'PENDIENTE')->first();
 
             if (!$partNumber) {
-                throw new \Exception('Número de parte no encontrado para: ' . $row['no_parte']);
+                $this->notFoundParts[] = trim($row['no_parte']);
+                return null;
             }
 
             return new ProductionPlan([
@@ -49,11 +52,19 @@ class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts,
 
     public function batchSize(): int
     {
-        return 1000;
+        return 100;
     }
 
     public function chunkSize(): int
     {
         return 100;
+    }
+
+    public static function afterImport(\Maatwebsite\Excel\Events\AfterImport $event)
+    {
+        $instance = $event->getConcernable();
+        if (!empty($instance->notFoundParts)) {
+            Session::flash('not_found_parts', $instance->notFoundParts);
+        }
     }
 }

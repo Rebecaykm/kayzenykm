@@ -192,7 +192,14 @@ class ProductionPlanController extends Controller
 
             Excel::import(new ProductionPlanImport, $file);
 
-            return redirect()->back()->with('success', 'Documento Importado Exitosamente');
+            $notFoundParts = session('not_found_parts', []);
+
+            if (!empty($notFoundParts)) {
+                $message = 'Los siguientes números de parte no se encontraron: ' . implode(', ', $notFoundParts);
+                return redirect()->back()->with('warning', $message);
+            }
+
+            return redirect()->back()->with('success', 'Documento importado exitosamente.');
         } catch (ValidationException $e) {
             $failures = $e->failures();
 
