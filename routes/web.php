@@ -289,6 +289,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     // Route::resource('chart', \App\Http\Controllers\ChartController::class);
     Route::get('chart', [\App\Http\Controllers\ChartController::class, 'index'])->name('chart.index');
     Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
+    Route::get('chart-example', [\App\Http\Controllers\ChartController::class, 'example'])->name('chart.example');
 
     /**
      *

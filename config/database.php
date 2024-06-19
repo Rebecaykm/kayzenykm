@@ -104,6 +104,19 @@ return [
         //     'prefix_indexes' => true,
         // ],
 
+        'iot' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => '192.168.130.7',
+            'port' => '1433',
+            'database' => 'YKMPrensas',
+            'username' => 'sa',
+            'password' => 'Password9',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
         /**
          * FSO PROTO
          */
@@ -183,7 +196,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

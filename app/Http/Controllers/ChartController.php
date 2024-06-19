@@ -8,6 +8,7 @@ use App\Models\ProductionPlan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ChartController extends Controller
 {
@@ -117,50 +118,48 @@ class ChartController extends Controller
         return view('chart.index', compact('cleanedArrayProduction'));
     }
 
-
-
-
     public function productionPlanChart()
     {
         // Obtener los nombres de las líneas del usuario autenticado
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        // Obtener la fecha de inicio y fin de la semana actual
-        $startWeek = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
-        $endWeek = Carbon::now()->endOfWeek()->format('Y-m-d H:i:s');
+        $now = Carbon::now()->format('Y-m-d');
 
-        // Consulta optimizada
+        $arrayClass = ['M1', 'M2', 'M3', 'M4'];
+
         $productionPlans = ProductionPlan::select([
-            'lines.name AS name_line',
-            'workcenters.number AS number_workcenter',
-            'workcenters.name AS name_workcenter',
+            'lines.name AS line_name',
+            'workcenters.number AS workcenter_number',
+            'workcenters.name AS workcenter_name',
             'part_numbers.number AS part_number',
             'production_plans.plan_quantity AS plan_quantity',
             'production_plans.production_quantity AS production_quantity',
             'production_plans.scrap_quantity AS scrap_quantity',
             'production_plans.date AS plan_date',
-            'shifts.name AS shift',
-            'statuses.name AS status'
+            'shifts.name AS shift_name',
+            'statuses.name AS status',
+            'production_plans.created_at AS created_at',
+            'production_plans.updated_at AS updated_at'
         ])
             ->join('part_numbers', 'part_numbers.id', '=', 'production_plans.part_number_id')
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->join('departaments', 'departaments.id', '=', 'lines.departament_id')
+            ->join('item_classes', 'item_classes.id', '=', 'part_numbers.item_class_id')
             ->join('shifts', 'shifts.id', '=', 'production_plans.shift_id')
             ->join('statuses', 'statuses.id', '=', 'production_plans.status_id')
             ->whereIn('lines.name', $lineNames)
-            ->whereBetween('production_plans.date', [$startWeek, $endWeek])
-            ->orderBy('production_plans.date')
-            ->orderBy('shifts.name')
+            ->whereIn('item_classes.abbreviation', $arrayClass)
+            ->where('production_plans.date', $now)
+            ->orderBy('production_plans.updated_at', 'DESC')
             ->get();
 
-        // Inicializar el arreglo para almacenar los datos de producción
         $arrayPlan = [];
 
-        // Recorrer los planes de producción para procesar los datos
         foreach ($productionPlans as $productionPlan) {
-            $line = $productionPlan->name_line;
+            $line = $productionPlan->line_name;
             $planDate = $productionPlan->plan_date;
-            $shift = $productionPlan->shift;
+            $shift = $productionPlan->shift_name;
             $partNumber = $productionPlan->part_number;
             $planQuantity = $productionPlan->plan_quantity;
             $productionQuantity = $productionPlan->production_quantity;
@@ -222,5 +221,21 @@ class ChartController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function example()
+    {
+        $dia_inicio = 19;
+        $mes_inicio = 06;
+        $ano_inicio = 2024;
+        $dia_final = 20;
+        $mes_final = 06;
+        $ano_final = 2024;
+
+        $result = DB::connection('iot')->select('EXEC dbo.web_reportes_produccion_dia_trf2500 @dia_inicio = ?, @mes_inicio = ?, @ano_inicio = ?, @dia_final = ?, @mes_final = ?, @ano_final = ?', [
+            $dia_inicio, $mes_inicio, $ano_inicio, $dia_final, $mes_final, $ano_final
+        ]);
+
+        dd($result);
     }
 }
