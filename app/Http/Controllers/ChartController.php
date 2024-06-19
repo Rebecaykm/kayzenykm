@@ -120,7 +120,6 @@ class ChartController extends Controller
 
     public function productionPlanChart()
     {
-        // Obtener los nombres de las líneas del usuario autenticado
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
         $now = Carbon::now()->format('Y-m-d');
