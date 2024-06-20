@@ -29,7 +29,7 @@ Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'signIn'])-
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('/', function () {
-        return redirect()->route('chart.index');
+        return redirect()->route('chart.productionPlanChart');
     });
 
     // Route::view('dashboard', 'dashboard')->name('dashboard');
