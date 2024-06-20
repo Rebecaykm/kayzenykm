@@ -1,4 +1,4 @@
-<x-app-layout title="Tipo de Paro">
+<x-app-layout title="{{ __('Tipo de Paro')}}">
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             {{ __('Tipo de Paro')}}
@@ -38,7 +38,7 @@
                         @foreach ($unemploymentTypes as $unemploymentType)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
-                                {{ $unemploymentType->name }}
+                                {{ strtoupper($unemploymentType->name) }}
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
