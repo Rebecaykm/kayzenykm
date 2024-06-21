@@ -19,7 +19,7 @@ class UnemploymentController extends Controller
      */
     public function index()
     {
-        $unemployments = Unemployment::query()->orderBy('name', 'ASC')->paginate(10);
+        $unemployments = Unemployment::query()->orderBy('id', 'ASC')->paginate(10);
 
         return view('unemployment.index', ['unemployments' => $unemployments]);
     }
