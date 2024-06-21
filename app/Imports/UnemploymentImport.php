@@ -46,9 +46,9 @@ class UnemploymentImport implements ToModel, WithHeadingRow
                 }
             }
 
-            // Adjuntar las líneas encontradas sin eliminar las relaciones existentes
+            // Sincronizar las relaciones con las líneas encontradas
             if (!empty($lineIds)) {
-                $unemployment->lines()->syncWithoutDetaching($lineIds);
+                $unemployment->lines()->sync($lineIds);
             }
         } else {
             // Si no se encuentra, crear uno nuevo
@@ -76,7 +76,7 @@ class UnemploymentImport implements ToModel, WithHeadingRow
 
             // Adjuntar las líneas encontradas
             if (!empty($lineIds)) {
-                $unemployment->lines()->attach($lineIds);
+                $unemployment->lines()->sync($lineIds);
             }
         }
 

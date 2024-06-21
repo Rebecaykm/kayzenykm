@@ -17,11 +17,13 @@ class UnemploymentUpdateImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        $unemployment = Unemployment::where('name', 'LIKE', '%' . $row['name'] . '%')->first();
+        $unemployment = Unemployment::where('name', $row['name'])->first();
 
         if ($unemployment) {
             // Obtener líneas del campo 'line' separadas por comas
             $lineNames = explode(',', $row['line']);
+
+            $lineIds = [];
 
             foreach ($lineNames as $lineName) {
                 // Limpiar el nombre de la línea (eliminar espacios en blanco)
@@ -30,17 +32,16 @@ class UnemploymentUpdateImport implements ToModel, WithHeadingRow
                 // Buscar la línea existente por nombre
                 $line = Line::where('name', $cleanLineName)->first();
 
-                // Si la línea existe, relacionarla con el Unemployment
                 if ($line) {
-                    // Verificar si ya está relacionada
-                    if (!$unemployment->lines()->where('line_id', $line->id)->exists()) {
-                        $unemployment->lines()->attach($line);
-                    }
+                    $lineIds[] = $line->id;
                 } else {
                     // Loggear el error si la línea no existe
                     Log::error("No se encontró la línea con el nombre: '{$cleanLineName}' para el Unemployment '{$unemployment->name}'");
                 }
             }
+
+            // Sincronizar las relaciones con las líneas encontradas
+            $unemployment->lines()->sync($lineIds);
         }
 
         return null;
