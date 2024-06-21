@@ -103,6 +103,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('unemployment', \App\Http\Controllers\UnemploymentController::class);
     Route::get('unemployment-file', [\App\Http\Controllers\UnemploymentController::class, 'viewFile'])->name('unemployment.file');
     Route::post('unemployment-import', [\App\Http\Controllers\UnemploymentController::class, 'importFile'])->name('unemployment.import');
+    Route::get('unemployment-update-file', [\App\Http\Controllers\UnemploymentController::class, 'viewUpdateFile'])->name('unemployment.updateFile');
+    Route::post('unemployment-update-import', [\App\Http\Controllers\UnemploymentController::class, 'importUpdateFile'])->name('unemployment.updateImport');
 
     /**
      *
