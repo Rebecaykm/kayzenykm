@@ -7,6 +7,7 @@ use App\Models\UnemploymentRecord;
 use App\Http\Requests\StoreUnemploymentRecordRequest;
 use App\Http\Requests\UpdateUnemploymentRecordRequest;
 use App\Models\Unemployment;
+use App\Models\User;
 use App\Models\Workcenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,39 +53,32 @@ class UnemploymentRecordController extends Controller
      */
     public function create()
     {
+        // Obtener las líneas asociadas al usuario autenticado
+        $user = User::with('lines')->findOrFail(auth()->id());
+
+        // Ahora tenemos las líneas del usuario
+        $lines = $user->lines()->with('unemployments')->get();
+
+        $unemployments = $lines->flatMap(function ($line) {
+            return $line->unemployments;
+        })->unique('id')->values();
+
+        $workcenterNumbers = $lines->flatMap->workcenters->pluck('number')->all();
+
         $workcenters = Workcenter::query()
             ->select('workcenters.id', 'workcenters.number', 'workcenters.name')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
             ->join('departaments', 'lines.departament_id', '=', 'departaments.id')
-            ->whereIn('workcenters.number', Auth::user()->lines->flatMap->workcenters->pluck('number')->all())
+            ->whereIn('workcenters.number', $workcenterNumbers)
             ->orderBy('workcenters.name', 'asc')
             ->get();
-
-        $userRoles = Auth::user()->roles->pluck('name')->toArray();
-        $userRole = in_array('Operador', $userRoles) ? 'Operador' : null;
-
-        $departmentAbbreviations = [
-            'Carrocería' => 'CR',
-            'Chasis' => 'CH',
-            'Pintura' => 'PT',
-            'Estampado' => 'PR'
-        ];
-
-        $abbreviations = Auth::user()->departaments->pluck('name')
-            ->filter(fn ($department) => isset($departmentAbbreviations[$department]))
-            ->map(fn ($department) => $departmentAbbreviations[$department])
-            ->toArray();
-
-        if ($userRole !== null && in_array('PR', $abbreviations)) {
-            $unemployments = Unemployment::whereIn('abbreviation', $abbreviations)->orderBy('name', 'asc')->get();
-        } else {
-            $abbreviations[] = 'CA';
-            $unemployments = Unemployment::whereIn('abbreviation', $abbreviations)->orderBy('name', 'asc')->get();
-        }
 
         return view('unemployment-record.create', compact('workcenters', 'unemployments'));
     }
 
+    /**
+     *
+     */
     function record()
     {
         $workcenterNumbers = Auth::user()->lines->flatMap(function ($line) {

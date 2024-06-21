@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             }]
                         },
                         options: {
+                            responsive: true,
                             scales: {
                                 x: {
                                     display: true,

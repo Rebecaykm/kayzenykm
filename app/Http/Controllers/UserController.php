@@ -226,6 +226,6 @@ class UserController extends Controller
         \Auth::login($user);
 
         // Redireccionar al panel de control después del inicio de sesión exitoso
-        return redirect()->route('chart.index');
+        return redirect()->route('chart.productionPlanChart');
     }
 }

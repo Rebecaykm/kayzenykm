@@ -29,7 +29,7 @@ Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'signIn'])-
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('/', function () {
-        return redirect()->route('chart.index');
+        return redirect()->route('chart.productionPlanChart');
     });
 
     // Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -101,6 +101,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('unemployment', \App\Http\Controllers\UnemploymentController::class);
+    Route::get('unemployment-file', [\App\Http\Controllers\UnemploymentController::class, 'viewFile'])->name('unemployment.file');
+    Route::post('unemployment-import', [\App\Http\Controllers\UnemploymentController::class, 'importFile'])->name('unemployment.import');
+    Route::get('unemployment-update-file', [\App\Http\Controllers\UnemploymentController::class, 'viewUpdateFile'])->name('unemployment.updateFile');
+    Route::post('unemployment-update-import', [\App\Http\Controllers\UnemploymentController::class, 'importUpdateFile'])->name('unemployment.updateImport');
 
     /**
      *
@@ -289,6 +293,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     // Route::resource('chart', \App\Http\Controllers\ChartController::class);
     Route::get('chart', [\App\Http\Controllers\ChartController::class, 'index'])->name('chart.index');
     Route::get('production-plan-chart', [\App\Http\Controllers\ChartController::class, 'productionPlanChart'])->name('chart.productionPlanChart');
+    Route::get('chart-example', [\App\Http\Controllers\ChartController::class, 'example'])->name('chart.example');
 
     /**
      *

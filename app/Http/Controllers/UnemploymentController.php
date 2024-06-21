@@ -5,7 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Unemployment;
 use App\Http\Requests\StoreUnemploymentRequest;
 use App\Http\Requests\UpdateUnemploymentRequest;
+use App\Imports\UnemploymentImport;
+use App\Imports\UnemploymentUpdateImport;
 use App\Models\UnemploymentType;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UnemploymentController extends Controller
 {
@@ -14,7 +20,7 @@ class UnemploymentController extends Controller
      */
     public function index()
     {
-        $unemployments = Unemployment::query()->orderBy('name', 'ASC')->paginate(10);
+        $unemployments = Unemployment::query()->orderBy('id', 'ASC')->paginate(10);
 
         return view('unemployment.index', ['unemployments' => $unemployments]);
     }
@@ -83,5 +89,83 @@ class UnemploymentController extends Controller
         $unemployment->delete();
 
         return redirect()->back();
+    }
+
+    /**
+     *
+     */
+    public function viewFile()
+    {
+        return view('unemployment.import');
+    }
+
+    /**
+     *
+     */
+    public function importFile(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx'
+        ]);
+
+        try {
+            $file = $request->file('file');
+
+            Excel::import(new UnemploymentImport, $file);
+
+            return back()->with('success', 'Importación completada con éxito.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            Log::error('Error de validación durante la importación: ' . $e->getMessage());
+
+            $errorMessages = '';
+            foreach ($failures as $failure) {
+                $errorMessages .= 'Fila ' . $failure->row() . ': ' . implode(', ', $failure->errors()) . '<br>';
+            }
+
+            return back()->with('error', 'Errores de validación encontrados: <br>' . $errorMessages);
+        } catch (Exception $e) {
+            Log::error('Error inesperado durante la importación: ' . $e->getMessage());
+            return back()->with('error', 'Ocurrió un error inesperado durante la importación. Por favor, inténtalo de nuevo.');
+        }
+    }
+
+    /**
+     *
+     */
+    public function viewUpdateFile()
+    {
+        return view('unemployment.update');
+    }
+
+    /**
+     *
+     */
+    public function importUpdateFile(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx'
+        ]);
+
+        try {
+            $file = $request->file('file');
+
+            Excel::import(new UnemploymentUpdateImport, $file);
+
+            return back()->with('success', 'Importación completada con éxito.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            Log::error('Error de validación durante la importación: ' . $e->getMessage());
+
+            $errorMessages = '';
+            foreach ($failures as $failure) {
+                $errorMessages .= 'Fila ' . $failure->row() . ': ' . implode(', ', $failure->errors()) . '<br>';
+            }
+
+            return back()->with('error', 'Errores de validación encontrados: <br>' . $errorMessages);
+        } catch (Exception $e) {
+            Log::error('Error inesperado durante la importación: ' . $e->getMessage());
+            return back()->with('error', 'Ocurrió un error inesperado durante la importación. Por favor, inténtalo de nuevo.');
+        }
     }
 }

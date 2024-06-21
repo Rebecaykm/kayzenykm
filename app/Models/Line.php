@@ -42,4 +42,12 @@ class Line extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    /**
+     *
+     */
+    public function unemployments(): BelongsToMany
+    {
+        return $this->belongsToMany(Unemployment::class);
+    }
 }

@@ -38,7 +38,7 @@
                                 {{ __('Estación de Trabajo') }}
                             </span>
                             <select name="workcenter_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                                <option>{{ __('Seleccione una Estación') }}</option>
+                                <option value="">{{ __('Seleccione una Estación') }}</option>
                                 @foreach ($workcenters as $workcenter)
                                 <option value="{{ $workcenter->id }}">{{ $workcenter->number }} - {{ $workcenter->name }}</option>
                                 @endforeach
@@ -51,9 +51,9 @@
                                 {{ __('Paro') }}
                             </span>
                             <select name="unemployment_id" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                                <option>{{ __('Seleccione una Estación') }}</option>
+                                <option value="">{{ __('Seleccione un Tipo de Paro') }}</option>
                                 @foreach ($unemployments as $unemployment)
-                                <option value="{{ $unemployment->id }}">{{ $unemployment->name }}</option>
+                                <option value="{{ $unemployment->id }}">{{ $unemployment->code ?? '' }} - {{ $unemployment->name ?? '' }}</option>
                                 @endforeach
                             </select>
                         </label>

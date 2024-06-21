@@ -1,7 +1,7 @@
 <x-app-layout title="Paro">
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {{ __('Paro')}}
+            {{ __('Paro') }}
         </h2>
 
         @if ($errors->any())
@@ -16,40 +16,43 @@
         </div>
         @endif
 
-        <div class="flex justify-end mb-4">
+        <!-- <div class="flex justify-end mb-4">
             <a href="{{ route('unemployment.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Nuevo Paro') }}
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 ml-2 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </a>
-        </div>
-
-
+        </div> -->
 
         <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">{{ __('Abreviatura') }}</th>
+                            <th class="px-4 py-3">{{ __('Código') }}</th>
                             <th class="px-4 py-3">{{ __('Nombre') }}</th>
                             <th class="px-4 py-3">{{ __('Tipo de Paro') }}</th>
-                            <th class="px-4 py-3">{{ __('Acciones') }}</th>
+                            <th class="px-4 py-3">{{ __('Línea Asociada') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Acciones') }}</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach ($unemployments as $unemployment)
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3 text-sm">
-                                {{ $unemployment->abbreviation ?? '' }}
+                            <td class="px-4 py-3 text-xs uppercase">
+                                {{ $unemployment->code ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs whitespace-pre-line uppercase">
                                 {{ $unemployment->name ?? '' }}
                             </td>
-                            <td class="px-4 py-3 text-sm">
+                            <td class="px-4 py-3 text-xs whitespace-pre-line uppercase">
                                 {{ $unemployment->unemploymentType->name ?? '' }}
                             </td>
+                            <td class="px-4 py-3 text-xs whitespace-pre-line uppercase">
+                                {{ $unemployment->lines->pluck('name')->implode(', ') }}
+                            </td>
+                            <!--
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <a href="{{ route('unemployment.edit', $unemployment->id) }}" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -69,6 +72,7 @@
                                     </form>
                                 </div>
                             </td>
+                            -->
                         </tr>
                         @endforeach
                     </tbody>
