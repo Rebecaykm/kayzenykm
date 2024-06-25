@@ -36,7 +36,7 @@
                             <th class="px-4 py-3">{{ __('Cantidad') }}</th>
                             <th class="px-4 py-3">{{ __('Secuencia') }}</th>
                             <th class="px-4 py-3">{{ __('Estado') }}</th>
-                            <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th>
+                            <!-- <th class="px-4 py-3">{{ __('Fecha de Registro') }}</th> -->
                             <th class="px-4 py-3">{{ __('Acciones') }}</th>
                         </tr>
                     </thead>
@@ -81,9 +81,9 @@
 
                             </td>
                             @endif
-                            <td class="px-4 py-3 text-xs">
+                            <!-- <td class="px-4 py-3 text-xs">
                                 {{ $prodcutionRecord->created_at->format('d-m-Y H:i:s') }}
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     @if ($prodcutionRecord->status->name != 'CANCELADO')

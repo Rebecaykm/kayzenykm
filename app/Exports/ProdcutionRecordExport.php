@@ -7,9 +7,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles
+class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     protected $data;
 
@@ -35,7 +37,7 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
                 'fin' => date('d-m-Y H:i:s', strtotime($item['time_end'])),
                 'minutos' => strtoupper(trim($item['minutes'])),
                 'estado' => strtoupper(trim($item['name_status'])),
-                'registro' => date('d-m-Y H:i:s', strtotime($item['created_at'])),
+                // 'registro' => date('d-m-Y H:i:s', strtotime($item['created_at'])),
             ];
         });
     }
@@ -52,11 +54,11 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
             'CANTIDAD',
             'FECHA',
             'TURNO',
-            'HORA DE INICIO',
-            'HORA DE FIN',
-            'CANT. MINUTOS',
+            'INICIO',
+            'FIN',
+            'MIN PROCESADOS',
             'ESTADO',
-            'FECHA DE REGISTRO',
+            // 'FECHA DE REGISTRO',
         ];
     }
 
@@ -64,6 +66,15 @@ class ProdcutionRecordExport implements FromCollection, WithHeadings, ShouldAuto
     {
         return [
             1 => ['font' => ['bold' => true]],
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'J' => NumberFormat::FORMAT_DATE_DATETIME,
+            'K' => NumberFormat::FORMAT_DATE_DATETIME,
+            'L' => NumberFormat::FORMAT_TEXT,
         ];
     }
 }
