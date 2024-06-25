@@ -37,9 +37,10 @@ class ExampleController extends Controller
             $partNumberId = $request->partNumberId;
             $partNumber = PartNumber::findOrFail($partNumberId);
             $quantity = $request->quantity ?? $partNumber->quantity;
+            $temp = $productionPlan->temp ?? 0;
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
-            $seconds = $timeEnd->diffInSeconds($timeStart);
+            $seconds = $timeEnd->diffInSeconds($timeStart) + $temp;
             $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
 
             for ($count = 1; $quantity > 0; $count++) {
@@ -53,7 +54,7 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $timeStart->format('Ymd H:i:s.v'),
+                    $productionPlan->production_start,
                     $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlan->id,
@@ -89,6 +90,9 @@ class ExampleController extends Controller
 
                 $dataArrayWithQr[] = $data;
             }
+
+            $productionPlan->update(['temp' => 0]);
+
             DB::commit();
 
             return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);

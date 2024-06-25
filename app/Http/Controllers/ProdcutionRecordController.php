@@ -11,6 +11,8 @@ use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\RYT4;
 use App\Models\Status;
+use App\Models\UnemploymentRecord;
+use App\Models\User;
 use App\Models\YHMIC;
 use App\Models\YT4;
 use Carbon\Carbon;
@@ -81,13 +83,38 @@ class ProdcutionRecordController extends Controller
      */
     public function startProduction(Request $request)
     {
-        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+        // Encontrar el plan de producción
+        $productionPlan = ProductionPlan::findOrFail($request->productionPlananId);
 
-        $statusEnProceso = Status::query()->where('name', 'EN PROCESO')->first();
+        // Obtener los estados
+        $statusProduccionDetenida = Status::where('name', 'PRODUCCIÓN DETENIDA')->firstOrFail();
+        $statusEnProceso = Status::where('name', 'EN PROCESO')->firstOrFail();
 
-        $statusProductionPlan->update(['status_id' => $statusEnProceso->id]);
+        // Verificar el estado actual del plan de producción
+        if ($productionPlan->status_id == $statusProduccionDetenida->id) {
+            $user = User::with(['lines.unemployments'])->findOrFail(auth()->id());
 
-        return redirect()->back();
+            // Obtener las líneas y sus paros asociados
+            $unemployments = $user->lines->flatMap(function ($line) {
+                return $line->unemployments;
+            })->unique('id')->values();
+
+            // Obtener el estación de trabajo asociado
+            $workcenter = $productionPlan->partNumber->workcenter;
+
+            // Retornar la vista con los datos necesarios
+            return view('production-record.unemployment', [
+                'workcenter' => $workcenter,
+                'unemployments' => $unemployments,
+                'productionPlananId' => $productionPlan->id,
+            ]);
+        } else {
+            // Actualizar el estado del plan de producción
+            $productionPlan->update(['status_id' => $statusEnProceso->id, 'production_start' => Carbon::now()->format('Y-m-d H:i:s.v')]);
+
+            // Redirigir de vuelta
+            return redirect()->back();
+        }
     }
 
     /**
@@ -95,15 +122,27 @@ class ProdcutionRecordController extends Controller
      */
     public function stopProduction(Request $request)
     {
-        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+        $productionPlan = ProductionPlan::find($request->productionPlananId);
 
-        $statusProduccionDetenida = Status::query()->where('name', 'PRODUCCIÓN DETENIDA')->first();
+        $temp = $productionPlan->temp ?? 0;
 
-        $statusProductionPlan->update(['status_id' => $statusProduccionDetenida->id]);
+        $timeStart = Carbon::parse($productionPlan->updated_at);
+        $timeEnd = Carbon::now();
+        $seconds = $timeEnd->diffInSeconds($timeStart) + $temp;
 
-        return redirect('production-plan');
+        $statusProduccionDetenida = Status::where('name', 'PRODUCCIÓN DETENIDA')->firstOrFail();
+
+        $productionPlan->update([
+            'status_id' => $statusProduccionDetenida->id,
+            'temp' => $seconds
+        ]);
+
+        return redirect('production-plan')->with('warning', 'Producción detenida con éxito');
     }
 
+    /**
+     *
+     */
     public function cancelProduction(Request $request)
     {
         $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
@@ -386,10 +425,46 @@ class ProdcutionRecordController extends Controller
         return redirect()->back();
     }
 
+    /**
+     *
+     */
     public function bais(Request $request)
     {
         $productionPlan = ProductionPlan::findOrFail($request->production);
 
         return view('production-record.bias', ['productionPlan' => $productionPlan]);
+    }
+
+    /**
+     *
+     */
+    public function unemploymentProduction(Request $request)
+    {
+        // Encontrar el plan de producción
+        $productionPlan = ProductionPlan::findOrFail($request->productionPlananId);
+
+        // Calcular el tiempo
+        $timeStart = Carbon::parse($productionPlan->updated_at);
+        $timeEnd = Carbon::now();
+        $seconds = $timeEnd->diffInSeconds($timeStart);
+        $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
+
+        // Crear el registro de paro
+        UnemploymentRecord::create([
+            'user_id' => Auth::id(),
+            'workcenter_id' => $request->workcenterId,
+            'unemployment_id' => $request->unemploymentId,
+            'time_start' => $timeStart->format('Ymd H:i:s.v'),
+            'time_end' => $timeEnd->format('Ymd H:i:s.v'),
+            'minutes' => $minutes,
+            'description' => $request->description ?? ''
+        ]);
+
+        // Actualizar el estado del plan de producción
+        $statusEnProceso = Status::where('name', 'EN PROCESO')->firstOrFail();
+        $productionPlan->update(['status_id' => $statusEnProceso->id]);
+
+        // Redirigir a la ruta
+        return redirect()->route('prodcution-record.create', ['production' => $productionPlan->id]);
     }
 }
