@@ -118,11 +118,16 @@ class ChartController extends Controller
         return view('chart.index', compact('cleanedArrayProduction'));
     }
 
+    /**
+     *
+     */
     public function productionPlanChart()
     {
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        $now = Carbon::now()->format('Y-m-d');
+        $now = Carbon::now();
+        $today = $now->format('Y-m-d');
+        $yesterday = $now->subDay()->format('Y-m-d');
 
         $arrayClass = ['M1', 'M2', 'M3', 'M4'];
 
@@ -149,7 +154,14 @@ class ChartController extends Controller
             ->join('statuses', 'statuses.id', '=', 'production_plans.status_id')
             ->whereIn('lines.name', $lineNames)
             ->whereIn('item_classes.abbreviation', $arrayClass)
-            ->where('production_plans.date', $now)
+            ->where(function ($query) use ($today, $yesterday) {
+                $query->where('production_plans.date', $today)
+                    ->whereIn('shifts.abbreviation', ['D', 'N'])
+                    ->orWhere(function ($subQuery) use ($yesterday) {
+                        $subQuery->where('production_plans.date', $yesterday)
+                            ->where('shifts.abbreviation', 'N');
+                    });
+            })
             ->orderBy('production_plans.updated_at', 'DESC')
             ->get();
 

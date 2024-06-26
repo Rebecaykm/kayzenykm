@@ -35,8 +35,8 @@
                 </label>
 
                 <label class="block mt-2 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">{{ __('Descripción') }}</span>
-                    <textarea name="description" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Ingresar motivo del paro"></textarea>
+                    <span class="text-gray-700 dark:text-gray-400">{{ __('Comntario') }}</span>
+                    <textarea name="description" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Ingresar motivo del paro y/o como se restablecio"></textarea>
                 </label>
 
                 <div class="mt-4">

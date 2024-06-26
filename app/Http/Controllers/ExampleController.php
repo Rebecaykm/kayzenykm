@@ -54,7 +54,7 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $productionPlan->production_start,
+                    $productionPlan->production_start ?? $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlan->id,
@@ -114,9 +114,10 @@ class ExampleController extends Controller
             $partNumberId = $request->partNumberId;
             $partNumber = PartNumber::findOrFail($partNumberId);
             $quantity = $request->quantity ?? $partNumber->quantity;
+            $temp = $productionPlan->temp ?? 0;
             $timeStart = Carbon::parse($productionPlan->updated_at);
             $timeEnd = Carbon::now();
-            $seconds = $timeEnd->diffInSeconds($timeStart);
+            $seconds = $timeEnd->diffInSeconds($timeStart) + $temp;
             $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
 
             $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
@@ -132,7 +133,7 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $timeStart->format('Ymd H:i:s.v'),
+                    $productionPlan->production_start ?? $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlan->id,
