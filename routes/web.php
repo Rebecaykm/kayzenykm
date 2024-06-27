@@ -307,4 +307,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('printer', \App\Http\Controllers\PrinterController::class);
 
     Route::get('test-printer', [\App\Http\Controllers\ExampleController::class, 'testPrint'])->name('example.test');
+
+    /**
+     * 
+     */
+    Route::resource('press-part-number', \App\Http\Controllers\PressPartNumberController::class);
+    Route::get('press-part-number-file', [\App\Http\Controllers\PressPartNumberController::class, 'viewFile'])->name('press-part-number.file');
+    Route::post('press-part-number-import', [\App\Http\Controllers\PressPartNumberController::class, 'importFile'])->name('press-part-number.import');
 });

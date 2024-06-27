@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Combinations;
 
 class ChartController extends Controller
 {
@@ -234,19 +235,54 @@ class ChartController extends Controller
         //
     }
 
+    // public function processPartNumbers(Request $request)
     public function example()
     {
-        $dia_inicio = 19;
-        $mes_inicio = 06;
-        $ano_inicio = 2024;
-        $dia_final = 20;
-        $mes_final = 06;
-        $ano_final = 2024;
+        // Obtén los números de parte desde la solicitud (puede ser un array de números de parte)
+        $partNumbers = ["DABA 72/73 191/192", "DB1R 50 261", "BDTS 70/71 181"];
 
-        $result = DB::connection('iot')->select('EXEC dbo.web_reportes_produccion_dia_trf2500 @dia_inicio = ?, @mes_inicio = ?, @ano_inicio = ?, @dia_final = ?, @mes_final = ?, @ano_final = ?', [
-            $dia_inicio, $mes_inicio, $ano_inicio, $dia_final, $mes_final, $ano_final
-        ]);
+        // Resultado final
+        $result = [];
 
-        dd($result);
+        foreach ($partNumbers as $partNumber) {
+            // Procesa cada número de parte
+            $processed = $this->processPartNumber($partNumber);
+            $result = array_merge($result, $processed);
+        }
+
+        // Devuelve el resultado
+        return response()->json($result);
+    }
+
+    private function processPartNumber($partNumber)
+    {
+        // Si no contiene "/", solo quita los espacios y devuélvelo
+        if (strpos($partNumber, '/') === false) {
+            return [str_replace(' ', '', $partNumber)];
+        }
+
+        // Separar por espacios
+        $parts = explode(' ', $partNumber);
+
+        // Base
+        $base = $parts[0];
+
+        // Procesar cada parte y concatenar
+        $combinations = [$base];
+
+        for ($i = 1; $i < count($parts); $i++) {
+            $newCombinations = [];
+            $subParts = explode('/', $parts[$i]);
+
+            foreach ($combinations as $combination) {
+                foreach ($subParts as $subPart) {
+                    $newCombinations[] = $combination . $subPart;
+                }
+            }
+
+            $combinations = $newCombinations;
+        }
+
+        return $combinations;
     }
 }
