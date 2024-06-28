@@ -16,8 +16,11 @@ return new class extends Migration
             $table->foreignId('press_part_number_id')->constrained('press_part_numbers');
             $table->date('plan_date');
             $table->foreignId('shift_id')->constrained('shifts');
-            $table->string('component_code');
-            $table->integer('hits');
+            $table->foreignId('status_id')->constrained('statuses');
+            $table->string('component_code')->nullable();
+            $table->double('planned_hits')->default(0);
+            $table->double('produced_hits')->default(0);
+            $table->double('scrap_quantity')->default(0);
             $table->timestamps();
         });
     }

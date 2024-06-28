@@ -16,18 +16,35 @@ class Status extends Model
         'name'
     ];
 
+    /**
+     *
+     */
     public function productionPlans(): HasMany
     {
         return $this->hasMany(ProductionPlan::class);
     }
 
+    /**
+     *
+     */
     public function productionRecords(): HasMany
     {
         return $this->hasMany(ProductionPlan::class);
     }
 
+    /**
+     *
+     */
     public function cycleInventories(): HasMany
     {
         return $this->hasMany(CycleInventory::class);
+    }
+
+    /**
+     *
+     */
+    public function pressProductionPlans(): HasMany
+    {
+        return $this->hasMany(PressProductionPlan::class);
     }
 }

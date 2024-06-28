@@ -15,7 +15,7 @@ class PressProductionPlan extends Model
     /**
      *
      */
-    protected $fillable = ['press_part_number_id', 'plan_date', 'shift_id', 'component_code', 'hits'];
+    protected $fillable = ['press_part_number_id', 'plan_date', 'shift_id', 'component_code', 'planned_hits', 'produced_hits', 'scrap_quantity'];
 
     /**
      *
@@ -30,6 +30,14 @@ class PressProductionPlan extends Model
      */
     public function shift(): BelongsTo
     {
-        return $this->belongsTo(Shift::class, 'shift_id');
+        return $this->belongsTo(Shift::class);
+    }
+
+    /**
+     *
+     */
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
     }
 }

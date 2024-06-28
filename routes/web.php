@@ -309,9 +309,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('test-printer', [\App\Http\Controllers\ExampleController::class, 'testPrint'])->name('example.test');
 
     /**
-     * 
+     *
      */
-    Route::resource('press-part-number', \App\Http\Controllers\PressPartNumberController::class);
+    Route::get('press-part-number', [\App\Http\Controllers\PressPartNumberController::class, 'index'])->name('press-part-number.index');
     Route::get('press-part-number-file', [\App\Http\Controllers\PressPartNumberController::class, 'viewFile'])->name('press-part-number.file');
     Route::post('press-part-number-import', [\App\Http\Controllers\PressPartNumberController::class, 'importFile'])->name('press-part-number.import');
+
+    /**
+     *
+     */
+    Route::resource('press-production-plans', \App\Http\Controllers\PressProductionPlanController::class);
 });
