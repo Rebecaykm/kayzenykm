@@ -10,7 +10,7 @@
                     <thead>
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">{{ __('Número de Parte') }}</th>
-                            <th class="px-4 py-3">{{ __('Golpes') }}</th>
+                            <th class="px-4 py-3">{{ __('Piezas por Golpe') }}</th>
                             <th class="px-4 py-3">{{ __('Números de Parte Relacionados') }}</th>
                         </tr>
                     </thead>
