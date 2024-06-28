@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PressPartNumberImport;
+use App\Models\PressPartNumber;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,9 @@ class PressPartNumberController extends Controller
      */
     public function index()
     {
-        //
+        $pressPartNumbers = PressPartNumber::orderBy('part_number', 'desc')->paginate(10);
+
+        return view('pressPartNumber.index', ['pressPartNumbers' => $pressPartNumbers]);
     }
 
     /**
