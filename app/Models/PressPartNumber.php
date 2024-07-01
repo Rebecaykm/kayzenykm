@@ -25,12 +25,4 @@ class PressPartNumber extends Model
     {
         return $this->belongsToMany(PartNumber::class, 'part_number_press_part_number', 'press_part_number_id', 'part_number_id');
     }
-
-    /**
-     *
-     */
-    public function pressProductionPlans(): HasMany
-    {
-        return $this->hasMany(PressProductionPlan::class, 'press_part_number_id');
-    }
 }
