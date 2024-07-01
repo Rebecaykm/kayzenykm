@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\PartNumber;
+use App\Models\PressPartNumber;
 use App\Models\ProductionPlan;
 use App\Models\Shift;
 use App\Models\Status;
@@ -26,26 +27,65 @@ class ProductionPlanImport implements ToModel, WithHeadingRow, WithBatchInserts,
     public function model(array $row)
     {
         try {
-            $partNumber = PartNumber::whereRaw('LTRIM(RTRIM(number)) = ?', [trim($row['no_parte'])])->first();
+            $noParte = trim($row['no_parte']);
             $quantity = $row['cantidad'];
-            $date = Date::excelToDateTimeObject($row['fecha'])->format('Ymd H:i:s.v');
+            $date = Date::excelToDateTimeObject($row['fecha'])->format('Y-m-d');
             $shift = Shift::where('abbreviation', trim($row['turno']))->first();
             $status = Status::where('name', 'PENDIENTE')->first();
 
-            if (!$partNumber) {
-                $this->notFoundParts[] = trim($row['no_parte']);
-                return null;
-            }
+            if (strpos($noParte, '/') !== false) {
+                $pressPartNumber = PressPartNumber::query()
+                    ->select([
+                        'press_part_numbers.id as press_part_number_id',
+                        'press_part_numbers.part_number as press_part_number',
+                        'part_numbers.id as part_number_id',
+                        'part_numbers.number as part_number'
+                    ])
+                    ->join('part_number_press_part_number', 'press_part_numbers.id', '=', 'part_number_press_part_number.press_part_number_id')
+                    ->join('part_numbers', 'part_number_press_part_number.part_number_id', '=', 'part_numbers.id')
+                    ->whereRaw('LTRIM(RTRIM(press_part_numbers.part_number)) = ?', [$noParte])
+                    ->get();
 
-            return new ProductionPlan([
-                'part_number_id' => $partNumber->id,
-                'plan_quantity' => $quantity,
-                'date' => $date,
-                'shift_id' => $shift->id,
-                'status_id' => $status->id,
-            ]);
+                if ($pressPartNumber->isEmpty()) {
+                    $this->notFoundParts[] = $noParte;
+                    return null;
+                }
+
+                $newPlans = [];
+
+                foreach ($pressPartNumber as $part) {
+                    $newPlans[] = [
+                        'part_number_id' => $part->part_number_id,
+                        'plan_quantity' => $quantity,
+                        'date' => $date,
+                        'shift_id' => $shift->id,
+                        'status_id' => $status->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                ProductionPlan::insert($newPlans);
+            } else {
+                $partNumber = PartNumber::whereRaw('LTRIM(RTRIM(number)) = ?', [trim($row['no_parte'])])->first();
+
+                if (!$partNumber) {
+                    $this->notFoundParts[] = $noParte;
+                    return null;
+                }
+
+                return new ProductionPlan([
+                    'part_number_id' => $partNumber->id,
+                    'plan_quantity' => $quantity,
+                    'date' => $date,
+                    'shift_id' => $shift->id,
+                    'status_id' => $status->id,
+                ]);
+            }
         } catch (\Exception $e) {
-            Log::error('Error durante la importación del archivo: ' . $e->getMessage());
+            Log::error('Error durante la importación del archivo: ' . $e->getMessage(), [
+                'row' => $row,
+                'exception' => $e
+            ]);
             return null;
         }
     }

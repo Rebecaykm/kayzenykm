@@ -21,9 +21,11 @@ class PressPartNumberImport implements ToModel, WithHeadingRow
         DB::beginTransaction();
 
         try {
+            $ppn = str_replace(' ', '', strtoupper(trim($row['part_number'])));
+
             // Buscar o crear el PressPartNumber
             $pressPartNumber = PressPartNumber::firstOrCreate(
-                ['part_number' => strtoupper(trim($row['part_number']))],
+                ['part_number' => $ppn],
                 ['pieces_per_hit' => $row['piezas_golpe']]
             );
 
