@@ -171,6 +171,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('prodcution-record/start-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'startProduction'])->name('prodcution-record.start-production');
     Route::post('prodcution-record/stop-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'stopProduction'])->name('prodcution-record.stop-production');
     Route::post('prodcution-record/cancel-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancelProduction'])->name('prodcution-record.cancel-production');
+    Route::post('prodcution-record/unemployment-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'unemploymentProduction'])->name('prodcution-record.unemployment-production');
 
     /**
      *
@@ -306,4 +307,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::resource('printer', \App\Http\Controllers\PrinterController::class);
 
     Route::get('test-printer', [\App\Http\Controllers\ExampleController::class, 'testPrint'])->name('example.test');
+
+    /**
+     *
+     */
+    Route::get('press-part-number', [\App\Http\Controllers\PressPartNumberController::class, 'index'])->name('press-part-number.index');
+    Route::get('press-part-number-file', [\App\Http\Controllers\PressPartNumberController::class, 'viewFile'])->name('press-part-number.file');
+    Route::post('press-part-number-import', [\App\Http\Controllers\PressPartNumberController::class, 'importFile'])->name('press-part-number.import');
+
+    /**
+     *
+     */
+    Route::resource('press-production-plans', \App\Http\Controllers\PressProductionPlanController::class);
 });

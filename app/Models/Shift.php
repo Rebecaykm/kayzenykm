@@ -16,8 +16,19 @@ class Shift extends Model
         'abbreviation', 'name'
     ];
 
+    /**
+     *
+     */
     public function productionPlans(): HasMany
     {
         return $this->hasMany(ProductionPlan::class, 'shift_id');
+    }
+
+    /**
+     *
+     */
+    public function pressProductionPlans(): HasMany
+    {
+        return $this->hasMany(PressProductionPlan::class, 'shift_id');
     }
 }

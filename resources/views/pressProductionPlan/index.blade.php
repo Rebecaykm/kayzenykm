@@ -1,7 +1,7 @@
-<x-app-layout title="{{ __('Plan de Producción') }}">
+<x-app-layout title="{{ __('Plan de Producción de Prensas') }}">
     <div class="xl:container lg:container md:container sm:container grid px-6 mx-auto">
         <h2 class="mt-6 mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {{ __('Plan de Producción')}}
+            {{ __('Plan de Producción de Prensas')}}
         </h2>
 
         @if ($errors->any())
@@ -97,55 +97,55 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @foreach ($productionPlans as $productionPlan)
+                        @foreach ($pressProductionPlans as $pressProductionPlan)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-xs">
-                                {{ $productionPlan->workcenter_name ?? '' }}
+                                {{ $pressProductionPlan->workcenter_name ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs sticky left-0 bg-white dark:bg-gray-800">
-                                {{ $productionPlan->part_number ?? '' }}
+                                {{ $pressProductionPlan->part_number ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs sticky left-28 bg-white dark:bg-gray-800">
-                                {{ $productionPlan->date ? \Carbon\Carbon::parse($productionPlan->date)->format('d-m-Y') : '' }}
+                                {{ $pressProductionPlan->plan_date ? \Carbon\Carbon::parse($pressProductionPlan->date)->format('d-m-Y') : '' }}
                             </td>
                             <td class="px-4 py-3 text-xs text-center">
-                                {{ $productionPlan->shift_abbreviation ?? '' }}
+                                {{ $pressProductionPlan->shift_abbreviation ?? '' }}
                             </td>
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                                    {{ intval($productionPlan->plan_quantity) ?? '' }}
+                                    {{ intval($pressProductionPlan->plan_quantity) ?? '' }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-xs text-center">
-                                @if ($productionPlan->plan_quantity < $productionPlan->production_quantity )
+                                @if ($pressProductionPlan->plan_quantity < $pressProductionPlan->production_quantity )
                                     <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-white dark:bg-yellow-600">
-                                        {{ intval($productionPlan->production_quantity) ?? '' }}
+                                        {{ intval($pressProductionPlan->production_quantity) ?? '' }}
                                     </span>
-                                    @elseif ($productionPlan->plan_quantity == $productionPlan->production_quantity )
+                                    @elseif ($pressProductionPlan->plan_quantity == $pressProductionPlan->production_quantity )
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
-                                        {{ intval($productionPlan->production_quantity) ?? '' }}
+                                        {{ intval($pressProductionPlan->production_quantity) ?? '' }}
                                     </span>
                                     @else
                                     <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        {{ intval($productionPlan->production_quantity) ?? '' }}
+                                        {{ intval($pressProductionPlan->production_quantity) ?? '' }}
                                     </span>
                                     @endif
                             </td>
                             <td class="px-4 py-3 text-xs text-center">
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
-                                    {{ intval($productionPlan->scrap_quantity) ?? '' }}
+                                    {{ intval($pressProductionPlan->scrap_quantity) ?? '' }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-xs">
-                                @if ($productionPlan->status_name == 'PENDIENTE')
+                                @if ($pressProductionPlan->status_name == 'PENDIENTE')
                                 <span class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700">
                                     {{ __('Pendiente') }}
                                 </span>
-                                @elseif ($productionPlan->status_name == 'EN PROCESO')
+                                @elseif ($pressProductionPlan->status_name == 'EN PROCESO')
                                 <span class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-blue-100">
                                     {{ __('En Proceso') }}
                                 </span>
-                                @elseif ($productionPlan->status_name == 'PRODUCCIÓN DETENIDA')
+                                @elseif ($pressProductionPlan->status_name == 'PRODUCCIÓN DETENIDA')
                                 <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
                                     {{ __('Producción Detenida') }}
                                 </span>
@@ -153,7 +153,7 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-xs">
-                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex w-full items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
+                                    <a href="{{ route('prodcution-record.create', ['production' => $pressProductionPlan->production_plan_id]) }}" class="flex w-full items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
@@ -167,16 +167,16 @@
 
                 </table>
             </div>
-            @if ($productionPlans->count())
+            @if ($pressProductionPlans->count())
             <div class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span class="flex items-center col-span-3">
-                    {{ __('Mostrando') }} {{ $productionPlans->firstItem() }} - {{ $productionPlans->lastItem() }} {{ __('de') }} {{ $productionPlans->total() }}
+                    {{ __('Mostrando') }} {{ $pressProductionPlans->firstItem() }} - {{ $pressProductionPlans->lastItem() }} {{ __('de') }} {{ $pressProductionPlans->total() }}
                 </span>
                 <span class="col-span-2"></span>
                 <!-- Pagination -->
                 <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
                     <nav aria-label="{{ __('Table navigation') }}">
-                        {{ $productionPlans->withQueryString()->links() }}
+                        {{ $pressProductionPlans->withQueryString()->links() }}
                     </nav>
                 </span>
             </div>
