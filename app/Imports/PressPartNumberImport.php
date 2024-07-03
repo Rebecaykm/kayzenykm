@@ -18,15 +18,21 @@ class PressPartNumberImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // Iniciar una transacción
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
         try {
-            $ppn = str_replace(' ', '', strtoupper(trim($row['part_number'])));
+            if (strpos($row['part_number'], '-') == true) {
+                $textWithoutSpaces = str_replace(' ', '', $row['part_number']);
+                $textFormatted = preg_replace('/-/', ' -', $textWithoutSpaces, 1);
+                $ppn = $textFormatted;
+            } else {
+                $ppn = str_replace(' ', '', strtoupper(trim($row['part_number'])));
+            }
 
             // Buscar o crear el PressPartNumber
             $pressPartNumber = PressPartNumber::firstOrCreate(
                 ['part_number' => $ppn],
-                ['pieces_per_hit' => $row['piezas_golpe']]
+                ['pieces_per_hit' => $row['piezas_golpe'] ?? 0]
             );
 
             // Procesar los números de parte relacionados
@@ -34,7 +40,8 @@ class PressPartNumberImport implements ToModel, WithHeadingRow
 
             foreach ($partNumbers as $key => $partNumber) {
                 // Buscar el PartNumber en la base de datos
-                $partNumberModel = PartNumber::where(DB::raw('REPLACE(number, \' \', \'\')'), 'LIKE', $partNumber)->first();
+                $partNumberModel = PartNumber::where(DB::raw('LTRIM(RTRIM(number))'), 'LIKE', $partNumber)->first();
+                // $partNumberModel = PartNumber::where(DB::raw('REPLACE(number, \' \', \'\')'), 'LIKE', $partNumber)->first();
 
                 if ($partNumberModel) {
                     // Adjuntar el PartNumber encontrado al PressPartNumber si no existe la relación
@@ -65,7 +72,13 @@ class PressPartNumberImport implements ToModel, WithHeadingRow
     {
         // Si no contiene "/", solo quita los espacios y devuélvelo
         if (strpos($partNumber, '/') === false) {
-            return [str_replace(' ', '', $partNumber)];
+            if (strpos($partNumber, '-') !== false) {
+                $textWithoutSpaces = str_replace(' ', '', $partNumber);
+                $textFormatted = preg_replace('/-/', ' -', $textWithoutSpaces, 1);
+                return [$textFormatted];
+            } else {
+                return [str_replace(' ', '', $partNumber)];
+            }
         }
 
         // Separar por espacios
