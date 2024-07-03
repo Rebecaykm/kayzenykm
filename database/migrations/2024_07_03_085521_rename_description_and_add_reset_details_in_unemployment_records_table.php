@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('press_part_numbers', function (Blueprint $table) {
-            $table->id();
-            $table->string('part_number');
-            $table->integer('pieces_per_hit')->default(0);
-            $table->timestamps();
+        Schema::table('unemployment_records', function (Blueprint $table) {
+            $table->longText('reset_details')->nullable();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('press_part_numbers');
+        Schema::table('unemployment_records', function (Blueprint $table) {
+            $table->dropColumn('reset_details');
+        });
     }
 };

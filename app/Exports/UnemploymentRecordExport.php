@@ -31,10 +31,11 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
                 'tipo' => strtoupper($item['unemployment_type']),
                 'nombre' => strtoupper($item['unemployment_name']),
                 'descripcion' => strtoupper($item['description']),
+                'restablecimiento' => strtoupper($item['reset_details']),
                 'inicio' => date('d-m-Y H:i:s', strtotime($item['time_start'])),
                 'fin' => date('d-m-Y H:i:s', strtotime($item['time_end'])),
                 'minutos' => $item['minutes'],
-                'fecha' => date('d-m-Y H:i:s', strtotime($item['created_at']))
+                // 'fecha' => date('d-m-Y H:i:s', strtotime($item['created_at']))
             ];
         });
     }
@@ -48,11 +49,12 @@ class UnemploymentRecordExport implements FromCollection, WithHeadings, ShouldAu
             'NOMBRE DE ESTACIÓN',
             'TIPO',
             'PARO',
-            'DESCRIPCIÓN',
+            'COMENTARIO',
+            'DETALLES DE RESTABLECIMIENTO',
             'HORA INICIO',
             'HORA FIN',
             'MINUTOS',
-            'FECHA DE REGISTRO'
+            // 'FECHA DE REGISTRO'
         ];
     }
 

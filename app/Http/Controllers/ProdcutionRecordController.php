@@ -457,7 +457,8 @@ class ProdcutionRecordController extends Controller
             'time_start' => $timeStart->format('Ymd H:i:s.v'),
             'time_end' => $timeEnd->format('Ymd H:i:s.v'),
             'minutes' => $minutes,
-            'description' => $request->description ?? ''
+            'description' => $request->description ?? '',
+            'reset_details' => $request->resetDetails ?? ''
         ]);
 
         // Actualizar el estado del plan de producción

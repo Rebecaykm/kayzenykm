@@ -227,6 +227,7 @@ class UnemploymentRecordController extends Controller
                 'unemployment_records.minutes',
                 'unemployment_records.created_at',
                 'unemployment_records.description',
+                'unemployment_records.reset_details',
             ])
             ->join('unemployments', 'unemployment_records.unemployment_id', '=', 'unemployments.id')
             ->leftJoin('unemployment_types', 'unemployments.unemployment_type_id', '=', 'unemployment_types.id')

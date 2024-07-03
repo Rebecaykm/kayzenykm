@@ -187,7 +187,7 @@ class ProductionPlanController extends Controller
 
     public function uploadFile(Request $request)
     {
-        // try {
+        try {
             $file = $request->file('plan_file');
 
             Excel::import(new ProductionPlanImport, $file);
@@ -200,15 +200,15 @@ class ProductionPlanController extends Controller
             }
 
             return redirect()->back()->with('success', 'Documento importado exitosamente.');
-        // } catch (ValidationException $e) {
-        //     $failures = $e->failures();
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
 
-        //     return redirect()->back()->withErrors($failures);
-        // } catch (\Exception $e) {
-        //     Log::error('Error al importar el archivo: ' . $e->getMessage());
+            return redirect()->back()->withErrors($failures);
+        } catch (\Exception $e) {
+            Log::error('Error al importar el archivo: ' . $e->getMessage());
 
-        //     return redirect()->back()->with('error', 'Ocurrió un error al importar el archivo. Por favor, inténtelo de nuevo más tarde.');
-        // }
+            return redirect()->back()->with('error', 'Ocurrió un error al importar el archivo. Por favor, inténtelo de nuevo más tarde.');
+        }
     }
 
     public function finish(Request $request)
