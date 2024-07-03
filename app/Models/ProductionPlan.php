@@ -17,26 +17,41 @@ class ProductionPlan extends Model
         'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id', 'scrap_quantity', 'temp', 'production_start'
     ];
 
+    /**
+     *
+     */
     public function partNumber(): BelongsTo
     {
         return $this->belongsTo(PartNumber::class);
     }
 
+    /**
+     *
+     */
     public function shift(): BelongsTo
     {
         return $this->belongsTo(Shift::class);
     }
 
+    /**
+     *
+     */
     public function scrapRecords(): HasMany
     {
         return $this->hasMany(ScrapRecord::class, 'production_plan_id');
     }
 
+    /**
+     *
+     */
     public function productionRecords(): HasMany
     {
         return $this->hasMany(ProdcutionRecord::class, 'production_plan_id');
     }
 
+    /**
+     *
+     */
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);

@@ -263,25 +263,6 @@
                 </div>
             </div>
 
-            @can('prodcution-record.index')
-            @if ($productionPlan->production_quantity == 0 && ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA'))
-            <div class="block mt-4 md:col-span-1 lg:col-span-2 ">
-                <form action="{{ route('prodcution-record.cancel-production') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="productionPlananId" value="{{ $productionPlan->id }}">
-                    <button type="submit" class="w-full md:w-auto lg:w-auto px-10 py-2 text-lg font-semibold leading-tight text-red-700 transition-colors duration-150 bg-red-100 border border-transparent rounded-lg active:bg-red-100 hover:bg-red-100 focus:outline-none focus:shadow-outline-red dark:text-red-100 dark:bg-red-700">
-                        <div class="flex justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                            <span class="ml-2">{{ __('Cancelar Producción') }}</span>
-                        </div>
-                    </button>
-                </form>
-            </div>
-            @endif
-            @endcan
-
             @if ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA')
             <div class="flex justify-end col-span-1 mt-4">
                 <a href="{{ route('production-plan.index') }}" class="flex px-10 py-2 items-center justify-center w-full md:w-auto lg:w-auto text-gray-700 text-lg font-semibold leading-tight transition-colors duration-150 bg-gray-200 border border-transparent rounded-lg active:bg-gray-200 hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray dark:bg-gray-600 dark:text-white">

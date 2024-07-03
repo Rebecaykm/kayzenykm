@@ -22,8 +22,10 @@ class ChartController extends Controller
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
         // Obtener la fecha de inicio y fin de las últimas 12 horas
-        $start = Carbon::now()->subDay()->format('Ymd H:i:s.v');
-        $end = Carbon::now()->addHour()->format('Ymd H:i:s.v');
+        // $start = Carbon::now()->subDay()->format('Ymd H:i:s.v');
+        // $end = Carbon::now()->addHour()->format('Ymd H:i:s.v');
+        $start = Carbon::yesterday()->startOfDay()->format('Ymd H:i:s.v');
+        $end = Carbon::now()->format('Ymd H:i:s.v');
 
         // Obtener los registros de producción
         $productionRecords = ProdcutionRecord::select([
@@ -52,6 +54,9 @@ class ChartController extends Controller
             ->whereIn('lines.name', $lineNames)
             ->whereBetween('prodcution_records.created_at', [$start, $end])
             ->orderBy('prodcution_records.created_at')
+            ->orderBy('lines.name', 'ASC')
+            ->orderBy('production_plans.date', 'ASC')
+            ->orderBy('shifts.abbreviation', 'ASC')
             ->get();
 
         // Inicializar el arreglo para almacenar los datos de producción
@@ -128,7 +133,7 @@ class ChartController extends Controller
 
         $now = Carbon::now();
         $today = $now->format('Y-m-d');
-        $yesterday = $now->subDay()->format('Y-m-d');
+        $yesterday = $now->yesterday()->format('Y-m-d');
 
         $arrayClass = ['M1', 'M2', 'M3', 'M4'];
 
@@ -163,7 +168,10 @@ class ChartController extends Controller
                             ->where('shifts.abbreviation', 'N');
                     });
             })
-            ->orderBy('production_plans.updated_at', 'DESC')
+            ->orderBy('departaments.name', 'ASC')
+            ->orderBy('lines.name', 'ASC')
+            ->orderBy('production_plans.date', 'ASC')
+            ->orderBy('shifts.abbreviation', 'ASC')
             ->get();
 
         $arrayPlan = [];
