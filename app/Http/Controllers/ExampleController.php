@@ -54,7 +54,7 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $productionPlan->production_start ?? $timeStart->format('Ymd H:i:s.v'),
+                    $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlan->id,
@@ -63,6 +63,7 @@ class ExampleController extends Controller
                 );
 
                 $dataArray[] = [
+                    'print' => 1,
                     'id' => $result->id,
                     'departament' => strtoupper(trim($partNumber->workcenter->line->departament->name)),
                     'workcenterNumber' => trim($partNumber->workcenter->number),
@@ -84,7 +85,7 @@ class ExampleController extends Controller
             }
             $dataArrayWithQr = [];
             foreach ($dataArray as $key => $data) {
-                $qrData = $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
+                $qrData = $data['print'] . ',' . $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
                 $qrCodeData = QrCode::size(600)->format('svg')->generate($qrData);
                 $data['qrCode'] = $qrCodeData;
 
@@ -102,6 +103,9 @@ class ExampleController extends Controller
         }
     }
 
+    /**
+     *
+     */
     public function printipl(Request $request)
     {
         try {
@@ -133,7 +137,7 @@ class ExampleController extends Controller
                 $result = ProdcutionRecord::storeProductionRecord(
                     $partNumberId,
                     $currentQuantity,
-                    $productionPlan->production_start ?? $timeStart->format('Ymd H:i:s.v'),
+                    $timeStart->format('Ymd H:i:s.v'),
                     $timeEnd->format('Ymd H:i:s.v'),
                     $minutes,
                     $productionPlan->id,
@@ -143,7 +147,7 @@ class ExampleController extends Controller
 
                 try {
                     if ($printer->brand == 'ZEBRA') {
-                        $codeQr = $result->id . '-' . trim($partNumber->number) . '-' . $currentQuantity . '-' . $result->sequence . '-' . Carbon::parse($productionPlan->date)->format('Ymd') . '-' . $productionPlan->shift->abbreviation;
+                        $codeQr = 1 . "-" . $result->id . '-' . trim($partNumber->number) . '-' . $currentQuantity . '-' . $result->sequence . '-' . Carbon::parse($productionPlan->date)->format('Ymd') . '-' . $productionPlan->shift->abbreviation;
 
                         $connector = new NetworkPrintConnector($printer->ip);
 

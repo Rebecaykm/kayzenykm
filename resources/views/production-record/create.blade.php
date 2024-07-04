@@ -297,10 +297,10 @@
 
                 ventanaImpresion.onload = function() {
                     ventanaImpresion.print();
-                    // ventanaImpresion.onafterprint = function() {
-                    //     ventanaImpresion.close();
-                    // };
-                    window.location.reload();
+                    setTimeout(function() {
+                        ventanaImpresion.close();
+                        window.location.reload();
+                    }, 1000);
                 };
             }
         }

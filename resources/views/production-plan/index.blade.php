@@ -171,10 +171,10 @@
 
                                     @can('prodcution-record.index')
                                     @if ($productionPlan->production_quantity == 0 && ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA'))
-                                    <form action="{{ route('prodcution-record.cancel-production') }}" method="POST" class="flex-1 flex items-center justify-center">
+                                    <form action="{{ route('prodcution-record.cancel-production') }}" method="POST" class=" items-center justify-center">
                                         @csrf
                                         <input type="hidden" name="productionPlanId" value="{{ $productionPlan->production_plan_id }}">
-                                        <button type="submit" class="flex items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
+                                        <button type="submit" class="flex-1 flex items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>

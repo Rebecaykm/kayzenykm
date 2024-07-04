@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 class ProdcutionRecord extends Model
@@ -14,7 +15,7 @@ class ProdcutionRecord extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'id', 'part_number_id', 'quantity', 'sequence', 'time_start', 'time_end', 'minutes', 'status_id', 'production_plan_id', 'user_id'
+        'id', 'part_number_id', 'quantity', 'sequence', 'time_start', 'time_end', 'minutes', 'status_id', 'production_plan_id', 'user_id', 'print_count', 'print_reason'
     ];
 
     /**
@@ -31,6 +32,14 @@ class ProdcutionRecord extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    /**
+     *
+     */
+    public function labelReprints(): HasMany
+    {
+        return $this->hasMany(LabelPrint::class, 'prodcution_record_id');
     }
 
     /**

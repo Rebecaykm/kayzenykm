@@ -159,7 +159,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      */
     Route::resource('prodcution-record', \App\Http\Controllers\ProdcutionRecordController::class);
     Route::get('prodcution-record-bais', [\App\Http\Controllers\ProdcutionRecordController::class, 'bais'])->name('prodcution-record.bais');
+
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
+    Route::get('store-reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'storeRepint'])->name('prodcution-record.store-reprint');
 
     Route::get('prodcution-record/{prodcution_record}/cancel', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancel'])->name('prodcution-record.cancel');
 
@@ -172,6 +174,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('prodcution-record/stop-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'stopProduction'])->name('prodcution-record.stop-production');
     Route::post('prodcution-record/cancel-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancelProduction'])->name('prodcution-record.cancel-production');
     Route::post('prodcution-record/unemployment-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'unemploymentProduction'])->name('prodcution-record.unemployment-production');
+
+    Route::get('back',[\App\Http\Controllers\ProdcutionRecordController::class, 'back'])->name('back.back');
 
     /**
      *
