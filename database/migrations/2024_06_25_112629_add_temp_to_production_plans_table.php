@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('production_plans', function (Blueprint $table) {
             $table->string('temp')->nullable();
             $table->timestamp('production_start')->nullable();
+            $table->timestamp('production_end')->nullable();
         });
     }
 
