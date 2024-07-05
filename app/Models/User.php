@@ -114,4 +114,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Line::class);
     }
+
+    /**
+     *
+     */
+    public function labelPrints(): HasMany
+    {
+        return $this->hasMany(LabelPrint::class, 'user_id');
+    }
 }

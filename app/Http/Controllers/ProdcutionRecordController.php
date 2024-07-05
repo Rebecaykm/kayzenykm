@@ -217,7 +217,8 @@ class ProdcutionRecordController extends Controller
         LabelPrint::create([
             'print_count' => $prodcutionRecord->print_count,
             'print_reason' => $printReason,
-            'prodcution_record_id' => $prodcutionRecordId
+            'prodcution_record_id' => $prodcutionRecordId,
+            'user_id' => Auth::id()
         ]);
 
         $data = [

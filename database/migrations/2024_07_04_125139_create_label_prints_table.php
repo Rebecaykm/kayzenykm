@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('print_count')->nullable();
             $table->longText('print_reason')->nullable();
             $table->foreignId('prodcution_record_id')->constrained('prodcution_records');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class LabelPrint extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'print_count', 'print_reason', 'prodcution_record_id'
+        'print_count', 'print_reason', 'prodcution_record_id', 'user_id'
     ];
 
     /**
@@ -22,5 +22,13 @@ class LabelPrint extends Model
     public function prodcutionRecord(): BelongsTo
     {
         return $this->belongsTo(ProdcutionRecord::class, 'prodcution_record_id');
+    }
+
+    /**
+     *
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
