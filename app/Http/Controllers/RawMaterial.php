@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\CheckPackNumberJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RawMaterial extends Controller
 {
@@ -12,7 +13,6 @@ class RawMaterial extends Controller
      */
     public function index()
     {
-
     }
 
     /**
@@ -38,11 +38,14 @@ class RawMaterial extends Controller
 
         $packNumber = strtoupper(trim(strval($request->pack)));
 
-        CheckPackNumberJob::dispatch(
-            $packNumber
-        );
+     try {
+            CheckPackNumberJob::dispatch($packNumber);
 
-        return redirect()->back()->with('success', 'Escaneado');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Log::error('Error al procesar el pack number: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**

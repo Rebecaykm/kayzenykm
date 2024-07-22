@@ -152,13 +152,37 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3">
-                                <div class="flex items-center space-x-4 text-xs">
-                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex w-full items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
+                                <div class="flex items-center space-x-4 text-xs w-full">
+                                    @if ($productionPlan->production_quantity > 0 || ($productionPlan->status->name != 'PENDIENTE' && $productionPlan->status->name != 'PRODUCCIÓN DETENIDA'))
+                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex-1 flex items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        <span class="ml-1 text-xs">{{ __('Producción') }}</span>
+                                        <span class="ml-1">{{ __('Producción') }}</span>
                                     </a>
+                                    @else
+                                    <a href="{{ route('prodcution-record.create', ['production' => $productionPlan->production_plan_id]) }}" class="flex-1 flex items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" aria-label="{{ __('Edit') }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span class="ml-2">{{ __('Producción') }}</span>
+                                    </a>
+                                    @endif
+
+                                    @can('prodcution-record.index')
+                                    @if ($productionPlan->production_quantity == 0 && ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA'))
+                                    <form action="{{ route('prodcution-record.cancel-production') }}" method="POST" class=" items-center justify-center">
+                                        @csrf
+                                        <input type="hidden" name="productionPlanId" value="{{ $productionPlan->production_plan_id }}">
+                                        <button type="submit" class="flex-1 flex items-center justify-center px-4 py-2 font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-full active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span class="ml-2">{{ __('Cancelar') }}</span>
+                                        </button>
+                                    </form>
+                                    @endif
+                                    @endcan
                                 </div>
                             </td>
                         </tr>

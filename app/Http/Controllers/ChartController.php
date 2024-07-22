@@ -16,14 +16,22 @@ class ChartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->filled('start') && $request->filled('end')) {
+            $start = Carbon::parse($request->start);
+            $end = Carbon::parse($request->end);
+            $startFormatted = $start->format('Ymd H:i:s');
+            $endFormatted = $end->format('Ymd H:i:s');
+        } else {
+            $start = Carbon::now()->subHours(18)->minute(0)->second(0);
+            $end = Carbon::now()->startOfHour();
+            $startFormatted = $start->format('Ymd H:i:s');
+            $endFormatted = $end->format('Ymd H:i:s');
+        }
+
         // Obtener los nombres de las líneas del usuario autenticado
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
-
-        // Obtener la fecha de inicio y fin de las últimas 12 horas
-        $start = Carbon::now()->subDay()->format('Ymd H:i:s.v');
-        $end = Carbon::now()->addHour()->format('Ymd H:i:s.v');
 
         // Obtener los registros de producción
         $productionRecords = ProdcutionRecord::select([
@@ -50,8 +58,11 @@ class ChartController extends Controller
             ->join('users', 'users.id', '=', 'prodcution_records.user_id')
             ->join('statuses', 'statuses.id', '=', 'prodcution_records.status_id')
             ->whereIn('lines.name', $lineNames)
-            ->whereBetween('prodcution_records.created_at', [$start, $end])
+            ->whereBetween('prodcution_records.created_at', [$startFormatted, $endFormatted])
             ->orderBy('prodcution_records.created_at')
+            ->orderBy('lines.name', 'ASC')
+            ->orderBy('production_plans.date', 'ASC')
+            ->orderBy('shifts.abbreviation', 'ASC')
             ->get();
 
         // Inicializar el arreglo para almacenar los datos de producción
@@ -78,13 +89,13 @@ class ChartController extends Controller
             $arrayProduction[$lineName][$workCenter][$noParte][$hourlyDateTime] += $quantityProduced;
         }
 
-        // Generar las últimas 12 horas
+        // Generar las horas dentro del rango seleccionado
         $allTimes = [];
-        $current = Carbon::now()->startOfHour();
-        for ($i = 0; $i < 12; $i++) {
-            $allTimes[] = $current->subHour()->format('d/m/y H:00');
+        $current = $start->copy();
+        while ($current <= $end) {
+            $allTimes[] = $current->format('d/m/y H:00');
+            $current->addHour();
         }
-        $allTimes = array_reverse($allTimes);  // Revertimos para tener el orden correcto
 
         // Limpiar y reestructurar los datos
         $cleanedArrayProduction = [];
@@ -122,13 +133,20 @@ class ChartController extends Controller
     /**
      *
      */
-    public function productionPlanChart()
+    public function productionPlanChart(Request $request)
     {
         $lineNames = Auth::user()->lines()->pluck('name')->toArray();
 
-        $now = Carbon::now();
-        $today = $now->format('Y-m-d');
-        $yesterday = $now->subDay()->format('Y-m-d');
+        if ($request->filled('start') && $request->filled('end')) {
+            $today = Carbon::parse($request->start)->format('Y-m-d');
+            $yesterday = Carbon::parse($request->end)->format('Y-m-d');
+            $useDateRange = true;
+        } else {
+            $now = Carbon::now();
+            $today = $now->format('Y-m-d');
+            $yesterday = $now->subDay()->format('Y-m-d');
+            $useDateRange = false;
+        }
 
         $arrayClass = ['M1', 'M2', 'M3', 'M4'];
 
@@ -155,15 +173,22 @@ class ChartController extends Controller
             ->join('statuses', 'statuses.id', '=', 'production_plans.status_id')
             ->whereIn('lines.name', $lineNames)
             ->whereIn('item_classes.abbreviation', $arrayClass)
-            ->where(function ($query) use ($today, $yesterday) {
-                $query->where('production_plans.date', $today)
-                    ->whereIn('shifts.abbreviation', ['D', 'N'])
-                    ->orWhere(function ($subQuery) use ($yesterday) {
-                        $subQuery->where('production_plans.date', $yesterday)
-                            ->where('shifts.abbreviation', 'N');
-                    });
+            ->when($useDateRange, function ($query) use ($today, $yesterday) {
+                $query->whereBetween('production_plans.date', [$today, $yesterday]);
+            }, function ($query) use ($today, $yesterday) {
+                $query->where(function ($query) use ($today, $yesterday) {
+                    $query->where('production_plans.date', $today)
+                        ->whereIn('shifts.abbreviation', ['D', 'N'])
+                        ->orWhere(function ($subQuery) use ($yesterday) {
+                            $subQuery->where('production_plans.date', $yesterday)
+                                ->where('shifts.abbreviation', 'N');
+                        });
+                });
             })
-            ->orderBy('production_plans.updated_at', 'DESC')
+            ->orderBy('departaments.name', 'ASC')
+            ->orderBy('lines.name', 'ASC')
+            ->orderBy('production_plans.date', 'ASC')
+            ->orderBy('shifts.abbreviation', 'ASC')
             ->get();
 
         $arrayPlan = [];

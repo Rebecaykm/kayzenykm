@@ -7,6 +7,7 @@ use App\Models\ProdcutionRecord;
 use App\Http\Requests\StoreProdcutionRecordRequest;
 use App\Http\Requests\UpdateProdcutionRecordRequest;
 use App\Models\IPYF013;
+use App\Models\LabelPrint;
 use App\Models\PartNumber;
 use App\Models\ProductionPlan;
 use App\Models\RYT4;
@@ -145,107 +146,21 @@ class ProdcutionRecordController extends Controller
      */
     public function cancelProduction(Request $request)
     {
-        $statusProductionPlan = ProductionPlan::find($request->productionPlananId);
+        $statusProductionPlan = ProductionPlan::find($request->productionPlanId);
 
         $statusProduccionDetenida = Status::query()->where('name', 'CANCELADO')->first();
 
         $statusProductionPlan->update(['status_id' => $statusProduccionDetenida->id]);
 
-        return redirect('production-plan');
+        return redirect()->back()->with('error', 'Producción cancelada con éxito');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProdcutionRecordRequest $request)
+    public function store(ProdcutionRecord $request)
     {
-        $dataArray = [];
-        $htmlContent = '';
-
-        $minutes = Carbon::parse($request->time_start)->diffInMinutes(Carbon::parse($request->time_end));
-
-        $partNumber = PartNumber::findOrFail($request->part_number_id);
-        $quantity = $request->quantity;
-
-        for ($count = 1; $quantity > 0; $count++) {
-
-            $productionPlan = ProductionPlan::findOrFail($request->production_plan_id);
-
-            $prodcutionRecordStatus = ($productionPlan->plan_quantity > $productionPlan->production_quantity) ?
-                Status::where('name', 'DENTRO DE PLANEACIÓN')->first() :
-                Status::where('name', 'EXCEDENTE DE PLANEACIÓN')->first();
-
-            $currentQuantity = min($quantity, $partNumber->quantity);
-
-            $result = ProdcutionRecord::storeProductionRecord(
-                $request->part_number_id,
-                $currentQuantity,
-                $request->time_start,
-                $request->time_end,
-                $minutes,
-                $request->production_plan_id,
-                $currentQuantity,
-                $prodcutionRecordStatus->id
-            );
-
-            array_push($dataArray, [
-                'id' => str_pad($result->id, 6, '0', STR_PAD_LEFT),
-                'departament' => strtoupper(trim($partNumber->workcenter->departament->name)),
-                'workcenterNumber' => trim($partNumber->workcenter->number),
-                'workcenterName' => trim($partNumber->workcenter->name),
-                'partNumber' => trim($partNumber->number),
-                'quantity' => str_pad($currentQuantity, 6, '0', STR_PAD_LEFT),
-                'sequence' => $result->sequence,
-                'date' => $productionPlan->date,
-                'shift' => $productionPlan->shift->abbreviation,
-                'container' => trim($partNumber->standardPackage->name),
-                'snp' => str_pad($partNumber->quantity, 6, '0', STR_PAD_LEFT),
-                'production_plan_id' => str_pad($result->production_plan_id, 6, '0', STR_PAD_LEFT),
-                'user_id' => str_pad($result->user_id, 6, '0', STR_PAD_LEFT),
-                'projects' => $partNumber->projects,
-                'class' => $partNumber->itemClass->abbreviation,
-                'a' => "*** ORIGINAL ***"
-            ]);
-
-            $quantity -= $partNumber->quantity;
-        }
-
-        foreach ($dataArray as $data) {
-            $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
-            $qrCodeData = QrCode::size(600)->generate($qrData);
-            $data['qrCode'] = $qrCodeData;
-            $view = View::make('label', $data);
-            $htmlContent .= $view->render();
-
-            // $htmlContent = $view->render();
-            // $connector = new WindowsPrintConnector("EPSON TM-T20 Receipt");
-            // $printer = new Printer($connector);
-            // $printer->text($htmlContent);
-            // $printer->cut();
-            // $printer->close();
-        }
-
-        $pdf = new Dompdf();
-        $pdf->loadHtml($htmlContent);
-        $pdf->setPaper(array(0, 0, 216, 432), 'portrait');
-        $pdf->render();
-
-        $output = $pdf->output();
-
-        // return response($output, 200, [
-        //     'Content-Type' => 'application/pdf',
-        //     'Content-Disposition' => 'inline; filename="etiqueta.pdf"',
-        // ]);
-
-        session()->put('pdfData', base64_encode($output));
-
-        return redirect()->back();
-    }
-
-    public function clearPDFSessionData()
-    {
-        session()->forget('pdfData');
-        return response()->json(['message' => 'PDF session data cleared successfully']);
+        //
     }
 
     /**
@@ -282,12 +197,37 @@ class ProdcutionRecordController extends Controller
 
     public function reprint(ProdcutionRecord $prodcutionRecord)
     {
+        return view('production-record.reprint', ['prodcutionRecord' => $prodcutionRecord]);
+    }
+
+    /**
+     *
+     */
+    public function storeRepint(Request $request)
+    {
+        $printReason = $request->printReason;
+        $prodcutionRecordId = $request->prodcutionRecordId;
+
+        $prodcutionRecord = ProdcutionRecord::findOrFail($prodcutionRecordId);
+
+        $prodcutionRecord->update([
+            'print_count' => $prodcutionRecord->print_count + 1,
+        ]);
+
+        LabelPrint::create([
+            'print_count' => $prodcutionRecord->print_count,
+            'print_reason' => $printReason,
+            'prodcution_record_id' => $prodcutionRecordId,
+            'user_id' => Auth::id()
+        ]);
+
         $data = [
+            'print' => $prodcutionRecord->print_count,
             'id' => $prodcutionRecord->id,
-            'departament' => strtoupper(trim($prodcutionRecord->productionPlan->PartNumber->workcenter->line->departament->name)),
-            'workcenterNumber' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->number),
-            'workcenterName' => trim($prodcutionRecord->productionPlan->PartNumber->workcenter->name),
-            'partNumber' => trim($prodcutionRecord->productionPlan->PartNumber->number),
+            'departament' => strtoupper(trim($prodcutionRecord->productionPlan->partNumber->workcenter->line->departament->name)),
+            'workcenterNumber' => trim($prodcutionRecord->productionPlan->partNumber->workcenter->number),
+            'workcenterName' => trim($prodcutionRecord->productionPlan->partNumber->workcenter->name),
+            'partNumber' => trim($prodcutionRecord->productionPlan->partNumber->number),
             'quantity' => $prodcutionRecord->quantity,
             'sequence' => $prodcutionRecord->sequence,
             'date' => $prodcutionRecord->productionPlan->date,
@@ -300,7 +240,7 @@ class ProdcutionRecordController extends Controller
             'a' => "*** REIMPRESIÓN ***"
         ];
 
-        $qrData = $data['id'] . $data['partNumber'] . $data['quantity'] . $data['sequence'] . Carbon::parse($data['date'])->format('Ymd') . $data['shift'];
+        $qrData = $data['print'] . ',' . $data['id'] . ',' . $data['partNumber'] . ',' . $data['quantity'] . ',' . $data['sequence'] . ',' . Carbon::parse($data['date'])->format('Ymd') . ',' . $data['shift'];
         $qrCodeData = QrCode::size(600)->generate($qrData);
         $data['qrCode'] = $qrCodeData;
 
@@ -309,11 +249,17 @@ class ProdcutionRecordController extends Controller
         return View::make('label-example', ['dataArrayWithQr' => $dataArrayWithQr]);
     }
 
+    /**
+     *
+     */
     public function report()
     {
         return view('production-record.report');
     }
 
+    /**
+     *
+     */
     public function download(Request $request)
     {
         $validated = $request->validate(
@@ -457,7 +403,8 @@ class ProdcutionRecordController extends Controller
             'time_start' => $timeStart->format('Ymd H:i:s.v'),
             'time_end' => $timeEnd->format('Ymd H:i:s.v'),
             'minutes' => $minutes,
-            'description' => $request->description ?? ''
+            'description' => $request->description ?? '',
+            'reset_details' => $request->resetDetails ?? ''
         ]);
 
         // Actualizar el estado del plan de producción
@@ -466,5 +413,13 @@ class ProdcutionRecordController extends Controller
 
         // Redirigir a la ruta
         return redirect()->route('prodcution-record.create', ['production' => $productionPlan->id]);
+    }
+
+    /**
+     *
+     */
+    public function back()
+    {
+        return redirect('prodcution-record');
     }
 }

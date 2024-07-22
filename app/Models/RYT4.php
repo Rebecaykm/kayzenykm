@@ -10,7 +10,7 @@ class RYT4 extends Model
     use HasFactory;
 
     protected $connection = 'odbc-connection-lx834fu01';
-    protected $table = 'LX834FU01.RYT4';
+    protected $table = 'LX834FU02.RYT4';
 
     protected $fillable = [
         'R4SINO',

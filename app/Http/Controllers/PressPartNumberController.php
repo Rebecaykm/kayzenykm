@@ -14,9 +14,11 @@ class PressPartNumberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pressPartNumbers = PressPartNumber::orderBy('part_number', 'desc')->paginate(10);
+        $search = strtoupper($request->search) ?? '';
+
+        $pressPartNumbers = PressPartNumber::query()->where('part_number', 'LIKE', '%' . $search . '%')->orderBy('part_number', 'ASC')->paginate(10);
 
         return view('pressPartNumber.index', ['pressPartNumbers' => $pressPartNumbers]);
     }
@@ -86,25 +88,25 @@ class PressPartNumberController extends Controller
             'file' => 'required|mimes:xlsx'
         ]);
 
-        try {
+        // try {
             $file = $request->file('file');
 
             Excel::import(new PressPartNumberImport, $file);
 
             return back()->with('success', 'Importación completada con éxito.');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            Log::error('Error de validación durante la importación: ' . $e->getMessage());
+        // } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        //     $failures = $e->failures();
+        //     Log::error('Error de validación durante la importación: ' . $e->getMessage());
 
-            $errorMessages = '';
-            foreach ($failures as $failure) {
-                $errorMessages .= 'Fila ' . $failure->row() . ': ' . implode(', ', $failure->errors()) . '<br>';
-            }
+        //     $errorMessages = '';
+        //     foreach ($failures as $failure) {
+        //         $errorMessages .= 'Fila ' . $failure->row() . ': ' . implode(', ', $failure->errors()) . '<br>';
+        //     }
 
-            return back()->with('error', 'Errores de validación encontrados: <br>' . $errorMessages);
-        } catch (Exception $e) {
-            Log::error('Error inesperado durante la importación: ' . $e->getMessage());
-            return back()->with('error', 'Ocurrió un error inesperado durante la importación. Por favor, inténtalo de nuevo.');
-        }
+        //     return back()->with('error', 'Errores de validación encontrados: <br>' . $errorMessages);
+        // } catch (Exception $e) {
+        //     Log::error('Error inesperado durante la importación: ' . $e->getMessage());
+        //     return back()->with('error', 'Ocurrió un error inesperado durante la importación. Por favor, inténtalo de nuevo.');
+        // }
     }
 }

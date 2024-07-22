@@ -16,6 +16,26 @@
         </div>
         @endif
 
+        <div class="py-2">
+            @if (session('warning'))
+            <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{!! session('warning') !!}</span>
+            </div>
+            @endif
+
+            @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+            @endif
+        </div>
+
         <div class="flex justify-end mb-4">
             <a href="{{ route('prodcution-record.report') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                 {{ __('Reporte') }}
@@ -87,21 +107,23 @@
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     @if ($prodcutionRecord->status->name != 'CANCELADO')
-                                    <button onclick="imprimir('{{ $prodcutionRecord->prodcution_record_id }}')" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Reimprimir') }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                        </svg>
-                                        {{ __('Imprimir') }}
-                                    </button>
+                                    <a href="{{ route('prodcution-record.reprint', ['prodcution_record' => $prodcutionRecord->prodcution_record_id]) }}">
+                                        <button class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Reimprimir') }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                            </svg>
+                                            {{ __('Reimprimir') }}
+                                        </button>
+                                    </a>
                                     @else
                                     <span class="flex items-center justify-between text-xs font-medium leading-tight text-gray-500 bg-gray-200 rounded-full dark:text-gray-400 dark:bg-gray-700 px-2 py-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                         </svg>
-                                        {{ __('Imprimir') }}
+                                        {{ __('Reimprimir') }}
                                     </span>
                                     @endif
-                                    @if ($prodcutionRecord->status->name != 'CANCELADO')
+                                    <!-- @if ($prodcutionRecord->status->name != 'CANCELADO')
                                     <a href="{{ route('prodcution-record.cancel', $prodcutionRecord->prodcution_record_id) }}" class="flex items-center justify-between px-2 py-1 text-xs font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="{{ __('Cancelar') }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -115,7 +137,7 @@
                                         </svg>
                                         {{ __('Cancelar') }}
                                     </span>
-                                    @endif
+                                    @endif -->
                                 </div>
                             </td>
                         </tr>
@@ -143,15 +165,4 @@
             @endif
         </div>
     </div>
-    <script>
-        function imprimir(prodcutionRecordId) {
-
-            var ventanaImpresion = window.open('{{ url("prodcution-record") }}/' + prodcutionRecordId + '/reprint');
-
-            ventanaImpresion.onload = function() {
-                ventanaImpresion.print();
-                window.location.reload();
-            };
-        }
-    </script>
 </x-app-layout>

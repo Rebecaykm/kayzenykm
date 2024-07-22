@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('production_plans', function (Blueprint $table) {
-            $table->string('temp')->nullable();
-            $table->timestamp('production_start')->nullable();
-            $table->timestamp('production_end')->nullable();
+        Schema::table('unemployment_records', function (Blueprint $table) {
+            $table->longText('reset_details')->nullable();
         });
     }
 
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('production_plans', function (Blueprint $table) {
-            $table->dropColumn(['temp','production_start']);
+        Schema::table('unemployment_records', function (Blueprint $table) {
+            $table->dropColumn('reset_details');
         });
     }
 };

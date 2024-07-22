@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('press_part_numbers', function (Blueprint $table) {
+        Schema::create('label_prints', function (Blueprint $table) {
             $table->id();
-            $table->string('part_number');
-            $table->integer('pieces_per_hit')->default(0);
+            $table->integer('print_count')->nullable();
+            $table->longText('print_reason')->nullable();
+            $table->foreignId('prodcution_record_id')->constrained('prodcution_records');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('press_part_numbers');
+        Schema::dropIfExists('label_prints');
     }
 };

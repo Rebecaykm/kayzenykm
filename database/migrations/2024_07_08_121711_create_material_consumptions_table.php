@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('press_part_numbers', function (Blueprint $table) {
+        Schema::create('material_consumptions', function (Blueprint $table) {
             $table->id();
-            $table->string('part_number');
-            $table->integer('pieces_per_hit')->default(0);
+            $table->string('pack_number');
+            $table->foreignId('production_plan_id')->constrained('production_plans');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('press_part_numbers');
+        Schema::dropIfExists('material_consumptions');
     }
 };
