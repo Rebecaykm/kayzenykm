@@ -14,7 +14,7 @@ class ProductionPlan extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id', 'scrap_quantity', 'temp', 'production_start'
+        'part_number_id', 'plan_quantity', 'production_quantity', 'date', 'shift_id', 'status_id', 'scrap_quantity', 'temp', 'production_start', 'spm'
     ];
 
     /**
@@ -55,5 +55,13 @@ class ProductionPlan extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    /**
+     *
+     */
+    public function materialConsumptions(): HasMany
+    {
+        return $this->hasMany(MaterialConsumption::class);
     }
 }

@@ -61,7 +61,7 @@ class CompletionProductionPlan implements ShouldQueue
             $scrapRecord->update(['flag' => 1]);
         }
 
-        $this->productionPlan->update(['status_id' => $status->id]);
+        $this->productionPlan->update(['status_id' => $status->id, 'production_end' => Carbon::now()->format('Y-m-d H:i:s.v')]);
 
         try {
             $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");

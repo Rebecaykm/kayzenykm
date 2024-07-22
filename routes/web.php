@@ -175,7 +175,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('prodcution-record/cancel-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancelProduction'])->name('prodcution-record.cancel-production');
     Route::post('prodcution-record/unemployment-production', [\App\Http\Controllers\ProdcutionRecordController::class, 'unemploymentProduction'])->name('prodcution-record.unemployment-production');
 
-    Route::get('back',[\App\Http\Controllers\ProdcutionRecordController::class, 'back'])->name('back.back');
+    Route::get('back', [\App\Http\Controllers\ProdcutionRecordController::class, 'back'])->name('back.back');
 
     /**
      *
@@ -318,4 +318,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('press-part-number', [\App\Http\Controllers\PressPartNumberController::class, 'index'])->name('press-part-number.index');
     Route::get('press-part-number-file', [\App\Http\Controllers\PressPartNumberController::class, 'viewFile'])->name('press-part-number.file');
     Route::post('press-part-number-import', [\App\Http\Controllers\PressPartNumberController::class, 'importFile'])->name('press-part-number.import');
+
+    /**
+     *
+     */
+    Route::get('material-consumption/create', [\App\Http\Controllers\MaterialConsumptionController::class, 'create'])->name('material-consumption.create');
+    Route::post('material-consumption', [\App\Http\Controllers\MaterialConsumptionController::class, 'store'])->name('material-consumption.store');
+    Route::post('material-consumption-spm', [\App\Http\Controllers\MaterialConsumptionController::class, 'spm'])->name('material-consumption.spm');
+    Route::post('material-consumption-finish', [\App\Http\Controllers\MaterialConsumptionController::class, 'finish'])->name('material-consumption.finish');
 });

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProductionPlanController extends Controller
@@ -211,15 +212,24 @@ class ProductionPlanController extends Controller
         }
     }
 
+    /**
+     *
+     */
     public function finish(Request $request)
     {
         try {
             $productionPlan = ProductionPlan::findOrFail($request->production);
 
             if ($productionPlan->production_quantity > 0 || $productionPlan->scrap_quantity > 0) {
-                DB::transaction(function () use ($productionPlan) {
-                    CompletionProductionPlan::dispatch($productionPlan);
-                });
+                $allowedNames = ['estampado'];
+                $departamentoName = Str::lower(optional($productionPlan->partNumber->workcenter->line->departament)->name);
+                if (in_array($departamentoName, $allowedNames)) {
+                    return redirect()->route('material-consumption.create', ['productionPlanId' => $productionPlan->id]);
+                } else {
+                    DB::transaction(function () use ($productionPlan) {
+                        CompletionProductionPlan::dispatch($productionPlan);
+                    });
+                }
                 return redirect('production-plan')->with('success', 'La finalización de producción se ha realizado correctamente.');
             } else {
                 return redirect('production-plan')->with('error', '¡Error! No es posible finalizar la producción con valores en cero.');

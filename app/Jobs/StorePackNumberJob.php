@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\YHMIC;
 use App\Models\YT4;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -12,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Stmt\Return_;
+use Illuminate\Support\Facades\Session;
 
 class StorePackNumberJob implements ShouldQueue
 {
@@ -50,6 +49,8 @@ class StorePackNumberJob implements ShouldQueue
                 'Y4TIM' => Carbon::now()->format('His'),
                 'Y4USR' => Auth::user()->infor ?? '',
             ]);
+
+            Session::flash('success', 'El pack number se ha almacenado correctamente.');
         } catch (\Exception $e) {
             Log::error('Error al procesar el trabajo StorePackNumberJob: ' . $e->getMessage());
         }

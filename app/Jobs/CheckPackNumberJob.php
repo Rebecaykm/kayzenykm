@@ -11,12 +11,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CheckPackNumberJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $packNumber;
+
     /**
      * Create a new job instance.
      */
@@ -33,38 +35,50 @@ class CheckPackNumberJob implements ShouldQueue
         try {
             $yhmicData = YHMIC::query()->where('YIPCNO', 'LIKE', $this->packNumber . '%')->get();
 
-            if (!$yhmicData->isEmpty()) {
-                foreach ($yhmicData as $key => $yhmic) {
-                    $yt4 = YT4::where([
-                        ['Y4SINO', 'LIKE', $yhmic->YISINO . '%'],
-                        ['Y4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
-                        ['Y4TQTY', 'LIKE', $yhmic->YIPQTY . '%'],
-                        ['Y4PROD', 'LIKE', $yhmic->YIPROD . '%'],
-                        ['Y4ORDN', 'LIKE', $yhmic->YIORDN . '%']
-                    ])->first();
+            if ($yhmicData->isEmpty()) {
+                Session::flash('error', 'Pack Number no encontrado.');
+                return ;
+            }
 
-                    $ryt4 = RYT4::where([
-                        ['R4SINO', 'LIKE', $yhmic->YISINO . '%'],
-                        ['R4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
-                        ['R4TQTY', 'LIKE', $yhmic->YIPQTY . '%'],
-                        ['R4PROD', 'LIKE', $yhmic->YIPROD . '%'],
-                        ['R4ORDN', 'LIKE', $yhmic->YIORDN . '%']
-                    ])->first();
+            $packProcessed = false; // Variable para verificar si al menos un pack fue procesado
 
-                    if (is_null($yt4) && is_null($ryt4)) {
-                        StorePackNumberJob::dispatch(
-                            $yhmic->YISINO,
-                            $yhmic->YIPCNO,
-                            $yhmic->YIPQTY,
-                            $yhmic->YIPROD,
-                            $yhmic->YIORDN,
-                            $yhmic->YITORD,
-                        );
-                    }
+            foreach ($yhmicData as $yhmic) {
+                $yt4 = YT4::where([
+                    ['Y4SINO', 'LIKE', $yhmic->YISINO . '%'],
+                    ['Y4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
+                    ['Y4TQTY', 'LIKE', $yhmic->YIPQTY . '%'],
+                    ['Y4PROD', 'LIKE', $yhmic->YIPROD . '%'],
+                    ['Y4ORDN', 'LIKE', $yhmic->YIORDN . '%']
+                ])->first();
+
+                $ryt4 = RYT4::where([
+                    ['R4SINO', 'LIKE', $yhmic->YISINO . '%'],
+                    ['R4TINO', 'LIKE', $yhmic->YIPCNO . '%'],
+                    ['R4TQTY', 'LIKE', $yhmic->YIPQTY . '%'],
+                    ['R4PROD', 'LIKE', $yhmic->YIPROD . '%'],
+                    ['R4ORDN', 'LIKE', $yhmic->YIORDN . '%']
+                ])->first();
+
+                if (is_null($yt4) && is_null($ryt4)) {
+                    StorePackNumberJob::dispatch(
+                        $yhmic->YISINO,
+                        $yhmic->YIPCNO,
+                        $yhmic->YIPQTY,
+                        $yhmic->YIPROD,
+                        $yhmic->YIORDN,
+                        $yhmic->YITORD
+                    );
+
+                    $packProcessed = true;
                 }
+            }
+
+            if (!$packProcessed) {
+                session()->flash('error', 'Pack Number ya está registrado.');
             }
         } catch (\Exception $e) {
             Log::error('Error al procesar el trabajo CheckPackNumberJob: ' . $e->getMessage());
+            throw $e;
         }
     }
 }
