@@ -111,7 +111,7 @@ class ProdcutionRecordController extends Controller
             ]);
         } else {
             // Actualizar el estado del plan de producción
-            $productionPlan->update(['status_id' => $statusEnProceso->id, 'production_start' => Carbon::now()->format('Y-m-d H:i:s.v')]);
+            $productionPlan->update(['status_id' => $statusEnProceso->id, 'production_start' => Carbon::now()->format('Ymd H:i:s.v')]);
 
             // Redirigir de vuelta
             return redirect()->back();
