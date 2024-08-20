@@ -25,6 +25,9 @@
             </a>
         </div>
         -->
+
+        <!-- @livewire('refresh-part-number') -->
+
         <div class="px-4 py-3 gap-x-2 my-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
             <label class="block text-sm">
                 <div class="relative text-gray-500 focus-within:text-purple-600">
