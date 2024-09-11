@@ -28,28 +28,33 @@ class PartNumberMigrationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //                                  Nombre,  Numero,  Balance, Medida, Tipo,   Clase,   Paquete,   Cantidad, Planeador, Projecto, Creacion dia y hora
-        $partNumbers = IIM::query()
+        $counter = 0;
+
+        IIM::query()
             ->select('IDESC', 'IPROD', 'IOPB', 'IUMS', 'IITYP', 'ICLAS', 'IMSPKT', 'IMBOXQ', 'IBUYC', 'IREF04', 'IMENDT', 'IMENTM', 'IMPLC')
             ->orderBy('IMENDT', 'ASC')
-            ->get();
+            ->chunk(500, function ($partNumbers) use (&$counter) {
+                foreach ($partNumbers as $key => $partNumber) {
 
-        foreach ($partNumbers as $key => $partNumber) {
-            StorePartNumberJob::dispatch(
-                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IDESC),
-                preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IPROD),
-                // $partNumber->IOPB,
-                $partNumber->IUMS,
-                $partNumber->IITYP,
-                $partNumber->ICLAS,
-                $partNumber->IMSPKT,
-                $partNumber->IMBOXQ,
-                $partNumber->IBUYC,
-                $partNumber->IREF04,
-                // $partNumber->IMENDT,
-                // $partNumber->IMENTM
-                trim($partNumber->IMPLC)
-            );
-        }
+                    $counter++;
+                    Log::warning("PartNumberMigrationJob : $counter");
+
+                    StorePartNumberJob::dispatch(
+                        preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IDESC),
+                        preg_replace('/[^a-zA-Z0-9\/\-\s]/', '', $partNumber->IPROD),
+                        // $partNumber->IOPB,
+                        $partNumber->IUMS,
+                        $partNumber->IITYP,
+                        $partNumber->ICLAS,
+                        $partNumber->IMSPKT,
+                        $partNumber->IMBOXQ,
+                        $partNumber->IBUYC,
+                        $partNumber->IREF04,
+                        // $partNumber->IMENDT,
+                        // $partNumber->IMENTM
+                        trim($partNumber->IMPLC)
+                    );
+                }
+            });
     }
 }

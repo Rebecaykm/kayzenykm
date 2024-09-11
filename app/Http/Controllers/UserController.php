@@ -18,6 +18,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
@@ -227,5 +228,56 @@ class UserController extends Controller
 
         // Redireccionar al panel de control después del inicio de sesión exitoso
         return redirect()->route('chart.productionPlanChart');
+    }
+
+    /**
+     *
+     */
+    public function apiSignIn(Request $request)
+    {
+        // Validar los datos de entrada
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        try {
+
+            // Buscar al usuario por su nombre de usuario o correo electrónico
+            $user = User::query()
+                ->where('username', $request->email)
+                ->orWhere('email', $request->email)
+                ->first();
+
+            // Verificar si el usuario no existe
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Usuario no encontrado. Verifique sus credenciales.',
+                ], 404);
+            }
+
+            // Verificar la contraseña
+            if (!\Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'message' => 'Contraseña incorrecta. Verifique sus credenciales.',
+                ], 401);
+            }
+
+            // Crear un token para el usuario
+            $token = $user->createToken('api_token')->plainTextToken;
+
+            Log::info('Token generado: ' . $token);
+
+            // Devolver respuesta exitosa con el token
+            return response()->json([
+                'message' => 'Inicio de sesión exitoso',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log para capturar cualquier excepción
+            Log::error('Error en el inicio de sesión: ' . $e->getMessage());
+            return response()->json(['message' => 'Error interno del servidor.'], 500);
+        }
     }
 }

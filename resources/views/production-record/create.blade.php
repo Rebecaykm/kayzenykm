@@ -284,7 +284,6 @@
         function imprimirPDF() {
             document.getElementById("etiquetaButton").disabled = true;
 
-
             var productionPlanId = '{{ $productionPlan->id }}';
             var partNumberId = '{{ $productionPlan->partNumber->id }}';
 
