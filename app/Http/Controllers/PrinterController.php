@@ -18,7 +18,7 @@ class PrinterController extends Controller
      */
     public function index()
     {
-        $printers = Printer::orderBy('brand', 'DESC')->paginate(10);
+        $printers = Printer::orderBy('brand')->orderBy('ip')->paginate(10);
 
         return view('printer.index', ['printers' => $printers]);
     }
