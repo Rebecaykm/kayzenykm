@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProviderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'apiSignIn']);
+
+Route::post('receive-providers', [ProviderController::class, 'receiveProvider']);

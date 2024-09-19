@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
     Route::get('store-reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'storeRepint'])->name('prodcution-record.store-reprint');
+    Route::get('store-reprint-ip', [\App\Http\Controllers\ProdcutionRecordController::class, 'storeRepintIp'])->name('prodcution-record.store-reprint-ip');
 
     Route::get('prodcution-record/{prodcution_record}/cancel', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancel'])->name('prodcution-record.cancel');
 
