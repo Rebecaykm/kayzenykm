@@ -101,9 +101,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
      *
      */
     Route::resource('unemployment', \App\Http\Controllers\UnemploymentController::class);
-    Route::get('unemployment-file', [\App\Http\Controllers\UnemploymentController::class, 'viewFile'])->name('unemployment.file');
+    Route::get('unemployment-file', [\App\Http\Controllers\UnemploymentController::class, 'viewFile'])->name('unemployment.file'); // Crea los paros
     Route::post('unemployment-import', [\App\Http\Controllers\UnemploymentController::class, 'importFile'])->name('unemployment.import');
-    Route::get('unemployment-update-file', [\App\Http\Controllers\UnemploymentController::class, 'viewUpdateFile'])->name('unemployment.updateFile');
+    Route::get('unemployment-update-file', [\App\Http\Controllers\UnemploymentController::class, 'viewUpdateFile'])->name('unemployment.updateFile'); // Carga los paros con la linea
     Route::post('unemployment-update-import', [\App\Http\Controllers\UnemploymentController::class, 'importUpdateFile'])->name('unemployment.updateImport');
 
     /**
@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('prodcution-record/{prodcution_record}/reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'reprint'])->name('prodcution-record.reprint');
     Route::get('store-reprint', [\App\Http\Controllers\ProdcutionRecordController::class, 'storeRepint'])->name('prodcution-record.store-reprint');
+    Route::get('store-reprint-ip', [\App\Http\Controllers\ProdcutionRecordController::class, 'storeRepintIp'])->name('prodcution-record.store-reprint-ip');
 
     Route::get('prodcution-record/{prodcution_record}/cancel', [\App\Http\Controllers\ProdcutionRecordController::class, 'cancel'])->name('prodcution-record.cancel');
 

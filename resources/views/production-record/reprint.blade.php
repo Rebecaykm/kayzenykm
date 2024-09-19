@@ -83,21 +83,20 @@
             var prodcutionRecordId = '{{ $prodcutionRecord->id }}';
             var printReason = document.getElementById('printReason').value;
 
-            var url = '{{ route("prodcution-record.store-reprint") }}' + '?prodcutionRecordId=' + encodeURIComponent(prodcutionRecordId) + '&printReason=' + encodeURIComponent(printReason);
+            var printer = "{{ $prodcutionRecord->productionPlan->partNumber->workcenter->printer->ip ?? '' }}"
 
-            var ventanaImpresion = window.open(url);
+            if (printer) {
+                window.location.href = '{{ route("prodcution-record.store-reprint-ip") }}?prodcutionRecordId=' + encodeURIComponent(prodcutionRecordId) + '&printReason=' + encodeURIComponent(printReason);
+            } else {
+                var url = '{{ route("prodcution-record.store-reprint") }}' + '?prodcutionRecordId=' + encodeURIComponent(prodcutionRecordId) + '&printReason=' + encodeURIComponent(printReason);
 
-            ventanaImpresion.onload = function() {
-                ventanaImpresion.print();
-                setTimeout(function() {
-                    ventanaImpresion.close();
-                    regresar();
-                }, 1000);
-            };
-        }
+                var ventanaImpresion = window.open(url);
 
-        function regresar() {
-            window.location.href = '{{ route("back.back") }}';
+                ventanaImpresion.onload = function() {
+                    ventanaImpresion.print();
+                    window.location.reload();
+                };
+            }
         }
     </script>
 </x-app-layout>

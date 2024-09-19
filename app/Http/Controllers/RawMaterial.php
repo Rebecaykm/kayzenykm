@@ -40,7 +40,6 @@ class RawMaterial extends Controller
 
      try {
             CheckPackNumberJob::dispatch($packNumber);
-
             return redirect()->back();
         } catch (\Exception $e) {
             Log::error('Error al procesar el pack number: ' . $e->getMessage());

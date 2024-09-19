@@ -13,7 +13,7 @@ class Printer extends Model
     protected $dateFormat = 'Ymd H:i:s.v';
 
     protected $fillable = [
-        'brand', 'model', 'ip', 'port', 'name'
+        'brand', 'model', 'ip', 'port', 'name', 'description'
     ];
 
     public function workcenters(): HasMany
