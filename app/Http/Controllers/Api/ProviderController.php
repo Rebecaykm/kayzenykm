@@ -14,11 +14,12 @@ class ProviderController extends Controller
     public function receiveProvider(Request $request)
     {
         $validated = $request->validate([
-            'code' => 'required|string|max:255',
+            'code' => ['required', 'string', 'min:20'],
+            'created_at' => ['required']
         ]);
 
-        $date = Carbon::now()->format('d/m/Y');
-        $time = Carbon::now()->format('H:i:s');
+        $date = Carbon::parse($validated['created_at'])->format('d/m/Y');
+        $time = Carbon::parse($validated['created_at'])->format('H:i:s');
         $code = $validated['code'];
 
         $type = substr($code, 0, 1);
