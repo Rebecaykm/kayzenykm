@@ -50,9 +50,8 @@ class PlansubExport implements FromView
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where('IPROD', 'Not like', '%-830%')
             ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
+            ->distinct('IPROD')->ORDERBY('IPROD','DESC')
             ->get()->toArray();
 
             $finales = implode("' OR  MCFPRO='",   array_column($plan1, 'IPROD'));
@@ -60,7 +59,6 @@ class PlansubExport implements FromView
         $Sub = YMCOM::query()
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
             ->whereraw("(MCFPRO='" . $finales . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4' or  MCCCLS='F1')")
-            ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
             ->get()->toarray();
             $finaleswrk = implode("' OR  RPROD='",   array_column($Sub, 'MCCPRO'));
 
@@ -75,7 +73,6 @@ class PlansubExport implements FromView
 
         $valPDp  = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
-
             ->wherein('FPROD', array_column($Sub, 'MCCPRO'))
             ->where([
                 ['FRDTE', '>=', $hoy],
@@ -143,10 +140,6 @@ class PlansubExport implements FromView
                 if (count($hijo) != 0) {
                     array_push($hijos, $hijo);
                 }
-
-
-
-
             }
             $datos += ["hijos" => $hijos];
             array_push($general, $datos);

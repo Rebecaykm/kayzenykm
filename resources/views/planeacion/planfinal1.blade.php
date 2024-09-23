@@ -196,13 +196,7 @@
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
                                                             @php
-                                                                // if($prod['IPROD']=="BDTS53816                          ")
-                                                                // {
-                                                                //     dd($prod['IPROD'],  $reg6['FRDTE'],
-                                                                //     $turno = $reg6['FPCNO'],
-                                                                //     $tipo = $reg6['FTYPE'],
-                                                                //     $total = $reg6['FQTY']);
-                                                                // }
+
 
                                                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                                     $valFD = 0;
@@ -297,8 +291,8 @@
                                                         dd($info1, $valFiD,$valFiN );
                                                     }
                                                 @endphp --}}
-
-                                                    @if (strpos($padre, 'SOR') === false)
+{{--
+                                                    @if (strpos($padre, 'SOR') === false) --}}
                                                         <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
@@ -318,18 +312,18 @@
                                                             </label>
 
                                                         </div>
-                                                    @else
+
                                                         @php
                                                             $totalfirykm = 0;
                                                         @endphp
-                                                        <div
+                                                        {{-- <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 
                                                             <label class="block text-sm ">
 
                                                                 <input id='{{ $inD }}' name='{{ $inD }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='0'
+
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                     disabled />
                                                             </label>
@@ -337,13 +331,13 @@
 
                                                                 <input id='{{ $inN }}' name='{{ $inN }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='0'
+
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                     disabled />
                                                             </label>
 
-                                                        </div>
-                                                    @endif
+                                                        </div> --}}
+
 
 
 
