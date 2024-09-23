@@ -313,9 +313,9 @@
 
                                                         </div>
 
-                                                        @php
+                                                        {{-- @php
                                                             $totalfirykm = 0;
-                                                        @endphp
+                                                        @endphp --}}
                                                         {{-- <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 

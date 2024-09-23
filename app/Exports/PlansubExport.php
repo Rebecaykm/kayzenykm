@@ -81,7 +81,6 @@ class PlansubExport implements FromView
             ])
             ->orderby('FPROD', 'DESC')
             ->get()->toarray();
-
         $YMCOM = array_column($Sub, 'MCFPRO');
         $YMCOMCH = array_column($Sub, 'MCCPRO');
 
@@ -143,17 +142,10 @@ class PlansubExport implements FromView
             }
             $datos += ["hijos" => $hijos];
             array_push($general, $datos);
-
         }
-
-
-        // $datos = self::CargarforcastF1($plan1, $fecha, $dias);
-
         $reporte += ['res' => $general, 'fecha' => $fecha, 'dias' => $dias];
-
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='",      $partsrev);
-
         return view('planeacion.RepSubfinal', [
             'general' => $reporte
         ]);
