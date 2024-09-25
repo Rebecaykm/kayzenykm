@@ -308,7 +308,7 @@ class PlaneacionController extends Controller
                     array_push($datas, $dfa);
 
             }
-            if ($CONT == 5) {
+            if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
@@ -979,13 +979,7 @@ class PlaneacionController extends Controller
             $KFPfecha = array_column($valPDpadres, 'FRDTE');
             $KFPMtotal = array_column($valPDpadres, 'FQTY');
             $kftype = array_column($valPDpadres, 'FTYPE');
-
-
-
-
             $total = 0;
-
-
             foreach ($finaleskmr as $F1) {
 
                 while (($key3 = array_search($F1, $kmrprod)) !== false) {

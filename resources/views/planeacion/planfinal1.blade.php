@@ -53,12 +53,8 @@
                         <tr
                             class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
                             <th class=" header px-4 py-3 sticky ">Cont</th>
-
                             <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
-
-
                             <th class=" header px-4 py-3 sticky "></th>
-
                             @php
                                 $hoy = $fecha;
                                 $contp = 0;
@@ -122,16 +118,13 @@
                                 @case(112030)
                                 @case(112060)
                                 @case(114030)
-
                                 @break
-
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
                                             <td class="px-2 py-1 text-s  bg-teal-300">
                                                 {{ $contp }}
                                             </td>
-
                                             <td class="px-2 py-1 text-xs  bg-teal-300">
                                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>
