@@ -17,6 +17,9 @@
             <th rowspan="2">
                 Workcenter
             </th>
+            <th rowspan="2">
+                CLASE
+            </th>
             <th rowspan="2"></th>
             @php
                 $hoy = $fecha;
@@ -49,12 +52,10 @@
 
             @while ($hoy != $fin)
                 <th>
-
                     Dia
                 </th>
                 <th>
                     Noche
-
                 </th>
                 @php
                     $hoy = date('Ymd', strtotime($hoy . '+1 day'));
@@ -83,8 +84,13 @@
                     {{ $info['parte'] }}
                 </td>
                 <td>
+
                 </td>
                 <td>
+
+                </td>
+                <td>
+
                 </td>
 
                 <td>
@@ -106,9 +112,7 @@
                             $valPN = $fore['F' . $hoy . 'N'];
                         }
                         $totalp += $valPD + $valPN;
-                //         if ($info['parte']  =="DGH928B0XD                         ") {
-                //     dd($info1['padre'],$hoy ,$contdias, $fore);
-                // }
+
                     @endphp
                     <td>
                         {{ $valPD }}
@@ -131,6 +135,7 @@
                 @endphp
             </tr>
             @foreach ($infohijos as $hijo)
+
                 @php
                     if (array_key_exists('Forehijo', $hijo) == false) {
                         $hijop = [];
@@ -147,6 +152,9 @@
                     </td>
                     <td>
                         {{ $hijo['WKC'] }}
+                    </td>
+                    <td>
+                        {{ $hijo['class'] }}
                     </td>
 
                     <td>

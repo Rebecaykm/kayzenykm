@@ -34,7 +34,6 @@ class PlanFinalExport implements FromView
     }
     public function view(): View
     {
-
         $dias = $this->dias;
         $fecha = $this->fecha;
         $hoy = $this->fecha;
@@ -48,17 +47,9 @@ class PlanFinalExport implements FromView
             ['IID', '!=', 'IZ'],
             ['IMPLC', '!=', 'OBSOLETE'],
         ])
-        ->where([
-            ['IPROD', 'Not like', '%-SOR%'],
-            ['IPROD', 'Not like', '%-830%']]
-        )
-
         ->where('ICLAS', 'F1')
-        ->distinct('IPROD')
+        ->distinct('IPROD')->orderby('IPROD','DESC')
         ->get()->toArray();
-
-
-
         $totalpa = array();
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $finaArra = array_column($prods, 'IPROD');
@@ -88,9 +79,6 @@ class PlanFinalExport implements FromView
                 ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
-
-
-
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->whereraw("(RPROD='" .  $finaleswrk  . "')")
@@ -99,7 +87,6 @@ class PlanFinalExport implements FromView
         $prowrok = array_column($WCT, 'RWRKC');
         // $prodcqa = array_column($cond, 'IPROD');
         // $minba = array_column($cond, 'IMIN');
-
         foreach ($cadfinal as $prod) {
             $Tshop = 0;
             $Tplan = 0;
@@ -116,13 +103,11 @@ class PlanFinalExport implements FromView
             $padre  += ['parte' => $prod];
             $numpar = [];
             $numpaplan =  [];
-
             if (count($valfinales) > 0) {
                 $resreg4 = array_column($valfinales, 'MPROD');
                 $MRDTE = array_column($valfinales, 'MRDTE');
                 $MRCNO = array_column($valfinales, 'MRCNO');
                 $MQTY = array_column($valfinales, 'MQTY');
-
                 while (($key = array_search($prod, $resreg4)) != false) {
                     // echo "<script>console.log('Console: " .  $key . '/' . $prod . "' );</script>";
                     $dia =  $MRDTE[$key];
@@ -134,12 +119,8 @@ class PlanFinalExport implements FromView
                     unset($resreg4[$key]);
                 }
             }
-
             $padre  += ['total' => $totalP];
-
-
             if (count($valPDp) > 0) {
-
                 $resreg6 = array_column($valPDp, 'FPROD');
                 $FRDTE = array_column($valPDp, 'FRDTE');
                 $FRCNO = array_column($valPDp, 'FPCNO');

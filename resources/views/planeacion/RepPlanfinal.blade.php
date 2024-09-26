@@ -11,7 +11,6 @@
     <thead>
         <tr>
             <th rowspan="2">No Parte Final </th>
-
             <th rowspan="2"></th>
             <th rowspan="2">
                 Parte <br> Total
@@ -80,7 +79,7 @@
                 @case(114030)
                 @break
                 @default
-                    <tr>
+                    {{-- <tr>
                         <td rowspan="3">
                             {{ $info['parte'] }}<br>
 
@@ -154,8 +153,12 @@
                             $hoy = $fecha;
                             $contdias = 0;
                         @endphp
-                    </tr>
+                    </tr> --}}
                     <tr>
+                        <td >
+                            {{ $info['parte'] }}
+
+                        </td>
                         <td>
                             Firme YKM
                         </td>
@@ -166,12 +169,12 @@
                             @php
 
                                 if (array_key_exists('F' . $hoy . 'D', $info) == false) {
-                                    $valPD = '-';
+                                    $valPD = '0';
                                 } else {
                                     $valPD = $info['F' . $hoy . 'D'];
                                 }
                                 if (array_key_exists('F' . $hoy . 'N', $info) == false) {
-                                    $valPN = '-';
+                                    $valPN = '0';
                                 } else {
                                     $valPN = $info['F' . $hoy . 'N'];
                                 }

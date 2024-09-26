@@ -76,12 +76,7 @@ class PlaneacionController extends Controller
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
-                ->where(
-                    [
-                        ['IPROD', 'Not like', '%-SOR%'],
-                        ['IPROD', 'Not like', '%-830%']
-                    ]
-                )
+
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
@@ -102,7 +97,6 @@ class PlaneacionController extends Controller
                     ['IID', '!=', 'IZ'],
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
-                ->where('IPROD', 'Not like', '%-830%')
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
@@ -136,12 +130,7 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where(
-                [
-                    ['IPROD', 'Not like', '%-SOR%'],
-                    ['IPROD', 'Not like', '%-830%']
-                ]
-            )
+
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -286,7 +275,6 @@ class PlaneacionController extends Controller
                     $ar=["part_number"=>$namenA,"date"=>$fechasql];
                     array_push(  $datval, $ar);
                 }
-                if ($request->$plans != 0) {
 
                     $dfa = [
                         'K6PROD' => $namenA,
@@ -318,9 +306,9 @@ class PlaneacionController extends Controller
                     ];
                     array_push($datasql, $dfasql);
                     array_push($datas, $dfa);
-                }
+
             }
-            if ($CONT == 5) {
+            if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
@@ -347,7 +335,7 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where('IPROD', 'Not like', '%-830%')
+
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -399,7 +387,6 @@ class PlaneacionController extends Controller
                     $ar=["part_number"=>$namenA,"date"=>$fechasql];
                     array_push(  $datval, $ar);
                 }
-                if ($request->$plans != 0) {
 
                     $dfa = [
                         'K6PROD' => $namenA,
@@ -431,9 +418,9 @@ class PlaneacionController extends Controller
                     ];
                     array_push($datasql, $dfasql);
                     array_push($datas, $dfa);
-                }
+
             }
-            if ($CONT == 10) {
+            if ($CONT == 50) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
@@ -462,12 +449,6 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->where(
-                [
-                    ['IPROD', 'Not like', '%-SOR%'],
-                    ['IPROD', 'Not like', '%-830%']
-                ]
-            )
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -525,7 +506,7 @@ class PlaneacionController extends Controller
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
                 ->whereraw("(MCFPRO='" . $prod['IPROD'] . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
-                ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
+
                 ->get()->toarray();
 
             if (count($Sub) == 0) {
@@ -745,7 +726,6 @@ class PlaneacionController extends Controller
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->whereraw("(MCFPRO='" . $prod1 . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
-            ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
             ->get()->toarray();
 
 
@@ -766,7 +746,6 @@ class PlaneacionController extends Controller
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->whereraw("(MCCPRO='" . $child . "') AND ( MCFCLS='F1')")
-            ->where([['MCFPRO', 'not like', '%-830%'], ['MCFPRO', 'not like', '%-SOR%']])
             ->get()->toarray();
 
         $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
@@ -866,16 +845,6 @@ class PlaneacionController extends Controller
             ->whereraw("(RPROD='" . $cadsubswrk . "')")
             ->get()->toarray();
 
-
-        // $RFMA = FMA::query()
-        //     ->selectRaw('MPROD,MRDTE, SUM(MQREQ) as Total')
-        //     ->whereraw("(MPROD='" .  $cadsubKMR  . "')")
-        //     ->where([
-        //         ['MRDTE', '>=', $hoy],
-        //         ['MRDTE', '<', $totalF],
-        //     ])
-        //     ->groupBy('MPROD', 'MRDTE')
-        //     ->get()->toarray();
         $prowk = array_column($WCT, 'RPROD');
         $prowrok = array_column($WCT, 'RWRKC');
 
@@ -1010,13 +979,7 @@ class PlaneacionController extends Controller
             $KFPfecha = array_column($valPDpadres, 'FRDTE');
             $KFPMtotal = array_column($valPDpadres, 'FQTY');
             $kftype = array_column($valPDpadres, 'FTYPE');
-
-
-
-
             $total = 0;
-
-
             foreach ($finaleskmr as $F1) {
 
                 while (($key3 = array_search($F1, $kmrprod)) !== false) {

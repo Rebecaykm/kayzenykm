@@ -53,12 +53,8 @@
                         <tr
                             class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
                             <th class=" header px-4 py-3 sticky ">Cont</th>
-
                             <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
-
-
                             <th class=" header px-4 py-3 sticky "></th>
-
                             @php
                                 $hoy = $fecha;
                                 $contp = 0;
@@ -122,16 +118,13 @@
                                 @case(112030)
                                 @case(112060)
                                 @case(114030)
-
                                 @break
-
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
                                             <td class="px-2 py-1 text-s  bg-teal-300">
                                                 {{ $contp }}
                                             </td>
-
                                             <td class="px-2 py-1 text-xs  bg-teal-300">
                                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>
@@ -196,13 +189,7 @@
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
                                                             @php
-                                                                // if($prod['IPROD']=="BDTS53816                          ")
-                                                                // {
-                                                                //     dd($prod['IPROD'],  $reg6['FRDTE'],
-                                                                //     $turno = $reg6['FPCNO'],
-                                                                //     $tipo = $reg6['FTYPE'],
-                                                                //     $total = $reg6['FQTY']);
-                                                                // }
+
 
                                                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                                     $valFD = 0;
@@ -297,8 +284,8 @@
                                                         dd($info1, $valFiD,$valFiN );
                                                     }
                                                 @endphp --}}
-
-                                                    @if (strpos($padre, 'SOR') === false)
+{{--
+                                                    @if (strpos($padre, 'SOR') === false) --}}
                                                         <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
@@ -318,18 +305,18 @@
                                                             </label>
 
                                                         </div>
-                                                    @else
-                                                        @php
+
+                                                        {{-- @php
                                                             $totalfirykm = 0;
-                                                        @endphp
-                                                        <div
+                                                        @endphp --}}
+                                                        {{-- <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 
                                                             <label class="block text-sm ">
 
                                                                 <input id='{{ $inD }}' name='{{ $inD }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='0'
+
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                     disabled />
                                                             </label>
@@ -337,13 +324,13 @@
 
                                                                 <input id='{{ $inN }}' name='{{ $inN }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='0'
+
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                     disabled />
                                                             </label>
 
-                                                        </div>
-                                                    @endif
+                                                        </div> --}}
+
 
 
 
