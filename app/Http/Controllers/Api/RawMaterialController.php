@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\RYT4;
 use App\Models\YHMIC;
 use App\Models\YT4;
 use Carbon\Carbon;
@@ -35,21 +36,24 @@ class RawMaterialController extends Controller
                 $query = YHMIC::query()->where('YIPCNO', 'LIKE', $code . '%')->get();
 
                 foreach ($query as $key => $row) {
-                    $updateQuery = YT4::query()
-                        ->where([
-                            ['Y4SINO', $row->YISINO],
-                            ['Y4TINO', $row->YIPCNO],
-                            ['Y4PROD', $row->YIPROD],
-                            ['Y4ORDN', $row->YIORDN]
-                        ])
-                        ->update([
-                            'Y4TQTY' => $row->YIPQTY,
-                            'Y4TORD' => $row->YITORD,
-                            'Y4DAT' => $date,
-                            'Y4TIM' => $time
-                        ]);
 
-                    if (!$updateQuery) {
+                    $yt4 = YT4::where([
+                        ['Y4SINO', 'LIKE', $row->YISINO . '%'],
+                        ['Y4TINO', 'LIKE', $row->YIPCNO . '%'],
+                        ['Y4TQTY', 'LIKE', $row->YIPQTY . '%'],
+                        ['Y4PROD', 'LIKE', $row->YIPROD . '%'],
+                        ['Y4ORDN', 'LIKE', $row->YIORDN . '%']
+                    ])->first();
+
+                    $ryt4 = RYT4::where([
+                        ['R4SINO', 'LIKE', $row->YISINO . '%'],
+                        ['R4TINO', 'LIKE', $row->YIPCNO . '%'],
+                        ['R4TQTY', 'LIKE', $row->YIPQTY . '%'],
+                        ['R4PROD', 'LIKE', $row->YIPROD . '%'],
+                        ['R4ORDN', 'LIKE', $row->YIORDN . '%']
+                    ])->first();
+
+                    if (is_null($yt4) && is_null($ryt4)) {
                         YT4::query()->insert([
                             'Y4SINO' => $row->YISINO,
                             'Y4TINO' => $row->YIPCNO,
@@ -59,7 +63,6 @@ class RawMaterialController extends Controller
                             'Y4TORD' => $row->YITORD,
                             'Y4DAT' => $date,
                             'Y4TIM' => $time,
-                            'Y4USR' => Auth::user()->infor ?? '',
                         ]);
                     }
                 }
