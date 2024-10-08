@@ -125,7 +125,7 @@ class ExampleController extends Controller
             $seconds = $timeEnd->diffInSeconds($timeStart) + $temp;
             $minutes = sprintf('%02d.%02d', floor($seconds / 60), $seconds % 60);
 
-            $models = implode(', ', $partNumber->projects->map(fn ($project) => $project->model)->all());
+            $models = implode(', ', $partNumber->projects->map(fn($project) => $project->model)->all());
 
             for ($count = 1; $quantity > 0; $count++) {
 
@@ -398,21 +398,28 @@ class ExampleController extends Controller
     {
         $data = YK007::query()->orderBy('DRSDT')->get();
 
+        $sorPeriod = YK007::query()->select('DRSDT', 'DREDT')->where('DPROD', 'LIKE', '%-SOR%')->groupBy('DRSDT', 'DREDT')->get();
+
+        $mpPeriod = YK007::query()->select('DRSDT', 'DREDT')->where('DPROD', 'NOT LIKE', '%-SOR%')->groupBy('DRSDT', 'DREDT')->get();
+
         $reportData = [];
 
         foreach ($data as $index => $item) {
             $reportData[] = [
                 'no' => $index + 1,
                 'part_no' => trim($item->DPROD),
-                'forecast_quantity' => $item->DRFQY,
-                'firm_order_quantity' => $item->DROQY,
-                'defference_quantity' => $item->DRDQY,
+                'forecast_quantity' => number_format($item->DRFQY, 1, '.', ''),
+                'firm_order_quantity' => number_format($item->DROQY, 1, '.', ''),
+                'defference_quantity' => number_format($item->DRDQY, 1, '.', ''),
                 'defference_average' => $item->DRDRT,
             ];
         }
 
-        $pdf = PDF::loadView('report', compact('reportData'));
+        $timestamp = now()->format('YmdHis');
+        $filename = "{$timestamp}_Report Forecast vs Firme.pdf";
 
-        return $pdf->download('report.pdf');
+        $pdf = PDF::loadView('report', ['reportData' => $reportData, 'sorPeriod' => $sorPeriod, 'mpPeriod' => $mpPeriod]);
+
+        return $pdf->download($filename);
     }
 }
