@@ -327,4 +327,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('material-consumption', [\App\Http\Controllers\MaterialConsumptionController::class, 'store'])->name('material-consumption.store');
     Route::post('material-consumption-spm', [\App\Http\Controllers\MaterialConsumptionController::class, 'spm'])->name('material-consumption.spm');
     Route::post('material-consumption-finish', [\App\Http\Controllers\MaterialConsumptionController::class, 'finish'])->name('material-consumption.finish');
+
+    Route::get('test', [\App\Http\Controllers\ExampleController::class, 'test'])->name('test.report');
 });

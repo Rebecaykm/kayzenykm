@@ -6,6 +6,7 @@ use App\Models\PartNumber;
 use App\Models\ProdcutionRecord;
 use App\Models\ProductionPlan;
 use App\Models\Status;
+use App\Models\YK007;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
@@ -391,5 +392,27 @@ class ExampleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function test()
+    {
+        $data = YK007::query()->orderBy('DRSDT')->get();
+
+        $reportData = [];
+
+        foreach ($data as $index => $item) {
+            $reportData[] = [
+                'no' => $index + 1,
+                'part_no' => trim($item->DPROD),
+                'forecast_quantity' => $item->DRFQY,
+                'firm_order_quantity' => $item->DROQY,
+                'defference_quantity' => $item->DRDQY,
+                'defference_average' => $item->DRDRT,
+            ];
+        }
+
+        $pdf = PDF::loadView('report', compact('reportData'));
+
+        return $pdf->download('report.pdf');
     }
 }
