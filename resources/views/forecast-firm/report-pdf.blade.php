@@ -62,7 +62,7 @@
                 <img src="{{ public_path('img/ykm.svg') }}" alt="Logo" style="max-width: 100%; height: auto;">
             </td>
             <td style="width: 60%; text-align: center;">
-                <h1 style="margin: 0;">FORECAST VS. FIRME</h1>
+                <h1 style="margin: 0;">FORECAST VS. FIRM</h1>
             </td>
             <td style="width: 30%; text-align: right;">
                 <div class="date-section">
@@ -91,7 +91,7 @@
                 <th>NO.</th>
                 <th>PART NO.</th>
                 <th>FORECAST</th>
-                <th>FIRME</th>
+                <th>FIRM</th>
                 <th>DEFFERENCE</th>
                 <th>RATE %</th>
             </tr>

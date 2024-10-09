@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReportForecastFirmeExport;
 use App\Models\PartNumber;
 use App\Models\ProdcutionRecord;
 use App\Models\ProductionPlan;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
+use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
@@ -394,9 +396,20 @@ class ExampleController extends Controller
         //
     }
 
-    public function test()
+    /**
+     *
+     */
+    public function indexForecastFirm()
     {
-        $data = YK007::query()->orderBy('DRSDT')->get();
+        return view('forecast-firm.index');
+    }
+
+    /**
+     *
+     */
+    public function reportPdf()
+    {
+        $data = YK007::query()->orderBy('DRSDT', 'ASC')->get();
 
         $sorPeriod = YK007::query()->select('DRSDT', 'DREDT')->where('DPROD', 'LIKE', '%-SOR%')->groupBy('DRSDT', 'DREDT')->get();
 
@@ -416,10 +429,18 @@ class ExampleController extends Controller
         }
 
         $timestamp = now()->format('YmdHis');
-        $filename = "{$timestamp}_Report Forecast vs Firme.pdf";
+        $filename = "{$timestamp}_Report Forecast vs Firm.pdf";
 
-        $pdf = PDF::loadView('report', ['reportData' => $reportData, 'sorPeriod' => $sorPeriod, 'mpPeriod' => $mpPeriod]);
+        $pdf = PDF::loadView('forecast-firm.report-pdf', ['reportData' => $reportData, 'sorPeriod' => $sorPeriod, 'mpPeriod' => $mpPeriod]);
 
         return $pdf->download($filename);
+    }
+
+    public function reportExcel()
+    {
+        $timestamp = now()->format('YmdHis');
+        $filename = "{$timestamp}_Report Forecast vs Firm.xlsx";
+
+        return Excel::download(new ReportForecastFirmeExport, $filename);
     }
 }

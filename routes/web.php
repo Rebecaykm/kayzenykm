@@ -26,6 +26,10 @@ Route::resource('raw-material', \App\Http\Controllers\RawMaterial::class);
 
 Route::post('sign-in', [\App\Http\Controllers\UserController::class, 'signIn'])->name('signIn');
 
+Route::get('forecast-vs-firm', [\App\Http\Controllers\ExampleController::class, 'indexForecastFirm'])->name('forecast-vs-firm.index');
+Route::get('forecast-vs-firm-pdf', [\App\Http\Controllers\ExampleController::class, 'reportPdf'])->name('forecast-vs-firm.report-pdf');
+Route::get('forecast-vs-firm-excel', [\App\Http\Controllers\ExampleController::class, 'reportExcel'])->name('forecast-vs-firm.report-excel');
+
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::get('/', function () {
@@ -327,6 +331,4 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('material-consumption', [\App\Http\Controllers\MaterialConsumptionController::class, 'store'])->name('material-consumption.store');
     Route::post('material-consumption-spm', [\App\Http\Controllers\MaterialConsumptionController::class, 'spm'])->name('material-consumption.spm');
     Route::post('material-consumption-finish', [\App\Http\Controllers\MaterialConsumptionController::class, 'finish'])->name('material-consumption.finish');
-
-    Route::get('test', [\App\Http\Controllers\ExampleController::class, 'test'])->name('test.report');
 });
