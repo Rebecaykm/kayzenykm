@@ -18,7 +18,6 @@ use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
 use App\Exports\PlansubExport;
 use App\Jobs\ProductionPlanByArrayMigrationJob;
-
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -37,7 +36,6 @@ class PlaneacionController extends Controller
 
     public function index(Request $request)
     {
-
         $dias = $request->NP ?? '*';
         $fecha = $request->Seproject ?? '*';
         $plan = '';
@@ -192,16 +190,16 @@ class PlaneacionController extends Controller
                 break;
         }
 
-
         if ($request->Type == 1) {
-            return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_'.$fecha . '.xlsx');
+            return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_' . $fecha . '.xlsx');
         } else {
-            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro .'_'. $fecha . '.xlsx');
+            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro . '_' . $fecha . '.xlsx');
         }
     }
 
     public function store(Request $request)
     {
+        //
     }
 
     /**
@@ -251,8 +249,8 @@ class PlaneacionController extends Controller
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datas = [];
-        $datval=[];
-        $datajob=[];
+        $datval = [];
+        $datajob = [];
         $datasql = [];
         $CONT = 0;
         foreach ($keyes as $plans) {
@@ -271,42 +269,41 @@ class PlaneacionController extends Controller
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
                 if (!in_array($namenA,   $datajob)) {
-                    array_push(  $datajob,$namenA);
-                    $ar=["part_number"=>$namenA,"date"=>$fechasql];
-                    array_push(  $datval, $ar);
+                    array_push($datajob, $namenA);
+                    $ar = ["part_number" => $namenA, "date" => $fechasql];
+                    array_push($datval, $ar);
                 }
 
-                    $dfa = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $inp[1],
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    $dfasql = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $fechasql,
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $horasql,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    array_push($datasql, $dfasql);
-                    array_push($datas, $dfa);
-
+                $dfa = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $inp[1],
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $hora,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                $dfasql = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $fechasql,
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $horasql,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                array_push($datasql, $dfasql);
+                array_push($datas, $dfa);
             }
             if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
@@ -364,8 +361,8 @@ class PlaneacionController extends Controller
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datasql = [];
-        $datajob=[];
-        $datval=[];
+        $datajob = [];
+        $datval = [];
         $CONT = 0;
         foreach ($keyes as $plans) {
             $dfa = [];
@@ -383,42 +380,41 @@ class PlaneacionController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
                 if (!in_array($namenA,   $datajob)) {
-                    array_push(  $datajob,$namenA);
-                    $ar=["part_number"=>$namenA,"date"=>$fechasql];
-                    array_push(  $datval, $ar);
+                    array_push($datajob, $namenA);
+                    $ar = ["part_number" => $namenA, "date" => $fechasql];
+                    array_push($datval, $ar);
                 }
 
-                    $dfa = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $inp[1],
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $hora,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    $dfasql = [
-                        'K6PROD' => $namenA,
-                        'K6WRKC' => $WCT,
-                        'K6SDTE' => $fecha,
-                        'K6EDTE' => $fefin,
-                        'K6DDTE' => $fechasql,
-                        'K6DSHT' => $turno,
-                        'K6PFQY' => $request->$plans,
-                        'K6CUSR' => 'LXSECOFR',
-                        'K6CCDT' => $load,
-                        'K6CCTM' => $horasql,
-                        'K6FIL1' => '',
-                        'K6FIL2' => ''
-                    ];
-                    array_push($datasql, $dfasql);
-                    array_push($datas, $dfa);
-
+                $dfa = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $inp[1],
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $hora,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                $dfasql = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $fechasql,
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $horasql,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                array_push($datasql, $dfasql);
+                array_push($datas, $dfa);
             }
             if ($CONT == 50) {
                 $indata = YK006::query()->insert($datas);
@@ -668,7 +664,7 @@ class PlaneacionController extends Controller
             $padre += ['total' => $totalP];
 
             if (count($valPDp) > 0) {
-                $firme=[];
+                $firme = [];
                 $total = 0;
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
@@ -684,7 +680,7 @@ class PlaneacionController extends Controller
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
-                        $firme+= [$tipo . $dia . $valt => $total];
+                        $firme += [$tipo . $dia . $valt => $total];
                         // $planpadre += [$tipo . $dia . $valt => $total];
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
@@ -695,7 +691,6 @@ class PlaneacionController extends Controller
                     }
                 }
                 $planpadre += $firme;
-
             }
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
@@ -705,7 +700,7 @@ class PlaneacionController extends Controller
             $poskwr = array_search($prod['IPROD'], $prowk);
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
             $padre += $forcastp;
-            $padre+= ['F'=>$planpadre];
+            $padre += ['F' => $planpadre];
             // dd( $padre);
             $inF1 += ['padre' => $padre];
 
@@ -1078,6 +1073,5 @@ class PlaneacionController extends Controller
 
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         }
-
     }
 }
