@@ -19,6 +19,7 @@
                                     <option value="2,12,123,13,20,23,3">J03G/W</option>
                                     <option value="4,45,47">J59W</option>
                                     <option value="5,56,57">J59J</option>
+                                    <option value="8,811">660B</option>
                                 </select>
                             </label>
                         </div>
@@ -57,6 +58,7 @@
                                     <option value="2,12,123,13,20,23,3">J03G/J03W</option>
                                     <option value="4,45,47">J59W</option>
                                     <option value="5,56,57">J59J</option>
+                                    <option value="8,811">660B</option>
                                 </select>
                             </label>
                         </div>
@@ -93,6 +95,11 @@
                                     <option value="2,12,123,13,20,23,3">J03G/J03W</option>
                                     <option value="4,45,47">J59W</option>
                                     <option value="5,56,57">J59J</option>
+                                    <option value="8,811">660B</option>
+                                    <option value="11,811">920B</option>
+                                    <option value="7,79,710">J34A</option>
+                                    <option value="9,79">J34H</option>
+                                    <option value="10,710">J34X</option>
                                 </select>
                             </label>
                         </div>

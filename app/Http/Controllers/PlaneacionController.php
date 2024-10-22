@@ -188,6 +188,21 @@ class PlaneacionController extends Controller
             case ('5,56,57'):
                 $pro = 'J59J';
                 break;
+            case ('7,79,710'):
+                $pro = 'J34A';
+                break;
+            case ('9,79'):
+                $pro = 'J34H';
+                break;
+            case ('10,710'):
+                $pro = 'J34X';
+                break;
+            case ('8,811'):
+                $pro = '660B';
+                break;
+            case ('11,811'):
+                $pro = '920B';
+                break;
         }
 
         if ($request->Type == 1) {

@@ -195,19 +195,32 @@ class PlaneacionviewController extends Controller
             case ('5,56,57'):
                 $pro = 'J59J';
                 break;
+            case ('7,79,710'):
+                $pro = 'J34A';
+                break;
+            case ('9,79'):
+                $pro = 'J34H';
+                break;
+            case ('10,710'):
+                $pro = 'J34X';
+                break;
+            case ('8,811'):
+                $pro = '660B';
+                break;
+            case ('11,811'):
+                $pro = '920B';
+                break;
         }
 
 
         if ($request->Type == 1) {
-            return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_'.$fecha . '.xlsx');
+            return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_' . $fecha . '.xlsx');
         } else {
-            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro .'_'. $fecha . '.xlsx');
+            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro . '_' . $fecha . '.xlsx');
         }
     }
 
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -762,14 +775,14 @@ class PlaneacionviewController extends Controller
             ->get()->toarray();
 
 
-        $valPDpadres =ProductionPlan::query()
-        ->join('part_numbers','part_numbers.id','=', 'part_number_id')
-        ->join('shifts','shifts.id','=','shift_id')
-        ->select('number','plan_quantity','date','abbreviation')
-        ->wherein('number', array_column($KMRFINAL, 'MCFPRO'))
-        ->where('date','>=',$hoy)
-        ->where('date','<',$totalF)
-        ->get()->toarray();
+        $valPDpadres = ProductionPlan::query()
+            ->join('part_numbers', 'part_numbers.id', '=', 'part_number_id')
+            ->join('shifts', 'shifts.id', '=', 'shift_id')
+            ->select('number', 'plan_quantity', 'date', 'abbreviation')
+            ->wherein('number', array_column($KMRFINAL, 'MCFPRO'))
+            ->where('date', '>=', $hoy)
+            ->where('date', '<', $totalF)
+            ->get()->toarray();
 
 
 
@@ -825,14 +838,14 @@ class PlaneacionviewController extends Controller
 
 
         // -----------------------------------------FIRME PLAN
-        $valPD =ProductionPlan::query()
-        ->join('part_numbers','part_numbers.id','=', 'part_number_id')
-        ->join('shifts','shifts.id','=','shift_id')
-        ->select('number','plan_quantity','date','abbreviation')
-        ->wherein('number', $sub1 )
-        ->where('date','>=',$hoy)
-        ->where('date','<',$totalF)
-        ->get()->toarray();
+        $valPD = ProductionPlan::query()
+            ->join('part_numbers', 'part_numbers.id', '=', 'part_number_id')
+            ->join('shifts', 'shifts.id', '=', 'shift_id')
+            ->select('number', 'plan_quantity', 'date', 'abbreviation')
+            ->wherein('number', $sub1)
+            ->where('date', '>=', $hoy)
+            ->where('date', '<', $totalF)
+            ->get()->toarray();
 
         // KFP::query()
         //     ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
@@ -1041,13 +1054,13 @@ class PlaneacionviewController extends Controller
 
             foreach ($valPD as $reg3) {
                 if ($reg3['number'] == $subs) {
-                    $dia = date('Ymd',strtotime($reg3['date']));
+                    $dia = date('Ymd', strtotime($reg3['date']));
                     $turno = $reg3['abbreviation'];
                     $tipo = 'F';
                     $total = $reg3['plan_quantity'] + 0;
 
                     $numpaplan += [$tipo . $dia .  $turno  => $total];
-                        $Tfirme = $Tfirme + $total;
+                    $Tfirme = $Tfirme + $total;
                 }
             }
 
