@@ -62,6 +62,9 @@
                         class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
                         <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
                         <th class=" header px-4 py-3 sticky ">
+                            Nivel<br> componente
+                        </th>
+                        <th class=" header px-4 py-3 sticky ">
                             Parte <br> componente
                         </th>
                         <th class=" header px-4 py-3 sticky ">
@@ -126,6 +129,8 @@
                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                     {{ $info['parte'] }}
                                 </div>
+                            </td>
+                            <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
@@ -312,10 +317,14 @@
 
 
                                 @php
+
                                     array_push($histo, $datossubs['sub']);
                                 @endphp
                                 <tr class="text-gray-700 dark:text-gray-400 ">
                                     <td class="px-2 py-1 text-xs text-center ">
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center ">
+                                        {{$datossubs['level']}}
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>

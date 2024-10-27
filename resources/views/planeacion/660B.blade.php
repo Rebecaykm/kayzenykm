@@ -1,11 +1,11 @@
-<x-app-layout title="Planeacion">
+<x-app-layout title="Planeacion 660B">
     <div class="container grid px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Planeación</h2>
 
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ajustes de Planeación Finales</h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="post" action="{{ route('planeacion.create') }}">
+            <form method="post" action="{{ route('660.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="1">
                 <div class="flex flex-col space-y-4">
@@ -16,14 +16,7 @@
                                 <select id="SeProject1" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                                    <option value="2,12,123,13,20,23,3">J03G/W</option>
-                                    <option value="4,45,47">J59W</option>
-                                    <option value="5,56,57">J59J</option>
                                     <option value="8,811">660B</option>
-                                    <option value="11,811">920B</option>
-                                    <option value="7,79,710">J34A</option>
-                                    <option value="9,79">J34H</option>
-                                    <option value="10,710">J34X</option>
                                 </select>
                             </label>
                         </div>
@@ -34,10 +27,24 @@
                                     class="block w-full mt-1 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none form-input" />
                             </label>
                         </div>
+
+                        <div class="flex-auto">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Dias a pleanear</span>
+                                <select id="DiasD" name="DiasD" onchange="PCenable()"
+                                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </label>
+                        </div>
                     </div>
-                    <button class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    <button
+                        class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                         <span>Ajustar</span>
                     </button>
@@ -45,7 +52,8 @@
             </form>
         </div>
 
-        <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ajustes de Planeación Subcomponentes</h4>
+        <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ajustes de Planeación Subcomponentes
+        </h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <form method="post" action="{{ route('planeacion.create') }}">
@@ -60,13 +68,9 @@
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
                                     <option value="2,12,123,13,20,23,3">J03G/J03W</option>
-                                    <option value="4,45,47">J59W</option>
-                                    <option value="5,56,57">J59J</option>
+
                                     <option value="8,811">660B</option>
-                                    <option value="11,811">920B</option>
-                                    <option value="7,79,710">J34A</option>
-                                    <option value="9,79">J34H</option>
-                                    <option value="10,710">J34X</option>
+
                                 </select>
                             </label>
                         </div>
@@ -78,9 +82,12 @@
                             </label>
                         </div>
                     </div>
-                    <button class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    <button
+                        class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                         <span>Ajustar</span>
                     </button>
@@ -100,14 +107,9 @@
                                 <select id="SeProjectReport" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                                    <option value="2,12,123,13,20,23,3">J03G/J03W</option>
-                                    <option value="4,45,47">J59W</option>
-                                    <option value="5,56,57">J59J</option>
+
                                     <option value="8,811">660B</option>
-                                    <option value="11,811">920B</option>
-                                    <option value="7,79,710">J34A</option>
-                                    <option value="9,79">J34H</option>
-                                    <option value="10,710">J34X</option>
+
                                 </select>
                             </label>
                         </div>
@@ -122,17 +124,24 @@
                     <div class="flex flex-col sm:flex-row sm:space-x-3">
                         <div class="flex-auto">
                             <label class="block text-sm">
-                                <input type="radio" value="1" class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none" name="Type" />
+                                <input type="radio" value="1"
+                                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none"
+                                    name="Type" />
                                 <span class="ml-2">Final</span>
                                 <br>
-                                <input type="radio" value="2" class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none" name="Type" />
+                                <input type="radio" value="2"
+                                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none"
+                                    name="Type" />
                                 <span class="ml-2">Subcomponentes</span>
                             </label>
                         </div>
                         <div class="flex-auto">
-                            <button class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                            <button
+                                class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                                 </svg>
                                 <span>Descargar</span>
                             </button>
