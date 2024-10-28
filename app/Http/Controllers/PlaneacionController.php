@@ -280,7 +280,7 @@ class PlaneacionController extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
                 if (!in_array($namenA,   $datajob)) {
@@ -392,7 +392,7 @@ class PlaneacionController extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
                 if (!in_array($namenA,   $datajob)) {
                     array_push($datajob, $namenA);
