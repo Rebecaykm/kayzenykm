@@ -104,7 +104,7 @@ class PlaneacionS1Controller extends Controller
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.planfinal1S1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         }
     }
 
@@ -278,7 +278,7 @@ class PlaneacionS1Controller extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
                 if (!in_array($namenA,   $datajob)) {
@@ -286,7 +286,7 @@ class PlaneacionS1Controller extends Controller
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
                 }
-
+dd($fecha,$fefin);
                 $dfa = [
                     'K6PROD' => $namenA,
                     'K6WRKC' => $WCT,
@@ -330,9 +330,9 @@ class PlaneacionS1Controller extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-        $result = odbc_exec($conn, $query);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU.YMP006C";
+        // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
 
@@ -390,7 +390,7 @@ class PlaneacionS1Controller extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
                 if (!in_array($namenA,   $datajob)) {
                     array_push($datajob, $namenA);

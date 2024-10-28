@@ -349,6 +349,7 @@ Route::post('planeacion660/create', [\App\Http\Controllers\Planeacion660bControl
 Route::get('planeacionS1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'index'])->name('planeacionS1.index');
 // Route::get('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
 Route::post('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
-      
+Route::post('planeacionS1/updatef1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'updateF1'])->name('planeacionS1.updatef1');
+
 
 });
