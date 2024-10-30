@@ -89,19 +89,13 @@ class Planeacion660bController extends Controller
     {
         $totalpa = array();
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-
         $finaArra = array_column($prods, 'IPROD');
-        $finales = implode("' OR  MPROD='", $finaArra);
-        // $finalesecl = implode("' OR  LPROD='", $finaArra);
-        // $finaleswrk = implode("' OR  RPROD='", $finaArra);
-        // $Qa = implode("' OR  IPROD='", $finaArra);
-
         $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
             ->where('MRDTE', '<', $totalF)
             ->where('MTYPE', '=', 'F')
-            ->whereraw("(MPROD='" . $finales . "')")
+            ->wherein("MPROD" , $finaArra )
             ->get();
         $MBMS = ECL::query()
             ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
@@ -112,22 +106,10 @@ class Planeacion660bController extends Controller
             ])
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
             ->get();
-        // $cond = IIM::query()
-        //     ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN', 'IMSPKT')
-        //     ->whereraw("(IPROD='" . $Qa . "')")
-        //     ->get()->toArray();
-
-        // $prodcqa = array_column($cond, 'IPROD');
-        // $pqa = array_column($cond, 'IMBOXQ');
-        // $typkt = array_column($cond, 'IMSPKT');
-
-
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->wherein("RPROD",$finaArra )
             ->get()->toarray();
-
-
         $prowk = array_column($WCT, 'RPROD');
         $wk = array_column($WCT, 'RWRKC');
         $valPDp = KFP::query() //plan
@@ -138,22 +120,17 @@ class Planeacion660bController extends Controller
                 ['FRDTE', '<', $totalF],
             ])
             ->get();
-
         foreach ($prods as $prod) {
-
-
             $inF1 = array();
             $padre = [];
             $dia = $hoy;
-            $connt = 1;
-            $i = 0;
             $planpadre = [];
             $totalP = 0;
             $tPlan = 0;
             $tfirme = 0;
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
-            //obtener forcaste
+
             if ($valfinales->count() > 0) {
                 $total = 0;
                 foreach ($valfinales as $reg4) {
@@ -180,46 +157,58 @@ class Planeacion660bController extends Controller
             }
 
             $padre += ['total' => $totalP];
-
             if ($valPDp->count() > 0) {//plan de padre
                 $firme = [];
                 $total = 0;
-
                 foreach ($valPDp as $reg6) {
                     if ($reg6->FPROD == $prod['IPROD']) {
-
                         $dia = $reg6->FRDTE;
                         $turno = $reg6->FPCNO;
                         $tipo = $reg6->FTYPE;
                         $total = $reg6->FQTY + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
-                        $firme += [$tipo . $dia . $valt => $total];
-
                         if ($tipo == 'P') {
-
-//plan /qbox
-
-                            $plan_dias=(round((round($totalP/3, 0)/$prod['IMBOXQ']),0))*$prod['IMBOXQ'];
+                            $tipo='F';
+                            $plan_dias=(round((($totalP/$diasd)/$prod['IMBOXQ']),0))*$prod['IMBOXQ'];
+// dd($plan_dias+$prod['IMBOXQ'],$prod['IMBOXQ'],$totalP);
                             if($plan_dias<$totalP)
                             {
-                                $plan_dias+=$prod['IMBOXQ'];
+                                $plan_dias1= $plan_dias+$prod['IMBOXQ'];
+                            }
+                            else{
+                                $plan_dias1= $plan_dias;
                             }
 
+                            if($diasd==2)
+                            {
 
+                                $dia1 = date('Ymd', strtotime($hoy . '+' . 1 . ' day'));
+                                $dia2 = date('Ymd', strtotime($hoy . '+' . 3 . ' day'));
 
-                            // dd( $totalP,$prod['IMBOXQ'],$plan_dias,$diasd);
-                            // $tPlan = $tPlan + $total;
+                                $firme += [$tipo . $dia1 . $valt =>  $plan_dias1];
+
+                                $firme += [$tipo . $dia2 . $valt =>  $plan_dias];
+                            }else{
+
+                                $dia1 = date('Ymd', strtotime($hoy . '+' . 0 . ' day'));
+                                $dia2 = date('Ymd', strtotime($hoy . '+' . 2 . ' day'));
+                                $dia3 = date('Ymd', strtotime($hoy . '+' . 4 . ' day'));
+                                $firme += [$tipo . $dia1 . $valt =>  $plan_dias1];
+
+                                $firme += [$tipo . $dia2 . $valt =>  $plan_dias];
+
+                                $firme += [$tipo . $dia3 . $valt =>  $plan_dias];
+
+                            }
+                            $tfirme = $tfirme + $total;
                         } else {
-
                             $firme += [$tipo . $dia . $valt => $total];
-
                             $tfirme = $tfirme + $total;
                         }
                     }
                 }
                 $planpadre += $firme;
             }
-// dd($padre );
             $padre += ['Qty' => $prod['IMBOXQ'] ?? 0];
             $padre += ['typkt' => $prod['IMSPKT'] ?? 'N/A'];
             $padre += ['tPlan' => $tPlan];
@@ -228,12 +217,9 @@ class Planeacion660bController extends Controller
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
             $padre += $forcastp;
             $padre += ['F' => $planpadre];
-            // dd( $padre);
             $inF1 += ['padre' => $padre];
-
             array_push($totalpa, $inF1);
         }
-
         return $totalpa;
     }
     /**

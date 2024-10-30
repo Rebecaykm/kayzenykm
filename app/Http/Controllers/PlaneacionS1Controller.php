@@ -730,11 +730,10 @@ dd($fecha,$fefin);
 
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
     {
-        //  $Sub = self::cargar($prod1);
 
-        $Sub = IIM::query()
-            ->join('LX834FU01.YMCOM', 'MCCPRO', '=', 'IPROD')
-            ->join('LX834F01.YMWEY', 'IPROD', '=', 'ZEITE')
+        $Sub = YMCOM::query()
+            ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
+            ->join('LX834F01.YMWEY', 'MCCPRO', '=', 'ZEITE')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'ZEITE', 'ZEQREQ', 'ZEID', 'ZELEVE ')
             ->where([
                 ['IID', '!=', 'IZ'],
@@ -748,8 +747,10 @@ dd($fecha,$fefin);
 
         $niveles = YMCOM::query()
             ->join('LX834F01.IIM', 'MCFPRO', '=', 'IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
-            ->whereraw("(MCCCLS='M2' or  MCCCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
+
+
+            ->select('MCCPRO', 'MCFPRO', 'MCCCLS', )
+            ->whereraw("(MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
             ->wherein('MCFPRO', $sub1)->get();
 
 
@@ -844,7 +845,7 @@ dd($fecha,$fefin);
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->wherein("MCCPRO", $sub1)
-            ->whereraw("(MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
+                        ->whereraw("(MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
             ->get()->toarray();
 
         $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
@@ -898,15 +899,19 @@ dd($fecha,$fefin);
         $pqa = array_column($cond, 'IMBOXQ');
         $minba = array_column($cond, 'IMIN');
         $typkt = array_column($cond, 'IMSPKT');
-        $sepa = [];
+        $sepa=[];
+        $sepa_niveles = [];
         $arrniv = [];
         if ($prod1 == "DA6A56H1X                          ") {
-            foreach ($sub1  as $su) {
-                $arrniv = self::recore( $su, $niveles);
+            $resultados = $Sub->filter(function ($padre) use ($prod1) {
+                return $padre->MCFPRO == $prod1 ;
+            });
+            foreach ( $resultados  as $su) {
+                $arrniv = self::recore( $su->MCCPRO, $niveles);
+                $sepa_niveles+=[$su->MCCPRO=>$arrniv];
             }
+            DD($prod1, $sepa_niveles);
         }
-
-
 
         foreach ($Sub as $subs) {
             $padreskmr = [];
@@ -1137,11 +1142,25 @@ dd($fecha,$fefin);
     public function recore($prod, $arre)
     {
         $pad = $prod;
+        $arr=[];
         $resultados = $arre->filter(function ($padre) use ($pad) {
             return $padre->MCFPRO == $pad;
         });
-
-        dd($prod, $arre, $resultados);
+        if($arre->count()>1)
+        {
+            foreach( $resultados as $item)
+            {
+                if($item->MCCPRO!=$item->MCFPRO)
+                {
+                    $recur=self::recore($item->MCCPRO, $arre);
+                    $arr+=[$item->MCCPRO=>$recur];
+                }else
+                {
+                    $arr+=[$item->MCCPRO=> $item->MCCPRO];
+                }
+            }
+        }
+       return $arr;
     }
 
     public function Buscar(Request $request)
