@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class YMLTM extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $connection = 'odbc-connection-lx834fu01';
     protected $table = 'LX834FU01.YMLTM';
 

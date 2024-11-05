@@ -353,5 +353,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     //ofset
     Route::get('offset', [\App\Http\Controllers\OffSetitemController::class, 'index'])->name('offset.index');
+    Route::post('offset/store', [\App\Http\Controllers\OffSetitemController::class, 'store'])->name('offset.store');
+    Route::post('offset/create', [\App\Http\Controllers\OffSetitemController::class, 'create'])->name('offset.create');
+
 
 });

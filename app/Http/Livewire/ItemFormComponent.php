@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\YMLTM;
 use Livewire\Component;
 
 class ItemFormComponent extends Component
@@ -15,16 +16,14 @@ class ItemFormComponent extends Component
 
     public function mount()
     {
-        $this->registros = TuModelo::all()->toArray(); // Carga los registros como un array
+        $this->registros = YMLTM::all()->toArray(); // Carga los registros como un array
     }
 
     public function actualizarFila($index)
     {
         $this->validate();
-
-        $registro = TuModelo::find($this->registros[$index]['id']);
+        $registro = YMLTM::find($this->registros[$index]['id']);
         $registro->update($this->registros[$index]);
-
         session()->flash('mensaje', 'Registro actualizado correctamente');
     }
 
