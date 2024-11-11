@@ -188,6 +188,21 @@ class PlaneacionController extends Controller
             case ('5,56,57'):
                 $pro = 'J59J';
                 break;
+            case ('7,79,710'):
+                $pro = 'J34A';
+                break;
+            case ('9,79'):
+                $pro = 'J34H';
+                break;
+            case ('10,710'):
+                $pro = 'J34X';
+                break;
+            case ('8,811'):
+                $pro = '660B';
+                break;
+            case ('11,811'):
+                $pro = '920B';
+                break;
         }
 
         if ($request->Type == 1) {
@@ -265,7 +280,7 @@ class PlaneacionController extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
                 if (!in_array($namenA,   $datajob)) {
@@ -377,7 +392,7 @@ class PlaneacionController extends Controller
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
+                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
                 if (!in_array($namenA,   $datajob)) {
                     array_push($datajob, $namenA);
