@@ -80,7 +80,7 @@ class PlaneacionoffsetController extends Controller
 
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            dd( $cadepar );
+            // dd( $cadepar );
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
@@ -566,7 +566,7 @@ class PlaneacionoffsetController extends Controller
                 $inF1 += ['padre' => $padre];
 // dd();
               $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias, $forcastp,    $Sub );
-//                 $inF1 += ['hijos' => $datossub];
+                $inF1 += ['hijos' => $datossub];
                  array_push($totalpa, $inF1);
             }
         }
@@ -574,8 +574,6 @@ class PlaneacionoffsetController extends Controller
 
 
 
-
-dd($totalpa);
 
         return $totalpa;
     }
