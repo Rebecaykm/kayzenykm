@@ -253,12 +253,12 @@
                                                                 if (array_key_exists('E' . $hoy . 'D', $Enbarque) == false) {
                                                                     $EnbarqueD = 0;
                                                                 } else {
-                                                                   $EnbarqueD =  $EnbarqueD['E' . $hoy . 'D'] + 0;
+                                                                   $EnbarqueD =  $Enbarque['E' . $hoy . 'D'] ;
                                                                 }
                                                                 if (array_key_exists('E' . $hoy . 'N', $Enbarque) == false) {
                                                                    $EnbarqueN = 0;
                                                                 } else {
-                                                                   $EnbarqueN =  $EnbarqueD['E' . $hoy . 'N'] + 0;
+                                                                   $EnbarqueN =  $Enbarque['E' . $hoy . 'N'] ;
                                                                 }
 
 
