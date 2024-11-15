@@ -97,6 +97,7 @@ class Planeacion660bController extends Controller
             ->where('MTYPE', '=', 'F')
             ->wherein("MPROD" , $finaArra )
             ->get();
+            // dd($valfinales->toarray() );
         $MBMS = ECL::query()
             ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
             ->wherein("LPROD" ,$finaArra )
@@ -168,9 +169,9 @@ class Planeacion660bController extends Controller
                         $total = $reg6->FQTY + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
                         if ($tipo == 'P') {
-                            $tipo='F';
+                            $tipo='E';
                             $plan_dias=(round((($totalP/$diasd)/$prod['IMBOXQ']),0))*$prod['IMBOXQ'];
-// dd($plan_dias+$prod['IMBOXQ'],$prod['IMBOXQ'],$totalP);
+
                             if($plan_dias<$totalP)
                             {
                                 $plan_dias1= $plan_dias+$prod['IMBOXQ'];
@@ -216,10 +217,11 @@ class Planeacion660bController extends Controller
             $poskwr = array_search($prod['IPROD'], $prowk);
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
             $padre += $forcastp;
-            $padre += ['F' => $planpadre];
+            $padre += ['E' => $planpadre];
             $inF1 += ['padre' => $padre];
             array_push($totalpa, $inF1);
         }
+
         return $totalpa;
     }
     /**

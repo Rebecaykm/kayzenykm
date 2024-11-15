@@ -1,10 +1,4 @@
 <x-app-layout title="Plan">
-    {{-- @php
-        include_once '../app/Http/Controllers/registros.php';
-        $obj = new registros();
-        $projecto = $obj->Projecto($tp);
-        // $dias = ;
-    @endphp --}}
 
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">

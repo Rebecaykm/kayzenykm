@@ -41,7 +41,7 @@
                 </div>
             </div>
             {{
-                $dias=15;
+                $dias=12;
             }}
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
@@ -125,7 +125,7 @@
                                 @break
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
-                                        @if (strpos($padre, 'SOR') === false)
+                                        {{-- @if (strpos($padre, 'SOR') === false) --}}
                                             <td class="px-2 py-1 text-s  bg-teal-300">
                                                 {{ $contp }}
                                             </td>
@@ -137,7 +137,7 @@
                                                     Container {{$info['typkt']}}
                                                 </div>
                                             </td>
-                                        @else
+                                        {{-- @else
                                             <td class="px-2 py-1 text-s bg-yellow-300">
                                                 {{ $contp }}
                                             </td>
@@ -149,7 +149,7 @@
                                                     WRKcenter {{ $info['WRC'] }}
                                                 </div>
                                             </td>
-                                        @endif
+                                        @endif --}}
                                         <td class="px-2 py-1 text-xs  bg-emerald-100">
                                             <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
@@ -183,7 +183,7 @@
                                         </td>
 
                                         @php
-                                            $hoy = $fecha;
+                                            $hoy = date('Ymd', strtotime($fecha . '-' . 4 . ' day'));;
                                             $contdias = 0;
                                             $namenA = strtr($padre, ' ', '_');
                                             $totalfirM = 0;
@@ -192,10 +192,11 @@
                                             $valeclD = 0;
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
+
                                         @endphp
                                         @while ($contdias < $dias)
-                                            @if ($contdias == 7)
-                                            @else
+
+
                                                 <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
@@ -213,7 +214,7 @@
                                                                 } else {
                                                                     $valFN = $info['For' . $hoy . 'N'];
                                                                 }
-
+                                                                $Enbarque=$info['E'];
                                                                 if (array_key_exists('F',$info) == false)
                                                                 {
 
@@ -247,6 +248,19 @@
                                                                 } else {
                                                                     $valeclN = $info['ecl' . $hoy . 'N'] + 0;
                                                                 }
+
+
+                                                                if (array_key_exists('E' . $hoy . 'D', $Enbarque) == false) {
+                                                                    $EnbarqueD = 0;
+                                                                } else {
+                                                                   $EnbarqueD = $info['E' . $hoy . 'D'] + 0;
+                                                                }
+                                                                if (array_key_exists('E' . $hoy . 'N', $Enbarque) == false) {
+                                                                   $EnbarqueN = 0;
+                                                                } else {
+                                                                   $EnbarqueN = $info['E' . $hoy . 'N'] + 0;
+                                                                }
+
 
                                                                 $valRD = 0;
                                                                 $valRN = 0;
@@ -293,13 +307,13 @@
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
 
-                                                            <input value='{{ $valeclD }}'
+                                                            <input value='{{ $EnbarqueD }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
                                                         <label class="block text-sm ">
 
-                                                            <input value='{{ $valeclN }}'
+                                                            <input value='{{ $EnbarqueN }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
@@ -361,7 +375,7 @@
 
 
                                                 </td>
-                                            @endif
+
 
 
                                             @php
