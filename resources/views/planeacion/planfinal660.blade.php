@@ -253,12 +253,12 @@
                                                                 if (array_key_exists('E' . $hoy . 'D', $Enbarque) == false) {
                                                                     $EnbarqueD = 0;
                                                                 } else {
-                                                                   $EnbarqueD = $info['E' . $hoy . 'D'] + 0;
+                                                                   $EnbarqueD =  $EnbarqueD['E' . $hoy . 'D'] + 0;
                                                                 }
                                                                 if (array_key_exists('E' . $hoy . 'N', $Enbarque) == false) {
                                                                    $EnbarqueN = 0;
                                                                 } else {
-                                                                   $EnbarqueN = $info['E' . $hoy . 'N'] + 0;
+                                                                   $EnbarqueN =  $EnbarqueD['E' . $hoy . 'N'] + 0;
                                                                 }
 
 
@@ -345,35 +345,6 @@
                                                             </label>
 
                                                         </div>
-
-                                                        {{-- @php
-                                                            $totalfirykm = 0;
-                                                        @endphp --}}
-                                                        {{-- <div
-                                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
-
-                                                            <label class="block text-sm ">
-
-                                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                    disabled />
-                                                            </label>
-                                                            <label class="block text-sm ">
-
-                                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                    disabled />
-                                                            </label>
-
-                                                        </div> --}}
-
-
-
-
                                                 </td>
 
 
@@ -396,6 +367,13 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input id='totalFirMMVO' name='totalFirMMVO' value="{{ $totalfirM }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input id='totalFirMMVO' name='totalFirMMVO' value="-"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
