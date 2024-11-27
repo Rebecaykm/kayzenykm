@@ -192,7 +192,6 @@
                                             $valeclD = 0;
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
-
                                         @endphp
                                         @while ($contdias < $dias)
 
@@ -202,10 +201,10 @@
                                                         <label class="block text-sm ">
                                                             @php
 
-
                                                                 if (array_key_exists('For' . $hoy . 'D', $info) == false) {
                                                                     $valFD = 0;
                                                                 } else {
+                                                                    // dd('For' . $hoy . 'D');
                                                                     $valFD = $info['For' . $hoy . 'D'];
                                                                 }
 

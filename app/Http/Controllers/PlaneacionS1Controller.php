@@ -286,7 +286,7 @@ class PlaneacionS1Controller extends Controller
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
                 }
-dd($fecha,$fefin);
+
                 $dfa = [
                     'K6PROD' => $namenA,
                     'K6WRKC' => $WCT,

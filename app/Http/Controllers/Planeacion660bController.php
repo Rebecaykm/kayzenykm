@@ -49,7 +49,7 @@ class Planeacion660bController extends Controller
 
         $tipo = $request->Planeacion;
 
-        $dias = 8;
+        $dias = 7;
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
         $diasd=$request->DiasD;
@@ -64,10 +64,10 @@ class Planeacion660bController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
+
         $padres = array_chunk($plan1, 10);
         if ($tipo == 2) {
             $total = count($padres);
@@ -88,16 +88,18 @@ class Planeacion660bController extends Controller
     function CargarforcastF1only($prods, $hoy, $dias,$diasd)
     {
         $totalpa = array();
-        $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+        $totalF = date('Ymd', strtotime($hoy . '+ 7 day'));
         $finaArra = array_column($prods, 'IPROD');
         $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $hoy)
-            ->where('MRDTE', '<', $totalF)
-            ->where('MTYPE', '=', 'F')
-            ->wherein("MPROD" , $finaArra )
+            ->where('MRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 2 . ' day')))
+            ->where('MRDTE', '<=',$totalF)
+            ->wherein("MPROD" ,$finaArra )
             ->get();
-            // dd($valfinales->toarray() );
+
+
+
+
         $MBMS = ECL::query()
             ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
             ->wherein("LPROD" ,$finaArra )
@@ -117,10 +119,12 @@ class Planeacion660bController extends Controller
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->wherein("FPROD" , $finaArra)
             ->where([
-                ['FRDTE', '>=', $hoy],
+                ['FRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 1 . ' day'))],
                 ['FRDTE', '<', $totalF],
             ])
             ->get();
+
+
         foreach ($prods as $prod) {
             $inF1 = array();
             $padre = [];
@@ -141,10 +145,13 @@ class Planeacion660bController extends Controller
                         $total = $reg4->MQTY + 0;
                         $valt = substr($turno, 4, 1);
                         $forcastp += ['For' . $dia . $valt => $total];
+                        //  dd(  $forcastp, 'fgsdfgbsetbwse',$prod['IPROD']);
                         $totalP = $totalP + $total;
                     }
                 }
             }
+
+
             if (count($MBMS) > 0) {
                 foreach ($MBMS as $reg1) {
                     if ($reg1->LPROD == $prod['IPROD']) {
@@ -220,6 +227,7 @@ class Planeacion660bController extends Controller
             $padre += ['E' => $planpadre];
             $inF1 += ['padre' => $padre];
             array_push($totalpa, $inF1);
+
         }
 
         return $totalpa;
