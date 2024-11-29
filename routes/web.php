@@ -336,7 +336,7 @@ Route::get('planeacion660', [\App\Http\Controllers\Planeacion660bController::cla
 // Route::post('planeacion/buscar', [\App\Http\Controllers\PlaneacionController::class, 'buscar'])->name('planeacion.buscar');
 Route::post('planeacion660/create', [\App\Http\Controllers\Planeacion660bController::class, 'create'])->name('660.create');
 Route::post('planeacion660/updatef1', [\App\Http\Controllers\Planeacion660bController::class, 'updateF1'])->name('planeacion660.updatef1');
-// Route::post('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'update'])->name('planeacion.update');
+Route::post('planeacion660/update', [\App\Http\Controllers\Planeacion660bController::class, 'update'])->name('planeacion660.update');
 // Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
 // Route::post('planeacion/updatef1', [\App\Http\Controllers\PlaneacionController::class, 'updateF1'])->name('planeacion.updatef1');
 // Route::get('planeacion/export', [\App\Http\Controllers\PlaneacionController::class, 'export'])->name('planeacion.export');

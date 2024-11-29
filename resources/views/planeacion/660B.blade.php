@@ -56,7 +56,7 @@
         </h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="post" action="{{ route('planeacion.create') }}">
+            <form method="post" action="{{ route('660.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="2">
                 <div class="flex flex-col space-y-4">

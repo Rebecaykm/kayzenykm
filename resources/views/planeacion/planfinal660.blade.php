@@ -40,9 +40,7 @@
                     </button>
                 </div>
             </div>
-            {{
-                $dias=12;
-            }}
+            {{ $dias = 12 }}
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
@@ -59,8 +57,7 @@
                             <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
                             <th class=" header px-4 py-3 sticky "></th>
                             @php
-                                $hoy =  date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
-
+                                $hoy = date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
                                 $contp = 0;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
@@ -113,30 +110,36 @@
                             @switch($info['WRC'])
                                 @case(111020)
                                 @case(111030)
+
                                 @case(111010)
                                 @case(112020)
+
                                 @case(112010)
                                 @case(112040)
+
                                 @case(114010)
                                 @case(114020)
+
                                 @case(112030)
                                 @case(112060)
+
                                 @case(114030)
                                 @break
+
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         {{-- @if (strpos($padre, 'SOR') === false) --}}
-                                            <td class="px-2 py-1 text-s  bg-teal-300">
-                                                {{ $contp }}
-                                            </td>
-                                            <td class="px-2 py-1 text-xs  bg-teal-300">
-                                                <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
-                                                    {{ $padre }}<br>
-                                                    SNP {{ $info['Qty'] }}<br>
-                                                    WRKcenter {{ $info['WRC'] }}<br>
-                                                    Container {{$info['typkt']}}
-                                                </div>
-                                            </td>
+                                        <td class="px-2 py-1 text-s  bg-teal-300">
+                                            {{ $contp }}
+                                        </td>
+                                        <td class="px-2 py-1 text-xs  bg-teal-300">
+                                            <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                                {{ $padre }}<br>
+                                                SNP {{ $info['Qty'] }}<br>
+                                                WRKcenter {{ $info['WRC'] }}<br>
+                                                Container {{ $info['typkt'] }}
+                                            </div>
+                                        </td>
                                         {{-- @else
                                             <td class="px-2 py-1 text-s bg-yellow-300">
                                                 {{ $contp }}
@@ -183,7 +186,7 @@
                                         </td>
 
                                         @php
-                                            $hoy = date('Ymd', strtotime($fecha . '-' . 4 . ' day'));;
+                                            $hoy = date('Ymd', strtotime($fecha . '-' . 4 . ' day'));
                                             $contdias = 0;
                                             $namenA = strtr($padre, ' ', '_');
                                             $totalfirM = 0;
@@ -193,167 +196,158 @@
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
                                         @endphp
-                                        @while ($contdias < $dias)
+                                        @while ($contdias < $dias-2)
+                                            <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        @php
 
+                                                            if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                                                                $valFD = 0;
+                                                            } else {
+                                                                // dd('For' . $hoy . 'D');
+                                                                $valFD = $info['For' . $hoy . 'D'];
+                                                            }
 
-                                                <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
-                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                        <label class="block text-sm ">
-                                                            @php
+                                                            if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                                                                $valFN = 0;
+                                                            } else {
+                                                                $valFN = $info['For' . $hoy . 'N'];
+                                                            }
+                                                            $Enbarque = $info['E'];
 
-                                                                if (array_key_exists('For' . $hoy . 'D', $info) == false) {
-                                                                    $valFD = 0;
-                                                                } else {
-                                                                    // dd('For' . $hoy . 'D');
-                                                                    $valFD = $info['For' . $hoy . 'D'];
-                                                                }
+                                                            // if (array_key_exists('F', $Enbarque) == false) {
+                                                            //     $valFiD = $valFD;
+                                                            //     $valFiN = $valFN;
+                                                            // } else {
+                                                            //
+                                                            // }
+                                                            $firme = $info['E'];
+                                                            if (array_key_exists('F' . $hoy . 'D', $firme) == false) {
+                                                                $valFiD = 0;
+                                                            } else {
+                                                                $valFiD = $firme['F' . $hoy . 'D'];
+                                                            }
+                                                            if (array_key_exists('F' . $hoy . 'N', $firme) == false) {
+                                                                $valFiN = 0;
+                                                            } else {
+                                                                $valFiN = $firme['F' . $hoy . 'N'];
+                                                            }
+                                                            if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                                                $valeclD = 0;
+                                                            } else {
+                                                                $valeclD = $info['ecl' . $hoy . 'D'] + 0;
+                                                            }
+                                                            if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                                                $valeclN = 0;
+                                                            } else {
+                                                                $valeclN = $info['ecl' . $hoy . 'N'] + 0;
+                                                            }
 
-                                                                if (array_key_exists('For' . $hoy . 'N', $info) == false) {
-                                                                    $valFN = 0;
-                                                                } else {
-                                                                    $valFN = $info['For' . $hoy . 'N'];
-                                                                }
-                                                                $Enbarque=$info['E'];
-                                                                if (array_key_exists('F',$info) == false)
-                                                                {
+                                                            if (
+                                                                array_key_exists('E' . $hoy . 'D', $Enbarque) == false
+                                                            ) {
+                                                                $EnbarqueD = 0;
+                                                            } else {
+                                                                $EnbarqueD = $Enbarque['E' . $hoy . 'D'];
+                                                            }
+                                                            if (
+                                                                array_key_exists('E' . $hoy . 'N', $Enbarque) == false
+                                                            ) {
+                                                                $EnbarqueN = 0;
+                                                            } else {
+                                                                $EnbarqueN = $Enbarque['E' . $hoy . 'N'];
+                                                            }
 
-                                                                    $valFiD = $valFD ;
-                                                                    $valFiN = $valFN ;
-                                                                }else {
+                                                            $valRD = 0;
+                                                            $valRN = 0;
+                                                            $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
+                                                            $inN = $namenA . '/' . $hoy . '/N/' . $info['WRC'];
+                                                            if ($contdias == 6) {
+                                                                $valFiD = 0;
+                                                                $valFiN = 0;
+                                                            }
+                                                            $totalforM += $valFD + $valFN;
+                                                            $totalfirM += $valeclD + $valeclN;
+                                                            $totalfirykm += $valFiN + $valFiD;
+                                                            $workcen = $info['WRC'];
 
+                                                        @endphp
+                                                        <input value='{{ $valFD }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
-                                                                    $firme=$info['F'];
+                                                        <input value='{{ $valFN }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
 
-                                                                    if (array_key_exists('F' . $hoy . 'D', $firme) == false) {
-                                                                        $valFiD = 0;
-                                                                    } else {
-                                                                        $valFiD = $firme['F' . $hoy . 'D'];
-                                                                    }
-                                                                    if (array_key_exists('F' . $hoy . 'N', $firme) == false) {
-                                                                        $valFiN = 0;
-                                                                    } else {
-                                                                        $valFiN = $firme['F' . $hoy . 'N'];
-                                                                    }
+                                                </div>
 
-                                                                }
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
 
-                                                                if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
-                                                                    $valeclD = 0;
-                                                                } else {
-                                                                    $valeclD = $info['ecl' . $hoy . 'D'] + 0;
-                                                                }
-                                                                if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
-                                                                    $valeclN = 0;
-                                                                } else {
-                                                                    $valeclN = $info['ecl' . $hoy . 'N'] + 0;
-                                                                }
+                                                        <input value='{{ $valeclD }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
+                                                        <input value='{{ $valeclN }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
 
-                                                                if (array_key_exists('E' . $hoy . 'D', $Enbarque) == false) {
-                                                                    $EnbarqueD = 0;
-                                                                } else {
-                                                                   $EnbarqueD =  $Enbarque['E' . $hoy . 'D'] ;
-                                                                }
-                                                                if (array_key_exists('E' . $hoy . 'N', $Enbarque) == false) {
-                                                                   $EnbarqueN = 0;
-                                                                } else {
-                                                                   $EnbarqueN =  $Enbarque['E' . $hoy . 'N'] ;
-                                                                }
+                                                </div>
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
 
+                                                        <input value='{{ $EnbarqueD }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
-                                                                $valRD = 0;
-                                                                $valRN = 0;
-                                                                $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
-                                                                $inN = $namenA . '/' . $hoy . '/N/' . $info['WRC'];
-                                                                if ($contdias == 6) {
-                                                                    $valFiD = 0;
-                                                                    $valFiN = 0;
-                                                                }
-                                                                $totalforM += $valFD + $valFN;
-                                                                $totalfirM += $valeclD + $valeclN;
-                                                                $totalfirykm += $valFiN + $valFiD;
-                                                                $workcen = $info['WRC'];
-
-                                                            @endphp
-                                                            <input value='{{ $valFD }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-                                                        <label class="block text-sm ">
-
-                                                            <input value='{{ $valFN }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-
-                                                    </div>
-
-                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                        <label class="block text-sm ">
-
-                                                            <input value='{{ $valeclD }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-                                                        <label class="block text-sm ">
-
-                                                            <input value='{{ $valeclN }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-
-                                                    </div>
-                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-                                                        <label class="block text-sm ">
-
-                                                            <input value='{{ $EnbarqueD }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-                                                        <label class="block text-sm ">
-
-                                                            <input value='{{ $EnbarqueN }}'
-                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                disabled />
-                                                        </label>
-                                                    </div>
-                                                    {{-- @php
+                                                        <input value='{{ $EnbarqueN }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+                                                </div>
+                                                {{-- @php
                                                     if ($padre == 'BDTS53383                          ') {
                                                         dd($info1, $valFiD,$valFiN );
                                                     }
                                                 @endphp --}}
-{{--
+                                                {{--
                                                     @if (strpos($padre, 'SOR') === false) --}}
 
-                                                        <div
-                                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
-                                                            <label class="block text-sm ">
+                                                    <label class="block text-sm ">
 
-                                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='{{ $valFiD }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-                                                            <label class="block text-sm ">
+                                                        <input id='{{ $inD }}' name='{{ $inD }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='{{ $valFiD }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
+                                                    <label class="block text-sm ">
 
-                                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='{{ $valFiN }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
+                                                        <input id='{{ $inN }}' name='{{ $inN }}'
+                                                            onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            value='{{ $valFiN }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                    </label>
 
-                                                        </div>
-                                                </td>
-
-
-
+                                                </div>
+                                            </td>
                                             @php
                                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                                 $contdias++;
                                             @endphp
                                         @endwhile
-
                                         <td class="px-2 py-1 text-xs  bg-emerald-100">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
@@ -513,9 +507,15 @@
                 val10 = parseInt(document.getElementById(parte + '/' + arr[3] + '/N/' + wc).value);
                 val11 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);
                 val12 = parseInt(document.getElementById(parte + '/' + arr[2] + '/N/' + wc).value);
-
-
-                valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12;
+                val13 = parseInt(document.getElementById(parte + '/' + arr[8] + '/D/' + wc).value);
+                val14 = parseInt(document.getElementById(parte + '/' + arr[8] + '/N/' + wc).value);
+                val15 = parseInt(document.getElementById(parte + '/' + arr[9] + '/D/' + wc).value);
+                val16 = parseInt(document.getElementById(parte + '/' + arr[9] + '/N/' + wc).value);
+                val17 = parseInt(document.getElementById(parte + '/' + arr[10] + '/D/' + wc).value);
+                val18 = parseInt(document.getElementById(parte + '/' + arr[10] + '/N/' + wc).value);
+                val19 = parseInt(document.getElementById(parte + '/' + arr[1] + '/D/' + wc).value);
+                val20 = parseInt(document.getElementById(parte + '/' + arr[1] + '/N/' + wc).value);
+                valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12+ val13+ val14+ val15+ val16+ val17+ val18+ val19+ val20;
                 document.getElementById('totalFirykm' + parte).value = valtotal;
                 console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
 
