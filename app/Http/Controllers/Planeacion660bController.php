@@ -125,7 +125,7 @@ class Planeacion660bController extends Controller
             ->get();
 
 
-
+$contval=0;
         foreach ($prods as $prod) {
             $inF1 = array();
             $padre = [];
@@ -136,7 +136,7 @@ class Planeacion660bController extends Controller
             $tfirme = 0;
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
-
+            $firme = [];
             if ($valfinales->count() > 0) {
                 $total = 0;
                 foreach ($valfinales as $reg4) {
@@ -146,62 +146,47 @@ class Planeacion660bController extends Controller
                         $total = $reg4->MQTY + 0;
                         $valt = substr($turno, 4, 1);
                         $forcastp += ['For' . $dia . $valt => $total];
-                        //  dd(  $forcastp, 'fgsdfgbsetbwse',$prod['IPROD']);
                         $totalP = $totalP + $total;
+                        $plan_dias=round(($totalP/$diasd),0);
+                        if($diasd==2)
+                        {
+                            $dia1 = date('Ymd', strtotime($hoy . '+' . 1 . ' day'));
+                            $dia2 = date('Ymd', strtotime($hoy . '+' . 3 . ' day'));
+                            $firme += ['E'  . $dia1 . $valt =>  $plan_dias];
+                            $firme += ['E' . $dia2 . $valt =>  $plan_dias];
+                        }else{
+                            $dia1 = date('Ymd', strtotime($hoy . '+' . 0 . ' day'));
+                            $dia2 = date('Ymd', strtotime($hoy . '+' . 2 . ' day'));
+                            $dia3 = date('Ymd', strtotime($hoy . '+' . 4 . ' day'));
+                            $firme += ['E' . $dia1 . $valt =>  $plan_dias];
+                            $firme += ['E' . $dia2 . $valt =>  $plan_dias];
+                            $firme += ['E' . $dia3 . $valt =>  $plan_dias];
+                        }
+                        $tfirme = $tfirme + $total;
                     }
                 }
             }
+
             if ($valPDp->count() > 0) {//plan de padre
-                $firme = [];
+
                 $total = 0;
+
+
                 foreach ($valPDp as $reg6) {
                     if ($reg6->FPROD == $prod['IPROD']) {
                         $dia = $reg6->FRDTE;
                         $turno = $reg6->FPCNO;
                         $tipo = $reg6->FTYPE;
                         $total = $reg6->FQTY + 0;
-                        $valt = substr($turno, 4, 1) ?? 'D';
-                        if ($tipo == 'P') {
-                            $tipo='E';
-                            $plan_dias=(round((($totalP/$diasd)/$prod['IMBOXQ']),0))*$prod['IMBOXQ'];
+                        $valt =  'D';
 
-                            if($plan_dias<$totalP)
-                            {
-                                $plan_dias1= $plan_dias+$prod['IMBOXQ'];
-                            }
-                            else{
-                                $plan_dias1= $plan_dias;
-                            }
 
-                            if($diasd==2)
-                            {
 
-                                $dia1 = date('Ymd', strtotime($hoy . '+' . 1 . ' day'));
-                                $dia2 = date('Ymd', strtotime($hoy . '+' . 3 . ' day'));
 
-                                $firme += [$tipo . $dia1 . $valt =>  $plan_dias1];
-
-                                $firme += [$tipo . $dia2 . $valt =>  $plan_dias];
-                            }else{
-
-                                $dia1 = date('Ymd', strtotime($hoy . '+' . 0 . ' day'));
-                                $dia2 = date('Ymd', strtotime($hoy . '+' . 2 . ' day'));
-                                $dia3 = date('Ymd', strtotime($hoy . '+' . 4 . ' day'));
-                                $firme += [$tipo . $dia1 . $valt =>  $plan_dias1];
-
-                                $firme += [$tipo . $dia2 . $valt =>  $plan_dias];
-
-                                $firme += [$tipo . $dia3 . $valt =>  $plan_dias];
-
-                            }
-                            $tfirme = $tfirme + $total;
-                        } else {
                             $firme += [$tipo . $dia . $valt => $total];
                             $tfirme = $tfirme + $total;
-                        }
-
-
                     }
+
                 }
                 $planpadre += $firme;
             }
