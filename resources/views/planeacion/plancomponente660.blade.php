@@ -39,7 +39,7 @@
                 </button>
             </div>
         </div>
-        {{ $dias = 12 }}
+        {{ $dias = 12;}}
         <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
             <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
@@ -66,7 +66,8 @@
                         </th>
                         <th class=" header px-4 py-3 sticky "></th>
                         @php
-                            $hoy =  date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
+
+                            $hoy = date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
                             $totalD = 0;
                             $tdias = $dias;
                             $dias = $dias - 2;
@@ -303,8 +304,6 @@
                                 $hoy = $fecha;
                             @endphp
                             @if (array_search($datossubs['sub'], $histo) != true)
-
-
                                 @php
 
                                     array_push($histo, $datossubs['sub']);
@@ -313,7 +312,7 @@
                                     <td class="px-2 py-1 text-xs text-center ">
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
-                                        {{$datossubs['level']}}
+                                        {{ $datossubs['level'] }}
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>
@@ -328,7 +327,7 @@
                                             SNP: {{ $datossubs['Qty'] }}<br>
                                             Wrkcente: {{ $datossubs['wrk'] }}<br>
                                             Min balance: {{ $datossubs['minbal'] }}<br>
-                                            Contenedor: {{ $datossubs['typkt']}}
+                                            Contenedor: {{ $datossubs['typkt'] }}
                                         </div>
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
@@ -403,7 +402,7 @@
 
                                     @php
                                         $coni = 0;
-                                        $hoy1 = date('Ymd', strtotime($fecha . '-' . 5. ' day'));;
+                                        $hoy1 = date('Ymd', strtotime($fecha . '- 5 day'));
                                         $plan = $datossubs['plan'];
                                         $totalplan = 0;
                                         $totalKMRP = 0;
