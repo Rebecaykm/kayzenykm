@@ -74,6 +74,7 @@ class Planeacion660bController extends Controller
             $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
+
              return view('planeacion.plancomponente660', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
 
@@ -179,10 +180,6 @@ $contval=0;
                         $tipo = $reg6->FTYPE;
                         $total = $reg6->FQTY + 0;
                         $valt =  'D';
-
-
-
-
                             $firme += [$tipo . $dia . $valt => $total];
                             $tfirme = $tfirme + $total;
                     }
@@ -384,7 +381,7 @@ $contval=0;
         // $finaleskfp = implode("' OR  FPROD='", $finaArra);
         $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
-            ->where('MRDTE', '>=', $hoy)
+            ->where('MRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 2 . ' day')))
             ->where('MRDTE', '<=', $totalF)
             ->where('MTYPE', '=', 'F')
             ->wherein("MPROD", $finaArra)
@@ -394,7 +391,7 @@ $contval=0;
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
             ->wherein("FPROD", $finaArra)
             ->where([
-                ['FRDTE', '>=', $hoy],
+                ['FRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 4 . ' day'))],
                 ['FRDTE', '<', $totalF],
             ])
             ->get();
@@ -532,11 +529,12 @@ $contval=0;
             ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD,MTYPE')
             ->whereraw("(MPROD='" . $FINALKMR . "')")
             ->where([
-                ['MRDTE', '>=', $hoy],
+                ['MRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 2 . ' day')) ],
                 ['MRDTE', '<', $totalF],
                 ['MTYPE', '=', 'F'],
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
+
 
 
         $valPDpadres = KFP::query() //plan
@@ -549,6 +547,8 @@ $contval=0;
             ])
             ->orderby('FPROD', 'DESC')
             ->get()->toarray();
+
+
 
 
         $KFPprod = array_column($valPDpadres, 'FPROD');
@@ -583,7 +583,7 @@ $contval=0;
             ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD,MTYPE')
             ->whereraw("(MPROD='" . $PADREKMR . "')")
             ->where([
-                ['MRDTE', '>=', $hoy],
+                ['MRDTE', '>=', date('Ymd', strtotime($hoy . '-' . 2 . ' day'))],
                 ['MRDTE', '<', $totalF],
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
@@ -593,10 +593,11 @@ $contval=0;
             ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
             ->whereraw("(FPROD='" . $cadsubsPlan . "')")
             ->where([
-                ['FRDTE', '>=', $hoy],
+                ['FRDTE', '>=',  date('Ymd', strtotime($hoy . '-' . 4 . ' day'))],
                 ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
+
 
 
         $cadsubssh = implode("' OR  SPROD='", $sub1);
@@ -740,6 +741,7 @@ $contval=0;
                         $forcast  += ['kfp' . $dia . $valt => $total];
                     }
 
+                    // dd($forcast,$valPDpadres);
                     unset($KFPprod[$key3]);
                     unset($KFPmtype[$key3]);
                     unset($KFPfecha[$key3]);
@@ -766,8 +768,10 @@ $contval=0;
                         $total = $forcast['kmr' . $dia . $valt] + $total;
                         $forcast['kmr' . $dia . $valt] = $total;
                     } else {
-                        $forcast += ['kmr' . $dia . $valt => $total];
+                     $forcast += ['kmr' . $dia . $valt => $total];
                     }
+
+
 
 
                     unset($kmrprod[$key3]);
@@ -855,6 +859,7 @@ $contval=0;
     public function update(Request $request)
     {
 
+
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -924,6 +929,7 @@ $contval=0;
                 array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
+
             if ($CONT == 50) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
@@ -938,33 +944,33 @@ $contval=0;
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        $query = "CALL LX834OU02.YMP006C";
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
+        return redirect()->route('660.index');
 
+        // $plan1 = IIM::query()
+        //     ->select('IPROD', 'IREF04')
+        //     ->wherein('IREF04 ', $array)
+        //     ->where([
+        //         ['IID', '!=', 'IZ'],
+        //         ['IMPLC', '!=', 'OBSOLETE'],
+        //     ])
+        //     ->where('ICLAS', 'F1')
+        //     ->distinct('IPROD')
+        //     ->get()->toArray();
 
-        $plan1 = IIM::query()
-            ->select('IPROD', 'IREF04')
-            ->wherein('IREF04 ', $array)
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
+        // $padres = array_chunk($plan1, 10);
+        // $total = count($padres);
+        // $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
 
-        $padres = array_chunk($plan1, 10);
-        $total = count($padres);
-        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+        // $partsrev = array_column($plan1, 'IPROD');
+        // $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
 
-        $partsrev = array_column($plan1, 'IPROD');
-        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
-        return view('planeacion.plancomponente660', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+        // return view('planeacion.plancomponente660', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
 

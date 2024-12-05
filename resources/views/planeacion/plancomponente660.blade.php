@@ -156,7 +156,7 @@
                             </td>
 
                             @php
-                                $hoy = $fecha;
+                                $hoy =date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
                                 $contdias = 0;
 
                             @endphp
@@ -297,7 +297,7 @@
                         {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                         @php
                             $datossub = $info1['hijos'];
-
+                            // dd($datossub );
                         @endphp
                         @foreach ($datossub as $datossubs)
                             @php
