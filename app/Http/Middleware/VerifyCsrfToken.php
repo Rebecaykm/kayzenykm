@@ -15,6 +15,10 @@ class VerifyCsrfToken extends Middleware
         'prodcution-report/download',
         'unemployment-report/download',
         'scrap-report/download',
+        'planeacion660/update',
+        'planeacion660/updateF1',
+        'planeacion/update',
+        'planeacion/updateF1',
     ];
 
     protected function tokensMatch($request)

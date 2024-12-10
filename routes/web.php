@@ -331,4 +331,26 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('material-consumption', [\App\Http\Controllers\MaterialConsumptionController::class, 'store'])->name('material-consumption.store');
     Route::post('material-consumption-spm', [\App\Http\Controllers\MaterialConsumptionController::class, 'spm'])->name('material-consumption.spm');
     Route::post('material-consumption-finish', [\App\Http\Controllers\MaterialConsumptionController::class, 'finish'])->name('material-consumption.finish');
+// 660B
+Route::get('planeacion660', [\App\Http\Controllers\Planeacion660bController::class, 'index'])->name('660.index');
+// Route::post('planeacion/buscar', [\App\Http\Controllers\PlaneacionController::class, 'buscar'])->name('planeacion.buscar');
+Route::post('planeacion660/create', [\App\Http\Controllers\Planeacion660bController::class, 'create'])->name('660.create');
+Route::post('planeacion660/updatef1', [\App\Http\Controllers\Planeacion660bController::class, 'updateF1'])->name('planeacion660.updatef1');
+Route::post('planeacion660/update', [\App\Http\Controllers\Planeacion660bController::class, 'update'])->name('planeacion660.update');
+// Route::get('planeacion/update', [\App\Http\Controllers\PlaneacionController::class, 'create'])->name('planeacion.update');
+// Route::post('planeacion/updatef1', [\App\Http\Controllers\PlaneacionController::class, 'updateF1'])->name('planeacion.updatef1');
+// Route::get('planeacion/export', [\App\Http\Controllers\PlaneacionController::class, 'export'])->name('planeacion.export');
+// Route::get('planeacion/exportfinal', [\App\Http\Controllers\PlaneacionController::class, 'exportfinal'])->name('planeacion.exportfinal');
+// Route::get('planeacion/exportsubcomponentes', [\App\Http\Controllers\PlaneacionController::class, 'exportsubcomponentes'])->name('planeacion.exportsubcomponentes');
+// Route::post('planeacion/siguiente', [\App\Http\Controllers\PlaneacionController::class, 'siguiente'])->name('planeacion.siguiente');
+
+
+
+
+Route::get('planeacionS1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'index'])->name('planeacionS1.index');
+// Route::get('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
+Route::post('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
+Route::post('planeacionS1/updatef1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'updateF1'])->name('planeacionS1.updatef1');
+
+
 });
