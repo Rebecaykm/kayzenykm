@@ -195,9 +195,7 @@ class PlaneacionController extends Controller
             case ('10,710'):
                 $pro = 'J34X';
                 break;
-            case ('8,811'):
-                $pro = '660B';
-                break;
+
             case ('11,811'):
                 $pro = '920B';
                 break;
@@ -281,11 +279,10 @@ class PlaneacionController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-                if (!in_array($namenA,   $datajob)) {
-                    array_push($datajob, $namenA);
+
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
-                }
+
 
                 $dfa = [
                     'K6PROD' => $namenA,
@@ -392,11 +389,10 @@ class PlaneacionController extends Controller
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
-                if (!in_array($namenA,   $datajob)) {
-                    array_push($datajob, $namenA);
+
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
-                }
+
 
                 $dfa = [
                     'K6PROD' => $namenA,

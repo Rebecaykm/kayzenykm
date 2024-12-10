@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class YK006 extends Model
 {
-    protected $connection = 'odbc-connection-lx834f01';
-    protected $table = 'LX834F01.YK006';
+    protected $connection = 'odbc-connection-lx834fu01';
+    protected $table = 'LX834Fu01.YK006';
 
     protected $fillable = [
         'K6PROD',
