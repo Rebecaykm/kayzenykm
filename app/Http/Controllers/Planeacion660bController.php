@@ -892,11 +892,10 @@ $contval=0;
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 1 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
-                if (!in_array($namenA,   $datajob)) {
-                    array_push($datajob, $namenA);
+
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
-                }
+
 
                 $dfa = [
                     'K6PROD' => $namenA,
