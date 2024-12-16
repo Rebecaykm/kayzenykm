@@ -13,6 +13,7 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
+use App\Models\YK0062;
 use Carbon\Carbon;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
@@ -275,11 +276,11 @@ class PlaneacionoffsetController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-                if (!in_array($namenA,   $datajob)) {
-                    array_push($datajob, $namenA);
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
-                }
+                // if (!in_array($namenA,   $datajob)) {
+                //     array_push($datajob, $namenA);
+                //     $ar = ["part_number" => $namenA, "date" => $fechasql];
+                //     array_push($datval, $ar);
+                // }
 
                 $dfa = [
                     'K6PROD' => $namenA,
@@ -312,7 +313,7 @@ class PlaneacionoffsetController extends Controller
                 array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 80) {
+            if ($CONT == 160) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
@@ -330,7 +331,7 @@ class PlaneacionoffsetController extends Controller
         $array = explode(",", $TP);
 
 
-        ProductionPlanByArrayMigrationJob::dispatch($datval);
+        // ProductionPlanByArrayMigrationJob::dispatch($datval);
 
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
@@ -393,18 +394,18 @@ class PlaneacionoffsetController extends Controller
                 }
 
                 $dfa = [
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $inp[1],
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $hora,
-                    'K6FIL1' => '',
-                    'K6FIL2' => ''
+                    'K62PROD' => $namenA,
+                    'K62WRKC' => $WCT,
+                    'K62SDTE' => $fecha,
+                    'K62EDTE' => $fefin,
+                    'K62DDTE' => $inp[1],
+                    'K62DSHT' => $turno,
+                    'K62PFQY' => $request->$plans,
+                    'K62CUSR' => 'LXSECOFR',
+                    'K62CCDT' => $load,
+                    'K62CCTM' => $hora,
+                    'K62FIL1' => '',
+                    'K62FIL2' => ''
                 ];
                 $dfasql = [
                     'K6PROD' => $namenA,
@@ -424,7 +425,7 @@ class PlaneacionoffsetController extends Controller
                 array_push($datas, $dfa);
             }
             if ($CONT == 50) {
-                $indata = YK006::query()->insert($datas);
+                $indata = YK0062::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
@@ -433,11 +434,12 @@ class PlaneacionoffsetController extends Controller
             $CONT = $CONT + 1;
         }
 
-        $indata = YK006::query()->insert($datas);
+        $indata = YK0062::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        // $query = "CALL LX834OU02.YMP006C";
+        $query = "CALL LX834OU02.YMR002C";
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
