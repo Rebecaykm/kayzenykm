@@ -353,4 +353,10 @@ Route::post('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller
 Route::post('planeacionS1/updatef1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'updateF1'])->name('planeacionS1.updatef1');
 
 
+
+Route::get('planeacionH', [\App\Http\Controllers\PlaneacionHController::class, 'index'])->name('planeacionH.index');
+// Route::get('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
+Route::post('planeacionH/create', [\App\Http\Controllers\PlaneacionHController::class, 'create'])->name('planeacionH.create');
+Route::post('planeacionH/updatef1', [\App\Http\Controllers\PlaneacionHController::class, 'updateF1'])->name('planeacionH.updatef1');
+
 });
