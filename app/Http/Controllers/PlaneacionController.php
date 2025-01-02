@@ -13,6 +13,8 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
+use App\Models\YK0062;
+
 use Carbon\Carbon;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
@@ -638,8 +640,6 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
         foreach ($prods as $prod) {
-
-
             $inF1 = array();
             $padre = [];
             $dia = $hoy;
@@ -728,6 +728,7 @@ class PlaneacionController extends Controller
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
     {
         //  $Sub = self::cargar($prod1);
+
         $Sub = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS')

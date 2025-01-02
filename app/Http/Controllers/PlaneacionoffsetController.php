@@ -8,7 +8,7 @@ use App\Models\KFP;
 use App\Models\FRT;
 use App\Models\IIM;
 use App\Models\LOGSUP;
-
+use App\Models\YKPLN;
 use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
@@ -56,7 +56,7 @@ class PlaneacionoffsetController extends Controller
 
 
            $tipo = $request->Planeacion;
-        $dias = 15;
+        $dias = 21;
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -82,7 +82,7 @@ class PlaneacionoffsetController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
             // dd( $cadepar );
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteOS', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
@@ -670,6 +670,13 @@ class PlaneacionoffsetController extends Controller
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get()->toarray();
 
+            $offset=YKPLN::query()
+            ->select('PPROD','PRDTE','PRSHFT','PRREQ','PQTY','PRPLQ','PRCAO')
+            ->whereIN('PPROD',$sub1)->
+            where( [
+                ['PRDTE', '>=', $hoy],
+                ['PRDTE', '<', $totalF],
+            ])->get();
 
         // -----------------------------------------FIRME PLAN
         $valPD = KFP::query()
@@ -864,8 +871,36 @@ class PlaneacionoffsetController extends Controller
             $KMRfecha = array_column($RKMRfinal, 'MRDTE');
             $KMRMtotal = array_column($RKMRfinal, 'TOTAL');
             $KtYPE = array_column($RKMRfinal, 'MTYPE');
-
             $total = 0;
+
+            $ofsg=[];
+foreach($offset as $off)
+{
+    $ofs=[];
+    if ($off['PPROD'] == $subs) {
+        $PRDTE=$off['PRDTE'];
+        $SHIFT=$off['PRSHFT'];
+        if($SHIFT=='D' ||  $SHIFT=='N')
+        {
+            $peof=$off['PRREQ']+0; // quantity pequest
+            $reqof=$off['PQTY']+0; //quantity requied
+            $reqpla=$off['PRPLQ']+0; //quantity planned
+            $carrof=$off['PRCAO']+0; //carriover
+
+            $ofs+=['opreq'.$PRDTE.$SHIFT=>$peof];
+            $ofs+=['oqty'.$PRDTE.$SHIFT=>$reqof];
+            $ofs+=['oplan'.$PRDTE.$SHIFT=>$reqpla];
+            $ofs+=['ocarry'.$PRDTE.$SHIFT=>$carrof];
+
+            $ofsg+=$ofs;
+        }
+
+    }
+}
+
+
+
+
             foreach ($valPD as $reg3) {
                 if ($reg3['FPROD'] == $subs) {
                     $dia = $reg3['FRDTE'];
@@ -898,7 +933,7 @@ class PlaneacionoffsetController extends Controller
             $pos = array_search($subs, $prodcqa);
             $poskwr = array_search($subs, $prowk);
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0, 'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr];
+            $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0, 'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop, 'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr,'offset'=>$ofsg];
 
             $sepa += [$subs => $numpar];
         }
