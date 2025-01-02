@@ -2,7 +2,7 @@
 
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-            <form method="post" action="{{ route('planeacion.create') }}">
+            <form method="post" action="{{ route('planeacionH.create') }}">
                 <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         @switch($tp)
@@ -25,7 +25,7 @@
                 </div>
             </form>
         </div>
-        <form action="{{ route('planeacion.updatef1') }}" method="post">
+        <form action="{{ route('planeacionH.updatef1') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
@@ -149,14 +149,14 @@
                                         <td class="px-2 py-1 text-xs  bg-emerald-100">
                                             <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
-                                                    <input value="FORECASTE MMVO"
+                                                    <input value="FORECASTE "
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
-                                                    <input value="FIRME MMVO"
+                                                    <input value="FIRME "
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>

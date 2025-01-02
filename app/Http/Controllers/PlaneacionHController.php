@@ -36,7 +36,7 @@ class PlaneacionHController extends Controller
 
     public function index(Request $request)
     {
-    
+
         $dias = $request->NP ?? '*';
         $fecha = $request->Seproject ?? '*';
         $plan = '';
@@ -88,7 +88,7 @@ class PlaneacionHController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
 
-            return view('planeacionH.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
@@ -245,7 +245,7 @@ class PlaneacionHController extends Controller
      */
     public function updateF1(Request $request)
     {
-
+// dd('hola                                                                                                                ');
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -328,13 +328,14 @@ class PlaneacionHController extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
+
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
 
-        ProductionPlanByArrayMigrationJob::dispatch($datval);
+        // ProductionPlanByArrayMigrationJob::dispatch($datval);
 
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
@@ -440,7 +441,7 @@ class PlaneacionHController extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        $query = "CALL LX834OU02.YMP006C";
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
@@ -685,27 +686,27 @@ $firme = [];
             while($contd<=5)
             {
                 $dia=$fetemp->format('Ymd');
-           
+
                 $firme += ['H' . $dia . 'D'=>   round(($total/10),0)];
-              
-                $firme += ['H' . $dia. 'N'=>  round(($total/10),0)]; 
+
+                $firme += ['H' . $dia. 'N'=>  round(($total/10),0)];
             $fetemp->addDay();
             $contd++;
             }
 
             if (count($valPDp) > 0) {
-                
+
                 $total = 0;
-                
+
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
-                        
+
                         $dia = $reg6['FRDTE'];
                         $turno = $reg6['FPCNO'];
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
-                        $valt = substr($turno, 4, 1) ?? 'D';   
-                        $firme += [$tipo . $dia . $valt => $total];                
+                        $valt = substr($turno, 4, 1) ?? 'D';
+                        $firme += [$tipo . $dia . $valt => $total];
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
                         } else {
@@ -716,7 +717,7 @@ $firme = [];
                 }
                 $planpadre += $firme;
             }
-           
+
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
@@ -730,7 +731,7 @@ $firme = [];
             $inF1 += ['padre' => $padre];
             // dd($inF1);
             array_push($totalpa, $inF1);
-           
+
         }
         // dd($totalpa);
 
