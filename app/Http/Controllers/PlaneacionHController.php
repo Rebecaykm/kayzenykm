@@ -245,7 +245,7 @@ class PlaneacionHController extends Controller
      */
     public function updateF1(Request $request)
     {
-// dd('hola                                                                                                                ');
+        // dd('hola                                                                                                                ');
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -281,8 +281,8 @@ class PlaneacionHController extends Controller
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
 
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+                $ar = ["part_number" => $namenA, "date" => $fechasql];
+                array_push($datval, $ar);
 
 
                 $dfa = [
@@ -353,7 +353,7 @@ class PlaneacionHController extends Controller
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
         // dd($datos);
-        return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
+        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
 
     public function update(Request $request)
@@ -392,8 +392,8 @@ class PlaneacionHController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+                $ar = ["part_number" => $namenA, "date" => $fechasql];
+                array_push($datval, $ar);
 
 
                 $dfa = [
@@ -467,7 +467,7 @@ class PlaneacionHController extends Controller
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
 
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+        return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     /**
@@ -677,21 +677,39 @@ class PlaneacionHController extends Controller
             }
 
             $padre += ['total' => $totalP];
-$fetemp= Carbon::parse($hoy);
+            $fetemp = Carbon::parse($hoy);
 
-$fintem= Carbon::parse($totalF);
-$contd=1;
+            $fintem = Carbon::parse($totalF);
+            $contd = 1;
 
-$firme = [];
-            while($contd<=5)
-            {
-                $dia=$fetemp->format('Ymd');
+            $firme = [];
+            $pos = array_search($prod['IPROD'], $prodcqa);
 
-                $firme += ['H' . $dia . 'D'=>   round(($total/10),0)];
+            $totalcon =  ceil(($total / $pqa[$pos]) / 10);
 
-                $firme += ['H' . $dia. 'N'=>  round(($total/10),0)];
-            $fetemp->addDay();
-            $contd++;
+
+
+            $contotal = 0;
+            while ($contd <= 5) {
+                $dia = $fetemp->format('Ymd');
+                if ($contotal <= $total / $pqa[$pos]) {
+                    // echo $dia.'-'.$contotal."--".$totalcon.'--'.$total/$pqa[$pos].'<br>';
+                    $firme += ['CH' . $dia . 'D' =>   $totalcon];
+                    $firme += ['H' . $dia . 'D' =>   round(($total / 10), 0)];
+
+                    if ($contotal <= $total / $pqa[$pos]) {
+                        $firme += ['CH' . $dia . 'N' =>  $totalcon];
+                        $firme += ['H' . $dia . 'N' =>  round(($total / 10), 0)];
+                        $contotal = $contotal + $totalcon;
+                    }
+
+
+                    $contotal = $contotal + $totalcon;
+                }
+
+
+                $fetemp->addDay();
+                $contd++;
             }
 
             if (count($valPDp) > 0) {
@@ -718,7 +736,7 @@ $firme = [];
                 $planpadre += $firme;
             }
 
-            $pos = array_search($prod['IPROD'], $prodcqa);
+            // $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
             $padre += ['tPlan' => $tPlan];
@@ -731,9 +749,8 @@ $firme = [];
             $inF1 += ['padre' => $padre];
             // dd($inF1);
             array_push($totalpa, $inF1);
-
         }
-        // dd($totalpa);
+        dd($totalpa);
 
         return $totalpa;
     }
@@ -771,9 +788,9 @@ $firme = [];
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->whereIN("IPROD",$sub1 )
+            ->whereIN("IPROD", $sub1)
             ->get();
-//final de agregar niveles ------------------------------------------------------
+        //final de agregar niveles ------------------------------------------------------
         $KMRFINAL = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'MCQREQ ')
@@ -1081,9 +1098,22 @@ $firme = [];
             });
 
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0,
-             'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop,
-             'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr,'level'=>$level->ZELEVE];
+            $numpar += [
+                'sub' => $subs,
+                'plan' => $numpaplan,
+                'padres' => $texfinal,
+                'forcast' => $forcast,
+                'Qty' => $pqa[$pos] ?? 0,
+                'minbal' => $minba[$pos] ?? 0,
+                'typkt' => $typkt[$pos] ?? 'N/A',
+                'wrk' => $prowrok[$poskwr] ?? 0,
+                'Tshop' => $Tshop,
+                'Tplan' => $Tplan,
+                'Tfirme' => $Tfirme,
+                'KMRpadres' => $texpadre ?? 0,
+                'Totalpadres' => $Tshopkmr,
+                'level' => $level->ZELEVE
+            ];
 
             $sepa += [$subs => $numpar];
         }

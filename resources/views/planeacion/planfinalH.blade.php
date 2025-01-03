@@ -60,7 +60,8 @@
                                 $contp = 0;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                                $diasjava = '';
+                                $diasjava = ''
+
                             @endphp
                             @while ($hoy != $fin)
                                 @if (date('w', strtotime($hoy)) == 0)
@@ -216,15 +217,15 @@
 
                                                                     $firme=$info['F'];
 
-                                                                    if (array_key_exists('F' . $hoy . 'D', $firme) == false) {
+                                                                    if (array_key_exists('H' . $hoy . 'D', $firme) == false) {
                                                                         $valFiD = $firme['H' . $hoy . 'D']??0;
                                                                     } else {
-                                                                        $valFiD = $firme['F' . $hoy . 'D'];
+                                                                        $valFiD = $firme['H' . $hoy . 'D'];
                                                                     }
-                                                                    if (array_key_exists('F' . $hoy . 'N', $firme) == false) {
+                                                                    if (array_key_exists('H' . $hoy . 'N', $firme) == false) {
                                                                         $valFiN = $firme['H' . $hoy . 'N']??0;
                                                                     } else {
-                                                                        $valFiN = $firme['F' . $hoy . 'N'];
+                                                                        $valFiN = $firme['H' . $hoy . 'N'];
                                                                     }
 
                                                                 }
@@ -286,9 +287,7 @@
                                                     if ($padre == 'BDTS53383                          ') {
                                                         dd($info1, $valFiD,$valFiN );
                                                     }
-                                                @endphp --}}
-{{--
-                                                    @if (strpos($padre, 'SOR') === false) --}}
+
                                                         <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
