@@ -91,58 +91,69 @@
                 </div> --}}
             </div>
             <!-- Content -->
-            <div class="flex flex-col">
-                <div class="flex items-start">
-                    <!-- Info -->
-                    <div class="min-w-[200px] bg-blue-50 p-4 border-r">
-                        <div class="text-sm text-gray-500">Item</div>
-                        <div class="font-bold">DA64541ZX - 830</div>
-                        <div class="text-sm text-gray-500">SNP: 80,000</div>
-                        <div class="text-sm text-gray-500">Workcenter: 124400</div>
-                    </div>
 
-                    <!-- Contenedor para el scroll horizontal -->
-                    <div class="flex-1 overflow-x-auto">
-                        <div class="flex whitespace-nowrap">
-                            @php
-                                $hoy = $fecha;
-                                $totalD = 0;
-                                $tdias = $dias;
-                                $dias = $dias - 2;
-                                $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                                $diasjava = '';
-                            @endphp
+            @php
+                $tdias = $dias;
+            @endphp
+            @foreach ($res as $info1)
+                @php
 
-                            @while ($hoy != $fin)
-                                <div class="flex flex-col items-center space-y-2 p-4">
-                                    <!-- Fecha -->
-                                    <div class="text-sm text-gray-500">  {{   $hoy }} </div>
-                                    <!-- Contenedor horizontal para los bloques -->
-                                    <div class="flex space-x-4">
-                                        <!-- Bloque 1 -->
-                                        <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                            <div class="text-sm text-gray-500">Dia</div>
-                                            <div class="font-bold">-</div>
-                                            <div class="text-sm text-gray-500">-</div>
-                                        </div>
-                                        <!-- Bloque 2 -->
-                                        <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                            <div class="text-sm text-gray-500">Noche</div>
-                                            <div class="text-sm text-gray-500">-</div>
-                                            <div class="text-sm text-gray-500">-</div>
+                    $info = $info1['padre'];
+
+                @endphp
+                <div class="flex flex-col">
+                    <div class="flex items-start">
+                        <!-- Info -->
+                        <div class="min-w-[200px] bg-blue-50 p-4 border-r">
+                            <div class="text-sm text-gray-500">Item</div>
+                            <div class="font-bold">{{ $info['parte'] }}</div>
+                            <div class="text-sm text-gray-500">SNP: 80,000</div>
+                            <div class="text-sm text-gray-500">Workcenter: 124400</div>
+                        </div>
+
+                        <!-- Contenedor para el scroll horizontal -->
+                        <div class="flex-1 overflow-x-auto">
+                            <div class="flex whitespace-nowrap">
+                                @php
+                                    $hoy = $fecha;
+                                    $totalD = 0;
+
+                                    $Xdias = $Tdias - 2;
+                                    $fin = date('Ymd', strtotime($hoy . '+' . $Xdias . ' day'));
+                                    $diasjava = '';
+                                @endphp
+
+                                @while ($hoy != $fin)
+                                    <div class="flex flex-col items-center space-y-2 p-4">
+                                        <!-- Fecha -->
+                                        <div class="text-sm text-gray-500"> {{ date('d', strtotime($hoy)) }} </div>
+                                        <!-- Contenedor horizontal para los bloques -->
+                                        <div class="flex space-x-4">
+                                            <!-- Bloque 1 -->
+                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
+                                                <div class="text-sm text-gray-500">D</div>
+                                                <div class="font-bold">-</div>
+                                                <div class="text-sm text-gray-500">-</div>
+                                            </div>
+                                            <!-- Bloque 2 -->
+                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
+                                                <div class="text-sm text-gray-500">N</div>
+                                                <div class="text-sm text-gray-500">-</div>
+                                                <div class="text-sm text-gray-500">-</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                @php
-                                    $diasjava = $hoy . '/' . $diasjava;
-                                    $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                    $totalD = $totalD + 1;
-                                @endphp
-                            @endwhile
+                                    @php
+                                        $diasjava = $hoy . '/' . $diasjava;
+                                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
+                                        $totalD = $totalD + 1;
+                                    @endphp
+                                @endwhile
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
 
 
 
