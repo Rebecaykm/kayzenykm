@@ -91,7 +91,10 @@
                                 @endphp
                             @endwhile
                             <th class=" header px-4 py-3 sticky ">
-                                Parte <br> Total
+                                Partes <br> Total
+                            </th>
+                            <th class=" header px-4 py-3 sticky ">
+                                Contenedor <br> Total
                             </th>
                         </tr>
                     </thead>
@@ -292,14 +295,14 @@
                                                             <label class="block text-sm ">
 
                                                                 <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
                                                                     value='{{ $valFiD }}'
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                             </label>
                                                             <label class="block text-sm ">
 
                                                                 <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
                                                                     value='{{ $valFiN }}'
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                             </label>
@@ -365,9 +368,41 @@
                                                 <label class="block text-sm ">
                                                     @php
                                                         $otalphp = 'totalFirykm' . $namenA;
+                                                        $contfM=$totalforM/$info['Qty'];
+                                                        $contfim=$totalfirM/$info['Qty'];
+                                                        $contykm=$totalfirykm/$info['Qty'];
                                                     @endphp
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{ $totalfirykm }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="px-2 py-1 text-xs  bg-emerald-100">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    <input name='totalForMMVO' id='totalForMMVO' value="{{   $contfM }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input id='totalFirMMVO' name='totalFirMMVO' value="{{ $contfim }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        $contotalphp = 'conttotalFirykm' . $namenA;
+                                                    @endphp
+                                                    <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
+                                                        value="{{ $contykm ?? 0 }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -479,7 +514,7 @@
             </div>
         </div>
         <script>
-            function myFunction(dias, parte, wc, idtest) {
+            function myFunction(dias, parte, wc, idtest,SNP) {
 
                 let mensaje = dias;
                 let arr = mensaje.split('/');
@@ -500,6 +535,7 @@
 
                 valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12;
                 document.getElementById('totalFirykm' + parte).value = valtotal;
+                document.getElementById('conttotalFirykm' + parte).value = valtotal/SNP ?? 0;
                 console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
 
 
