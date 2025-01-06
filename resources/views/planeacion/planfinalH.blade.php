@@ -60,8 +60,7 @@
                                 $contp = 0;
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                                $diasjava = ''
-
+                                $diasjava = '';
                             @endphp
                             @while ($hoy != $fin)
                                 @if (date('w', strtotime($hoy)) == 0)
@@ -101,28 +100,33 @@
                     </thead>
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-
                         @foreach ($res as $info1)
+
                             @php
 
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
-
                             @endphp
                             @switch($info['WRC'])
                                 @case(111020)
                                 @case(111030)
+
                                 @case(111010)
                                 @case(112020)
+
                                 @case(112010)
                                 @case(112040)
+
                                 @case(114010)
                                 @case(114020)
+
                                 @case(112030)
                                 @case(112060)
+
                                 @case(114030)
                                 @break
+
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
@@ -134,7 +138,7 @@
                                                     {{ $padre }}<br>
                                                     SNP {{ $info['Qty'] }}<br>
                                                     WRKcenter {{ $info['WRC'] }}<br>
-                                                    Container {{$info['typkt']}}
+                                                    Container {{ $info['typkt'] }}
                                                 </div>
                                             </td>
                                         @else
@@ -172,6 +176,13 @@
                                                         disabled />
                                                 </label>
                                             </div>
+                                            <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value="Firme YKM contenedores"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
 
                                         </td>
 
@@ -185,6 +196,7 @@
                                             $valeclD = 0;
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
+
                                         @endphp
                                         @while ($contdias < $dias)
                                             @if ($contdias == 7)
@@ -194,48 +206,55 @@
                                                         <label class="block text-sm ">
                                                             @php
 
-
-                                                                if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                                                                $firme = $info['F'];
+                                                                if (
+                                                                    array_key_exists('For' . $hoy . 'D', $info) == false
+                                                                ) {
                                                                     $valFD = 0;
                                                                 } else {
                                                                     $valFD = $info['For' . $hoy . 'D'];
                                                                 }
 
-                                                                if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('For' . $hoy . 'N', $info) == false
+                                                                ) {
                                                                     $valFN = 0;
                                                                 } else {
                                                                     $valFN = $info['For' . $hoy . 'N'];
                                                                 }
 
-                                                                if (array_key_exists('F',$info) == false)
-                                                                {
-
-                                                                    $valFiD = $valFD ;
-                                                                    $valFiN = $valFN ;
-                                                                }else {
-
-
-                                                                    $firme=$info['F'];
-
-                                                                    if (array_key_exists('H' . $hoy . 'D', $firme) == false) {
-                                                                        $valFiD = $firme['H' . $hoy . 'D']??0;
+                                                                if (array_key_exists('F', $info) == false) {
+                                                                    $valFiD = $valFD;
+                                                                    $valFiN = $valFN;
+                                                                } else {
+                                                                    if (
+                                                                        array_key_exists('H' . $hoy . 'D', $firme) ==
+                                                                        false
+                                                                    ) {
+                                                                        $valFiD = $firme['H' . $hoy . 'D'] ?? 0;
                                                                     } else {
                                                                         $valFiD = $firme['H' . $hoy . 'D'];
                                                                     }
-                                                                    if (array_key_exists('H' . $hoy . 'N', $firme) == false) {
-                                                                        $valFiN = $firme['H' . $hoy . 'N']??0;
+                                                                    if (
+                                                                        array_key_exists('H' . $hoy . 'N', $firme) ==
+                                                                        false
+                                                                    ) {
+                                                                        $valFiN = $firme['H' . $hoy . 'N'] ?? 0;
                                                                     } else {
                                                                         $valFiN = $firme['H' . $hoy . 'N'];
                                                                     }
-
                                                                 }
 
-                                                                if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('ecl' . $hoy . 'D', $info) == false
+                                                                ) {
                                                                     $valeclD = 0;
                                                                 } else {
                                                                     $valeclD = $info['ecl' . $hoy . 'D'] + 0;
                                                                 }
-                                                                if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('ecl' . $hoy . 'N', $info) == false
+                                                                ) {
                                                                     $valeclN = 0;
                                                                 } else {
                                                                     $valeclN = $info['ecl' . $hoy . 'N'] + 0;
@@ -253,6 +272,21 @@
                                                                 $totalfirM += $valeclD + $valeclN;
                                                                 $totalfirykm += $valFiN + $valFiD;
                                                                 $workcen = $info['WRC'];
+
+                                                                if (
+                                                                    array_key_exists('CH' . $hoy . 'D', $firme) == false
+                                                                ) {
+                                                                    $valchFD = 0;
+                                                                } else {
+                                                                    $valchFD = $firme['CH' . $hoy . 'D'];
+                                                                }
+                                                                if (
+                                                                    array_key_exists('CH' . $hoy . 'N', $firme) == false
+                                                                ) {
+                                                                    $valchFN = 0;
+                                                                } else {
+                                                                    $valchFN = $firme['CH' . $hoy . 'N'];
+                                                                }
 
                                                             @endphp
                                                             <input value='{{ $valFD }}'
@@ -283,55 +317,52 @@
                                                         </label>
 
                                                     </div>
+
+
+                                                    <div
+                                                        class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+
+                                                        <label class="block text-sm ">
+
+                                                            <input id='{{ $inD }}' name='{{ $inD }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
+                                                                value='{{ $valFiD }}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        </label>
+                                                        <label class="block text-sm ">
+
+                                                            <input id='{{ $inN }}' name='{{ $inN }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
+                                                                value='{{ $valFiN }}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        </label>
+
+                                                    </div>
+
                                                     {{-- @php
-                                                    if ($padre == 'BDTS53383                          ') {
-                                                        dd($info1, $valFiD,$valFiN );
-                                                    }
-
-                                                        <div
-                                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
-
-                                                            <label class="block text-sm ">
-
-                                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                    value='{{ $valFiD }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-                                                            <label class="block text-sm ">
-
-                                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                    value='{{ $valFiN }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-
-                                                        </div>
-
-                                                        {{-- @php
                                                             $totalfirykm = 0;
                                                         @endphp --}}
-                                                        {{-- <div
-                                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
+                                                    <div
+                                                        class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 
-                                                            <label class="block text-sm ">
+                                                        <label class="block text-sm ">
 
-                                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                            <input id='{{ $inD }}' name='{{ $inD }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                value="{{ $valchFD }}"
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                                disabled />
+                                                        </label>
+                                                        <label class="block text-sm ">
 
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                    disabled />
-                                                            </label>
-                                                            <label class="block text-sm ">
+                                                            <input id='{{ $inN }}' name='{{ $inN }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                value="{{ $valchFN }}"
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                                disabled />
+                                                        </label>
 
-                                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                                    disabled />
-                                                            </label>
-
-                                                        </div> --}}
+                                                    </div>
 
 
 
@@ -367,12 +398,24 @@
                                                 <label class="block text-sm ">
                                                     @php
                                                         $otalphp = 'totalFirykm' . $namenA;
-                                                        $contfM=$totalforM/$info['Qty'];
-                                                        $contfim=$totalfirM/$info['Qty'];
-                                                        $contykm=$totalfirykm/$info['Qty'];
+                                                        $contfM = $totalforM / $info['Qty'];
+                                                        $contfim = $totalfirM / $info['Qty'];
+                                                        $contykm = $totalfirykm / $info['Qty'];
                                                     @endphp
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{ $totalfirykm }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        $contotalphp = 'conttotalFirykm' . $namenA;
+                                                    @endphp
+                                                    <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
+                                                        value="{{ $contykm ?? 0 }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -382,7 +425,7 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
-                                                    <input name='totalForMMVO' id='totalForMMVO' value="{{   $contfM }}"
+                                                    <input name='totalForMMVO' id='totalForMMVO' value="{{ $contfM }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -390,6 +433,18 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input id='totalFirMMVO' name='totalFirMMVO' value="{{ $contfim }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        $contotalphp = 'conttotalFirykm' . $namenA;
+                                                    @endphp
+                                                    <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
+                                                        value="{{ $contykm ?? 0 }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -513,7 +568,7 @@
             </div>
         </div>
         <script>
-            function myFunction(dias, parte, wc, idtest,SNP) {
+            function myFunction(dias, parte, wc, idtest, SNP) {
 
                 let mensaje = dias;
                 let arr = mensaje.split('/');
@@ -534,7 +589,7 @@
 
                 valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12;
                 document.getElementById('totalFirykm' + parte).value = valtotal;
-                document.getElementById('conttotalFirykm' + parte).value = valtotal/SNP ?? 0;
+                document.getElementById('conttotalFirykm' + parte).value = valtotal / SNP ?? 0;
                 console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
 
 

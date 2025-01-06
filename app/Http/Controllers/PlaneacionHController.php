@@ -638,8 +638,6 @@ class PlaneacionHController extends Controller
             ->get()->toarray();
 
         foreach ($prods as $prod) {
-
-
             $inF1 = array();
             $padre = [];
             $dia = $hoy;
@@ -669,42 +667,36 @@ class PlaneacionHController extends Controller
                     if ($reg1['LPROD'] == $prod['IPROD']) {
                         $dia = $reg1['LSDTE'];
                         $turno = $reg1['CLCNO'];
-                        $total = $reg1['TOTAL'] + 0;
+                        $totalecl = $reg1['TOTAL'] + 0;
                         $valt = substr($turno, 4, 1);
-                        $forcastp += ['ecl' . $dia . $valt => $total];
+                        $forcastp += ['ecl' . $dia . $valt => $totalecl];
                     }
                 }
             }
-
             $padre += ['total' => $totalP];
             $fetemp = Carbon::parse($hoy);
-
             $fintem = Carbon::parse($totalF);
             $contd = 1;
-
             $firme = [];
             $pos = array_search($prod['IPROD'], $prodcqa);
-
             $totalcon =  ceil(($total / $pqa[$pos]) / 10);
-
-
-
             $contotal = 0;
+//             if($prod['IPROD']=='VA4128B04                          ')
+//             {
+// dd($total,$MBMS  );
+//             }
             while ($contd <= 5) {
                 $dia = $fetemp->format('Ymd');
                 if ($contotal <= $total / $pqa[$pos]) {
                     // echo $dia.'-'.$contotal."--".$totalcon.'--'.$total/$pqa[$pos].'<br>';
                     $firme += ['CH' . $dia . 'D' =>   $totalcon];
-                    $firme += ['H' . $dia . 'D' =>   round(($total / 10), 0)];
-
+                    $firme += ['H' . $dia . 'D' => $totalcon*$pqa[$pos] ];
+                    $contotal = $contotal + $totalcon;
                     if ($contotal <= $total / $pqa[$pos]) {
                         $firme += ['CH' . $dia . 'N' =>  $totalcon];
-                        $firme += ['H' . $dia . 'N' =>  round(($total / 10), 0)];
+                        $firme += ['H' . $dia . 'N' =>  $totalcon*$pqa[$pos] ];
                         $contotal = $contotal + $totalcon;
                     }
-
-
-                    $contotal = $contotal + $totalcon;
                 }
 
 
@@ -735,7 +727,6 @@ class PlaneacionHController extends Controller
                 }
                 $planpadre += $firme;
             }
-
             // $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
@@ -750,8 +741,6 @@ class PlaneacionHController extends Controller
             // dd($inF1);
             array_push($totalpa, $inF1);
         }
-        dd($totalpa);
-
         return $totalpa;
     }
 
