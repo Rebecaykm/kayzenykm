@@ -187,6 +187,7 @@
                                         </td>
 
                                         @php
+
                                             $hoy = $fecha;
                                             $contdias = 0;
                                             $namenA = strtr($padre, ' ', '_');
@@ -207,6 +208,7 @@
                                                             @php
 
                                                                 $firme = $info['F'];
+
                                                                 if (
                                                                     array_key_exists('For' . $hoy . 'D', $info) == false
                                                                 ) {

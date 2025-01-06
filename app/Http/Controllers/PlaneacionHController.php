@@ -667,9 +667,10 @@ class PlaneacionHController extends Controller
                     if ($reg1['LPROD'] == $prod['IPROD']) {
                         $dia = $reg1['LSDTE'];
                         $turno = $reg1['CLCNO'];
-                        $totalecl = $reg1['TOTAL'] + 0;
+                        $total = $reg1['TOTAL'] + 0;
                         $valt = substr($turno, 4, 1);
-                        $forcastp += ['ecl' . $dia . $valt => $totalecl];
+
+                        $forcastp += ['ecl' . $dia . 'D' => $total];
                     }
                 }
             }
