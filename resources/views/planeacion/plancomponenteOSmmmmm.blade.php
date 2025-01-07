@@ -48,8 +48,8 @@
             <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
             <div class="flex flex-col max-w-full overflow-x-auto">
                 @php
-                $tdias = $dias;
-            @endphp
+                    $tdias = $dias;
+                @endphp
                 <!-- Header -->
 
                 {{-- <div class="flex flex-col">
@@ -124,9 +124,74 @@
                                     $fin = date('Ymd', strtotime($hoy . '+' . $Xdias . ' day'));
                                     $diasjava = '';
                                 @endphp
+                                <div class="flex flex-col items-center space-y-2 p-4">
+
+                                    <!-- Fecha -->
+                                    <div class="text-sm text-gray-500"> Dia </div>
+                                    <!-- Contenedor horizontal para los bloques -->
+                                    <div class="flex space-x-4">
+                                        <!-- Bloque 1 -->
+                                        <div class="min-w-[100px] text-center border rounded shadow p-2">
+                                            <div class="text-sm text-gray-500">Turno</div>
+                                            <div class="text-sm text-gray-500">Forcast</div>
+                                            <div class="text-sm text-gray-500">Firme</div>
+                                            <div class="text-sm text-gray-500">F/YKM</div>
+                                        </div>
+
+                                    </div>
+                                </div>
 
                                 @while ($hoy != $fin)
+                                    @php
+
+                                        if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                                            $valFD = '-';
+                                        } else {
+                                            $valFD = $info['For' . $hoy . 'D'];
+                                        }
+
+                                        if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                                            $valFN = '-';
+                                        } else {
+                                            $valFN = $info['For' . $hoy . 'N'];
+                                        }
+                                        if (array_key_exists('P' . $hoy . 'D', $info) == false) {
+                                            $valPD = '-';
+                                        } else {
+                                            $valPD = $info['P' . $hoy . 'D'];
+                                        }
+
+                                        if (array_key_exists('P' . $hoy . 'N', $info) == false) {
+                                            $valPN = '-';
+                                        } else {
+                                            $valPN = $info['P' . $hoy . 'N'];
+                                        }
+                                        if (array_key_exists('F' . $hoy . 'D', $info) == false) {
+                                            $valFiD = '-';
+                                        } else {
+                                            $valFiD = $info['F' . $hoy . 'D'];
+                                        }
+                                        if (array_key_exists('F' . $hoy . 'N', $info) == false) {
+                                            $valFiN = '-';
+                                        } else {
+                                            $valFiN = $info['F' . $hoy . 'N'];
+                                        }
+                                        if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                            $valeclD = '-';
+                                        } else {
+                                            $valeclD = $info['ecl' . $hoy . 'D'];
+                                        }
+                                        if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                            $valeclN = '-';
+                                        } else {
+                                            $valeclN = $info['ecl' . $hoy . 'N'];
+                                        }
+                                        $valRD = 0;
+                                        $valRN = 0;
+
+                                    @endphp
                                     <div class="flex flex-col items-center space-y-2 p-4">
+
                                         <!-- Fecha -->
                                         <div class="text-sm text-gray-500"> {{ date('d', strtotime($hoy)) }} </div>
                                         <!-- Contenedor horizontal para los bloques -->
@@ -134,13 +199,20 @@
                                             <!-- Bloque 1 -->
                                             <div class="min-w-[100px] text-center border rounded shadow p-2">
                                                 <div class="text-sm text-gray-500">D</div>
-                                                <div class="font-bold">-</div>
+                                                <div class="text-sm text-gray-500">
+                                                    {{ $valFD }}
+                                                </div>
+                                                <div class="text-sm text-gray-500">{{ $valeclD }}</div>
                                                 <div class="text-sm text-gray-500">-</div>
                                             </div>
                                             <!-- Bloque 2 -->
                                             <div class="min-w-[100px] text-center border rounded shadow p-2">
                                                 <div class="text-sm text-gray-500">N</div>
-                                                <div class="text-sm text-gray-500">-</div>
+                                                <div class="text-sm text-gray-500">
+                                                   {{ $valFN }}
+                                                </div>
+                                                <div class="text-sm text-gray-500">{{ $valeclN }}</div>
+
                                                 <div class="text-sm text-gray-500">-</div>
                                             </div>
                                         </div>

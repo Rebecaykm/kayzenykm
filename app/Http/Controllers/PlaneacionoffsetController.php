@@ -82,7 +82,7 @@ class PlaneacionoffsetController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
             // dd( $cadepar );
-            return view('planeacion.plancomponenteOS', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
