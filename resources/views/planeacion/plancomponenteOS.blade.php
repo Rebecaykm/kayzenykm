@@ -1,5 +1,10 @@
 <x-app-layout title="Plan">
-
+    {{-- @php
+        include_once '../app/Http/Controllers/registros.php';
+        $obj = new registros();
+        $projecto = $obj->Projecto($tp);
+        // $dias = ;
+    @endphp --}}
 
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -46,122 +51,15 @@
             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
             <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
-            <div class="flex flex-col max-w-full overflow-x-auto">
-                <!-- Header -->
-                {{-- <div class="flex flex-col">
-                    <div class="flex items-start"> --}}
-                <!-- Info -->
 
-                {{-- <div class="w-[200px] bg-blue-50 p-4 border-r flex flex-col space-y-2">
-                            <span class="font-bold">PARTE FINALES</span>
-                            <span class="text-gray-500">PARTES PADRES</span>.
-                        </div> --}}
-                {{--
-                        @php
-                            $hoy = $fecha;
-                            $totalD = 0;
-                            $tdias = $dias;
-                            $dias = $dias - 2;
-                            $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                            $diasjava = '';
-
-                        @endphp --}}
-                {{-- <div class="flex space-x-6">
-
-                            @while ($hoy != $fin)
-                            <div class="min-w-[100px] text-center border rounded shadow p-2 flex items-center justify-center space-x-2">
-                                <div>
-                                    <div class="text-sm text-gray-500">Dia</div>
-                                </div>
-                                <div class="font-bold">-</div>
-                                <div>
-                                    <div class="text-sm text-gray-500">Noche</div>
-                                </div>
-                            </div>
-                                @php
-                                    $diasjava = $hoy . '/' . $diasjava;
-                                    $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                    $totalD = $totalD + 1;
-
-                                @endphp
-                            @endwhile
-
-                        </div> --}}
-                {{-- </div>
-                </div> --}}
-            </div>
-            <!-- Content -->
-
-            @php
-                $tdias = $dias;
-            @endphp
-            @foreach ($res as $info1)
-                @php
-
-                    $info = $info1['padre'];
-
-                @endphp
-                <div class="flex flex-col">
-                    <div class="flex items-start">
-                        <!-- Info -->
-                        <div class="min-w-[200px] bg-blue-50 p-4 border-r">
-                            <div class="text-sm text-gray-500">Item</div>
-                            <div class="font-bold">{{ $info['parte'] }}</div>
-                            <div class="text-sm text-gray-500">SNP: 80,000</div>
-                            <div class="text-sm text-gray-500">Workcenter: 124400</div>
-                        </div>
-
-                        <!-- Contenedor para el scroll horizontal -->
-                        <div class="flex-1 overflow-x-auto">
-                            <div class="flex whitespace-nowrap">
-                                @php
-                                    $hoy = $fecha;
-                                    $totalD = 0;
-
-                                    $Xdias = $Tdias - 2;
-                                    $fin = date('Ymd', strtotime($hoy . '+' . $Xdias . ' day'));
-                                    $diasjava = '';
-                                @endphp
-
-                                @while ($hoy != $fin)
-                                    <div class="flex flex-col items-center space-y-2 p-4">
-                                        <!-- Fecha -->
-                                        <div class="text-sm text-gray-500"> {{ date('d', strtotime($hoy)) }} </div>
-                                        <!-- Contenedor horizontal para los bloques -->
-                                        <div class="flex space-x-4">
-                                            <!-- Bloque 1 -->
-                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                                <div class="text-sm text-gray-500">D</div>
-                                                <div class="font-bold">-</div>
-                                                <div class="text-sm text-gray-500">-</div>
-                                            </div>
-                                            <!-- Bloque 2 -->
-                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                                <div class="text-sm text-gray-500">N</div>
-                                                <div class="text-sm text-gray-500">-</div>
-                                                <div class="text-sm text-gray-500">-</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @php
-                                        $diasjava = $hoy . '/' . $diasjava;
-                                        $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                        $totalD = $totalD + 1;
-                                    @endphp
-                                @endwhile
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-
-
-
-            {{-- <table class="w-full whitespace-no-wrap "> --}}
-            {{-- <thead>
+            <table class="w-full whitespace-no-wrap ">
+                <thead>
                     <tr
                         class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-
+                        {{-- <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
+                        <th class=" header px-4 py-3 sticky ">
+                            Parte <br> componente
+                        </th> --}}
                         <th class=" header px-4 py-3 sticky ">
                             Parte <br> Finales
                         </th>
@@ -204,10 +102,12 @@
 
                             @endphp
                         @endwhile
-
+                        <th class=" header px-4 py-3 sticky ">
+                            Parte <br> Total
+                        </th>
                     </tr>
-                </thead> --}}
-            {{-- <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                </thead>
+                <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                     @php
                         $histo = [];
                     @endphp
@@ -225,10 +125,15 @@
                             </td>
                         </tr>
                         <tr class="text-gray-700 dark:text-gray-400  text-xs ">
-
+                            {{-- <td class="px-2 py-1 text-xs  bg-teal-300">
+                                <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                    {{ $info['parte'] }}
+                                </div>
+                            </td> --}}
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
-
+                            {{-- <td class="px-2 py-1 text-xs  bg-emerald-100">
+                            </td> --}}
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -396,7 +301,8 @@
                                 </div>
                             </td>
                         </tr>
-                       @php
+                        {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
+                        @php
                             $datossub = $info1['hijos'];
 
                         @endphp
@@ -457,7 +363,24 @@
                                     </td>
                                 </tr>
                                 <tr class="text-gray-700 dark:text-gray-400 ">
+                                    {{-- <td class="px-2 py-1 text-xs text-center ">
+                                    </td> --}}
+                                    {{-- <td class="px-2 py-1 text-xs text-center">
+                                        {{ $datossubs['sub'] }}<br>
+                                        @php
 
+                                            $item = strtr($datossubs['sub'], ' ', '_');
+                                            $wctpar = $datossubs['wrk'] ?? 'xxxx';
+
+                                        @endphp
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
+                                            SNP: {{ $datossubs['Qty'] }}<br>
+                                            Wrkcente: {{ $datossubs['wrk'] }}<br>
+                                            Min balance: {{ $datossubs['minbal'] }}<br>
+                                            Contenedor: {{ $datossubs['typkt']}}
+                                        </div>
+                                    </td> --}}
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
                                             $forcast = $datossubs['forcast'];
@@ -490,7 +413,13 @@
                                                     disabled />
                                             </label>
                                         </div>
-
+                                        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+                                                <input value="Requeriment (Parent parts)"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+                                        </div> --}}
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
 
@@ -561,6 +490,7 @@
                                         </div>
 
                                     </td>
+                                    {{-- totales --}}
 
                                     @php
                                         $coni = 0;
@@ -742,6 +672,21 @@
                                                         disabled />
                                                 </label>
                                             </div>
+                                            {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $valKMRsd }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+
+                                                    <input value={{ $valMKMRsn }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div> --}}
+
+                                            {{-- //---------------------------------------- --}}
 
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
@@ -792,7 +737,7 @@
                                                         disabled />
                                                 </label>
                                             </div>
-
+                                            {{-- //-------------------------------------------------- --}}
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valPDH }}
@@ -900,8 +845,8 @@
                         @endforeach
                     @endforeach
 
-                </tbody> --}}
-            {{-- </table> --}}
+                </tbody>
+            </table>
 
         </div>
     </form>
@@ -910,7 +855,7 @@
         <form method="post" action="{{ route('planeacion.siguiente') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
-                {{-- <div class="flex justify-center">
+                <div class="flex justify-center">
                     <label class="block mt-4 text-sm">
                         <input type="hidden" name={{ $fecha . '/' . $tdias }} id="data"
                             value={{ $fecha . '/' . $tdias }}>
@@ -922,7 +867,7 @@
                         <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
                         <input type="hidden" name="dias" id="data" value={{ $tdias }}>
                     </label>
-                </div> --}}
+                </div>
                 <div class="flex justify-center">
                     @if ($pagina != 0)
                         <button type="submit"
@@ -949,7 +894,7 @@
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
-                    {{-- <label class="block mt-4 text-sm">
+                    <label class="block mt-4 text-sm">
                         <input type="hidden" name={{ $fecha . '/' . $dias }} id="data"
                             value={{ $fecha . '/' . $dias }}>
                         <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
@@ -960,32 +905,32 @@
                         <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
                         <input type="hidden" name="dias" id="data" value={{ $tdias }}>
                     </label>
-                </div> --}}
-                    <div class="flex justify-center">
-                        @if ($pagina != $tpag)
-                            <button type="submit"
-                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                                <span class="mr-2">Siguiente</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </button>
-                        @else
-                            <button type="submit"
-                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue disabled:opacity-75"
-                                disabled="true">
-                                <span class="mr-2">Siguiente</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </button>
-                        @endif
-                    </div>
                 </div>
+                <div class="flex justify-center">
+                    @if ($pagina != $tpag)
+                        <button type="submit"
+                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            <span class="mr-2">Siguiente</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    @else
+                        <button type="submit"
+                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue disabled:opacity-75"
+                            disabled="true">
+                            <span class="mr-2">Siguiente</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+            </div>
         </form>
         <div
             class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
@@ -993,8 +938,7 @@
                 Y - TEC KEYLEX MÉXICO
             </span>
             <span class="col-span-2"></span>
-
-
+            {{-- {{ $res->setPath('/planeacion/create') }} --}}
             <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
                 <nav aria-label="Table navigation">
                     <ul class="inline-flex items-center">
