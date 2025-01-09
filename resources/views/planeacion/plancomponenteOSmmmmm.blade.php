@@ -50,63 +50,17 @@
                 @php
                     $tdias = $dias;
                 @endphp
-                <!-- Header -->
 
-                {{-- <div class="flex flex-col">
-                    <div class="flex items-start"> --}}
-                <!-- Info -->
-
-                {{-- <div class="w-[200px] bg-blue-50 p-4 border-r flex flex-col space-y-2">
-                            <span class="font-bold">PARTE FINALES</span>
-                            <span class="text-gray-500">PARTES PADRES</span>.
-                        </div> --}}
-                {{--
-                        @php
-                            $hoy = $fecha;
-                            $totalD = 0;
-                            $tdias = $dias;
-                            $dias = $dias - 2;
-                            $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-                            $diasjava = '';
-
-                        @endphp --}}
-                {{-- <div class="flex space-x-6">
-
-                            @while ($hoy != $fin)
-                            <div class="min-w-[100px] text-center border rounded shadow p-2 flex items-center justify-center space-x-2">
-                                <div>
-                                    <div class="text-sm text-gray-500">Dia</div>
-                                </div>
-                                <div class="font-bold">-</div>
-                                <div>
-                                    <div class="text-sm text-gray-500">Noche</div>
-                                </div>
-                            </div>
-                                @php
-                                    $diasjava = $hoy . '/' . $diasjava;
-                                    $hoy = date('Ymd', strtotime($hoy . '+1 day'));
-                                    $totalD = $totalD + 1;
-
-                                @endphp
-                            @endwhile
-
-                        </div> --}}
-                {{-- </div>
-                </div> --}}
             </div>
             <!-- Content -->
-
-
             @foreach ($res as $info1)
                 @php
-
                     $info = $info1['padre'];
-
                 @endphp
                 <div class="flex flex-col">
                     <div class="flex items-start">
                         <!-- Info -->
-                        <div class="min-w-[200px] bg-blue-50 p-4 border-r">
+                        <div class="w-48 bg-blue-50 p-4 border-r">
                             <div class="text-sm text-gray-500">Item</div>
                             <div class="font-bold">{{ $info['parte'] }}</div>
                             <div class="text-sm text-gray-500">SNP: 80,000</div>
@@ -125,19 +79,17 @@
                                     $diasjava = '';
                                 @endphp
                                 <div class="flex flex-col items-center space-y-2 p-4">
-
                                     <!-- Fecha -->
-                                    <div class="text-sm text-gray-500"> Dia </div>
+                                    <div class="font-bold">Dia </div>
                                     <!-- Contenedor horizontal para los bloques -->
                                     <div class="flex space-x-4">
                                         <!-- Bloque 1 -->
-                                        <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                            <div class="text-sm text-gray-500">Turno</div>
+                                        <div class="w-40 text-center border rounded shadow p-2">
+                                            <div class="font-bold">Turno</div>
                                             <div class="text-sm text-gray-500">Forcast</div>
                                             <div class="text-sm text-gray-500">Firme</div>
                                             <div class="text-sm text-gray-500">F/YKM</div>
                                         </div>
-
                                     </div>
                                 </div>
 
@@ -193,12 +145,12 @@
                                     <div class="flex flex-col items-center space-y-2 p-4">
 
                                         <!-- Fecha -->
-                                        <div class="text-sm text-gray-500"> {{ date('d', strtotime($hoy)) }} </div>
+                                        <div class="font-bold"> {{ date('d', strtotime($hoy)) }} </div>
                                         <!-- Contenedor horizontal para los bloques -->
                                         <div class="flex space-x-4">
                                             <!-- Bloque 1 -->
-                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                                <div class="text-sm text-gray-500">D</div>
+                                            <div class="w-24 text-center border rounded shadow">
+                                                <div class="font-bold">D</div>
                                                 <div class="text-sm text-gray-500">
                                                     {{ $valFD }}
                                                 </div>
@@ -206,10 +158,10 @@
                                                 <div class="text-sm text-gray-500">-</div>
                                             </div>
                                             <!-- Bloque 2 -->
-                                            <div class="min-w-[100px] text-center border rounded shadow p-2">
-                                                <div class="text-sm text-gray-500">N</div>
+                                            <div class=" w-24 text-center border rounded shadow ">
+                                                <div class="font-bold">N</div>
                                                 <div class="text-sm text-gray-500">
-                                                   {{ $valFN }}
+                                                    {{ $valFN }}
                                                 </div>
                                                 <div class="text-sm text-gray-500">{{ $valeclN }}</div>
 
@@ -222,10 +174,368 @@
                                         $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                         $totalD = $totalD + 1;
                                     @endphp
+                                    @php
+                                        $histo = [];
+                                        $datossub = $info1['hijos'];
+                                    @endphp
                                 @endwhile
+
                             </div>
                         </div>
                     </div>
+                    @foreach ($datossub as $datossubs)
+                        @php
+                            $hoy1 = $fecha;
+                        @endphp
+                        @if (array_search($datossubs['sub'], $histo) != true)
+                            @php
+                                array_push($histo, $datossubs['sub']);
+                                $item = strtr($datossubs['sub'], ' ', '_');
+                                $wctpar = $datossubs['wrk'] ?? 'xxxx';
+                            @endphp
+                            <div class="flex items-start ">
+                                <div class=" w-48 bg-gray-50 border-r p-1">
+                                    <div class="text-sm text-gray-500">Item</div>
+                                    <div class="font-bold">{{ $datossubs['sub'] }}</div>
+                                    <div class="text-sm text-gray-500">SNP: {{ $datossubs['Qty'] }}</div>
+                                    <div class="text-sm text-gray-500"> WC: {{ $datossubs['wrk'] }}</div>
+                                    {{-- <div class="text-sm text-gray-500"> Min balance: {{ $datossubs['minbal'] }}</div> --}}
+                                    <div class="text-sm text-gray-500"> Contenedor:{{ $datossubs['typkt'] }}</div>
+                                </div>
+
+                                <div class="flex flex-col items-center space-y-2 p-4">
+                                    <!-- Fecha -->
+                                    <div class="font-bold">Dia </div>
+                                    <!-- Contenedor horizontal para los bloques -->
+                                    <div class="flex space-x-4">
+                                        <!-- Bloque 1 -->
+                                        <div class="w-40 text-center border rounded shadow p-1">
+                                            <div class="font-bold">Turno</div>
+                                            <div class="text-sm text-gray-500 border-red-400  ">Pronostico</div>
+
+                                            <div class="text-sm text-gray-500">Cant requerida</div>
+                                            <div class="text-sm text-gray-500">Cant necesaria</div>
+                                            <div class="text-sm text-gray-500"> Plan</div>
+                                            <div class="text-sm text-gray-500">Remanente</div>
+                                            <div class="text-sm text-gray-500">Plan</div>
+                                            <div class="text-sm text-gray-500">Firme"</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-x-auto">
+                                    <div class="flex whitespace-nowrap">
+
+                                        @php
+                                            $coni = 0;
+                                            $hoy1 = $fecha;
+                                            $plan = $datossubs['plan'];
+                                            $offset = $datossubs['offset'];
+
+                                            $totalplan = 0;
+                                            $totalKMRP = 0;
+                                            $totalfir = 0;
+                                            $totalkfp = 0;
+
+                                            $forcast = $datossubs['forcast'];
+                                            $totalplan = array_sum($forcast);
+                                            $totalcarry = 0;
+                                            $totalpreq = 0;
+                                            $totaloqty = 0;
+                                            $totalvalFH = 0;
+                                            $CONTCARR = 0;
+                                            $totaloplan=0;
+                                        @endphp
+
+                                        @while ($coni < $dias)
+                                            @php
+
+                                                if (array_key_exists('For' . $hoy1 . 'D', $plan) == false) {
+                                                    $valFDH = '0';
+                                                } else {
+                                                    $valFDH = $plan['For' . $hoy1 . 'D'];
+                                                }
+
+                                                if (array_key_exists('For' . $hoy1 . 'N', $plan) == false) {
+                                                    $valFNH = '0';
+                                                } else {
+                                                    $valFNH = $plan['For' . $hoy1 . 'N'];
+                                                }
+                                                $var = 'R' . $hoy . 'D';
+                                                $re = 0;
+                                                $valRDH = 0;
+                                                $valRNH = 0;
+
+                                                if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
+                                                    $valRDH = $valRDH + $forcast['FMA' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('kmr' . $hoy1 . 'D', $forcast) == true) {
+                                                    $valRDH = $valRDH + $forcast['kmr' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('ecl' . $hoy1 . 'D', $forcast) == true) {
+                                                    $valRDH = $valRDH + $forcast['ecl' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('kmr' . $hoy1 . 'N', $forcast) == true) {
+                                                    $valRNH = $valRNH + $forcast['kmr' . $hoy1 . 'N'];
+                                                }
+                                                if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
+                                                    $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
+                                                }
+
+                                                $totalKMRP = $totalKMRP + $valRDH + $valRNH;
+
+                                                if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
+                                                    $valPDH = '0';
+                                                } else {
+                                                    $valPDH = $plan['P' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('P' . $hoy1 . 'N', $plan) == false) {
+                                                    $valPNH = '0';
+                                                } else {
+                                                    $valPNH = $plan['P' . $hoy1 . 'N'];
+                                                }
+                                                $totalplan = $valPDH + $valPNH + $totalplan;
+
+                                                if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
+                                                    $valFiDH = $valPDH;
+                                                } else {
+                                                    $valFiDH = $plan['F' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('F' . $hoy1 . 'N', $plan) == false) {
+                                                    $valFiNH = $valPNH;
+                                                } else {
+                                                    $valFiNH = $plan['F' . $hoy1 . 'N'];
+                                                }
+                                                $totalfir = $totalfir + $valFiDH + $valFiNH;
+                                                if (array_key_exists('S' . $hoy1 . 'D', $plan) == false) {
+                                                    $valSDH = '-';
+                                                } else {
+                                                    $valSDH = $plan['S' . $hoy1 . 'D'];
+                                                }
+
+                                                if (array_key_exists('S' . $hoy1 . 'N', $plan) == false) {
+                                                    $valSNH = '-';
+                                                } else {
+                                                    $valSNH = $plan['S' . $hoy1 . 'N'];
+                                                }
+
+                                                if (array_key_exists('KMRS' . $hoy1 . 'D', $forcast) == false) {
+                                                    $valKMRsd = '-';
+                                                } else {
+                                                    $valKMRsd = $forcast['KMRS' . $hoy1 . 'D'];
+                                                }
+
+                                                if (array_key_exists('KMRS' . $hoy1 . 'N', $forcast) == false) {
+                                                    $valMKMRsn = '-';
+                                                } else {
+                                                    $valMKMRsn = $forcast['KMRS' . $hoy1 . 'N'];
+                                                }
+                                                if (array_key_exists('kfp' . $hoy1 . 'D', $forcast) == false) {
+                                                    $valkfpsd = '0';
+                                                } else {
+                                                    $valkfpsd = $forcast['kfp' . $hoy1 . 'D'];
+                                                }
+
+                                                if (array_key_exists('kfp' . $hoy1 . 'N', $forcast) == false) {
+                                                    $valMkfpsn = '0';
+                                                } else {
+                                                    $valMkfpsn = $forcast['kfp' . $hoy1 . 'N'];
+                                                }
+                                                $totalkfp += $valkfpsd + $valMkfpsn;
+
+                                                // OFFSET
+                                                // dd($info,$offset,'opreq' . $hoy . 'D',array_key_exists('opreq' . $hoy . 'D', $offset));
+                                                if (array_key_exists('opreq' . $hoy1 . 'D', $offset) == false) {
+                                                    $prreqD = '0';
+                                                } else {
+                                                    $prreqD = $offset['opreq' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('oqty' . $hoy1 . 'D', $offset) == false) {
+                                                    $oqtyD = '0';
+                                                } else {
+                                                    $oqtyD = $offset['oqty' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('oplan' . $hoy1 . 'D', $offset) == false) {
+                                                    $oplanD = '0';
+                                                } else {
+                                                    $oplanD = $offset['oplan' . $hoy1 . 'D'];
+                                                }
+                                                if (array_key_exists('ocarry' . $hoy1 . 'D', $offset) == false) {
+                                                    $ocarryD = '0';
+                                                } else {
+                                                    $ocarryD = $offset['ocarry' . $hoy1 . 'D'];
+                                                }
+
+                                                //-----------NOCHE
+                                                if (array_key_exists('opreq' . $hoy1 . 'N', $offset) == false) {
+                                                    $prreqN = '0';
+                                                } else {
+                                                    $prreqN = $offset['opreq' . $hoy1 . 'N'];
+                                                }
+                                                if (array_key_exists('oqty' . $hoy1 . 'N', $offset) == false) {
+                                                    $oqtyN = '0';
+                                                } else {
+                                                    $oqtyN = $offset['oqty' . $hoy1 . 'N'];
+                                                }
+                                                if (array_key_exists('oplan' . $hoy1 . 'N', $offset) == false) {
+                                                    $oplanN = '0';
+                                                } else {
+                                                    $oplanN = $offset['oplan' . $hoy1 . 'N'];
+                                                }
+                                                if (array_key_exists('ocarry' . $hoy1 . 'N', $offset) == false) {
+                                                    $ocarryN = '0';
+                                                } else {
+                                                    $ocarryN = $offset['ocarry' . $hoy1 . 'N'];
+                                                }
+                                                if ($CONTCARR == 8) {
+                                                    $CONTCARR = 1;
+                                                    $totalcarry = 0;
+                                                    $totalcarry=  $ocarryD;
+                                                } else {
+                                                    $CONTCARR = $CONTCARR + 1;
+                                                        if( $CONTCARR<=7){
+                                                            if($ocarryD!=0){
+                                                            $totalcarry= $ocarryD;
+                                                            if($ocarryN!=0){
+                                                            $totalcarry= $ocarryN;
+                                                            }
+                                                        }else {
+                                                            if($ocarryN!=0){
+                                                            $totalcarry= $ocarryN;
+                                                            }
+                                                        }
+                                                        }
+
+
+
+
+                                                    $totalpreq += $prreqD + $prreqN;
+                                                    $totaloqty += $oqtyN + $oqtyD;
+                                                    $totalvalFH += $valFNH + $valFDH;
+                                                    $totaloplan+=$oplanD+$oplanN;
+                                                }
+
+                                            @endphp
+                                            @if ($CONTCARR == 8)
+                                                <div class="flex flex-col items-center space-y-2 p-4">
+
+                                                    @php
+                                                        $namenA = strtr($datossubs['sub'], ' ', '_');
+                                                        $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
+                                                        $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
+                                                        $WRCj = $datossubs['wrk'];
+                                                        $namep = $datossubs['sub'];
+                                                    @endphp
+
+                                                    <!-- Fecha -->
+
+                                                    <div class="font-bold">Total
+                                                    </div>
+                                                    <!-- Contenedor horizontal para los bloques -->
+                                                    <div class="flex space-x-4 border border-red-700">
+                                                        <!-- Bloque 1 -->
+                                                        <div class="w-24 text-center border rounded shadow">
+                                                            <div class="font-bold">-</div>
+                                                            <div class="text-sm ">{{  $totalvalFH }}</div>
+                                                            {{-- <div class="text-sm text-gray-500">{{ $valeclD }}</div>
+                                                        <div class="text-sm ">{{ $valkfpsd }}</div> --}}
+
+                                                            <div class="text-sm text-gray-500">{{  $totalpreq}}</div>
+                                                            <div class="text-sm ">{{$totaloqty }}</div>
+                                                            <div class="text-sm text-gray-500">{{$totaloplan}}</div>
+                                                            <div class="text-sm ">{{ $totalcarry }}</div>
+                                                            {{-- <div class="text-sm text-gray-500">{{ $valPDH }}</div> --}}
+                                                            <div class="text-sm flex items-center justify-center">
+                                                                <input type="number" min="0"
+                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                                    disabled />
+                                                            </div>
+                                                            <div class="text-sm text-gray-500">{{ $valSDH }}
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- Bloque 2 -->
+
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="flex flex-col items-center space-y-2 p-4">
+
+                                                    @php
+                                                        $namenA = strtr($datossubs['sub'], ' ', '_');
+                                                        $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
+                                                        $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
+                                                        $WRCj = $datossubs['wrk'];
+                                                        $namep = $datossubs['sub'];
+                                                    @endphp
+
+                                                    <!-- Fecha -->
+
+                                                    <div class="font-bold">{{ date('d', strtotime($hoy1)) }}
+                                                    </div>
+                                                    <!-- Contenedor horizontal para los bloques -->
+                                                    <div class="flex space-x-4">
+                                                        <!-- Bloque 1 -->
+                                                        <div class="w-24 text-center border rounded shadow">
+                                                            <div class="font-bold">D</div>
+                                                            <div class="text-sm ">{{ $valRDH }}</div>
+                                                            {{-- <div class="text-sm text-gray-500">{{ $valeclD }}</div>
+                                                            <div class="text-sm ">{{ $valkfpsd }}</div> --}}
+
+                                                            <div class="text-sm text-gray-500">{{ $prreqD }}
+                                                            </div>
+                                                            <div class="text-sm ">{{ $oqtyD }}</div>
+                                                            <div class="text-sm text-gray-500">{{ $oplanD }}
+                                                            </div>
+                                                            <div class="text-sm ">{{ $ocarryD }}</div>
+                                                            {{-- <div class="text-sm text-gray-500">{{ $valPDH }}</div> --}}
+                                                            <div class="text-sm flex items-center justify-center">
+                                                                <input id="{{ $inD }}"
+                                                                    name="{{ $inD }}"
+                                                                    value="{{ $valFiDH }}"
+                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
+                                                                    type="number" min="0"
+                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                            </div>
+                                                            <div class="text-sm text-gray-500">{{ $valSDH }}
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- Bloque 2 -->
+                                                        <div class="w-24 text-center border rounded shadow ">
+                                                            <div class="font-bold">N</div>
+                                                            <div class="text-sm border-y-gray-900">
+                                                                {{ $valRNH }}</div>
+                                                            <div class="text-sm text-gray-500">{{ $prreqN }}
+                                                            </div>
+                                                            <div class="text-sm border-y-gray-900">{{ $oqtyN }}
+                                                            </div>
+                                                            <div class="text-sm text-gray-500">{{ $oplanN }}
+                                                            </div>
+                                                            <div class="text-sm border-y-gray-900">{{ $ocarryN }}
+                                                            </div>
+                                                            {{-- <div class="text-sm text-gray-500">{{ $valPNH }}</div> --}}
+                                                            <div class="text-sm  "> <input id={{ $inN }}
+                                                                    name={{ $inN }} value={{ $valFiNH }}
+                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
+                                                                    type="number" min="0"
+                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                            </div>
+                                                            <div class="text-sm text-gray-500">{{ $valSNH }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @php
+                                                    $hoy1 = date('Ymd', strtotime($hoy1 . '+1 day'));
+                                                    $coni++;
+                                                @endphp
+                                            @endif
+                                        @endwhile
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
             @endforeach
 
@@ -524,7 +834,6 @@
                                     <td class="px-2 py-1 text-xs text-center">
 
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-
 
                                             Contenedor: {{ $datossubs['typkt'] }}
                                         </div>

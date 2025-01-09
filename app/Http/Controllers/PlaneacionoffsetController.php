@@ -659,7 +659,7 @@ class PlaneacionoffsetController extends Controller
         $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
         $kmrmcfprod = array_column($KMRPARENT, 'MCFPRO');
         $KMRMCFCLS = array_column($KMRPARENT, 'MCFCLS');
-        $PADREKMR = implode("' OR  MPROD='", $kmrmcfprod);
+         $PADREKMR = implode("' OR  MPROD='", $kmrmcfprod);
 
         $RKMR = KMR::query()
             ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD,MTYPE')
@@ -679,23 +679,23 @@ class PlaneacionoffsetController extends Controller
             ])->get();
 
         // -----------------------------------------FIRME PLAN
-        $valPD = KFP::query()
-            ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->whereraw("(FPROD='" . $cadsubsPlan . "')")
-            ->where([
-                ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<', $totalF],
-            ])
-            ->get()->toarray();
+        // $valPD = KFP::query()
+        //     ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
+        //     ->whereraw("(FPROD='" . $cadsubsPlan . "')")
+        //     ->where([
+        //         ['FRDTE', '>=', $hoy],
+        //         ['FRDTE', '<', $totalF],
+        //     ])
+        //     ->get()->toarray();
 
 
         $cadsubssh = implode("' OR  SPROD='", $sub1);
-        $valSD = FSO::query()
-            ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
-            ->whereraw("(SPROD='" . $cadsubssh . "')")
-            ->where('SDDTE', '>=', $hoy)
-            ->where('SDDTE', '<', $totalF)
-            ->get()->toarray();
+        // $valSD = FSO::query()
+        //     ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
+        //     ->whereraw("(SPROD='" . $cadsubssh . "')")
+        //     ->where('SDDTE', '>=', $hoy)
+        //     ->where('SDDTE', '<', $totalF)
+        //     ->get()->toarray();
 
 
         $cond = IIM::query()
@@ -741,14 +741,14 @@ class PlaneacionoffsetController extends Controller
                 unset($FINALREQ[$key5]);
             }
 
-            while (($key2 = array_search($subs, $kmrmccprod)) !== false) {
-                if ($kmrmcfprod[$key2] != $subs) {
-                    array_push($padreskmr, $kmrmcfprod[$key2]);
-                }
-                unset($kmrmccprod[$key2]);
-                unset($KMRMCFCLS[$key2]);
-                unset($kmrmcfprod[$key2]);
-            }
+            // while (($key2 = array_search($subs, $kmrmccprod)) !== false) {
+            //     if ($kmrmcfprod[$key2] != $subs) {
+            //         array_push($padreskmr, $kmrmcfprod[$key2]);
+            //     }
+            //     unset($kmrmccprod[$key2]);
+            //     unset($KMRMCFCLS[$key2]);
+            //     unset($kmrmcfprod[$key2]);
+            // }
 
             $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
             $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
@@ -901,32 +901,32 @@ foreach($offset as $off)
 
 
 
-            foreach ($valPD as $reg3) {
-                if ($reg3['FPROD'] == $subs) {
-                    $dia = $reg3['FRDTE'];
-                    $turno = $reg3['FPCNO'];
-                    $tipo = $reg3['FTYPE'];
-                    $total = $reg3['FQTY'] + 0;
-                    $valt = substr($turno, 4, 1);
-                    $numpaplan += [$tipo . $dia . $valt => $total];
-                    if ($tipo == 'P') {
-                        $Tplan = $Tplan + $total;
-                    } else {
-                        $Tfirme = $Tfirme + $total;
-                    }
-                }
-            }
-            $total = 0;
-            foreach ($valSD as $reg4) {
-                if ($reg4['SPROD'] == $subs) {
-                    $dia = $reg4['SDDTE'];
-                    $turno = $reg4['SOCNO'];
-                    $total = $reg4['SQREQ'] + 0;
-                    $valt = substr($turno, 4, 1);
-                    $numpaplan += ['S' . $dia . $valt => $total];
-                    $Tshop = $Tshop + $total;
-                }
-            }
+            // foreach ($valPD as $reg3) {
+            //     if ($reg3['FPROD'] == $subs) {
+            //         $dia = $reg3['FRDTE'];
+            //         $turno = $reg3['FPCNO'];
+            //         $tipo = $reg3['FTYPE'];
+            //         $total = $reg3['FQTY'] + 0;
+            //         $valt = substr($turno, 4, 1);
+            //         $numpaplan += [$tipo . $dia . $valt => $total];
+            //         if ($tipo == 'P') {
+            //             $Tplan = $Tplan + $total;
+            //         } else {
+            //             $Tfirme = $Tfirme + $total;
+            //         }
+            //     }
+            // }
+            // $total = 0;
+            // foreach ($valSD as $reg4) {
+            //     if ($reg4['SPROD'] == $subs) {
+            //         $dia = $reg4['SDDTE'];
+            //         $turno = $reg4['SOCNO'];
+            //         $total = $reg4['SQREQ'] + 0;
+            //         $valt = substr($turno, 4, 1);
+            //         $numpaplan += ['S' . $dia . $valt => $total];
+            //         $Tshop = $Tshop + $total;
+            //     }
+            // }
             $total = 0;
             $Tshopkmr = 0;
 
