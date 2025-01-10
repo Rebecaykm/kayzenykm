@@ -354,14 +354,12 @@ class PlaneacionoffsetController extends Controller
 
     public function update(Request $request)
     {
-
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $tipo = $request->tipo;
         $WC = $request->SeWC;
         $variables = $request->all();
-
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
         $dias = 8;
@@ -372,76 +370,100 @@ class PlaneacionoffsetController extends Controller
         $datajob = [];
         $datval = [];
         $CONT = 0;
+        $chpart = [];
+        $chpartcol = collect();
         foreach ($keyes as $plans) {
             $dfa = [];
-            $inp = explode('/', $plans, 4);
-            if (count($inp) >= 3) {
-                $WCT = $inp[3];
-                $dfasql = [];
+            $inp = explode('/', $plans);
 
-                $namenA = strtr($inp[0], '_', ' ');
-
-                $turno = $inp[2];
-                $load = date('Ymd', strtotime('now'));
-                $hora = date('His', time());
-                $horasql = date('H:i:s', time());
-                $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
-                $fechasql = date('Ymd', strtotime($inp[1]));
-                if (!in_array($namenA,   $datajob)) {
-                    array_push($datajob, $namenA);
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+            if (count($inp) == 3) {
+                if ($inp[0] == 'Che' && $inp[1] == 'on') {
+                    $chpart += [$inp[2] => $inp[2]];
+                    $chpartcol->put($inp[2], $inp[2]);
                 }
-
-                $dfa = [
-                    'K62PRO' => $namenA,
-                    'K62WRK' => $WCT,
-                    'K62SDT' => $fecha,
-                    'K62EDT' => $fefin,
-                    'K62DDT' => $inp[1],
-                    'K62DSH' => $turno,
-                    'K62PFQ' => $request->$plans,
-                    'K62CUS' => 'LXSECOFR',
-                    'K62CCD' => $load,
-                    'K62CCT' => $hora,
-                    'K62FI1' => '',
-                    'K62FI2' => ''
-                ];
-                $dfasql = [
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $fechasql,
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $horasql,
-                    'K6FIL1' => '',
-                    'K6FIL2' => ''
-                ];
-                array_push($datasql, $dfasql);
-                array_push($datas, $dfa);
             }
-            if ($CONT == 50) {
-                $indata = YK0062::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
-                $datas = [];
-                $datasql = [];
-                $CONT = 0;
-            }
-            $CONT = $CONT + 1;
         }
 
+
+        foreach ($keyes as $plans) {
+            $dfa = [];
+            $inp = explode('/', $plans);
+
+
+            if (count($inp) >= 3 && $inp[0] != 'Che'  ) {
+
+                $WCT = $inp[3];
+                $dfasql = [];
+                $indice = $chpartcol->search($inp[0]);
+
+                if ($indice !== false) {
+                    // dd('fkmdk');
+                    $namenA = strtr($inp[0], '_', ' ');
+                    $turno = $inp[2];
+                    $load = date('Ymd', strtotime('now'));
+                    $hora = date('His', time());
+                    $horasql = date('H:i:s', time());
+                    $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
+                    $fechasql = date('Ymd', strtotime($inp[1]));
+                    if (!in_array($namenA,   $datajob)) {
+                        array_push($datajob, $namenA);
+                        $ar = ["part_number" => $namenA, "date" => $fechasql];
+                        array_push($datval, $ar);
+                    }
+
+                        $dfa = [
+                            'K62PRO' => $namenA,
+                            'K62WRK' => $WCT,
+                            'K62SDT' => $fecha,
+                            'K62EDT' => $fefin,
+                            'K62DDT' => $inp[1],
+                            'K62DSH' => $turno,
+                            'K62PFQ' => $request->$plans,
+                            'K62CUS' => 'LXSECOFR',
+                            'K62CCD' => $load,
+                            'K62CCT' => $hora,
+                            'K62FI1' => '',
+                            'K62FI2' => ''
+                        ];
+                        $dfasql = [
+                            'K6PROD' => $namenA,
+                            'K6WRKC' => $WCT,
+                            'K6SDTE' => $fecha,
+                            'K6EDTE' => $fefin,
+                            'K6DDTE' => $fechasql,
+                            'K6DSHT' => $turno,
+                            'K6PFQY' => $request->$plans,
+                            'K6CUSR' => 'LXSECOFR',
+                            'K6CCDT' => $load,
+                            'K6CCTM' => $horasql,
+                            'K6FIL1' => '',
+                            'K6FIL2' => ''
+                        ];
+                        array_push($datasql, $dfasql);
+                        array_push($datas, $dfa);
+
+                    if ($CONT == 80) {
+                        $indata = YK0062::query()->insert($datas);
+                        $insql = LOGSUP::query()->insert($datasql);
+                        $datas = [];
+                        $datasql = [];
+                        $CONT = 0;
+                    }
+                    $CONT = $CONT + 1;
+                } else {
+
+                }
+            }
+        }
         $indata = YK0062::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
 
+
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         // $query = "CALL LX834OU02.YMP006C";
-        // $query = "CALL LX834OU02.YMR002C";
+         $query = "CALL LX834OU02.YMR002C";
 
-        // $result = odbc_exec($conn, $query);
+        $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
@@ -641,8 +663,8 @@ class PlaneacionoffsetController extends Controller
             ->get()->toarray();
 
         $offset = YKPLN::query()
-        ->join('LX834F01.YMWEY', 'PPROD', '=', 'ZEITE')
-        ->select('PPROD', 'PRDTE', 'PRSHFT', 'PRREQ', 'PQTY', 'PRPLQ', 'PRCAO','ZELEVE')
+            ->join('LX834F01.YMWEY', 'PPROD', '=', 'ZEITE')
+            ->select('PPROD', 'PRDTE', 'PRSHFT', 'PRREQ', 'PQTY', 'PRPLQ', 'PRCAO', 'ZELEVE')
             ->whereIN('PPROD', $sub1)->where([
                 ['PRDTE', '>=', $hoy],
                 ['PRDTE', '<', $totalF],
@@ -826,11 +848,11 @@ class PlaneacionoffsetController extends Controller
             $total = 0;
 
             $ofsg = [];
-            $level='';
+            $level = '';
             foreach ($offset as $off) {
                 $ofs = [];
                 if ($off['PPROD'] == $subs) {
-                    $level=preg_replace('/\.\s*/', '', $off['ZELEVE']);;
+                    $level = preg_replace('/\.\s*/', '', $off['ZELEVE']);;
                     $PRDTE = $off['PRDTE'];
                     $SHIFT = $off['PRSHFT'];
                     if ($SHIFT == 'D' ||  $SHIFT == 'N') {
@@ -902,9 +924,9 @@ class PlaneacionoffsetController extends Controller
             //     'offset' => $ofsg
             // ];
 
-            $coleccion->put($subs,[
+            $coleccion->put($subs, [
                 'sub' => $subs,
-                'level'=>$level,
+                'level' => $level,
                 'plan' => $numpaplan,
                 'padres' => $texfinal,
                 'forcast' => $forcast,
@@ -917,13 +939,14 @@ class PlaneacionoffsetController extends Controller
                 'Tfirme' => $Tfirme,
                 'KMRpadres' => $texpadre ?? 0,
                 'Totalpadres' => $Tshopkmr,
-                'offset' => $ofsg]);
+                'offset' => $ofsg
+            ]);
 
             // $sepa += [$subs => $numpar];
         }
 
         $sorted = $coleccion->sortBy('level')->values();
-        $sepa= $sorted->toArray();
+        $sepa = $sorted->toArray();
 
 
         return $sepa;
