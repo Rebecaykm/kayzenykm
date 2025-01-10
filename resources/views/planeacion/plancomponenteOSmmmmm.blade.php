@@ -21,64 +21,53 @@
             @endswitch
         </h2>
     </div>
-    <form action="{{ route('planeacion.update') }}" method="post">
-        <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
-            @csrf
-            <div class="flex justify-center">
-                <button type="submit"
-                    class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
-                    <span class="mr-2">Actualizar</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                </button>
-            </div>
+
+    <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
 
 
+
+
+
+    </div>
+    <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
+
+        <div class="flex flex-col max-w-full overflow-x-auto">
+            @php
+                $tdias = $dias;
+            @endphp
 
         </div>
-        <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
-            <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
-            <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
-            <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
-            <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
-            <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
-            <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
-            <div class="flex flex-col max-w-full overflow-x-auto">
-                @php
-                    $tdias = $dias;
-                @endphp
+        <!-- Content -->
+        @foreach ($res as $info1)
+            @php
+                $info = $info1['padre'];
+            @endphp
 
-            </div>
-            <!-- Content -->
-            @foreach ($res as $info1)
-                @php
-                    $info = $info1['padre'];
-                @endphp
-                <div class="flex flex-col">
-                    <div class="flex items-start">
-                        <!-- Info -->
-                        <div class="w-48 bg-blue-50 p-4 border-r">
-                            <div class="text-sm text-gray-500">Item</div>
-                            <div class="font-bold">{{ $info['parte'] }}</div>
-                            <div class="text-sm text-gray-500">SNP: 80,000</div>
-                            <div class="text-sm text-gray-500">Workcenter: 124400</div>
-                        </div>
 
-                        <!-- Contenedor para el scroll horizontal -->
-                        <div class="flex-1 overflow-x-auto">
-                            <div class="flex whitespace-nowrap">
-                                @php
-                                    $hoy = $fecha;
-                                    $totalD = 0;
+            <div class="flex flex-col">
 
-                                    $Xdias = $tdias - 2;
-                                    $fin = date('Ymd', strtotime($hoy . '+' . $Xdias . ' day'));
-                                    $diasjava = '';
-                                @endphp
-                                <div class="flex flex-col items-center space-y-2 p-4">
+                <div class="flex items-start">
+                    <!-- Info -->
+                    <div class="w-48 bg-blue-50 p-4 border-r">
+                        <div class="text-sm text-gray-500">Item</div>
+                        <div class="font-bold">{{ $info['parte'] }}</div>
+                        <div class="text-sm text-gray-500">SNP: 80,000</div>
+                        <div class="text-sm text-gray-500">Workcenter: 124400</div>
+
+                    </div>
+
+                    <!-- Contenedor para el scroll horizontal -->
+                    <div class="flex-1 overflow-x-auto">
+                        <div class="flex whitespace-nowrap">
+                            @php
+                                $hoy = $fecha;
+                                $totalD = 0;
+
+                                $Xdias = $tdias - 2;
+                                $fin = date('Ymd', strtotime($hoy . '+' . $Xdias . ' day'));
+                                $diasjava = '';
+                            @endphp
+                            {{-- <div class="flex flex-col items-center space-y-2 p-4">
                                     <!-- Fecha -->
                                     <div class="font-bold">Dia </div>
                                     <!-- Contenedor horizontal para los bloques -->
@@ -91,9 +80,9 @@
                                             <div class="text-sm text-gray-500">F/YKM</div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                @while ($hoy != $fin)
+                            {{-- @while ($hoy != $fin)
                                     @php
 
                                         if (array_key_exists('For' . $hoy . 'D', $info) == false) {
@@ -178,12 +167,23 @@
                                         $histo = [];
                                         $datossub = $info1['hijos'];
                                     @endphp
-                                @endwhile
-
-                            </div>
+                                @endwhile --}}
+                            @php
+                                $histo = [];
+                                $datossub = $info1['hijos'];
+                            @endphp
                         </div>
                     </div>
-                    @foreach ($datossub as $datossubs)
+                </div>
+                @foreach ($datossub as $datossubs)
+                    <form action="{{ route('planeacionOS.update') }}" method="post">
+                        @csrf
+                        <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
+                        <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                        <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                        <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                        <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                        <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
                         @php
                             $hoy1 = $fecha;
                         @endphp
@@ -192,8 +192,9 @@
                                 array_push($histo, $datossubs['sub']);
                                 $item = strtr($datossubs['sub'], ' ', '_');
                                 $wctpar = $datossubs['wrk'] ?? 'xxxx';
+                                $namenA = strtr($datossubs['sub'], ' ', '_');
                             @endphp
-                            <div class="flex items-start ">
+                            <div class="flex items-start  border rounded border-solid ">
                                 <div class=" w-48 bg-gray-50 border-r p-1">
                                     <div class="text-sm text-gray-500">Item</div>
                                     <div class="font-bold">{{ $datossubs['sub'] }}</div>
@@ -201,9 +202,24 @@
                                     <div class="text-sm text-gray-500"> WC: {{ $datossubs['wrk'] }}</div>
                                     {{-- <div class="text-sm text-gray-500"> Min balance: {{ $datossubs['minbal'] }}</div> --}}
                                     <div class="text-sm text-gray-500"> Contenedor:{{ $datossubs['typkt'] }}</div>
+                                    <input type="checkbox" id="{{'Che'.$namenA}}" name="{{'Che'.$namenA}}"/> Aplica cambio <br/>
+                                    <div class="font-bold"> Nivel:--------{{ $datossubs['level'] }}<br></div>
+
+                                    <div class="flex justify-center">
+                                        <button type="submit"
+                                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+                                            <span class="mr-2">Actualizar</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
                                 </div>
 
-                                <div class="flex flex-col items-center space-y-2 p-4">
+                                <div class="flex flex-col items-center  border rounded space-y-2 p-4">
                                     <!-- Fecha -->
                                     <div class="font-bold">Dia </div>
                                     <!-- Contenedor horizontal para los bloques -->
@@ -243,7 +259,7 @@
                                             $totaloqty = 0;
                                             $totalvalFH = 0;
                                             $CONTCARR = 0;
-                                            $totaloplan=0;
+                                            $totaloplan = 0;
                                         @endphp
 
                                         @while ($coni < $dias)
@@ -389,31 +405,26 @@
                                                 if ($CONTCARR == 8) {
                                                     $CONTCARR = 1;
                                                     $totalcarry = 0;
-                                                    $totalcarry=  $ocarryD;
+                                                    $totalcarry = $ocarryD;
                                                 } else {
                                                     $CONTCARR = $CONTCARR + 1;
-                                                        if( $CONTCARR<=7){
-                                                            if($ocarryD!=0){
-                                                            $totalcarry= $ocarryD;
-                                                            if($ocarryN!=0){
-                                                            $totalcarry= $ocarryN;
+                                                    if ($CONTCARR <= 7) {
+                                                        if ($ocarryD != 0) {
+                                                            $totalcarry = $ocarryD;
+                                                            if ($ocarryN != 0) {
+                                                                $totalcarry = $ocarryN;
                                                             }
-                                                        }else {
-                                                            if($ocarryN!=0){
-                                                            $totalcarry= $ocarryN;
+                                                        } else {
+                                                            if ($ocarryN != 0) {
+                                                                $totalcarry = $ocarryN;
                                                             }
                                                         }
-                                                        }
-
-
-
-
+                                                    }
                                                     $totalpreq += $prreqD + $prreqN;
                                                     $totaloqty += $oqtyN + $oqtyD;
                                                     $totalvalFH += $valFNH + $valFDH;
-                                                    $totaloplan+=$oplanD+$oplanN;
+                                                    $totaloplan += $oplanD + $oplanN;
                                                 }
-
                                             @endphp
                                             @if ($CONTCARR == 8)
                                                 <div class="flex flex-col items-center space-y-2 p-4">
@@ -435,13 +446,15 @@
                                                         <!-- Bloque 1 -->
                                                         <div class="w-24 text-center border rounded shadow">
                                                             <div class="font-bold">-</div>
-                                                            <div class="text-sm ">{{  $totalvalFH }}</div>
+                                                            <div class="text-sm ">{{ $totalvalFH }}</div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valeclD }}</div>
                                                         <div class="text-sm ">{{ $valkfpsd }}</div> --}}
 
-                                                            <div class="text-sm text-gray-500">{{  $totalpreq}}</div>
-                                                            <div class="text-sm ">{{$totaloqty }}</div>
-                                                            <div class="text-sm text-gray-500">{{$totaloplan}}</div>
+                                                            <div class="text-sm text-gray-500">{{ $totalpreq }}
+                                                            </div>
+                                                            <div class="text-sm ">{{ $totaloqty }}</div>
+                                                            <div class="text-sm text-gray-500">{{ $totaloplan }}
+                                                            </div>
                                                             <div class="text-sm ">{{ $totalcarry }}</div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valPDH }}</div> --}}
                                                             <div class="text-sm flex items-center justify-center">
@@ -458,10 +471,10 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="flex flex-col items-center space-y-2 p-4">
+                                                <div class="flex flex-col  border rounded items-center space-y-2 p-4">
 
                                                     @php
-                                                        $namenA = strtr($datossubs['sub'], ' ', '_');
+
                                                         $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
                                                         $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
                                                         $WRCj = $datossubs['wrk'];
@@ -470,7 +483,7 @@
 
                                                     <!-- Fecha -->
 
-                                                    <div class="font-bold">{{ date('d', strtotime($hoy1)) }}
+                                                    <div class="font-bold ">{{ date('d', strtotime($hoy1)) }}
                                                     </div>
                                                     <!-- Contenedor horizontal para los bloques -->
                                                     <div class="flex space-x-4">
@@ -491,7 +504,7 @@
                                                             <div class="text-sm flex items-center justify-center">
                                                                 <input id="{{ $inD }}"
                                                                     name="{{ $inD }}"
-                                                                    value="{{ $valFiDH }}"
+                                                                    value="{{ $oplanD }}"
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                                     type="number" min="0"
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
@@ -507,15 +520,17 @@
                                                                 {{ $valRNH }}</div>
                                                             <div class="text-sm text-gray-500">{{ $prreqN }}
                                                             </div>
-                                                            <div class="text-sm border-y-gray-900">{{ $oqtyN }}
+                                                            <div class="text-sm border-y-gray-900">
+                                                                {{ $oqtyN }}
                                                             </div>
                                                             <div class="text-sm text-gray-500">{{ $oplanN }}
                                                             </div>
-                                                            <div class="text-sm border-y-gray-900">{{ $ocarryN }}
+                                                            <div class="text-sm border-y-gray-900">
+                                                                {{ $ocarryN }}
                                                             </div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valPNH }}</div> --}}
                                                             <div class="text-sm  "> <input id={{ $inN }}
-                                                                    name={{ $inN }} value={{ $valFiNH }}
+                                                                    name={{ $inN }} value={{ $oplanN }}
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                                     type="number" min="0"
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
@@ -535,14 +550,15 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
-                </div>
-            @endforeach
+                    </form>
+                @endforeach
+            </div>
+        @endforeach
 
 
 
-            {{-- <table class="w-full whitespace-no-wrap "> --}}
-            {{-- <thead>
+        {{-- <table class="w-full whitespace-no-wrap "> --}}
+        {{-- <thead>
                     <tr
                         class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
 
@@ -591,7 +607,7 @@
 
                     </tr>
                 </thead> --}}
-            {{-- <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
+        {{-- <tbody class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                     @php
                         $histo = [];
                     @endphp
@@ -1284,10 +1300,10 @@
                     @endforeach
 
                 </tbody> --}}
-            {{-- </table> --}}
+        {{-- </table> --}}
 
-        </div>
-    </form>
+    </div>
+
 
     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
         <form method="post" action="{{ route('planeacion.siguiente') }}">
@@ -1392,7 +1408,8 @@
             let mensaje = dias;
             let arr = mensaje.split('/');
 
-
+            console.log('Che' + parte);
+            document.getElementById('Che'+parte).checked = true;
             val1 = parseInt(document.getElementById(parte + '/' + arr[1] + '/D/' + wc).value);
             val2 = parseInt(document.getElementById(parte + '/' + arr[1] + '/N/' + wc).value);
             val3 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);

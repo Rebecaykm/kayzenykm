@@ -10,21 +10,21 @@ use Illuminate\Database\Eloquent\Model;
 class YK0062 extends Model
 {
     protected $connection = 'odbc-connection-lx834fu02';
-    protected $table = 'LX834FU02.YK006';
+    protected $table = 'LX834FU02.YK0062';
 
     protected $fillable = [
-        'K62PROD',
-        'K62WRKC',
-        'K62SDTE',
-        'K62EDTE',
-        'K62DDTE',
-        'K62DSHT',
-        'K62PFQY',
-        'K62CUSR',
-        'K62CCDT',
-        'K62CCTM',
-        'K62FIL1',
-        'K62FIL2'
+        'K62PRO',
+        'K62WRK',
+        'K62SDT',
+        'K62EDT',
+        'K62DDT',
+        'K62DSH',
+        'K62PFQ',
+        'K62CUS',
+        'K62CCD',
+        'K62CCT',
+        'K62FI1',
+        'K62FI2'
     ];
 
     public function fromDateTime($value)
