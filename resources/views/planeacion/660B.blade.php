@@ -67,7 +67,6 @@
                                 <select id="SeProject2" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                                    <option value="2,12,123,13,20,23,3">J03G/J03W</option>
 
                                     <option value="8,811">660B</option>
 
