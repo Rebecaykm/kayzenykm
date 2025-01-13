@@ -244,9 +244,7 @@ class PlaneacionHController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateF1(Request $request)
-    {
-        // dd('hola                                                                                                                ');
-        $inF1 = array();
+    {    $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $tipo = $request->tipo;
@@ -358,6 +356,7 @@ class PlaneacionHController extends Controller
 
     public function update(Request $request)
     {
+
 
         $inF1 = array();
         $TP = $request->SeProject;

@@ -132,16 +132,11 @@ class PlaneacionController extends Controller
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
-
         $padres = array_chunk($plan1, 10);
         $partsrev = array_column($plan1, 'IPROD');
-
         $total = count($padres) - 1;
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-
-
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
@@ -264,6 +259,7 @@ class PlaneacionController extends Controller
         $datajob = [];
         $datasql = [];
         $CONT = 0;
+
         foreach ($keyes as $plans) {
             $dfa = [];
             $dfasql = [];
@@ -280,8 +276,8 @@ class PlaneacionController extends Controller
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
 
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+                    // $ar = ["part_number" => $namenA, "date" => $fechasql];
+                    // array_push($datval, $ar);
 
 
                 $dfa = [
@@ -298,26 +294,26 @@ class PlaneacionController extends Controller
                     'K6FIL1' => '',
                     'K6FIL2' => ''
                 ];
-                $dfasql = [
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $fechasql,
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $horasql,
-                    'K6FIL1' => '',
-                    'K6FIL2' => ''
-                ];
-                array_push($datasql, $dfasql);
+                // $dfasql = [
+                //     'K6PROD' => $namenA,
+                //     'K6WRKC' => $WCT,
+                //     'K6SDTE' => $fecha,
+                //     'K6EDTE' => $fefin,
+                //     'K6DDTE' => $fechasql,
+                //     'K6DSHT' => $turno,
+                //     'K6PFQY' => $request->$plans,
+                //     'K6CUSR' => 'LXSECOFR',
+                //     'K6CCDT' => $load,
+                //     'K6CCTM' => $horasql,
+                //     'K6FIL1' => '',
+                //     'K6FIL2' => ''
+                // ];
+                // array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 80) {
+            if ($CONT == 160) {
                 $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
+                // $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -326,14 +322,14 @@ class PlaneacionController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
+        // $indatasql = LOGSUP::query()->insert($datasql);
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
 
-        ProductionPlanByArrayMigrationJob::dispatch($datval);
+        // ProductionPlanByArrayMigrationJob::dispatch($datval);
 
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')

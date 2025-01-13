@@ -166,6 +166,7 @@ class PlanFinalExport implements FromView
             'fecha' => $fecha
         ];
 
+        DD($general);
         return view('planeacion.RepPlanfinal', [
             'general' => $general
         ]);
