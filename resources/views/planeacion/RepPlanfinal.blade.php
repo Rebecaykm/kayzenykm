@@ -62,6 +62,8 @@
             @php
 
                 $info = $info1['padre'];
+
+
                 $contdias = 0;
 
             @endphp
@@ -149,11 +151,12 @@
                             @endphp
                         @endwhile
 
-                        @php
-                            $hoy = $fecha;
-                            $contdias = 0;
-                        @endphp
+
                     </tr> --}}
+                    @php
+                    $hoy = $fecha;
+                    $contdias = 0;
+                @endphp
                     <tr>
                         <td >
                             {{ $info['parte'] }}
@@ -178,7 +181,9 @@
                                 } else {
                                     $valPN = $info['F' . $hoy . 'N'];
                                 }
+
                             @endphp
+
                             <td>
                                 {{ $valPD }}
                             </td>
