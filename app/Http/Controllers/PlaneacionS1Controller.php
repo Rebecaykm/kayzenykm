@@ -13,8 +13,6 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
-use App\Models\YK0062;
-
 use Carbon\Carbon;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
@@ -26,7 +24,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
 
-class PlaneacionController extends Controller
+class PlaneacionS1Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +43,7 @@ class PlaneacionController extends Controller
         $CP = '';
         $WC = '';
         $WCs = [];
-        return view('planeacion.index', ['LWK' => $WCs]);
+        return view('planeacion.indexS1', ['LWK' => $WCs]);
     }
 
     /**
@@ -89,7 +87,7 @@ class PlaneacionController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
 
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteS1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
@@ -106,7 +104,7 @@ class PlaneacionController extends Controller
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.planfinal1S1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         }
     }
 
@@ -134,11 +132,16 @@ class PlaneacionController extends Controller
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
+
         $padres = array_chunk($plan1, 10);
         $partsrev = array_column($plan1, 'IPROD');
+
         $total = count($padres) - 1;
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+
+
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
@@ -192,7 +195,9 @@ class PlaneacionController extends Controller
             case ('10,710'):
                 $pro = 'J34X';
                 break;
-
+            case ('8,811'):
+                $pro = '660B';
+                break;
             case ('11,811'):
                 $pro = '920B';
                 break;
@@ -261,7 +266,6 @@ class PlaneacionController extends Controller
         $datajob = [];
         $datasql = [];
         $CONT = 0;
-
         foreach ($keyes as $plans) {
             $dfa = [];
             $dfasql = [];
@@ -277,10 +281,11 @@ class PlaneacionController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-
-                    // $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    // array_push($datval, $ar);
-
+                if (!in_array($namenA,   $datajob)) {
+                    array_push($datajob, $namenA);
+                    $ar = ["part_number" => $namenA, "date" => $fechasql];
+                    array_push($datval, $ar);
+                }
 
                 $dfa = [
                     'K6PROD' => $namenA,
@@ -296,26 +301,26 @@ class PlaneacionController extends Controller
                     'K6FIL1' => '',
                     'K6FIL2' => ''
                 ];
-                // $dfasql = [
-                //     'K6PROD' => $namenA,
-                //     'K6WRKC' => $WCT,
-                //     'K6SDTE' => $fecha,
-                //     'K6EDTE' => $fefin,
-                //     'K6DDTE' => $fechasql,
-                //     'K6DSHT' => $turno,
-                //     'K6PFQY' => $request->$plans,
-                //     'K6CUSR' => 'LXSECOFR',
-                //     'K6CCDT' => $load,
-                //     'K6CCTM' => $horasql,
-                //     'K6FIL1' => '',
-                //     'K6FIL2' => ''
-                // ];
-                // array_push($datasql, $dfasql);
+                $dfasql = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $fechasql,
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $horasql,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 160) {
+            if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
-                // $insql = LOGSUP::query()->insert($datasql);
+                $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -324,14 +329,14 @@ class PlaneacionController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        // $indatasql = LOGSUP::query()->insert($datasql);
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-        $result = odbc_exec($conn, $query);
+        $indatasql = LOGSUP::query()->insert($datasql);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU.YMP006C";
+        // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
 
-        // ProductionPlanByArrayMigrationJob::dispatch($datval);
+        ProductionPlanByArrayMigrationJob::dispatch($datval);
 
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
@@ -387,10 +392,11 @@ class PlaneacionController extends Controller
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
-
+                if (!in_array($namenA,   $datajob)) {
+                    array_push($datajob, $namenA);
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
-
+                }
 
                 $dfa = [
                     'K6PROD' => $namenA,
@@ -569,6 +575,7 @@ class PlaneacionController extends Controller
                 // dd( $padre);
                 $inF1 += ['padre' => $padre];
 
+
                 $datossub = self::Cargarforcast($prod['IPROD'], $hoy, $dias, $forcastp);
                 $inF1 += ['hijos' => $datossub];
                 array_push($totalpa, $inF1);
@@ -634,6 +641,8 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
         foreach ($prods as $prod) {
+
+
             $inF1 = array();
             $padre = [];
             $dia = $hoy;
@@ -721,41 +730,60 @@ class PlaneacionController extends Controller
 
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
     {
-        //  $Sub = self::cargar($prod1);
 
         $Sub = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
-            ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
+            ->join('LX834F01.YMWEY', 'MCCPRO', '=', 'ZEITE')
+            ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'ZEITE', 'ZEQREQ', 'ZEID', 'ZELEVE ')
             ->where([
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->whereraw("(MCFPRO='" . $prod1 . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
-            ->get()->toarray();
+            ->ORDERBY('ZELEVE', 'desc')
+            ->get();
+
+        $sub1 = $Sub->pluck('MCCPRO');
+
+        $niveles = YMCOM::query()
+            ->join('LX834F01.IIM', 'MCFPRO', '=', 'IPROD')
+
+
+            ->select('MCCPRO', 'MCFPRO', 'MCCCLS', )
+            ->whereraw("(MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
+            ->wherein('MCFPRO', $sub1)->get();
+
+
+
+
+
+
+        //  $child_leven = YMWEY::query()
+        // ->join('LX834F01.IIM', 'IPROD', '=', 'ZEITE')
+        // ->select('ZEITE', 'ZEQREQ', 'ZEID', 'ZELEVE ')
+        // ->where([
+        //     ['IID', '!=', 'IZ'],
+        //     ['IMPLC', '!=', 'OBSOLETE'],
+        // ])
+        // ->whereIN("IPROD", $sub1 )
+        // ->get();
+        // dd($Sub,$child_leven);
 
 
         $total = array();
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
-        $sub1 = array_column($Sub, 'MCCPRO');
-        $cadsubsPlan = implode("' OR  FPROD='", $sub1);
-        $child = implode("' OR  MCCPRO='", $sub1);
-        $cadsubKMR = implode("' OR  MPROD='", $sub1);
-        $cadsubswrk = implode("' OR  RPROD='", $sub1);
-        $Qa = implode("' OR  IPROD='", $sub1);
+
+        // $cadsubsPlan = implode("' OR  FPROD='", $sub1);
+        // $child = implode("' OR  MCCPRO='", $sub1);
+        // $cadsubKMR = implode("' OR  MPROD='", $sub1);
+        // $cadsubswrk = implode("' OR  RPROD='", $sub1);
+        // $Qa = implode("' OR  IPROD='", $sub1);
         // agregar niveles------------------------------------------------------------------------------------------------
 
 
 
-        $child_leven = YMWEY::query()
-            ->join('LX834F01.IIM', 'IPROD', '=', 'ZEITE')
-            ->select('ZEITE', 'ZEQREQ', 'ZEID', 'ZELEVE ')
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->whereIN("IPROD",$sub1 )
-            ->get();
-//final de agregar niveles ------------------------------------------------------
+
+        //final de agregar niveles ------------------------------------------------------
         $KMRFINAL = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'MCQREQ ')
@@ -763,7 +791,8 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->whereraw("(MCCPRO='" . $child . "') AND ( MCFCLS='F1')")
+            ->wherein("MCCPRO", $sub1)
+            ->where("MCFCLS", 'F1')
             ->get()->toarray();
 
         $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
@@ -815,7 +844,8 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->whereraw("(MCCPRO='" . $child . "') AND (MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
+            ->wherein("MCCPRO", $sub1)
+                        ->whereraw("(MCFCLS='M2' or  MCFCLS='M3' or  MCFCLS='M4') AND (IID != 'IZ' AND IMPLC != 'OBSOLETE') ")
             ->get()->toarray();
 
         $kmrmccprod = array_column($KMRPARENT, 'MCCPRO');
@@ -835,7 +865,7 @@ class PlaneacionController extends Controller
         // -----------------------------------------FIRME PLAN
         $valPD = KFP::query()
             ->select('FPROD', 'FRDTE', 'FQTY', 'FPCNO', 'FTYPE')
-            ->whereraw("(FPROD='" . $cadsubsPlan . "')")
+            ->wherein("FPROD", $sub1)
             ->where([
                 ['FRDTE', '>=', $hoy],
                 ['FRDTE', '<', $totalF],
@@ -843,10 +873,10 @@ class PlaneacionController extends Controller
             ->get()->toarray();
 
 
-        $cadsubssh = implode("' OR  SPROD='", $sub1);
+        // $cadsubssh = implode("' OR  SPROD='", $sub1);
         $valSD = FSO::query()
             ->select('SPROD', 'SDDTE', 'SQREQ', 'SOCNO')
-            ->whereraw("(SPROD='" . $cadsubssh . "')")
+            ->wherein("SPROD", $sub1)
             ->where('SDDTE', '>=', $hoy)
             ->where('SDDTE', '<', $totalF)
             ->get()->toarray();
@@ -854,12 +884,12 @@ class PlaneacionController extends Controller
 
         $cond = IIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN', 'IMSPKT')
-            ->whereraw("(IPROD='" . $Qa . "')")
+            ->wherein("IPROD", $sub1)
             ->get()->toArray();
 
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
-            ->whereraw("(RPROD='" . $cadsubswrk . "')")
+            ->wherein("RPROD", $sub1)
             ->get()->toarray();
 
         $prowk = array_column($WCT, 'RPROD');
@@ -869,12 +899,21 @@ class PlaneacionController extends Controller
         $pqa = array_column($cond, 'IMBOXQ');
         $minba = array_column($cond, 'IMIN');
         $typkt = array_column($cond, 'IMSPKT');
-        $sepa = [];
+        $sepa=[];
+        $sepa_niveles = [];
+        $arrniv = [];
+        if ($prod1 == "DA6A56H1X                          ") {
+            $resultados = $Sub->filter(function ($padre) use ($prod1) {
+                return $padre->MCFPRO == $prod1 ;
+            });
+            foreach ( $resultados  as $su) {
+                $arrniv = self::recore( $su->MCCPRO, $niveles);
+                $sepa_niveles+=[$su->MCCPRO=>$arrniv];
+            }
+            // DD($prod1, $sepa_niveles);
+        }
 
-
-        foreach ($sub1 as $subs) {
-
-
+        foreach ($Sub as $subs) {
             $padreskmr = [];
             $finaleskmr = [];
             $finaleskmrQTY = [];
@@ -883,27 +922,23 @@ class PlaneacionController extends Controller
             $numpaplan = [];
             $total = 0;
             $req = 0;
-            while (($key5 = array_search($subs,  $FINALMCPRO)) !== false) {
+            while (($key5 = array_search($subs->MCCPRO,  $FINALMCPRO)) !== false) {
                 $req = 0 + $FINALREQ[$key5];
-
                 array_push($finaleskmr, $FINALLIST[$key5]);
                 array_push($finaleskmrQTY, $FINALLIST[$key5] . "/REQ:" . $req);
-
                 unset($FINALLIST[$key5]);
                 unset($FINALMCPRO[$key5]);
                 unset($FINALCALS[$key5]);
                 unset($FINALREQ[$key5]);
             }
-
-            while (($key2 = array_search($subs, $kmrmccprod)) !== false) {
-                if ($kmrmcfprod[$key2] != $subs) {
+            while (($key2 = array_search($subs->MCCPRO, $kmrmccprod)) !== false) {
+                if ($kmrmcfprod[$key2] != $subs->MCCPRO) {
                     array_push($padreskmr, $kmrmcfprod[$key2]);
                 }
                 unset($kmrmccprod[$key2]);
                 unset($KMRMCFCLS[$key2]);
                 unset($kmrmcfprod[$key2]);
             }
-
             $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
             $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
             $FINALCALS = array_column($KMRFINAL, 'MCFCLS');
@@ -916,7 +951,6 @@ class PlaneacionController extends Controller
             if ($contF1 >= 1) {
 
                 $texfinal = implode(',' . '<br> ',    $finaleskmrQTY);
-
                 $cadfinal = implode("' OR  MPROD='", $finaleskmr);
                 // $cadsubsL = implode("' OR  LPROD='", $padreskmr );
             } else {
@@ -1027,14 +1061,28 @@ class PlaneacionController extends Controller
             $KtYPE = array_column($RKMRfinal, 'MTYPE');
 
             $total = 0;
+            $offset = 1;
             foreach ($valPD as $reg3) {
-                if ($reg3['FPROD'] == $subs) {
-                    $dia = $reg3['FRDTE'];
+                if ($reg3['FPROD'] == $subs->MCCPRO) {
                     $turno = $reg3['FPCNO'];
                     $tipo = $reg3['FTYPE'];
                     $total = $reg3['FQTY'] + 0;
                     $valt = substr($turno, 4, 1);
-                    $numpaplan += [$tipo . $dia . $valt => $total];
+                    $dia = $reg3['FRDTE'];
+                    $fecha = Carbon::createFromFormat('Ymd', $dia);
+                    $nivel = $subs->ZELEVE;
+                    if ($valt == 'D') {
+                        $diares = $fecha->subDay();
+                        $dia = $diares->format('Ymd');
+                        // dd($dia,$dian);
+                        $valt = 'N';
+
+                        $numpaplan += [$tipo .  $dia . $valt => $total];
+                    } else {
+                        $valt = 'D';
+                        $numpaplan += [$tipo .  $dia . $valt => $total];
+                    }
+
                     if ($tipo == 'P') {
                         $Tplan = $Tplan + $total;
                     } else {
@@ -1042,9 +1090,10 @@ class PlaneacionController extends Controller
                     }
                 }
             }
+
             $total = 0;
             foreach ($valSD as $reg4) {
-                if ($reg4['SPROD'] == $subs) {
+                if ($reg4['SPROD'] == $subs->MCCPRO) {
                     $dia = $reg4['SDDTE'];
                     $turno = $reg4['SOCNO'];
                     $total = $reg4['SQREQ'] + 0;
@@ -1056,24 +1105,60 @@ class PlaneacionController extends Controller
             $total = 0;
             $Tshopkmr = 0;
 
-            $pos = array_search($subs, $prodcqa);
-            $poskwr = array_search($subs, $prowk);
-            $level = $child_leven->first(function ($item) use ($subs) {
-                return $item->ZEITE === $subs;
-            });
+            $pos = array_search($subs->MCCPRO, $prodcqa);
+            $poskwr = array_search($subs->MCCPRO, $prowk);
+            // $level = $child_leven->first(function ($item) use ($subs) {
+            //     return $item->ZEITE === $subs;
+            // });
 
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0,
-             'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop,
-             'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr,'level'=>$level->ZELEVE];
+            $numpar += [
+                'sub' => $subs->MCCPRO,
+                'plan' => $numpaplan,
+                'padres' => $texfinal,
+                'forcast' => $forcast,
+                'Qty' => $pqa[$pos] ?? 0,
+                'minbal' => $minba[$pos] ?? 0,
+                'typkt' => $typkt[$pos] ?? 'N/A',
+                'wrk' => $prowrok[$poskwr] ?? 0,
+                'Tshop' => $Tshop,
+                'Tplan' => $Tplan,
+                'Tfirme' => $Tfirme,
+                'KMRpadres' => $texpadre ?? 0,
+                'Totalpadres' => $Tshopkmr,
+                'level' => $subs->ZELEVE
+            ];
 
-            $sepa += [$subs => $numpar];
+            $sepa += [$subs->MCCPRO => $numpar];
         }
 
 
         return $sepa;
     }
 
+    public function recore($prod, $arre)
+    {
+        $pad = $prod;
+        $arr=[];
+        $resultados = $arre->filter(function ($padre) use ($pad) {
+            return $padre->MCFPRO == $pad;
+        });
+        if($arre->count()>1)
+        {
+            foreach( $resultados as $item)
+            {
+                if($item->MCCPRO!=$item->MCFPRO)
+                {
+                    $recur=self::recore($item->MCCPRO, $arre);
+                    $arr+=[$item->MCCPRO=>$recur];
+                }else
+                {
+                    $arr+=[$item->MCCPRO=> $item->MCCPRO];
+                }
+            }
+        }
+       return $arr;
+    }
 
     public function Buscar(Request $request)
     {

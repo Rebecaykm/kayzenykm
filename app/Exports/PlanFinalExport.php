@@ -88,6 +88,8 @@ class PlanFinalExport implements FromView
         // $prodcqa = array_column($cond, 'IPROD');
         // $minba = array_column($cond, 'IMIN');
         foreach ($cadfinal as $prod) {
+
+
             $Tshop = 0;
             $Tplan = 0;
             $Tfirme = 0;
@@ -108,7 +110,14 @@ class PlanFinalExport implements FromView
                 $MRDTE = array_column($valfinales, 'MRDTE');
                 $MRCNO = array_column($valfinales, 'MRCNO');
                 $MQTY = array_column($valfinales, 'MQTY');
-                while (($key = array_search($prod, $resreg4)) != false) {
+                // if($prod=="520110406000-BC                    ")
+                // {
+                //     dd('skdnka',
+                //     $prod, $resreg4);
+                // }
+                while (($key = array_search($prod, $resreg4)) !== false) {
+
+
                     // echo "<script>console.log('Console: " .  $key . '/' . $prod . "' );</script>";
                     $dia =  $MRDTE[$key];
                     $turno =  $MRCNO[$key];
@@ -126,7 +135,7 @@ class PlanFinalExport implements FromView
                 $FRCNO = array_column($valPDp, 'FPCNO');
                 $FQTY = array_column($valPDp, 'FQTY');
                 $FTYPE = array_column($valPDp, 'FTYPE');
-                while (($key2 = array_search($prod, $resreg6)) != false) {
+                while (($key2 = array_search($prod, $resreg6)) !==false) {
                     $dia = $FRDTE[$key2];
                     $turno =  $FRCNO[$key2];
                     $tipo = $FTYPE[$key2];
@@ -137,6 +146,8 @@ class PlanFinalExport implements FromView
                     unset($resreg6[$key2]);
                 }
             }
+
+
 
 
 
@@ -158,6 +169,7 @@ class PlanFinalExport implements FromView
             $inF1 += ['hijos' =>   $sepa];
             array_push($totalpa, $inF1);
         }
+
         $general = [];
 
         $general += [

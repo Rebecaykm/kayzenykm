@@ -1,8 +1,14 @@
 <x-app-layout title="Plan">
+    {{-- @php
+        include_once '../app/Http/Controllers/registros.php';
+        $obj = new registros();
+        $projecto = $obj->Projecto($tp);
+        // $dias = ;
+    @endphp --}}
 
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Planeacion proyecto
+            Planeacion S1 proyecto
             @switch($tp)
                 @case('2,12,123,13,20,23,3')
                     J03W/G
@@ -19,7 +25,11 @@
                 @default
             @endswitch
         </h2>
+
+
     </div>
+
+
     <form action="{{ route('planeacion.update') }}" method="post">
         <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
             @csrf

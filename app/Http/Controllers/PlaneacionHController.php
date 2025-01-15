@@ -13,8 +13,6 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
-use App\Models\YK0062;
-
 use Carbon\Carbon;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
@@ -26,7 +24,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
 
-class PlaneacionController extends Controller
+class PlaneacionHController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,6 +36,7 @@ class PlaneacionController extends Controller
 
     public function index(Request $request)
     {
+
         $dias = $request->NP ?? '*';
         $fecha = $request->Seproject ?? '*';
         $plan = '';
@@ -45,7 +44,7 @@ class PlaneacionController extends Controller
         $CP = '';
         $WC = '';
         $WCs = [];
-        return view('planeacion.index', ['LWK' => $WCs]);
+        return view('planeacion.index_hori', ['LWK' => $WCs]);
     }
 
     /**
@@ -89,7 +88,7 @@ class PlaneacionController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
 
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
@@ -106,7 +105,7 @@ class PlaneacionController extends Controller
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         }
     }
 
@@ -134,11 +133,16 @@ class PlaneacionController extends Controller
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
+
         $padres = array_chunk($plan1, 10);
         $partsrev = array_column($plan1, 'IPROD');
+
         $total = count($padres) - 1;
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
+
+
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
@@ -240,9 +244,7 @@ class PlaneacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateF1(Request $request)
-    {
-
-        $inF1 = array();
+    {    $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $tipo = $request->tipo;
@@ -261,7 +263,6 @@ class PlaneacionController extends Controller
         $datajob = [];
         $datasql = [];
         $CONT = 0;
-
         foreach ($keyes as $plans) {
             $dfa = [];
             $dfasql = [];
@@ -278,8 +279,8 @@ class PlaneacionController extends Controller
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
 
-                    // $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    // array_push($datval, $ar);
+                $ar = ["part_number" => $namenA, "date" => $fechasql];
+                array_push($datval, $ar);
 
 
                 $dfa = [
@@ -296,26 +297,26 @@ class PlaneacionController extends Controller
                     'K6FIL1' => '',
                     'K6FIL2' => ''
                 ];
-                // $dfasql = [
-                //     'K6PROD' => $namenA,
-                //     'K6WRKC' => $WCT,
-                //     'K6SDTE' => $fecha,
-                //     'K6EDTE' => $fefin,
-                //     'K6DDTE' => $fechasql,
-                //     'K6DSHT' => $turno,
-                //     'K6PFQY' => $request->$plans,
-                //     'K6CUSR' => 'LXSECOFR',
-                //     'K6CCDT' => $load,
-                //     'K6CCTM' => $horasql,
-                //     'K6FIL1' => '',
-                //     'K6FIL2' => ''
-                // ];
-                // array_push($datasql, $dfasql);
+                $dfasql = [
+                    'K6PROD' => $namenA,
+                    'K6WRKC' => $WCT,
+                    'K6SDTE' => $fecha,
+                    'K6EDTE' => $fefin,
+                    'K6DDTE' => $fechasql,
+                    'K6DSHT' => $turno,
+                    'K6PFQY' => $request->$plans,
+                    'K6CUSR' => 'LXSECOFR',
+                    'K6CCDT' => $load,
+                    'K6CCTM' => $horasql,
+                    'K6FIL1' => '',
+                    'K6FIL2' => ''
+                ];
+                array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 160) {
+            if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
-                // $insql = LOGSUP::query()->insert($datasql);
+                $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -324,7 +325,8 @@ class PlaneacionController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        // $indatasql = LOGSUP::query()->insert($datasql);
+        $indatasql = LOGSUP::query()->insert($datasql);
+
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
@@ -349,11 +351,12 @@ class PlaneacionController extends Controller
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
         // dd($datos);
-        return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
+        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
 
     public function update(Request $request)
     {
+
 
         $inF1 = array();
         $TP = $request->SeProject;
@@ -388,8 +391,8 @@ class PlaneacionController extends Controller
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+                $ar = ["part_number" => $namenA, "date" => $fechasql];
+                array_push($datval, $ar);
 
 
                 $dfa = [
@@ -463,7 +466,7 @@ class PlaneacionController extends Controller
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
 
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+        return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     /**
@@ -665,32 +668,55 @@ class PlaneacionController extends Controller
                         $turno = $reg1['CLCNO'];
                         $total = $reg1['TOTAL'] + 0;
                         $valt = substr($turno, 4, 1);
-                        $forcastp += ['ecl' . $dia . $valt => $total];
+
+                        $forcastp += ['ecl' . $dia . 'D' => $total];
                     }
                 }
             }
-
             $padre += ['total' => $totalP];
+            $fetemp = Carbon::parse($hoy);
+            $fintem = Carbon::parse($totalF);
+            $contd = 1;
+            $firme = [];
+            $pos = array_search($prod['IPROD'], $prodcqa);
+            $totalcon =  ceil(($total / $pqa[$pos]) / 10);
+            $contotal = 0;
+//             if($prod['IPROD']=='VA4128B04                          ')
+//             {
+// dd($total,$MBMS  );
+//             }
+            while ($contd <= 5) {
+                $dia = $fetemp->format('Ymd');
+                if ($contotal <= $total / $pqa[$pos]) {
+                    // echo $dia.'-'.$contotal."--".$totalcon.'--'.$total/$pqa[$pos].'<br>';
+                    $firme += ['CH' . $dia . 'D' =>   $totalcon];
+                    $firme += ['H' . $dia . 'D' => $totalcon*$pqa[$pos] ];
+                    $contotal = $contotal + $totalcon;
+                    if ($contotal <= $total / $pqa[$pos]) {
+                        $firme += ['CH' . $dia . 'N' =>  $totalcon];
+                        $firme += ['H' . $dia . 'N' =>  $totalcon*$pqa[$pos] ];
+                        $contotal = $contotal + $totalcon;
+                    }
+                }
+
+
+                $fetemp->addDay();
+                $contd++;
+            }
 
             if (count($valPDp) > 0) {
-                $firme = [];
+
                 $total = 0;
+
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
-                        // if($prod['IPROD']=="BDTS53816                          ")
-                        // {
-                        //     dd($prod['IPROD'],  $reg6['FRDTE'],
-                        //     $turno = $reg6['FPCNO'],
-                        //     $tipo = $reg6['FTYPE'],
-                        //     $total = $reg6['FQTY']);
-                        // }
+
                         $dia = $reg6['FRDTE'];
                         $turno = $reg6['FPCNO'];
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
                         $firme += [$tipo . $dia . $valt => $total];
-                        // $planpadre += [$tipo . $dia . $valt => $total];
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
                         } else {
@@ -701,7 +727,7 @@ class PlaneacionController extends Controller
                 }
                 $planpadre += $firme;
             }
-            $pos = array_search($prod['IPROD'], $prodcqa);
+            // $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
             $padre += ['tPlan' => $tPlan];
@@ -712,17 +738,15 @@ class PlaneacionController extends Controller
             $padre += ['F' => $planpadre];
             // dd( $padre);
             $inF1 += ['padre' => $padre];
-
+            // dd($inF1);
             array_push($totalpa, $inF1);
         }
-
         return $totalpa;
     }
 
     function Cargarforcast($prod1, $hoy, $dias, $valDp)
     {
         //  $Sub = self::cargar($prod1);
-
         $Sub = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS')
@@ -753,9 +777,9 @@ class PlaneacionController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-            ->whereIN("IPROD",$sub1 )
+            ->whereIN("IPROD", $sub1)
             ->get();
-//final de agregar niveles ------------------------------------------------------
+        //final de agregar niveles ------------------------------------------------------
         $KMRFINAL = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'MCQREQ ')
@@ -1063,9 +1087,22 @@ class PlaneacionController extends Controller
             });
 
 
-            $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0,
-             'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop,
-             'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr,'level'=>$level->ZELEVE];
+            $numpar += [
+                'sub' => $subs,
+                'plan' => $numpaplan,
+                'padres' => $texfinal,
+                'forcast' => $forcast,
+                'Qty' => $pqa[$pos] ?? 0,
+                'minbal' => $minba[$pos] ?? 0,
+                'typkt' => $typkt[$pos] ?? 'N/A',
+                'wrk' => $prowrok[$poskwr] ?? 0,
+                'Tshop' => $Tshop,
+                'Tplan' => $Tplan,
+                'Tfirme' => $Tfirme,
+                'KMRpadres' => $texpadre ?? 0,
+                'Totalpadres' => $Tshopkmr,
+                'level' => $level->ZELEVE
+            ];
 
             $sepa += [$subs => $numpar];
         }

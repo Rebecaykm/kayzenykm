@@ -143,10 +143,11 @@
 
                                                             if($cF1==0){
                                                             $F1= $obj->padre($plans->IPROD);
-                                                            foreach($F1 as $F1s)
-                                                            {
-                                                                $cF1=$obj->con
-
+                                                            // foreach($F1 as $F1s)
+                                                            // {
+                                                            //     $cF1=$obj->con
+                                                                
+                                                            // } 
                                                     }else{
                                                         foreach ($F1 as $F1s) {
                                                         if ($F1s->Bclas != 'F1') {
@@ -172,7 +173,7 @@
                                                         }
                                                     }
                                                     }
-
+                                                
                                                 }
 
                                             @endphp

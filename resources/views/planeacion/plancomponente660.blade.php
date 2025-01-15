@@ -19,8 +19,12 @@
                 @default
             @endswitch
         </h2>
+
+
     </div>
-    <form action="{{ route('planeacion.update') }}" method="post">
+
+
+    <form action="{{ route('planeacion660.update') }}" method="post">
         <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
             @csrf
             <div class="flex justify-center">
@@ -34,10 +38,8 @@
                     </svg>
                 </button>
             </div>
-
-
-
         </div>
+        {{ $dias = 12;}}
         <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
             <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
@@ -45,7 +47,6 @@
             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
             <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
-
             <table class="w-full whitespace-no-wrap ">
                 <thead>
                     <tr
@@ -65,7 +66,8 @@
                         </th>
                         <th class=" header px-4 py-3 sticky "></th>
                         @php
-                            $hoy = $fecha;
+
+                            $hoy = date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
                             $totalD = 0;
                             $tdias = $dias;
                             $dias = $dias - 2;
@@ -154,7 +156,7 @@
                             </td>
 
                             @php
-                                $hoy = $fecha;
+                                $hoy =date('Ymd', strtotime($fecha . '-' . 5 . ' day'));
                                 $contdias = 0;
 
                             @endphp
@@ -295,17 +297,13 @@
                         {{-- ------------------------------------------------------- busca los subcomponenetes  --------------------------------------------------------------------------------------------------- --}}
                         @php
                             $datossub = $info1['hijos'];
-
+                            // dd($datossub );
                         @endphp
                         @foreach ($datossub as $datossubs)
                             @php
                                 $hoy = $fecha;
-
                             @endphp
-
                             @if (array_search($datossubs['sub'], $histo) != true)
-
-
                                 @php
 
                                     array_push($histo, $datossubs['sub']);
@@ -314,7 +312,7 @@
                                     <td class="px-2 py-1 text-xs text-center ">
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center ">
-                                        {{$datossubs['level']}}
+                                        {{ $datossubs['level'] }}
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>
@@ -329,7 +327,7 @@
                                             SNP: {{ $datossubs['Qty'] }}<br>
                                             Wrkcente: {{ $datossubs['wrk'] }}<br>
                                             Min balance: {{ $datossubs['minbal'] }}<br>
-                                            Contenedor: {{ $datossubs['typkt']}}
+                                            Contenedor: {{ $datossubs['typkt'] }}
                                         </div>
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
@@ -404,7 +402,7 @@
 
                                     @php
                                         $coni = 0;
-                                        $hoy1 = $fecha;
+                                        $hoy1 = date('Ymd', strtotime($fecha . '- 5 day'));
                                         $plan = $datossubs['plan'];
                                         $totalplan = 0;
                                         $totalKMRP = 0;
@@ -569,7 +567,6 @@
                                                 $WRCj = $datossubs['wrk'];
                                                 $namep = $datossubs['sub'];
                                             @endphp
-
                                             <div
                                                 class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
                                                 <label class="block text-sm border-teal-400  outline-pink-500">

@@ -1,11 +1,11 @@
 <x-app-layout title="Planeacion">
     <div class="container grid px-6 mx-auto">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Planeación MMVO</h2>
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Planeación 920 y MNAO</h2>
 
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ajustes de Planeación Finales</h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="post" action="{{ route('planeacionOS.create') }}">
+            <form method="post" action="{{ route('planeacionH.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="1">
                 <div class="flex flex-col space-y-4">
@@ -16,10 +16,10 @@
                                 <select id="SeProject1" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                                    <option value="2,12,123,13,20,23,3">J03G/W</option>
-                                    <option value="4,45,47">J59W</option>
-                                    <option value="5,56,57">J59J</option>
-                                    
+                                    <option value="11,811">920B</option>
+                                    <option value="7,79,710">J34A</option>
+                                    <option value="9,79">J34H</option>
+                                   
                                 </select>
                             </label>
                         </div>
@@ -48,7 +48,7 @@
         </h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="post" action="{{ route('planeacionOS.create') }}">
+            <form method="post" action="{{ route('planeacion.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="2">
                 <div class="flex flex-col space-y-4">
@@ -59,10 +59,7 @@
                                 <select id="SeProject2" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                                    <option value="2,12,123,13,20,23,3">J03G/J03W</option>
-                                    <option value="4,45,47">J59W</option>
-                                    <option value="5,56,57">J59J</option>
-                                    <option value="8,811">660B</option>
+                              
                                     <option value="11,811">920B</option>
                                     <option value="7,79,710">J34A</option>
                                     <option value="9,79">J34H</option>
