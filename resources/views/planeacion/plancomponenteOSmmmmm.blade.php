@@ -32,8 +32,8 @@
             <button type="submit"
                 class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
                 <span class="mr-2">Actualizar</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
@@ -120,8 +120,8 @@
                                         <!-- Bloque 1 -->
                                         <div class="w-40 text-center border rounded shadow p-1">
                                             <div class="font-bold">Turno</div>
+                                            <div class="text-sm text-gray-500 border-red-400  ">KMR padres</div>
                                             <div class="text-sm text-gray-500 border-red-400  ">Pronostico</div>
-
                                             <div class="text-sm text-gray-500">Cant requerida</div>
                                             <div class="text-sm text-gray-500">Cant necesaria</div>
                                             <div class="text-sm text-gray-500"> Plan</div>
@@ -153,68 +153,14 @@
                                             $totalvalFH = 0;
                                             $CONTCARR = 0;
                                             $totaloplan = 0;
+                                            $totalFkmr = 0;
                                         @endphp
 
                                         @while ($coni < $dias)
                                             @php
 
-                                                if (array_key_exists('For' . $hoy1 . 'D', $plan) == false) {
-                                                    $valFDH = '0';
-                                                } else {
-                                                    $valFDH = $plan['For' . $hoy1 . 'D'];
-                                                }
 
-                                                if (array_key_exists('For' . $hoy1 . 'N', $plan) == false) {
-                                                    $valFNH = '0';
-                                                } else {
-                                                    $valFNH = $plan['For' . $hoy1 . 'N'];
-                                                }
-                                                $var = 'R' . $hoy . 'D';
-                                                $re = 0;
-                                                $valRDH = 0;
-                                                $valRNH = 0;
 
-                                                if (array_key_exists('FMA' . $hoy1 . 'D', $forcast) == true) {
-                                                    $valRDH = $valRDH + $forcast['FMA' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('kmr' . $hoy1 . 'D', $forcast) == true) {
-                                                    $valRDH = $valRDH + $forcast['kmr' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('ecl' . $hoy1 . 'D', $forcast) == true) {
-                                                    $valRDH = $valRDH + $forcast['ecl' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('kmr' . $hoy1 . 'N', $forcast) == true) {
-                                                    $valRNH = $valRNH + $forcast['kmr' . $hoy1 . 'N'];
-                                                }
-                                                if (array_key_exists('ecl' . $hoy1 . 'N', $forcast) == true) {
-                                                    $valRNH = $valRNH + $forcast['ecl' . $hoy1 . 'N'];
-                                                }
-
-                                                $totalKMRP = $totalKMRP + $valRDH + $valRNH;
-
-                                                if (array_key_exists('P' . $hoy1 . 'D', $plan) == false) {
-                                                    $valPDH = '0';
-                                                } else {
-                                                    $valPDH = $plan['P' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('P' . $hoy1 . 'N', $plan) == false) {
-                                                    $valPNH = '0';
-                                                } else {
-                                                    $valPNH = $plan['P' . $hoy1 . 'N'];
-                                                }
-                                                $totalplan = $valPDH + $valPNH + $totalplan;
-
-                                                if (array_key_exists('F' . $hoy1 . 'D', $plan) == false) {
-                                                    $valFiDH = $valPDH;
-                                                } else {
-                                                    $valFiDH = $plan['F' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('F' . $hoy1 . 'N', $plan) == false) {
-                                                    $valFiNH = $valPNH;
-                                                } else {
-                                                    $valFiNH = $plan['F' . $hoy1 . 'N'];
-                                                }
-                                                $totalfir = $totalfir + $valFiDH + $valFiNH;
                                                 if (array_key_exists('S' . $hoy1 . 'D', $plan) == false) {
                                                     $valSDH = '-';
                                                 } else {
@@ -227,74 +173,16 @@
                                                     $valSNH = $plan['S' . $hoy1 . 'N'];
                                                 }
 
-                                                if (array_key_exists('KMRS' . $hoy1 . 'D', $forcast) == false) {
-                                                    $valKMRsd = '-';
-                                                } else {
-                                                    $valKMRsd = $forcast['KMRS' . $hoy1 . 'D'];
-                                                }
-
-                                                if (array_key_exists('KMRS' . $hoy1 . 'N', $forcast) == false) {
-                                                    $valMKMRsn = '-';
-                                                } else {
-                                                    $valMKMRsn = $forcast['KMRS' . $hoy1 . 'N'];
-                                                }
-                                                if (array_key_exists('kfp' . $hoy1 . 'D', $forcast) == false) {
-                                                    $valkfpsd = '0';
-                                                } else {
-                                                    $valkfpsd = $forcast['kfp' . $hoy1 . 'D'];
-                                                }
-
-                                                if (array_key_exists('kfp' . $hoy1 . 'N', $forcast) == false) {
-                                                    $valMkfpsn = '0';
-                                                } else {
-                                                    $valMkfpsn = $forcast['kfp' . $hoy1 . 'N'];
-                                                }
-                                                $totalkfp += $valkfpsd + $valMkfpsn;
 
                                                 // OFFSET
                                                 // dd($info,$offset,'opreq' . $hoy . 'D',array_key_exists('opreq' . $hoy . 'D', $offset));
-                                                if (array_key_exists('opreq' . $hoy1 . 'D', $offset) == false) {
-                                                    $prreqD = '0';
-                                                } else {
-                                                    $prreqD = $offset['opreq' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('oqty' . $hoy1 . 'D', $offset) == false) {
-                                                    $oqtyD = '0';
-                                                } else {
-                                                    $oqtyD = $offset['oqty' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('oplan' . $hoy1 . 'D', $offset) == false) {
-                                                    $oplanD = '0';
-                                                } else {
-                                                    $oplanD = $offset['oplan' . $hoy1 . 'D'];
-                                                }
-                                                if (array_key_exists('ocarry' . $hoy1 . 'D', $offset) == false) {
-                                                    $ocarryD = '0';
-                                                } else {
-                                                    $ocarryD = $offset['ocarry' . $hoy1 . 'D'];
-                                                }
+
 
                                                 //-----------NOCHE
-                                                if (array_key_exists('opreq' . $hoy1 . 'N', $offset) == false) {
-                                                    $prreqN = '0';
-                                                } else {
-                                                    $prreqN = $offset['opreq' . $hoy1 . 'N'];
-                                                }
-                                                if (array_key_exists('oqty' . $hoy1 . 'N', $offset) == false) {
-                                                    $oqtyN = '0';
-                                                } else {
-                                                    $oqtyN = $offset['oqty' . $hoy1 . 'N'];
-                                                }
-                                                if (array_key_exists('oplan' . $hoy1 . 'N', $offset) == false) {
-                                                    $oplanN = '0';
-                                                } else {
-                                                    $oplanN = $offset['oplan' . $hoy1 . 'N'];
-                                                }
-                                                if (array_key_exists('ocarry' . $hoy1 . 'N', $offset) == false) {
-                                                    $ocarryN = '0';
-                                                } else {
-                                                    $ocarryN = $offset['ocarry' . $hoy1 . 'N'];
-                                                }
+
+                                                $ocarryN = $offset['ocarry' . $hoy1 . 'N'] ?? 0;
+                                                $ocarryD = $offset['ocarry' . $hoy1 . 'D'] ?? 0;
+
                                                 if ($CONTCARR == 8) {
                                                     $CONTCARR = 1;
                                                     $totalcarry = 0;
@@ -313,9 +201,21 @@
                                                             }
                                                         }
                                                     }
-                                                    $totalpreq += $prreqD + $prreqN;
+                                                    $prreqD=$offset['opreq' . $hoy1 . 'D'] ?? 0;
+                                                     $prreqN=$offset['opreq' . $hoy1 . 'N'] ?? 0;
+
+                                                        $totalpreq += $prreqD + $prreqN;
+                                                    $oqtyD = $offset['oqty' . $hoy1 . 'D'] ?? 0;
+                                                    $oqtyN = $offset['oqty' . $hoy1 . 'N'] ?? 0;
                                                     $totaloqty += $oqtyN + $oqtyD;
+                                                    $FpadresD = $forcast['KMRS' . $hoy1 . 'D'] ?? 0;
+                                                    $FpadresN = $forcast['KMRS' . $hoy1 . 'N'] ?? 0;
+                                                    $totalFkmr += $FpadresD + $FpadresN;
+                                                    $valFNH = $forcast['FMA' . $hoy1 . 'N'] ?? 0;
+                                                    $valFDH = $forcast['FMA' . $hoy1 . 'D'] ?? 0;
                                                     $totalvalFH += $valFNH + $valFDH;
+                                                    $oplanD = $offset['oplan' . $hoy1 . 'D'] ?? 0;
+                                                    $oplanN = $offset['oplan' . $hoy1 . 'N'] ?? 0;
                                                     $totaloplan += $oplanD + $oplanN;
                                                 }
                                             @endphp
@@ -339,6 +239,7 @@
                                                         <!-- Bloque 1 -->
                                                         <div class="w-24 text-center border rounded shadow">
                                                             <div class="font-bold">-</div>
+                                                            <div class="text-sm ">{{ $totalFkmr }}</div>
                                                             <div class="text-sm ">{{ $totalvalFH }}</div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valeclD }}</div>
                                                         <div class="text-sm ">{{ $valkfpsd }}</div> --}}
@@ -383,21 +284,27 @@
                                                         <!-- Bloque 1 -->
                                                         <div class="w-24 text-center border rounded shadow">
                                                             <div class="font-bold">D</div>
-                                                            <div class="text-sm ">{{ $valRDH }}</div>
+                                                            <div class="text-sm ">
+                                                                {{ $forcast['KMRS' . $hoy1 . 'D'] ?? 0 }}</div>
+                                                            <div class="text-sm ">
+                                                                {{ $forcast['FMA' . $hoy1 . 'D'] ?? 0 }}</div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valeclD }}</div>
                                                             <div class="text-sm ">{{ $valkfpsd }}</div> --}}
 
-                                                            <div class="text-sm text-gray-500">{{ $prreqD }}
+                                                            <div class="text-sm text-gray-500">
+                                                                {{ $offset['opreq' . $hoy1 . 'D'] ?? 0 }}
                                                             </div>
-                                                            <div class="text-sm ">{{ $oqtyD }}</div>
-                                                            <div class="text-sm text-gray-500">{{ $oplanD }}
+                                                            <div class="text-sm ">
+                                                                {{ $offset['oqty' . $hoy1 . 'D'] ?? 0 }}</div>
+                                                            <div class="text-sm text-gray-500">
+                                                                {{ $offset['oplan' . $hoy1 . 'D'] ?? 0 }}
                                                             </div>
                                                             <div class="text-sm ">{{ $ocarryD }}</div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valPDH }}</div> --}}
                                                             <div class="text-sm flex items-center justify-center">
                                                                 <input id="{{ $inD }}"
                                                                     name="{{ $inD }}"
-                                                                    value="{{ $oplanD }}"
+                                                                    value="{{ $offset['oplan' . $hoy1 . 'D'] ?? 0 }}"
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                                     type="number" min="0"
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
@@ -409,21 +316,26 @@
                                                         <!-- Bloque 2 -->
                                                         <div class="w-24 text-center border rounded shadow ">
                                                             <div class="font-bold">N</div>
+                                                            <div class="text-sm ">
+                                                                {{ $forcast['KMRS' . $hoy1 . 'D'] ?? 0 }}</div>
                                                             <div class="text-sm border-y-gray-900">
-                                                                {{ $valRNH }}</div>
-                                                            <div class="text-sm text-gray-500">{{ $prreqN }}
+                                                                {{ $forcast['kmr' . $hoy1 . 'N'] ?? 0 }}</div>
+                                                            <div class="text-sm text-gray-500">
+                                                                {{ $offset['opreq' . $hoy1 . 'N'] ?? 0 }}
                                                             </div>
                                                             <div class="text-sm border-y-gray-900">
-                                                                {{ $oqtyN }}
+                                                                {{ $offset['oqty' . $hoy1 . 'N'] ?? 0 }}
                                                             </div>
-                                                            <div class="text-sm text-gray-500">{{ $oplanN }}
+                                                            <div class="text-sm text-gray-500">
+                                                                {{ $offset['oplan' . $hoy1 . 'N'] ?? 0 }}
                                                             </div>
                                                             <div class="text-sm border-y-gray-900">
                                                                 {{ $ocarryN }}
                                                             </div>
                                                             {{-- <div class="text-sm text-gray-500">{{ $valPNH }}</div> --}}
                                                             <div class="text-sm  "> <input id={{ $inN }}
-                                                                    name={{ $inN }} value={{ $oplanN }}
+                                                                    name={{ $inN }}
+                                                                    value={{ $offset['oplan' . $hoy1 . 'N'] ?? 0 }}
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $wctpar; ?>',this.id)"
                                                                     type="number" min="0"
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
@@ -450,25 +362,36 @@
 
 
     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-        <form method="post" action="{{ route('planeacion.siguiente') }}">
+        <form method="post" action="{{ route('planeacionOS.siguiente') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
-
                 <div class="flex justify-center">
-                    @if ($pagina != 0)
-                        <button type="submit"
-                            class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                            <span class="mr-2">Anterior</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                    <label class="block mt-4 text-sm">
+                        <input type="hidden" name={{ $fecha . '/' . $tdias }} id="data"
+                            value={{ $fecha . '/' . $tdias }}>
+                        <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                        <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                        <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                        <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                        <input type="hidden" name="paginate" id="paginate" value={{ $pagina - 1 }}>
+                        <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
+                        <input type="hidden" name="dias" id="data" value={{ $tdias }}>
+                    </label>
+                    <div class="flex justify-center">
+                        @if ($pagina != 0)
+                            <button type="submit"
+                                class="flex items-center justify-between px-4 py-2 text-xs font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                                <span class="mr-2">Anterior</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
 
-                        </button>
-                    @endif
+                            </button>
+                        @endif
+                    </div>
                 </div>
-            </div>
         </form>
         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
             <label class="block mt-4 text-sm">
@@ -476,9 +399,20 @@
                 <p class="text-blue-600">{{ $pagina }} de {{ $tpag }} </p>
             </label>
         </div>
-        <form method="post" action="{{ route('planeacion.siguiente') }}">
+        <form method="post" action="{{ route('planeacionOS.siguiente') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
+                <label class="block mt-4 text-sm">
+                    <input type="hidden" name={{ $fecha . '/' . $tdias }} id="data"
+                        value={{ $fecha . '/' . $tdias }}>
+                    <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                    <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
+                    <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
+                    <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
+                    <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
+                    <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
+                    <input type="hidden" name="dias" id="data" value={{ $tdias }}>
+                </label>
                 <div class="flex justify-center">
 
                     <div class="flex justify-center">

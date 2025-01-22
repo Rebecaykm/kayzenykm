@@ -357,6 +357,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('offset/create', [\App\Http\Controllers\OffSetitemController::class, 'create'])->name('offset.create');
     Route::post('planeacionOS/create', [\App\Http\Controllers\PlaneacionoffsetController::class, 'create'])->name('planeacionOS.create');
     Route::post('planeacionOS/update', [\App\Http\Controllers\PlaneacionoffsetController::class, 'update'])->name('planeacionOS.update');
+    Route::post('planeacionOS/siguiente', [\App\Http\Controllers\PlaneacionoffsetController::class, 'siguiente'])->name('planeacionOS.siguiente');
+
 // 660B
 Route::get('planeacion660', [\App\Http\Controllers\Planeacion660bController::class, 'index'])->name('660.index');
 // Route::post('planeacion/buscar', [\App\Http\Controllers\PlaneacionController::class, 'buscar'])->name('planeacion.buscar');

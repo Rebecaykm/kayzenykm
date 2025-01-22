@@ -244,7 +244,8 @@ class PlaneacionHController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateF1(Request $request)
-    {    $inF1 = array();
+    {
+        $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
         $tipo = $request->tipo;
@@ -681,28 +682,47 @@ class PlaneacionHController extends Controller
             $pos = array_search($prod['IPROD'], $prodcqa);
             $totalcon =  ceil(($total / $pqa[$pos]) / 10);
             $contotal = 0;
-//             if($prod['IPROD']=='VA4128B04                          ')
-//             {
-// dd($total,$MBMS  );
-//             }
+            //             if($prod['IPROD']=='VA4128B04                          ')
+            //             {
+            // dd($total,$MBMS  );
+            //             }
             while ($contd <= 5) {
                 $dia = $fetemp->format('Ymd');
-                if ($contotal <= $total / $pqa[$pos]) {
-                    // echo $dia.'-'.$contotal."--".$totalcon.'--'.$total/$pqa[$pos].'<br>';
-                    $firme += ['CH' . $dia . 'D' =>   $totalcon];
-                    $firme += ['H' . $dia . 'D' => $totalcon*$pqa[$pos] ];
-                    $contotal = $contotal + $totalcon;
-                    if ($contotal <= $total / $pqa[$pos]) {
-                        $firme += ['CH' . $dia . 'N' =>  $totalcon];
-                        $firme += ['H' . $dia . 'N' =>  $totalcon*$pqa[$pos] ];
+
+                if ($contotal <  ceil($total / $pqa[$pos])) {
+                    $re = $contotal * $pqa[$pos] - $total;
+                    if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
+                        $re = $total - $contotal * $pqa[$pos];
+                        $firme += ['CH' . $dia . 'D' => ceil( $re/$pqa[$pos])];
+                        $firme += ['H' . $dia . 'D' =>  ceil( $re/$pqa[$pos]) * $pqa[$pos]];
+                        $contotal = $contotal + ceil( $re/$pqa[$pos]);
+                    } else  {
+
+                        $firme += ['CH' . $dia . 'D' =>  $totalcon];
+                        $firme += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
                         $contotal = $contotal + $totalcon;
                     }
+
+                    if ($contotal <= ceil($total / $pqa[$pos])) {
+
+                        if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
+                            $re = $total - $contotal * $pqa[$pos];
+                            $firme += ['CH' . $dia . 'N' => ceil( $re/$pqa[$pos])];
+                            $firme += ['H' . $dia . 'N' =>  ceil( $re/$pqa[$pos]) * $pqa[$pos]];
+                            $contotal = $contotal + ceil( $re/$pqa[$pos]);
+
+                        } else {
+
+                            $firme += ['CH' . $dia . 'N' =>  $totalcon];
+                            $firme += ['H' . $dia . 'N' =>  $totalcon * $pqa[$pos]];
+                            $contotal = $contotal + $totalcon;
+                        }
+                    }
                 }
-
-
                 $fetemp->addDay();
                 $contd++;
             }
+
 
             if (count($valPDp) > 0) {
 
