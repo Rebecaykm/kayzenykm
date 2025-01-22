@@ -910,7 +910,7 @@ class PlaneacionS1Controller extends Controller
                 $arrniv = self::recore( $su->MCCPRO, $niveles);
                 $sepa_niveles+=[$su->MCCPRO=>$arrniv];
             }
-            DD($prod1, $sepa_niveles);
+            // DD($prod1, $sepa_niveles);
         }
 
         foreach ($Sub as $subs) {
@@ -931,8 +931,6 @@ class PlaneacionS1Controller extends Controller
                 unset($FINALCALS[$key5]);
                 unset($FINALREQ[$key5]);
             }
-
-
             while (($key2 = array_search($subs->MCCPRO, $kmrmccprod)) !== false) {
                 if ($kmrmcfprod[$key2] != $subs->MCCPRO) {
                     array_push($padreskmr, $kmrmcfprod[$key2]);
@@ -941,7 +939,6 @@ class PlaneacionS1Controller extends Controller
                 unset($KMRMCFCLS[$key2]);
                 unset($kmrmcfprod[$key2]);
             }
-
             $FINALLIST = array_column($KMRFINAL, 'MCFPRO');
             $FINALMCPRO = array_column($KMRFINAL, 'MCCPRO');
             $FINALCALS = array_column($KMRFINAL, 'MCFCLS');

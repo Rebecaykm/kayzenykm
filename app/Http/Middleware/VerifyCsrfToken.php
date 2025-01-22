@@ -15,6 +15,8 @@ class VerifyCsrfToken extends Middleware
         'prodcution-report/download',
         'unemployment-report/download',
         'scrap-report/download',
+        'planeacionOS/create',
+        'planeacionOS/update',
         'planeacion660/update',
         'planeacion660/updateF1',
         'planeacion/update',

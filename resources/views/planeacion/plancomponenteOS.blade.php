@@ -1,4 +1,10 @@
 <x-app-layout title="Plan">
+    {{-- @php
+        include_once '../app/Http/Controllers/registros.php';
+        $obj = new registros();
+        $projecto = $obj->Projecto($tp);
+        // $dias = ;
+    @endphp --}}
 
     <div class="xl:container lg:container md:container sm:container grid   mx-auto ">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -50,13 +56,10 @@
                 <thead>
                     <tr
                         class=" sticky top-0 text-xs font-semibold tracking-wide text-center text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-                        <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
-                        <th class=" header px-4 py-3 sticky ">
-                            Nivel<br> componente
-                        </th>
+                        {{-- <th class=" header px-4 py-3 sticky" rowspan="3">No Parte Final </th>
                         <th class=" header px-4 py-3 sticky ">
                             Parte <br> componente
-                        </th>
+                        </th> --}}
                         <th class=" header px-4 py-3 sticky ">
                             Parte <br> Finales
                         </th>
@@ -114,18 +117,23 @@
                             $info = $info1['padre'];
 
                         @endphp
-                        <tr class="text-gray-700 dark:text-gray-400  text-xs ">
-                            <td class="px-2 py-1 text-xs  bg-teal-300">
+                        <tr>
+                            <td colspan="5" class="px-2 py-1 text-xs  bg-teal-300">
                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                     {{ $info['parte'] }}
                                 </div>
                             </td>
+                        </tr>
+                        <tr class="text-gray-700 dark:text-gray-400  text-xs ">
+                            {{-- <td class="px-2 py-1 text-xs  bg-teal-300">
+                                <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                    {{ $info['parte'] }}
+                                </div>
+                            </td> --}}
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
-                            <td class="px-2 py-1 text-xs  bg-emerald-100">
-                            </td>
-                            <td class="px-2 py-1 text-xs  bg-emerald-100">
-                            </td>
+                            {{-- <td class="px-2 py-1 text-xs  bg-emerald-100">
+                            </td> --}}
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
                             </td>
                             <td class="px-2 py-1 text-xs  bg-emerald-100">
@@ -180,6 +188,7 @@
                                                 } else {
                                                     $valPD = $info['P' . $hoy . 'D'];
                                                 }
+
                                                 if (array_key_exists('P' . $hoy . 'N', $info) == false) {
                                                     $valPN = '-';
                                                 } else {
@@ -304,19 +313,59 @@
                             @endphp
 
                             @if (array_search($datossubs['sub'], $histo) != true)
-
-
                                 @php
-
                                     array_push($histo, $datossubs['sub']);
                                 @endphp
-                                <tr class="text-gray-700 dark:text-gray-400 ">
-                                    <td class="px-2 py-1 text-xs text-center ">
-                                    </td>
-                                    <td class="px-2 py-1 text-xs text-center ">
-                                        {{$datossubs['level']}}
+                                <tr>
+                                    <td class="px-2 py-1 text-xs text-center">
+
+                                        {{ $datossubs['sub'] }}<br>
+                                        @php
+
+                                            $item = strtr($datossubs['sub'], ' ', '_');
+                                            $wctpar = $datossubs['wrk'] ?? 'xxxx';
+
+                                        @endphp
                                     </td>
                                     <td class="px-2 py-1 text-xs text-center">
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
+                                            SNP: {{ $datossubs['Qty'] }}<br>
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center">
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
+
+                                            Wrkcente: {{ $datossubs['wrk'] }}<br>
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center">
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
+
+                                            Min balance: {{ $datossubs['minbal'] }}<br>
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 py-1 text-xs text-center">
+
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+
+
+                                            Contenedor: {{ $datossubs['typkt'] }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-gray-700 dark:text-gray-400 ">
+                                    {{-- <td class="px-2 py-1 text-xs text-center ">
+                                    </td> --}}
+                                    {{-- <td class="px-2 py-1 text-xs text-center">
                                         {{ $datossubs['sub'] }}<br>
                                         @php
 
@@ -331,7 +380,7 @@
                                             Min balance: {{ $datossubs['minbal'] }}<br>
                                             Contenedor: {{ $datossubs['typkt']}}
                                         </div>
-                                    </td>
+                                    </td> --}}
                                     <td class="px-2 py-1 text-xs text-center">
                                         @php
                                             $forcast = $datossubs['forcast'];
@@ -364,12 +413,52 @@
                                                     disabled />
                                             </label>
                                         </div>
-                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                        {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
                                                 <input value="Requeriment (Parent parts)"
                                                     class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                     disabled />
                                             </label>
+                                        </div> --}}
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="quantity pequest "
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="quantity requered"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="Quanity  Plan"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
+                                        </div>
+                                        <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            <label class="block text-sm ">
+
+                                                <input value="Carri Over"
+                                                    class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    disabled />
+                                            </label>
+
+
                                         </div>
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
@@ -381,6 +470,7 @@
 
 
                                         </div>
+
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             <label class="block text-sm ">
                                                 <input value="Firme"
@@ -406,6 +496,8 @@
                                         $coni = 0;
                                         $hoy1 = $fecha;
                                         $plan = $datossubs['plan'];
+                                        $offset = $datossubs['offset'];
+
                                         $totalplan = 0;
                                         $totalKMRP = 0;
                                         $totalfir = 0;
@@ -507,6 +599,50 @@
                                             }
                                             $totalkfp += $valkfpsd + $valMkfpsn;
 
+                                            // OFFSET
+                                            // dd($info,$offset,'opreq' . $hoy . 'D',array_key_exists('opreq' . $hoy . 'D', $offset));
+                                            if (array_key_exists('opreq' . $hoy . 'D', $offset) == false) {
+                                                $prreqD = '-';
+                                            } else {
+                                                $prreqD = $offset['opreq' . $hoy . 'D'];
+                                            }
+                                            if (array_key_exists('oqty' . $hoy . 'D', $offset) == false) {
+                                                $oqtyD = '-';
+                                            } else {
+                                                $oqtyD = $offset['oqty' . $hoy . 'D'];
+                                            }
+                                            if (array_key_exists('oplan' . $hoy . 'D', $offset) == false) {
+                                                $oplanD = '-';
+                                            } else {
+                                                $oplanD = $offset['oplan' . $hoy . 'D'];
+                                            }
+                                            if (array_key_exists('ocarry' . $hoy . 'D', $offset) == false) {
+                                                $ocarryD = '-';
+                                            } else {
+                                                $ocarryD = $offset['ocarry' . $hoy . 'D'];
+                                            }
+
+                                            //-----------NOCHE
+                                            if (array_key_exists('opreq' . $hoy . 'N', $offset) == false) {
+                                                $prreqN = '-';
+                                            } else {
+                                                $prreqN = $offset['opreq' . $hoy . 'N'];
+                                            }
+                                            if (array_key_exists('oqty' . $hoy . 'N', $offset) == false) {
+                                                $oqtyN = '-';
+                                            } else {
+                                                $oqtyN = $offset['oqty' . $hoy . 'N'];
+                                            }
+                                            if (array_key_exists('oplan' . $hoy . 'N', $offset) == false) {
+                                                $oplanN = '-';
+                                            } else {
+                                                $oplanN = $offset['oplan' . $hoy . 'N'];
+                                            }
+                                            if (array_key_exists('ocarry' . $hoy . 'N', $offset) == false) {
+                                                $ocarryN = '-';
+                                            } else {
+                                                $ocarryN = $offset['ocarry' . $hoy . 'N'];
+                                            }
                                         @endphp
                                         <td class="px-2 py-1 text-xs text-center  ">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -536,7 +672,7 @@
                                                         disabled />
                                                 </label>
                                             </div>
-                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                            {{-- <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valKMRsd }}
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -548,8 +684,60 @@
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
+                                            </div> --}}
+
+                                            {{-- //---------------------------------------- --}}
+
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $prreqD }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    <input value={{ $prreqN }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $oqtyD }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    <input value={{ $oqtyN }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
                                             </div>
 
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $oplanD }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    <input value={{ $oplanN }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input value={{ $ocarryD }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+                                                    <input value={{ $ocarryN }}
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            {{-- //-------------------------------------------------- --}}
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
                                                     <input value={{ $valPDH }}

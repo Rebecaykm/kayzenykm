@@ -331,6 +331,34 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('material-consumption', [\App\Http\Controllers\MaterialConsumptionController::class, 'store'])->name('material-consumption.store');
     Route::post('material-consumption-spm', [\App\Http\Controllers\MaterialConsumptionController::class, 'spm'])->name('material-consumption.spm');
     Route::post('material-consumption-finish', [\App\Http\Controllers\MaterialConsumptionController::class, 'finish'])->name('material-consumption.finish');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //ofset
+    Route::get('offset', [\App\Http\Controllers\OffSetitemController::class, 'index'])->name('offset.index');
+    Route::post('offset/store', [\App\Http\Controllers\OffSetitemController::class, 'store'])->name('offset.store');
+    Route::post('offset/create', [\App\Http\Controllers\OffSetitemController::class, 'create'])->name('offset.create');
+    Route::post('planeacionOS/create', [\App\Http\Controllers\PlaneacionoffsetController::class, 'create'])->name('planeacionOS.create');
+    Route::post('planeacionOS/update', [\App\Http\Controllers\PlaneacionoffsetController::class, 'update'])->name('planeacionOS.update');
+    Route::post('planeacionOS/siguiente', [\App\Http\Controllers\PlaneacionoffsetController::class, 'siguiente'])->name('planeacionOS.siguiente');
+
 // 660B
 Route::get('planeacion660', [\App\Http\Controllers\Planeacion660bController::class, 'index'])->name('660.index');
 // Route::post('planeacion/buscar', [\App\Http\Controllers\PlaneacionController::class, 'buscar'])->name('planeacion.buscar');
