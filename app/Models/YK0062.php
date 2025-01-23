@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class YK0062 extends Model
 {
-    protected $connection = 'odbc-connection-lx834fu02';
-    protected $table = 'LX834FU02.YK0062';
+    protected $connection = 'odbc-connection-lx834fu01';
+    protected $table = 'LX834FU01.YK0062';
 
     protected $fillable = [
         'K62PRO',

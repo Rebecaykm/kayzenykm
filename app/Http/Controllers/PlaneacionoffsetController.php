@@ -16,8 +16,10 @@ use App\Models\YK006;
 use App\Models\YK0062;
 use Carbon\Carbon;
 use App\Exports\PlanExport;
+use App\Exports\PlanExportOS;
 use App\Exports\PlanFinalExport;
 use App\Exports\PlansubExport;
+use App\Exports\PlansubExportOS;
 use App\Jobs\ProductionPlanByArrayMigrationJob;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -189,7 +191,7 @@ class PlaneacionoffsetController extends Controller
         if ($request->Type == 1) {
             return Excel::download(new PlanFinalExport($fecha, $dias, $TP), 'finales_' . $pro . '_' . $fecha . '.xlsx');
         } else {
-            return Excel::download(new PlansubExport($fecha, $dias, $TP), 'Subcomponentes_' .  $pro . '_' . $fecha . '.xlsx');
+            return Excel::download(new PlansubExportOS($fecha, $dias, $TP), 'Subcomponentes_' .  $pro . '_' . $fecha . '.xlsx');
         }
     }
 
@@ -454,8 +456,6 @@ class PlaneacionoffsetController extends Controller
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
-
-
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
@@ -466,14 +466,11 @@ class PlaneacionoffsetController extends Controller
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
-
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
         return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 

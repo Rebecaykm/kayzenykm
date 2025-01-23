@@ -83,7 +83,7 @@
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Reportes de Planeación</h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="get" action="{{ route('planeacion.exportsubcomponentes') }}">
+            <form method="get" action="{{ route('planeacionOS.exportsubcomponentes') }}">
                 <div class="flex flex-col space-y-4">
                     <div class="flex flex-col sm:flex-row sm:space-x-3">
                         <div class="flex-auto">
@@ -95,11 +95,7 @@
                                     <option value="2,12,123,13,20,23,3">J03G/J03W</option>
                                     <option value="4,45,47">J59W</option>
                                     <option value="5,56,57">J59J</option>
-                                    <option value="8,811">660B</option>
-                                    <option value="11,811">920B</option>
-                                    <option value="7,79,710">J34A</option>
-                                    <option value="9,79">J34H</option>
-                                    <option value="10,710">J34X</option>
+
                                 </select>
                             </label>
                         </div>

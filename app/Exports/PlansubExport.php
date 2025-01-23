@@ -159,6 +159,7 @@ class PlansubExport implements FromView
 
         $reporte += ['res' => $general, 'fecha' => $fecha, 'dias' => $dias];
         $partsrev = array_column($plan1, 'IPROD');
+        $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='",      $partsrev);
         return view('planeacion.RepSubfinal', [
             'general' => $reporte
