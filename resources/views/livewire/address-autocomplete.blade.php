@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('planeacion.buscar') }}"
+<form method="post" action="{{ route('planeacionOS.buscar') }}"
     x-data='{
         addressSelected(e) {
             let value = e.target.value

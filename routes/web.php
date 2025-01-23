@@ -359,6 +359,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('planeacionOS/update', [\App\Http\Controllers\PlaneacionoffsetController::class, 'update'])->name('planeacionOS.update');
     Route::post('planeacionOS/siguiente', [\App\Http\Controllers\PlaneacionoffsetController::class, 'siguiente'])->name('planeacionOS.siguiente');
     Route::get('planeacionOS/exportsubcomponentes', [\App\Http\Controllers\PlaneacionoffsetController::class, 'exportsubcomponentes'])->name('planeacionOS.exportsubcomponentes');
+    Route::post('planeacionOS/buscar', [\App\Http\Controllers\PlaneacionoffsetController::class, 'buscar'])->name('planeacionOS.buscar');
 
 // 660B
 Route::get('planeacion660', [\App\Http\Controllers\Planeacion660bController::class, 'index'])->name('660.index');

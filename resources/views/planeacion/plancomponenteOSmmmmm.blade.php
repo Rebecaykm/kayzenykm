@@ -4,6 +4,7 @@
         @csrf
         <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
         <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+
         <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
         <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
         <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
@@ -48,8 +49,10 @@
 
             </div>
             <!-- Content -->
+
             @foreach ($res as $info1)
                 @php
+
                     $info = $info1['padre'];
                 @endphp
 

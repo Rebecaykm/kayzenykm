@@ -344,6 +344,8 @@ class PlaneacionoffsetController extends Controller
 
     public function update(Request $request)
     {
+
+
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -450,9 +452,9 @@ class PlaneacionoffsetController extends Controller
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         // $query = "CALL LX834OU02.YMP006C";
-        $query = "CALL LX834OU.YMR002C";
+        // $query = "CALL LX834OU.YMR002C";
 
-        $result = odbc_exec($conn, $query);
+        // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
@@ -468,11 +470,23 @@ class PlaneacionoffsetController extends Controller
             ->get()->toArray();
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
-        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-        $partsrev = array_column($plan1, 'IPROD');
-        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
-    }
+
+
+if($total==0)
+{
+    $WCs=[];
+    return view('planeacion.index', ['LWK' => $WCs]);
+
+}else
+{
+    $datos = self::CargarforcastF1($padres[$request->paginate ], $fecha, $dias);
+    $partsrev = array_column($plan1, 'IPROD');
+    $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
+    return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
+
+}
+
+           }
 
     /**
      * Remove the specified resource from storage.
@@ -522,8 +536,6 @@ class PlaneacionoffsetController extends Controller
         $total = array();
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $sub1 = $Sub->pluck('MCCPRO');
-
-
         $KMRFINAL = YMCOM::query()
             ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
             ->select('MCCPRO', 'MCFPRO', 'MCFCLS', 'MCQREQ ')
@@ -533,7 +545,6 @@ class PlaneacionoffsetController extends Controller
             ])->wherein('MCCPRO', $sub1)
             ->where('MCFCLS', '=', 'F1')
             ->get();
-
         $RKMRfinal = KMR::query()
             ->selectRaw('SUM(MQTY) as Total,MRDTE,MRCNO,MPROD,MTYPE')
             ->whereIN('MPROD', $KMRFINAL->pluck('MCFPRO'))
@@ -543,8 +554,6 @@ class PlaneacionoffsetController extends Controller
                 ['MTYPE', '=', 'F'],
             ])->groupBy('MRDTE', 'MRCNO', 'MPROD', 'MTYPE')
             ->get();
-
-
         $offset = YKPLN::query()
             ->join('LX834F01.YMWEY', 'PPROD', '=', 'ZEITE')
             ->select('PPROD', 'PRDTE', 'PRSHFT', 'PRREQ', 'PQTY', 'PRPLQ', 'PRCAO', 'ZELEVE')
@@ -556,7 +565,6 @@ class PlaneacionoffsetController extends Controller
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN', 'IMSPKT')
             ->wherein("IPROD", $sub1)
             ->get();
-
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
             ->wherein("RPROD", $sub1)
@@ -598,12 +606,10 @@ class PlaneacionoffsetController extends Controller
                         $reqof = $off['PQTY'] + 0; //quantity requied
                         $reqpla = $off['PRPLQ'] + 0; //quantity planned
                         $carrof = $off['PRCAO'] + 0; //carriover
-
                         $ofs += ['opreq' . $PRDTE . $SHIFT => $peof];
                         $ofs += ['oqty' . $PRDTE . $SHIFT => $reqof];
                         $ofs += ['oplan' . $PRDTE . $SHIFT => $reqpla];
                         $ofs += ['ocarry' . $PRDTE . $SHIFT => $carrof];
-
                         $ofsg += $ofs;
                     }
                 }
@@ -611,7 +617,7 @@ class PlaneacionoffsetController extends Controller
 
             $total = 0;
             $Tshopkmr = 0;
-            $prodcqa = $cond->where('IPROD',$subs);
+            $prodcqa = $cond->where('IPROD', $subs);
 
             $poskwr = array_search($subs, $prowk);
 
@@ -700,7 +706,6 @@ class PlaneacionoffsetController extends Controller
             ->get()->toarray();
 
         foreach ($prods as $prod) {
-
 
             $inF1 = array();
             $padre = [];
@@ -809,9 +814,10 @@ class PlaneacionoffsetController extends Controller
 
             return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         } else {
+
             $datos = self::CargarforcastF1($plan1, $fecha, $dias);
 
-            return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
+            return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         }
     }
 }

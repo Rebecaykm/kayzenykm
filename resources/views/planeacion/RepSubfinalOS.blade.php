@@ -62,8 +62,6 @@
                     $totalD = $totalD + 1;
                 @endphp
             @endwhile
-
-
         </tr>
 
     </thead>
@@ -85,15 +83,11 @@
                     {{ $info['parte'] }}
                 </td>
                 <td>
-
                 </td>
                 <td>
-
                 </td>
                 <td>
-
                 </td>
-
                 <td>
                     Planeado
                 </td>
@@ -169,7 +163,6 @@
                             $valPD = $forehijo['F' . $hoy . 'D'] ?? 0;
                             $valPN = $forehijo['F' . $hoy . 'N'] ?? 0;
                             $totalh += $valPD + $valPN;
-
                         @endphp
                         <td>
                             {{ $valPD }}
@@ -205,10 +198,10 @@
                     <td>
                     </td>
                     <td>
-                        {{-- {{ $hijo['WKC'] }} --}}
+
                     </td>
                     <td>
-                        {{-- {{ $hijo['class'] }} --}}
+
                     </td>
 
                     <td>
