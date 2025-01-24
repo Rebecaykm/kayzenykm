@@ -111,6 +111,7 @@
                         $histo = [];
                     @endphp
                     @foreach ($res as $info1)
+
                         @php
 
                             $info = $info1['padre'];

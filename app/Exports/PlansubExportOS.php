@@ -115,17 +115,12 @@ class PlansubExportOS implements FromView
                     //forcast
                     $fihijo=$Sub->where('MCCPRO', $hijo['MCCPRO'] );
                     $kmrpadress = $RKMRfinal->wherein('MPROD', $fihijo->pluck('MCFPRO'));
-                    if(count(    $kmrpadress)!=0)
-                    {
-                        dd(    $RKMRfinal->toarray(), $kmrpadress->toarray(),  $fihijo->pluck('MCFPRO'));
-                    }
-                    foreach ($kmrpadress as $kmrp) {
 
+                    foreach ($kmrpadress as $kmrp) {
                         $turno = $kmrp['MRCNO'];
                         $valt = substr($turno, 4, 1);
                         $forcast  += ['KMRS' . $kmrp['MRDTE'] . $valt => $kmrp['TOTAL']];
                     }
-
                     $Forehijo += ['Forehijo' => $forhijo];
                     $Forehijo += ['Forcasthijo' => $forcast ];
                     array_push($hijos, $Forehijo);

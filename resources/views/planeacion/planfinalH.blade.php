@@ -101,7 +101,6 @@
                     <tbody
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($res as $info1)
-
                             @php
 
                                 $contp += 1;
@@ -291,7 +290,7 @@
                                                                 }
 
                                                             @endphp
-                                                            <input value='{{ $valFD }}'
+                                                            <input value='{{  $valFD }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
@@ -328,14 +327,14 @@
 
                                                             <input id='{{ $inD }}' name='{{ $inD }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                value='{{ $valFiD }}'
+                                                                value='{{ $firme['F' . $hoy . 'D'] ?? $valFiD }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                         </label>
                                                         <label class="block text-sm ">
 
                                                             <input id='{{ $inN }}' name='{{ $inN }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                value='{{ $valFiN }}'
+                                                                value='{{$firme['F' . $hoy . 'N'] ?? $valFiN }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                         </label>
 

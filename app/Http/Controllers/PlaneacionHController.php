@@ -136,23 +136,16 @@ class PlaneacionHController extends Controller
 
         $padres = array_chunk($plan1, 10);
         $partsrev = array_column($plan1, 'IPROD');
-
         $total = count($padres) - 1;
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-
-
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
     public function export(Request $request)
     {
-
         $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
         $fechaFin = $request->fechaFin != '' ? Carbon::parse($request->fechaFin)->format('Ymd') : Carbon::now()->format('Ymd');
-
-
         return Excel::download(new PlanExport($fecha, $fechaFin), 'Planeacion.xlsx');
     }
 
@@ -251,12 +244,10 @@ class PlaneacionHController extends Controller
         $tipo = $request->tipo;
         $WC = $request->SeWC;
         $variables = $request->all();
-
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
         $dias = 8;
         $fecha = $data[0];
-
         $hoy = date('Ymd', strtotime($fecha));
         $datas = [];
         $datas = [];
@@ -267,7 +258,6 @@ class PlaneacionHController extends Controller
         foreach ($keyes as $plans) {
             $dfa = [];
             $dfasql = [];
-
             $inp = explode('/', $plans, 4);
             if (count($inp) >= 3) {
                 $WCT = $inp[3];
@@ -278,12 +268,8 @@ class PlaneacionHController extends Controller
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
-
-
                 $ar = ["part_number" => $namenA, "date" => $fechasql];
                 array_push($datval, $ar);
-
-
                 $dfa = [
                     'K6PROD' => $namenA,
                     'K6WRKC' => $WCT,
@@ -327,15 +313,11 @@ class PlaneacionHController extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
-
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-
-
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
-
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
@@ -343,7 +325,6 @@ class PlaneacionHController extends Controller
                 ['IID', '!=', 'IZ'],
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
-
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
@@ -357,8 +338,6 @@ class PlaneacionHController extends Controller
 
     public function update(Request $request)
     {
-
-
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -394,7 +373,6 @@ class PlaneacionHController extends Controller
 
                 $ar = ["part_number" => $namenA, "date" => $fechasql];
                 array_push($datval, $ar);
-
 
                 $dfa = [
                     'K6PROD' => $namenA,
@@ -447,8 +425,6 @@ class PlaneacionHController extends Controller
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
-
-
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
@@ -505,8 +481,6 @@ class PlaneacionHController extends Controller
                 ['FRDTE', '<', $totalF],
             ])
             ->get();
-
-
         foreach ($prods as $prod) {
             $Sub = YMCOM::query()
                 ->join('LX834F01.IIM', 'MCCPRO', '=', 'IPROD')
@@ -516,7 +490,6 @@ class PlaneacionHController extends Controller
                     ['IMPLC', '!=', 'OBSOLETE'],
                 ])
                 ->whereraw("(MCFPRO='" . $prod['IPROD'] . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
-
                 ->get()->toarray();
 
             if (count($Sub) == 0) {
@@ -761,6 +734,8 @@ class PlaneacionHController extends Controller
             // dd($inF1);
             array_push($totalpa, $inF1);
         }
+
+
         return $totalpa;
     }
 
