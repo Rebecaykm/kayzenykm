@@ -39,7 +39,7 @@
                 </button>
             </div>
         </div>
-        {{ $dias = 7;}}
+        {{ $dias = 12;}}
         <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
             <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
             <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
