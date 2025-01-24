@@ -423,9 +423,9 @@ class PlaneacionController extends Controller
                 array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 50) {
+            if ($CONT == 160) {
                 $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
+                // $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -434,7 +434,7 @@ class PlaneacionController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
+        // $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";

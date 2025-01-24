@@ -24,7 +24,7 @@
     </div>
 
 
-    <form action="{{ route('planeacionH.update') }}" method="post">
+    <form action="{{ route('planeacion.update') }}" method="post">
         <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
             @csrf
             <div class="flex justify-center">

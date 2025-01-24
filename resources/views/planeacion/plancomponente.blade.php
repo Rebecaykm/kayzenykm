@@ -44,7 +44,7 @@
             <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
             <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
             <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
-            <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
+            <input type="hidden" name="paginate" id="paginate" value={{ $pagina }}>
 
             <table class="w-full whitespace-no-wrap ">
                 <thead>
@@ -713,7 +713,7 @@
                         <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                         <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                         <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
-                        <input type="hidden" name="paginate" id="paginate" value={{ $pagina + 1 }}>
+                        <input type="hidden" name="paginate" id="paginate" value={{ $pagina +1 }}>
                         <input type="hidden" name="fecha" id="data" value={{ $fecha }}>
                         <input type="hidden" name="dias" id="data" value={{ $tdias }}>
                     </label>
