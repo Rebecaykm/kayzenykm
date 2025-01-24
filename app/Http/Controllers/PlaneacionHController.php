@@ -405,7 +405,7 @@ class PlaneacionHController extends Controller
                 array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
-            if ($CONT == 50) {
+            if ($CONT == 150) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];

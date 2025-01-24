@@ -19,7 +19,7 @@
                                     <option value="11,811">920B</option>
                                     <option value="7,79,710">J34A</option>
                                     <option value="9,79">J34H</option>
-                                   
+
                                 </select>
                             </label>
                         </div>
@@ -48,7 +48,7 @@
         </h4>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form method="post" action="{{ route('planeacion.create') }}">
+            <form method="post" action="{{ route('planeacionH.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="2">
                 <div class="flex flex-col space-y-4">
@@ -59,7 +59,7 @@
                                 <select id="SeProject2" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-                              
+
                                     <option value="11,811">920B</option>
                                     <option value="7,79,710">J34A</option>
                                     <option value="9,79">J34H</option>
