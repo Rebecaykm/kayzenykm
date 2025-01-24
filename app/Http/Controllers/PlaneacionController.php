@@ -278,8 +278,8 @@ class PlaneacionController extends Controller
                 $fechasql = date('Ymd', strtotime($inp[1]));
 
 
-                    $ar = ["part_number" => $namenA, "date" => $fechasql];
-                    array_push($datval, $ar);
+                    // $ar = ["part_number" => $namenA, "date" => $fechasql];
+                    // array_push($datval, $ar);
 
 
                 $dfa = [
@@ -296,26 +296,26 @@ class PlaneacionController extends Controller
                     'K6FIL1' => '',
                     'K6FIL2' => ''
                 ];
-                $dfasql = [
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $fechasql,
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $horasql,
-                    'K6FIL1' => '',
-                    'K6FIL2' => ''
-                ];
-                array_push($datasql, $dfasql);
+                // $dfasql = [
+                //     'K6PROD' => $namenA,
+                //     'K6WRKC' => $WCT,
+                //     'K6SDTE' => $fecha,
+                //     'K6EDTE' => $fefin,
+                //     'K6DDTE' => $fechasql,
+                //     'K6DSHT' => $turno,
+                //     'K6PFQY' => $request->$plans,
+                //     'K6CUSR' => 'LXSECOFR',
+                //     'K6CCDT' => $load,
+                //     'K6CCTM' => $horasql,
+                //     'K6FIL1' => '',
+                //     'K6FIL2' => ''
+                // ];
+                // array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
             if ($CONT == 160) {
                 $indata = YK006::query()->insert($datas);
-                 $insql = LOGSUP::query()->insert($datasql);
+                // $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -364,6 +364,7 @@ class PlaneacionController extends Controller
 
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
+
         $dias = 8;
         $fecha = $data[0];
         $hoy = date('Ymd', strtotime($fecha));
@@ -374,8 +375,10 @@ class PlaneacionController extends Controller
         $CONT = 0;
         foreach ($keyes as $plans) {
             $dfa = [];
-            $inp = explode('/', $plans, 4);
-            if (count($inp) >= 3) {
+            $inp = explode('/', $plans);
+            if (count($inp) >= 3 && count($inp) <=4) {
+
+
                 $WCT = $inp[3];
                 $dfasql = [];
 
@@ -422,8 +425,9 @@ class PlaneacionController extends Controller
                 ];
                 array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
+
             }
-            if ($CONT == 160) {
+            if ($CONT == 90) {
                 $indata = YK006::query()->insert($datas);
                 $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
@@ -434,7 +438,7 @@ class PlaneacionController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-         $indatasql = LOGSUP::query()->insert($datasql);
+        $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
