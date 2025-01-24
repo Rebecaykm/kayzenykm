@@ -662,7 +662,7 @@
     </form>
 
     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
-        <form method="post" action="{{ route('planeacion.siguiente') }}">
+        <form method="post" action="{{ route('planeacionH.siguiente') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
@@ -700,7 +700,7 @@
                 <p class="text-blue-600">{{ $pagina }} de {{ $tpag }} </p>
             </label>
         </div>
-        <form method="post" action="{{ route('planeacion.siguiente') }}">
+        <form method="post" action="{{ route('planeacionH.siguiente') }}">
             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
