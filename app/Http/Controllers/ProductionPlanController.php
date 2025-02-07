@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReporteExport;
 use App\Models\ProductionPlan;
 use App\Http\Requests\StoreProductionPlanRequest;
 use App\Http\Requests\UpdateProductionPlanRequest;
@@ -11,6 +12,7 @@ use App\Jobs\ProductionPlanMigrationJob;
 use App\Models\PartNumber;
 use App\Models\Shift;
 use App\Models\Status;
+use App\Models\Workcenter;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -182,9 +184,7 @@ class ProductionPlanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductionPlan $productionPlan)
-    {
-    }
+    public function destroy(ProductionPlan $productionPlan) {}
 
     public function uploadFile(Request $request)
     {
@@ -265,5 +265,14 @@ class ProductionPlanController extends Controller
                 odbc_close($conn);
             }
         }
+    }
+
+    public function generarReporte()
+    {
+        $workCenter = Workcenter::query()->where('name', 'MP11M')->first();
+        $shiftId = 1;
+        $date = '2025-02-04';
+
+        return Excel::download(new ReporteExport($workCenter->id, $shiftId, $date), 'forma_modificado.xlsx');
     }
 }
