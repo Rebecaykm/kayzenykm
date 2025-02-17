@@ -24,7 +24,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Symfony\Component\VarDumper\Caster\FrameStub;
 
-class PlaneacionHController extends Controller
+class PlaneacionHT1t2Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -56,6 +56,7 @@ class PlaneacionHController extends Controller
 
     public function create(Request $request)
     {
+
         $inF1 = array();
         $inF2 = array();
         $tipo = $request->Planeacion;
@@ -67,45 +68,27 @@ class PlaneacionHController extends Controller
         $CP = $request->SePC;
         $WC = $request->SeWC;
         $array = explode(",", $TP);
-        if ($tipo == 2) {
-            $plan1 = IIM::query()
-                ->select('IPROD', 'IREF04')
-                ->wherein('IREF04 ', $array)
-                ->where([
-                    ['IID', '!=', 'IZ'],
-                    ['IMPLC', '!=', 'OBSOLETE'],
-                ])
 
-                ->where('ICLAS', 'F1')
-                ->distinct('IPROD')
-                ->get()->toArray();
-            $padres = array_chunk($plan1, 10);
+            $tipo = ($request->Type == 'T1') ? "TIER1%" : "TIER2%";
 
-            $total = count($padres);
+        $plan1 = IIM::query()
+            ->select('IPROD', 'IREF04', 'IDSCE')
+            ->whereIn('IREF04', $array)
+            ->where([
+                ['IID', '!=', 'IZ'],
+                ['IMPLC', '!=', 'OBSOLETE'],
+            ])
+            ->where('ICLAS', 'F1')
+            ->where('IDSCE', 'like', $tipo) // Se agregan los '%' para búsquedas parciales
+            ->distinct('IPROD')
+            ->get()
+            ->toArray();
 
-            $datos = self::CargarforcastF1($padres[0], $fecha, $dias);
-
-            $partsrev = array_column($plan1, 'IPROD');
-            $cadepar = implode("' OR  IPROD='", $partsrev);
-
-            return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
-        } else {
-            $plan1 = IIM::query()
-                ->select('IPROD', 'IREF04')
-                ->wherein('IREF04 ', $array)
-                ->where([
-                    ['IID', '!=', 'IZ'],
-                    ['IMPLC', '!=', 'OBSOLETE'],
-                ])
-                ->where('ICLAS', 'F1')
-                ->distinct('IPROD')
-                ->get()->toArray();
-            $total = 0;
-            $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
-            $partsrev = array_column($plan1, 'IPROD');
-            $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
-        }
+        $total = 0;
+        $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+        $partsrev = array_column($plan1, 'IPROD');
+        $cadepar = implode("' OR  IPROD='", $partsrev);
+        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
     }
 
 
@@ -651,6 +634,7 @@ class PlaneacionHController extends Controller
             $fintem = Carbon::parse($totalF);
             $contd = 1;
             $firme = [];
+            $firmepro = [];
             $pos = array_search($prod['IPROD'], $prodcqa);
             $totalcon =  ceil(($total / $pqa[$pos]) / 10);
             $contotal = 0;
@@ -665,13 +649,13 @@ class PlaneacionHController extends Controller
                     $re = $contotal * $pqa[$pos] - $total;
                     if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
                         $re = $total - $contotal * $pqa[$pos];
-                        $firme += ['CH' . $dia . 'D' => ceil( $re/$pqa[$pos])];
-                        $firme += ['H' . $dia . 'D' =>  ceil( $re/$pqa[$pos]) * $pqa[$pos]];
-                        $contotal = $contotal + ceil( $re/$pqa[$pos]);
-                    } else  {
+                        $firmepro += ['CH' . $dia . 'D' => ceil($re / $pqa[$pos])];
+                        $firmepro += ['H' . $dia . 'D' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
+                        $contotal = $contotal + ceil($re / $pqa[$pos]);
+                    } else {
 
-                        $firme += ['CH' . $dia . 'D' =>  $totalcon];
-                        $firme += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
+                        $firmepro += ['CH' . $dia . 'D' =>  $totalcon];
+                        $firmepro += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
                         $contotal = $contotal + $totalcon;
                     }
 
@@ -679,14 +663,13 @@ class PlaneacionHController extends Controller
 
                         if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
                             $re = $total - $contotal * $pqa[$pos];
-                            $firme += ['CH' . $dia . 'N' => ceil( $re/$pqa[$pos])];
-                            $firme += ['H' . $dia . 'N' =>  ceil( $re/$pqa[$pos]) * $pqa[$pos]];
-                            $contotal = $contotal + ceil( $re/$pqa[$pos]);
-
+                            $firmepro += ['CH' . $dia . 'N' => ceil($re / $pqa[$pos])];
+                            $firmepro += ['H' . $dia . 'N' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
+                            $contotal = $contotal + ceil($re / $pqa[$pos]);
                         } else {
 
-                            $firme += ['CH' . $dia . 'N' =>  $totalcon];
-                            $firme += ['H' . $dia . 'N' =>  $totalcon * $pqa[$pos]];
+                            $firmepro += ['CH' . $dia . 'N' =>  $totalcon];
+                            $firmepro += ['H' . $dia . 'N' =>  $totalcon * $pqa[$pos]];
                             $contotal = $contotal + $totalcon;
                         }
                     }
@@ -698,19 +681,21 @@ class PlaneacionHController extends Controller
 
             if (count($valPDp) > 0) {
                 $total = 0;
-                foreach ($valPDp as $reg6) {
-                    if ($reg6['FPROD'] == $prod['IPROD']) {
 
+                foreach ($valPDp as $reg6) {
+                    // dd($reg6);
+
+                    if ($reg6['FPROD'] == $prod['IPROD']) {
                         $dia = $reg6['FRDTE'];
                         $turno = $reg6['FPCNO'];
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
-if($tipo=='F')
-{
-    $firme += [$tipo . $dia . $valt => $total];
-}
 
+                        if ($tipo =='F') {
+                            $firme += [$tipo . $dia . $valt => $total];
+                            $tfirme = $tfirme + $total;
+                        }
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
                         } else {
@@ -719,17 +704,22 @@ if($tipo=='F')
                         }
                     }
                 }
+
+
                 $planpadre += $firme;
             }
+
             // $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
             $padre += ['tPlan' => $tPlan];
             $padre += ['tfirme' => $tfirme];
+            $padre+=['tipo'=>$prod['IDSCE']];
             $poskwr = array_search($prod['IPROD'], $prowk);
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
             $padre += $forcastp;
             $padre += ['F' => $planpadre];
+            $padre += ['Fp' =>  $firmepro];
             // dd( $padre);
             $inF1 += ['padre' => $padre];
             // dd($inF1);

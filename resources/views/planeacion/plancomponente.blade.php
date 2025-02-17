@@ -564,8 +564,8 @@
                                             </div>
                                             @php
                                                 $namenA = strtr($datossubs['sub'], ' ', '_');
-                                                $inD = $namenA . '/' . $hoy1 . '/D/' . $datossubs['wrk'];
-                                                $inN = $namenA . '/' . $hoy1 . '/N/' . $datossubs['wrk'];
+                                                $inD = $namenA . '#' . $hoy1 . '#D#' . $datossubs['wrk'];
+                                                $inN = $namenA . '#' . $hoy1 . '#N#' . $datossubs['wrk'];
                                                 $WRCj = $datossubs['wrk'];
                                                 $namep = $datossubs['sub'];
                                             @endphp

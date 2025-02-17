@@ -137,7 +137,8 @@
                                                     {{ $padre }}<br>
                                                     SNP {{ $info['Qty'] }}<br>
                                                     WRKcenter {{ $info['WRC'] }}<br>
-                                                    Container {{ $info['typkt'] }}
+                                                    Container {{ $info['typkt'] }}<br>
+                                                    Tipo {{ $info['tipo']??'N/A' }}
                                                 </div>
                                             </td>
                                         @else
@@ -170,6 +171,13 @@
                                             </div>
                                             <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
                                                 <label class="block text-sm ">
+                                                    <input value="Firme YKM propuesto"
+                                                        class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-3 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
                                                     <input value="Firme YKM"
                                                         class="block w-30 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
@@ -195,6 +203,7 @@
                                             $totalfirykm = 0;
                                             $valeclD = 0;
                                             $valeclN = 0;
+                                            $totalKFP=0;
                                             $workcen = $info['WRC'];
 
                                         @endphp
@@ -207,59 +216,29 @@
                                                             @php
 
                                                                 $firme = $info['F'];
+                                                                $firmep = $info['Fp']??$info['F'];
+                                                                $valFD=$info['For' . $hoy . 'D']??0;
+                                                                $valFN= $info['For' . $hoy . 'N']??0;
+                                                                $valFiD = $firmep['H' . $hoy . 'D'] ?? 0;
+                                                                $valFiN = $firmep['H' . $hoy . 'N'] ?? 0;
+                                                                $valeclD = $info['ecl' . $hoy . 'D'] ?? 0;
+                                                                $valeclN = $info['ecl' . $hoy . 'N']?? 0;
+                                                                $valchFD = $firmep['CH' . $hoy . 'D']??0;
+                                                                $valchFN = $firmep['CH' . $hoy . 'N']??0;
+                                                                $valfirmeD=$firme['F' . $hoy . 'D']??0;
+                                                                $valfirmeN=$firme['F' . $hoy . 'N']??0;
 
-                                                                if (
-                                                                    array_key_exists('For' . $hoy . 'D', $info) == false
-                                                                ) {
-                                                                    $valFD = 0;
-                                                                } else {
-                                                                    $valFD = $info['For' . $hoy . 'D'];
-                                                                }
+                                                                $KFPD=(count($firme)==0)? $valFiD:$valfirmeD;
 
-                                                                if (
-                                                                    array_key_exists('For' . $hoy . 'N', $info) == false
-                                                                ) {
-                                                                    $valFN = 0;
-                                                                } else {
-                                                                    $valFN = $info['For' . $hoy . 'N'];
-                                                                }
+                                                                $KFPN=(count($firme)==0)? $valFiN:$valfirmeN;
+                                                                $totalKFP+=$KFPD+$KFPN+0;
 
-                                                                if (array_key_exists('F', $info) == false) {
-                                                                    $valFiD = $valFD;
-                                                                    $valFiN = $valFN;
-                                                                } else {
-                                                                    if (
-                                                                        array_key_exists('H' . $hoy . 'D', $firme) ==
-                                                                        false
-                                                                    ) {
-                                                                        $valFiD = $firme['H' . $hoy . 'D'] ?? 0;
-                                                                    } else {
-                                                                        $valFiD = $firme['H' . $hoy . 'D'];
-                                                                    }
-                                                                    if (
-                                                                        array_key_exists('H' . $hoy . 'N', $firme) ==
-                                                                        false
-                                                                    ) {
-                                                                        $valFiN = $firme['H' . $hoy . 'N'] ?? 0;
-                                                                    } else {
-                                                                        $valFiN = $firme['H' . $hoy . 'N'];
-                                                                    }
-                                                                }
 
-                                                                if (
-                                                                    array_key_exists('ecl' . $hoy . 'D', $info) == false
-                                                                ) {
-                                                                    $valeclD = 0;
-                                                                } else {
-                                                                    $valeclD = $info['ecl' . $hoy . 'D'] + 0;
-                                                                }
-                                                                if (
-                                                                    array_key_exists('ecl' . $hoy . 'N', $info) == false
-                                                                ) {
-                                                                    $valeclN = 0;
-                                                                } else {
-                                                                    $valeclN = $info['ecl' . $hoy . 'N'] + 0;
-                                                                }
+
+                                                                // if (array_key_exists('F', $info) == false) {
+                                                                //     $valFiD = $valFD;
+                                                                //     $valFiN = $valFN;
+                                                                // }
 
                                                                 $valRD = 0;
                                                                 $valRN = 0;
@@ -274,20 +253,7 @@
                                                                 $totalfirykm += $valFiN + $valFiD;
                                                                 $workcen = $info['WRC'];
 
-                                                                if (
-                                                                    array_key_exists('CH' . $hoy . 'D', $firme) == false
-                                                                ) {
-                                                                    $valchFD = 0;
-                                                                } else {
-                                                                    $valchFD = $firme['CH' . $hoy . 'D'];
-                                                                }
-                                                                if (
-                                                                    array_key_exists('CH' . $hoy . 'N', $firme) == false
-                                                                ) {
-                                                                    $valchFN = 0;
-                                                                } else {
-                                                                    $valchFN = $firme['CH' . $hoy . 'N'];
-                                                                }
+
 
                                                             @endphp
                                                             <input value='{{  $valFD }}'
@@ -318,6 +284,22 @@
                                                         </label>
 
                                                     </div>
+                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                        <label class="block text-sm ">
+
+                                                            <input value='{{  $valFiD}}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                                disabled />
+                                                        </label>
+                                                        <label class="block text-sm ">
+
+                                                            <input value='{{ $valFiD}}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                                disabled />
+                                                        </label>
+
+                                                    </div>
+
 
 
                                                     <div
@@ -327,14 +309,14 @@
 
                                                             <input id='{{ $inD }}' name='{{ $inD }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                value='{{ $firme['F' . $hoy . 'D'] ?? $valFiD }}'
+                                                                value='{{$KFPD ??0  }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                         </label>
                                                         <label class="block text-sm ">
 
                                                             <input id='{{ $inN }}' name='{{ $inN }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
-                                                                value='{{$firme['F' . $hoy . 'N'] ?? $valFiN }}'
+                                                                value='{{$KFPN ??0 }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                         </label>
 
@@ -362,16 +344,9 @@
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
-
                                                     </div>
-
-
-
-
                                                 </td>
                                             @endif
-
-
                                             @php
                                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                                 $contdias++;
@@ -394,6 +369,7 @@
                                                         disabled />
                                                 </label>
                                             </div>
+
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
@@ -405,6 +381,22 @@
                                                     @endphp
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{ $totalfirykm }}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        $otalphp = 'totalFirykm' . $namenA;
+                                                        $contfM = $totalforM / $info['Qty'];
+                                                        $contfim = $totalfirM / $info['Qty'];
+                                                        $contykm = $totalfirykm / $info['Qty'];
+                                                        $contkfp =   $totalKFP  / $info['Qty'];
+                                                    @endphp
+                                                    <input id='{{ $otalphp }}' name='{{ $otalphp }}'
+                                                        value="{{    $totalKFP }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -439,13 +431,21 @@
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+                                                    <input id='totalFirMMVO' name='totalFirMMVO' value="{{  $contykm}}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
                                                     @php
                                                         $contotalphp = 'conttotalFirykm' . $namenA;
                                                     @endphp
                                                     <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
-                                                        value="{{ $contykm ?? 0 }}"
+                                                        value="{{ $contkfp?? 0 }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>

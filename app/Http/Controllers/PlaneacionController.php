@@ -325,8 +325,9 @@ class PlaneacionController extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
+DD('SDNNSKL');
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";
+        $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
@@ -375,8 +376,9 @@ class PlaneacionController extends Controller
         $CONT = 0;
         foreach ($keyes as $plans) {
             $dfa = [];
-            $inp = explode('/', $plans);
-            if (count($inp) >= 3 && count($inp) <=4) {
+            $inp = explode('#', $plans);
+
+            if (count($inp) >= 3) {
 
 
                 $WCT = $inp[3];
@@ -428,22 +430,19 @@ class PlaneacionController extends Controller
 
             }
             if ($CONT == 90) {
-                $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
+                // $indata = YK006::query()->insert($datas);
+                // $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
             }
             $CONT = $CONT + 1;
         }
-
-        $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
-
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-
-        $result = odbc_exec($conn, $query);
+        // $indata = YK006::query()->insert($datas);
+        // $indatasql = LOGSUP::query()->insert($datasql);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU.YMP006C";
+        // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
         ProductionPlanByArrayMigrationJob::dispatch($datval);
@@ -1065,8 +1064,6 @@ class PlaneacionController extends Controller
             $level = $child_leven->first(function ($item) use ($subs) {
                 return $item->ZEITE === $subs;
             });
-
-
             $numpar += ['sub' => $subs, 'plan' => $numpaplan, 'padres' => $texfinal, 'forcast' => $forcast, 'Qty' => $pqa[$pos] ?? 0,
              'minbal' => $minba[$pos] ?? 0, 'typkt' => $typkt[$pos] ?? 'N/A', 'wrk' => $prowrok[$poskwr] ?? 0, 'Tshop' => $Tshop,
              'Tplan' => $Tplan, 'Tfirme' => $Tfirme, 'KMRpadres' => $texpadre ?? 0, 'Totalpadres' => $Tshopkmr,'level'=>$level->ZELEVE];
