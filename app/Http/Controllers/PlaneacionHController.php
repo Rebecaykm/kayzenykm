@@ -100,7 +100,6 @@ class PlaneacionHController extends Controller
                 ->where('ICLAS', 'F1')
                 ->distinct('IPROD')
                 ->get()->toArray();
-
             $total = 0;
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
@@ -284,26 +283,26 @@ class PlaneacionHController extends Controller
                     'K6FIL1' => '',
                     'K6FIL2' => ''
                 ];
-                $dfasql = [
-                    'K6PROD' => $namenA,
-                    'K6WRKC' => $WCT,
-                    'K6SDTE' => $fecha,
-                    'K6EDTE' => $fefin,
-                    'K6DDTE' => $fechasql,
-                    'K6DSHT' => $turno,
-                    'K6PFQY' => $request->$plans,
-                    'K6CUSR' => 'LXSECOFR',
-                    'K6CCDT' => $load,
-                    'K6CCTM' => $horasql,
-                    'K6FIL1' => '',
-                    'K6FIL2' => ''
-                ];
-                array_push($datasql, $dfasql);
+                // $dfasql = [
+                //     'K6PROD' => $namenA,
+                //     'K6WRKC' => $WCT,
+                //     'K6SDTE' => $fecha,
+                //     'K6EDTE' => $fefin,
+                //     'K6DDTE' => $fechasql,
+                //     'K6DSHT' => $turno,
+                //     'K6PFQY' => $request->$plans,
+                //     'K6CUSR' => 'LXSECOFR',
+                //     'K6CCDT' => $load,
+                //     'K6CCTM' => $horasql,
+                //     'K6FIL1' => '',
+                //     'K6FIL2' => ''
+                // // ];
+                // array_push($datasql, $dfasql);
                 array_push($datas, $dfa);
             }
             if ($CONT == 80) {
                 $indata = YK006::query()->insert($datas);
-                $insql = LOGSUP::query()->insert($datasql);
+                // $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
@@ -312,7 +311,7 @@ class PlaneacionHController extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        $indatasql = LOGSUP::query()->insert($datasql);
+        // $indatasql = LOGSUP::query()->insert($datasql);
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
@@ -698,9 +697,7 @@ class PlaneacionHController extends Controller
 
 
             if (count($valPDp) > 0) {
-
                 $total = 0;
-
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
 
@@ -709,7 +706,11 @@ class PlaneacionHController extends Controller
                         $tipo = $reg6['FTYPE'];
                         $total = $reg6['FQTY'] + 0;
                         $valt = substr($turno, 4, 1) ?? 'D';
-                        $firme += [$tipo . $dia . $valt => $total];
+if($tipo=='F')
+{
+    $firme += [$tipo . $dia . $valt => $total];
+}
+
                         if ($valt == 'P') {
                             $tPlan = $tPlan + $total;
                         } else {

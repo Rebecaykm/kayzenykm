@@ -109,28 +109,43 @@
                             @switch($info['WRC'])
                                 @case(111020)
                                 @case(111030)
+
                                 @case(111010)
                                 @case(112020)
+
                                 @case(112010)
                                 @case(112040)
+
                                 @case(114010)
                                 @case(114020)
+
                                 @case(112030)
                                 @case(112060)
+
                                 @case(114030)
                                 @break
+
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
-                                            <td class="px-2 py-1 text-s  bg-teal-300">
+                                            <td class="px-2 py-1 text-s  ">
                                                 {{ $contp }}
                                             </td>
-                                            <td class="px-2 py-1 text-xs  bg-teal-300">
-                                                <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
+                                            @php
+                                                $firmfor = $info['FIRMFOR'];
+
+                                            @endphp
+                                            <td class="px-2 py-1 text-xs  ">
+                                                <div class="w-30 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>
                                                     SNP {{ $info['Qty'] }}<br>
                                                     WRKcenter {{ $info['WRC'] }}<br>
-                                                    Container {{$info['typkt']}}
+                                                    Container {{ $info['typkt'] }}<br>
+                                                    ULTIMO FIRME<br>
+                                                    FECHA: <br>{{ $firmfor['DRSDT'] }} al  {{ $firmfor['DREDT'] }}<br>
+                                                    FIRME:  {{ $firmfor['DROQY'] }}<br>
+                                                    FORSCASTE {{ $firmfor['DRFQY'] }}<br>
+                                                    DIFERENCIA <br> QTY: {{ $firmfor['DRDQY']}}<br> RATE: {{ $firmfor['DRDRT']}}
                                                 </div>
                                             </td>
                                         @else
@@ -190,48 +205,56 @@
                                                         <label class="block text-sm ">
                                                             @php
 
-
-                                                                if (array_key_exists('For' . $hoy . 'D', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('For' . $hoy . 'D', $info) == false
+                                                                ) {
                                                                     $valFD = 0;
                                                                 } else {
                                                                     $valFD = $info['For' . $hoy . 'D'];
                                                                 }
 
-                                                                if (array_key_exists('For' . $hoy . 'N', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('For' . $hoy . 'N', $info) == false
+                                                                ) {
                                                                     $valFN = 0;
                                                                 } else {
                                                                     $valFN = $info['For' . $hoy . 'N'];
                                                                 }
 
-                                                                if (array_key_exists('F',$info) == false)
-                                                                {
+                                                                if (array_key_exists('F', $info) == false) {
+                                                                    $valFiD = $valFD;
+                                                                    $valFiN = $valFN;
+                                                                } else {
+                                                                    $firme = $info['F'];
 
-                                                                    $valFiD = $valFD ;
-                                                                    $valFiN = $valFN ;
-                                                                }else {
-
-
-                                                                    $firme=$info['F'];
-
-                                                                    if (array_key_exists('F' . $hoy . 'D', $firme) == false) {
+                                                                    if (
+                                                                        array_key_exists('F' . $hoy . 'D', $firme) ==
+                                                                        false
+                                                                    ) {
                                                                         $valFiD = 0;
                                                                     } else {
                                                                         $valFiD = $firme['F' . $hoy . 'D'];
                                                                     }
-                                                                    if (array_key_exists('F' . $hoy . 'N', $firme) == false) {
+                                                                    if (
+                                                                        array_key_exists('F' . $hoy . 'N', $firme) ==
+                                                                        false
+                                                                    ) {
                                                                         $valFiN = 0;
                                                                     } else {
                                                                         $valFiN = $firme['F' . $hoy . 'N'];
                                                                     }
-
                                                                 }
 
-                                                                if (array_key_exists('ecl' . $hoy . 'D', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('ecl' . $hoy . 'D', $info) == false
+                                                                ) {
                                                                     $valeclD = 0;
                                                                 } else {
                                                                     $valeclD = $info['ecl' . $hoy . 'D'] + 0;
                                                                 }
-                                                                if (array_key_exists('ecl' . $hoy . 'N', $info) == false) {
+                                                                if (
+                                                                    array_key_exists('ecl' . $hoy . 'N', $info) == false
+                                                                ) {
                                                                     $valeclN = 0;
                                                                 } else {
                                                                     $valeclN = $info['ecl' . $hoy . 'N'] + 0;
@@ -284,32 +307,32 @@
                                                         dd($info1, $valFiD,$valFiN );
                                                     }
                                                 @endphp --}}
-{{--
+                                                    {{--
                                                     @if (strpos($padre, 'SOR') === false) --}}
-                                                        <div
-                                                            class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                                    <div
+                                                        class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
-                                                            <label class="block text-sm ">
+                                                        <label class="block text-sm ">
 
-                                                                <input id='{{ $inD }}' name='{{ $inD }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='{{ $valFiD }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
-                                                            <label class="block text-sm ">
+                                                            <input id='{{ $inD }}' name='{{ $inD }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                value='{{ $valFiD }}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        </label>
+                                                        <label class="block text-sm ">
 
-                                                                <input id='{{ $inN }}' name='{{ $inN }}'
-                                                                    onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
-                                                                    value='{{ $valFiN }}'
-                                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-                                                            </label>
+                                                            <input id='{{ $inN }}' name='{{ $inN }}'
+                                                                onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
+                                                                value='{{ $valFiN }}'
+                                                                class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                                        </label>
 
-                                                        </div>
+                                                    </div>
 
-                                                        {{-- @php
+                                                    {{-- @php
                                                             $totalfirykm = 0;
                                                         @endphp --}}
-                                                        {{-- <div
+                                                    {{-- <div
                                                             class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-red-400">
 
                                                             <label class="block text-sm ">
