@@ -27,7 +27,6 @@
                                     class="block w-full mt-1 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none form-input" />
                             </label>
                         </div>
-
                         <div class="flex-auto">
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Dias a pleanear</span>
@@ -51,10 +50,8 @@
                 </div>
             </form>
         </div>
-
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ajustes de Planeación Subcomponentes
         </h4>
-
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <form method="post" action="{{ route('660.create') }}">
                 @csrf
@@ -67,9 +64,7 @@
                                 <select id="SeProject2" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
                                     <option value="">Seleccione un Proyecto</option>
-
                                     <option value="8,811">660B</option>
-
                                 </select>
                             </label>
                         </div>

@@ -563,6 +563,7 @@
                                                 </label>
                                             </div>
                                             @php
+
                                                 $namenA = strtr($datossubs['sub'], ' ', '_');
                                                 $inD = $namenA . '#' . $hoy1 . '#D#' . $datossubs['wrk'];
                                                 $inN = $namenA . '#' . $hoy1 . '#N#' . $datossubs['wrk'];
@@ -761,23 +762,20 @@
     </div>
     <script>
         function myFunction(dias, parte, wc, idtest) {
-
             let mensaje = dias;
             let arr = mensaje.split('/');
-
-
-            val1 = parseInt(document.getElementById(parte + '/' + arr[1] + '/D/' + wc).value);
-            val2 = parseInt(document.getElementById(parte + '/' + arr[1] + '/N/' + wc).value);
-            val3 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);
-            val4 = parseInt(document.getElementById(parte + '/' + arr[2] + '/N/' + wc).value);
-            val5 = parseInt(document.getElementById(parte + '/' + arr[3] + '/D/' + wc).value);
-            val6 = parseInt(document.getElementById(parte + '/' + arr[3] + '/N/' + wc).value);
-            val7 = parseInt(document.getElementById(parte + '/' + arr[4] + '/D/' + wc).value);
-            val8 = parseInt(document.getElementById(parte + '/' + arr[4] + '/N/' + wc).value);
-            val9 = parseInt(document.getElementById(parte + '/' + arr[5] + '/D/' + wc).value);
-            val10 = parseInt(document.getElementById(parte + '/' + arr[5] + '/N/' + wc).value);
-            val11 = parseInt(document.getElementById(parte + '/' + arr[0] + '/D/' + wc).value);
-            console.log(parte + '/' + arr[4] + '/D/' + wc);
+            val1 = parseInt(document.getElementById(parte + '#' + arr[1] + '#D#' + wc).value);
+            val2 = parseInt(document.getElementById(parte + '#' + arr[1] + '#N#' + wc).value);
+            val3 = parseInt(document.getElementById(parte + '#' + arr[2] + '#D#' + wc).value);
+            val4 = parseInt(document.getElementById(parte + '#' + arr[2] + '#N#' + wc).value);
+            val5 = parseInt(document.getElementById(parte + '#' + arr[3] + '#D#' + wc).value);
+            val6 = parseInt(document.getElementById(parte + '#' + arr[3] + '#N#' + wc).value);
+            val7 = parseInt(document.getElementById(parte + '#' + arr[4] + '#D#' + wc).value);
+            val8 = parseInt(document.getElementById(parte + '#' + arr[4] + '#N#' + wc).value);
+            val9 = parseInt(document.getElementById(parte + '#' + arr[5] + '#D#' + wc).value);
+            val10 = parseInt(document.getElementById(parte + '#' + arr[5] + '#N#' + wc).value);
+            val11 = parseInt(document.getElementById(parte + '#' + arr[0] + '#D#' + wc).value);
+            console.log(parte + '#' + arr[4] + '#D#' + wc);
             console.log(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]);
             valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11;
             document.getElementById('totalFirykm' + parte).value = valtotal;

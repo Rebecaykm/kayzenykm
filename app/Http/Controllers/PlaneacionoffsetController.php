@@ -13,6 +13,7 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
+use App\Models\YK007;
 use App\Models\YK0062;
 use Carbon\Carbon;
 use App\Exports\PlanExport;
@@ -705,6 +706,11 @@ if($total==0)
             ])
             ->get()->toarray();
 
+         $YK007=YK007::query('DPROD','DRSDT','DREDT' ,'DROQY','DRFQY','DRDQY','DRDRT')
+         ->wherein('DPROD',$finaArra)
+         ->get();
+
+
         foreach ($prods as $prod) {
 
             $inF1 = array();
@@ -774,16 +780,23 @@ if($total==0)
                 }
                 $planpadre += $firme;
             }
+
+        $firfor= $YK007->where('DPROD', $prod['IPROD'])->first();
+
+        // $arrfirfor=[];
+        // $arrfirfor+=['DRSDT'=>$firfor['DRSDT']??0,'DREDT'=>$firfor['DREDT']??0,'DROQY'=>$firfor['DROQY']??0 ,'DRFQY'=>$firfor['DRFQY']??0,'DRDQY'=>$firfor['DRDQY']??0,'DRDRT'=>$firfor['DRDRT']??0];
+
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
+            $padre+=['FIRMFOR'=> $firfor->toarray()];
             $padre += ['tPlan' => $tPlan];
             $padre += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'], $prowk);
             $padre += ['WRC' => $wk[$poskwr] ?? '202020020202020'];
             $padre += $forcastp;
             $padre += ['F' => $planpadre];
-            // dd( $padre);
+
             $inF1 += ['padre' => $padre];
 
             array_push($totalpa, $inF1);

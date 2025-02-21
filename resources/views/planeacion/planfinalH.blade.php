@@ -25,7 +25,7 @@
                 </div>
             </form>
         </div>
-        <form action="{{ route('planeacionH.updatef1') }}" method="post">
+        <form action="{{ route('planeacionHT.updatef1') }}" method="post">
             <div class="flex flex-row gap-x-4  items-center p-0 rounded-lg">
                 @csrf
                 <div class="flex justify-center">
@@ -43,6 +43,7 @@
             <div class="flex-grow overflow-auto sm:h-80 md:h-96 lg:h-screen xl:h-screen">
                 <input type="hidden" name={{ $fecha . '/' . $dias }} id="data" value={{ $fecha . '/' . $dias }}>
                 <input type="hidden" name="SeProject" id="SeProject" value={{ $tp }}>
+                <input type="hidden" name="Type" id="Type" value={{ $tipo??'' }}>
                 <input type="hidden" name="SePC" id="SePC" value={{ $cp }}>
                 <input type="hidden" name="SeWC" id="SeWC" value={{ $wc }}>
                 <input type="hidden" name="nextp" id="nextp" value="{{ $partesne }}">
@@ -110,22 +111,18 @@
                             @switch($info['WRC'])
                                 @case(111020)
                                 @case(111030)
-
                                 @case(111010)
                                 @case(112020)
-
                                 @case(112010)
                                 @case(112040)
-
                                 @case(114010)
                                 @case(114020)
-
                                 @case(112030)
                                 @case(112060)
-
                                 @case(114030)
+                                @case(112050)
+                                @case(116010)
                                 @break
-
                                 @default
                                     <tr class="text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
@@ -145,7 +142,6 @@
                                             <td class="px-2 py-1 text-s bg-yellow-300">
                                                 {{ $contp }}
                                             </td>
-
                                             <td class="px-2 py-1 text-xs bg-yellow-300">
                                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>

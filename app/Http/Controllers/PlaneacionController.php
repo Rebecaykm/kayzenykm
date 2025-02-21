@@ -362,10 +362,8 @@ DD('SDNNSKL');
         $tipo = $request->tipo;
         $WC = $request->SeWC;
         $variables = $request->all();
-
         $keyes = array_keys($variables);
         $data = explode('/', $keyes[1], 2);
-
         $dias = 8;
         $fecha = $data[0];
         $hoy = date('Ymd', strtotime($fecha));
@@ -377,26 +375,18 @@ DD('SDNNSKL');
         foreach ($keyes as $plans) {
             $dfa = [];
             $inp = explode('#', $plans);
-
             if (count($inp) >= 3) {
-
-
                 $WCT = $inp[3];
                 $dfasql = [];
-
                 $namenA = strtr($inp[0], '_', ' ');
-
                 $turno = $inp[2];
                 $load = date('Ymd', strtotime('now'));
                 $hora = date('His', time());
                 $horasql = date('H:i:s', time());
                 $fefin = date('Ymd', strtotime($fecha . '+' . $dias - 2 . ' day'));
                 $fechasql = date('Ymd', strtotime($inp[1]));
-
                     $ar = ["part_number" => $namenA, "date" => $fechasql];
                     array_push($datval, $ar);
-
-
                 $dfa = [
                     'K6PROD' => $namenA,
                     'K6WRKC' => $WCT,
@@ -430,24 +420,21 @@ DD('SDNNSKL');
 
             }
             if ($CONT == 90) {
-                // $indata = YK006::query()->insert($datas);
-                // $insql = LOGSUP::query()->insert($datasql);
+                $indata = YK006::query()->insert($datas);
+                $insql = LOGSUP::query()->insert($datasql);
                 $datas = [];
                 $datasql = [];
                 $CONT = 0;
             }
             $CONT = $CONT + 1;
         }
-        // $indata = YK006::query()->insert($datas);
-        // $indatasql = LOGSUP::query()->insert($datasql);
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU.YMP006C";
-        // $result = odbc_exec($conn, $query);
+        $indata = YK006::query()->insert($datas);
+        $indatasql = LOGSUP::query()->insert($datasql);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU.YMP006C";
+        $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-
         ProductionPlanByArrayMigrationJob::dispatch($datval);
-
-
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
@@ -458,14 +445,11 @@ DD('SDNNSKL');
             ->where('ICLAS', 'F1')
             ->distinct('IPROD')
             ->get()->toArray();
-
         $padres = array_chunk($plan1, 10);
         $total = count($padres);
         $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
         return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 

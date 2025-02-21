@@ -67,6 +67,7 @@ class PlaneacionHT1t2Controller extends Controller
 
         $CP = $request->SePC;
         $WC = $request->SeWC;
+        $tipo=$request->Type;
         $array = explode(",", $TP);
 
             $tipo = ($request->Type == 'T1') ? "TIER1%" : "TIER2%";
@@ -88,7 +89,7 @@ class PlaneacionHT1t2Controller extends Controller
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='", $partsrev);
-        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total,'type'=>$tipo]);
     }
 
 
@@ -223,7 +224,7 @@ class PlaneacionHT1t2Controller extends Controller
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
-        $tipo = $request->tipo;
+        $tipo = $request->Type;
         $WC = $request->SeWC;
         $variables = $request->all();
         $keyes = array_keys($variables);
@@ -301,15 +302,17 @@ class PlaneacionHT1t2Controller extends Controller
         $array = explode(",", $TP);
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
         $plan1 = IIM::query()
-            ->select('IPROD', 'IREF04')
-            ->wherein('IREF04 ', $array)
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
+        ->select('IPROD', 'IREF04', 'IDSCE')
+        ->whereIn('IREF04', $array)
+        ->where([
+            ['IID', '!=', 'IZ'],
+            ['IMPLC', '!=', 'OBSOLETE'],
+        ])
+        ->where('ICLAS', 'F1')
+        ->where('IDSCE', 'like', $tipo) // Se agregan los '%' para búsquedas parciales
+        ->distinct('IPROD')
+        ->get()
+        ->toArray();
 
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
