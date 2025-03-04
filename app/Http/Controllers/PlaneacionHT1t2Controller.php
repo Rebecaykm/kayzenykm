@@ -86,44 +86,13 @@ class PlaneacionHT1t2Controller extends Controller
             ->toArray();
 
         $total = 0;
-        $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+        $datos = self::CargarforcastF1only($plan1, $fecha, $dias, $tipo);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = implode("' OR  IPROD='", $partsrev);
         return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total,'type'=>$tipo]);
     }
 
 
-    public function siguiente(Request $request)
-    {
-        $inF1 = array();
-        $inF2 = array();
-        $tipo = $request->SeProject;
-
-        $dias = 8;
-
-        $fecha = $request->fecha != '' ? Carbon::parse($request->fecha)->format('Ymd') : Carbon::now()->format('Ymd');
-        $TP = $request->SeProject;
-        $CP = $request->SePC;
-        $WC = $request->SeWC;
-        $array = explode(",", $TP);
-        $plan1 = IIM::query()
-            ->select('IPROD', 'IREF04')
-            ->wherein('IREF04 ', $array)
-            ->where([
-                ['IID', '!=', 'IZ'],
-                ['IMPLC', '!=', 'OBSOLETE'],
-            ])
-            ->where('ICLAS', 'F1')
-            ->distinct('IPROD')
-            ->get()->toArray();
-
-        $padres = array_chunk($plan1, 10);
-        $partsrev = array_column($plan1, 'IPROD');
-        $total = count($padres) - 1;
-        $datos = self::CargarforcastF1($padres[$request->paginate], $fecha, $dias);
-        $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $request->fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
-    }
 
     public function export(Request $request)
     {
@@ -187,7 +156,7 @@ class PlaneacionHT1t2Controller extends Controller
 
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -314,7 +283,7 @@ class PlaneacionHT1t2Controller extends Controller
         ->get()
         ->toArray();
 
-        $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+        $datos = self::CargarforcastF1only($plan1, $fecha, $dias,$tipo);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
         // dd($datos);
@@ -427,7 +396,7 @@ class PlaneacionHT1t2Controller extends Controller
 
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-
+dd();
         return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
@@ -541,10 +510,11 @@ class PlaneacionHT1t2Controller extends Controller
         return $totalpa;
     }
 
-    function CargarforcastF1only($prods, $hoy, $dias)
+    function CargarforcastF1only($prods, $hoy, $dias,$ty)
     {
         $totalpa = array();
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+        $totalF2 = date('Ymd', strtotime($hoy . '+' . 15 . ' day'));
         $finaArra = array_column($prods, 'IPROD');
         $finales = implode("' OR  MPROD='", $finaArra);
         $finalesecl = implode("' OR  LPROD='", $finaArra);
@@ -554,20 +524,21 @@ class PlaneacionHT1t2Controller extends Controller
         $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
-            ->where('MRDTE', '<', $totalF)
+            ->where('MRDTE', '<', $totalF2)
             ->where('MTYPE', '=', 'F')
             ->whereraw("(MPROD='" . $finales . "')")
-            ->get()->toarray();
+            ->get();
 
         $MBMS = ECL::query()
             ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
             ->whereraw("(LPROD='" . $finalesecl . "')")
             ->where([
                 ['LSDTE', '>=', $hoy],
-                ['LSDTE', '<', $totalF],
+                ['LSDTE', '<', $totalF2],
             ])
+
             ->groupBy('LPROD', 'LSDTE', 'CLCNO')
-            ->get()->toarray();
+            ->get();
 
         $cond = IIM::query()
             ->select('ICLAS', 'IMBOXQ', 'IMPLC', 'IPROD', 'IMIN', 'IMSPKT')
@@ -591,9 +562,15 @@ class PlaneacionHT1t2Controller extends Controller
             ->whereraw("(FPROD='" . $finaleskfp . "')")
             ->where([
                 ['FRDTE', '>=', $hoy],
-                ['FRDTE', '<', $totalF],
+                ['FRDTE', '<', $totalF2],
             ])
             ->get()->toarray();
+
+
+
+
+
+
 
         foreach ($prods as $prod) {
             $inF1 = array();
@@ -607,32 +584,62 @@ class PlaneacionHT1t2Controller extends Controller
             $tfirme = 0;
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
-            if (count($valfinales) > 0) {
-                $total = 0;
-                foreach ($valfinales as $reg4) {
-                    if ($reg4['MPROD'] == $prod['IPROD']) {
-                        $dia = $reg4['MRDTE'];
-                        $turno = $reg4['MRCNO'];
-                        $total = $reg4['MQTY'] + 0;
-                        $valt = substr($turno, 4, 1);
-                        $forcastp += ['For' . $dia . $valt => $total];
-                        $totalP = $totalP + $total;
-                    }
-                }
-            }
-            if (count($MBMS) > 0) {
-                foreach ($MBMS as $reg1) {
-                    if ($reg1['LPROD'] == $prod['IPROD']) {
-                        $dia = $reg1['LSDTE'];
-                        $turno = $reg1['CLCNO'];
-                        $total = $reg1['TOTAL'] + 0;
-                        $valt = substr($turno, 4, 1);
 
-                        $forcastp += ['ecl' . $dia . 'D' => $total];
+            if($ty=='TIER1%')
+            {
+
+                if (count($valfinales) > 0) {
+                    $total1 = 0;
+
+                    $foract=$valfinales->where('MPROD','==',$prod['IPROD'])->first();
+                    $fornext=$valfinales->where('MPROD','==',$prod['IPROD'])->skip(1)->first();
+
+                   if ($foract) {
+                        $forcastp += ['For' . $foract->MRDTE . substr($foract->MRCNO, 4, 1) =>$foract->MQTY+0];
                     }
+                    $total1=$foract->MQTY??0;
+                    if ($fornext) {
+                        $forcastp += ['Forsec' . $fornext->MRDTE . substr($fornext->MRCNO, 4, 1) =>$fornext->MQTY+0];
+                    }
+                    $total2=$fornext->MQTY??0;
+
                 }
+
+
+
+            }else
+            {
+                if (count($MBMS) > 0) {
+
+                    $firact=$MBMS->where('LPROD','==',$prod['IPROD'])->first();
+
+                    if ($firact) {
+                        $forcastp += ['ecl' . $firact->LSDTE . 'D' =>$firact->TOTAL+0];
+
+                    }
+                    $total1=$firact->TOTAL??0;
+
+                }
+                if (count($valfinales) > 0) {
+
+                    $fornext=$valfinales->where('MPROD','==',$prod['IPROD'])->first();
+                    if ($fornext) {
+                        $forcastp += ['Forsec' . $fornext->MRDTE . substr($fornext->MRCNO, 4, 1) =>$fornext->MQTY+0];
+
+                    }
+                    $total2=$fornext->MQTY??0;
+
+                }
+
+
             }
-            $padre += ['total' => $totalP];
+
+            $padre += ['total1'  =>(($total1/5)*3)+0];
+            $padre += ['total2' =>(($total2/5)*2)+0];
+            $total=(($total1/5)*3)+(($total2/5)*2);
+            $padre += ['total' => $total1+$total2];
+            $total=(($total1/5)*3)+(($total2/5)*2);
+
             $fetemp = Carbon::parse($hoy);
             $fintem = Carbon::parse($totalF);
             $contd = 1;
@@ -641,13 +648,9 @@ class PlaneacionHT1t2Controller extends Controller
             $pos = array_search($prod['IPROD'], $prodcqa);
             $totalcon =  ceil(($total / $pqa[$pos]) / 10);
             $contotal = 0;
-            //             if($prod['IPROD']=='VA4128B04                          ')
-            //             {
-            // dd($total,$MBMS  );
-            //             }
+
             while ($contd <= 5) {
                 $dia = $fetemp->format('Ymd');
-
                 if ($contotal <  ceil($total / $pqa[$pos])) {
                     $re = $contotal * $pqa[$pos] - $total;
                     if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
@@ -656,7 +659,6 @@ class PlaneacionHT1t2Controller extends Controller
                         $firmepro += ['H' . $dia . 'D' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
                         $contotal = $contotal + ceil($re / $pqa[$pos]);
                     } else {
-
                         $firmepro += ['CH' . $dia . 'D' =>  $totalcon];
                         $firmepro += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
                         $contotal = $contotal + $totalcon;

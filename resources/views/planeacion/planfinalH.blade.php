@@ -60,7 +60,8 @@
                                 $hoy = $fecha;
                                 $contp = 0;
                                 $totalD = 0;
-                                $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
+                                $fin = date('Ymd', strtotime($hoy . '+' . $dias-1 . ' day'));
+
                                 $diasjava = '';
                             @endphp
                             @while ($hoy != $fin)
@@ -78,10 +79,7 @@
                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
                                                 Dia
                                             </label>
-                                            <label
-                                                class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                                Noche
-                                            </label>
+
                                         </div>
                                     </th>
                                 @endif
@@ -91,8 +89,39 @@
                                     $totalD = $totalD + 1;
                                 @endphp
                             @endwhile
+                            <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
+                                <div class='W-full'>
+                                    {{ date('Ymd', strtotime(date('Ymd', strtotime($fecha . '+' . 11 . ' day')))) }}
+                                </div>
+                                <div class='w-full'>
+                                    {{ date('l', strtotime(date('Ymd', strtotime($fecha . '+' . 11 . ' day')))) }}
+                                </div>
+                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <label
+                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        Dia
+                                    </label>
+                                    <label
+                                        class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        Noche
+                                    </label>
+                                </div>
+                            </th>
+                            <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
+
+                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                    <label
+                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        1 forcast
+                                    </label>
+                                    <label
+                                        class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        2 forcast
+                                    </label>
+                                </div>
+                            </th>
                             <th class=" header px-4 py-3 sticky ">
-                                Partes <br> Total
+                             <br> Total piezas
                             </th>
                             <th class=" header px-4 py-3 sticky ">
                                 Contenedor <br> Total
@@ -203,8 +232,84 @@
                                             $workcen = $info['WRC'];
 
                                         @endphp
-                                        @while ($contdias < $dias)
-                                            @if ($contdias == 7)
+                                        @while ($contdias < $dias-1)
+                                            @if ($contdias == 6)
+                                            <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
+                                                        @php
+
+
+                                                            $valFDsec=$info['Forsec' . date('Ymd', strtotime($fecha . '+' . 11 . ' day')). 'D']??0;
+
+                                                            $valsec=$info['eclsec' . date('Ymd', strtotime($fecha . '+' . 11 . ' day')). 'D']??0;
+
+
+                                                            $workcen = $info['WRC'];
+
+
+
+                                                        @endphp
+                                                        <input value='{{  $valFDsec }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+
+
+                                                </div>
+
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
+
+                                                        <input value='{{    $valsec }}'
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+
+
+                                                </div>
+                                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                    <label class="block text-sm ">
+
+                                                        <input value=''
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+
+
+                                                </div>
+
+
+
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
+
+                                                    <label class="block text-sm ">
+
+                                                        <input
+
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700  focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled/>
+                                                    </label>
+
+
+                                                </div>
+
+                                                {{-- @php
+                                                        $totalfirykm = 0;
+                                                    @endphp --}}
+                                                <div
+                                                    class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg  ">
+
+                                                    <label class="block text-sm ">
+
+                                                        <input
+
+                                                            class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            disabled />
+                                                    </label>
+
+                                                </div>
+                                            </td>
                                             @else
                                                 <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -223,6 +328,9 @@
                                                                 $valchFN = $firmep['CH' . $hoy . 'N']??0;
                                                                 $valfirmeD=$firme['F' . $hoy . 'D']??0;
                                                                 $valfirmeN=$firme['F' . $hoy . 'N']??0;
+
+                                                                $valFDsec=$info['Forsec' . $hoy . 'D']??0;
+
 
                                                                 $KFPD=(count($firme)==0)? $valFiD:$valfirmeD;
 
@@ -348,7 +456,111 @@
                                                 $contdias++;
                                             @endphp
                                         @endwhile
+                                        <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
 
+                                                @if($type=='TIER1%')
+                                                <label class="block text-sm ">
+                                                    <input value='{{  $info['total1'] }}'
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                @else
+
+                                                <label class="block text-sm ">
+                                                    <input
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                @endif
+                                                <label class="block text-sm ">
+
+                                                    <input value='{{    $info['total2']  }}'
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+
+                                            </div>
+
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                @if($type=='TIER2%')
+                                                <label class="block text-sm ">
+                                                    <input value='{{  $info['total1'] }}'
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                @else
+                                                <label class="block text-sm ">
+                                                    <input
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                @endif
+                                                <label class="block text-sm ">
+
+                                                    <input
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                <label class="block text-sm ">
+
+                                                    <input value=''
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+
+                                                    <input value=''
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+
+                                            </div>
+
+
+
+                                            <div
+                                                class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
+
+                                                <label class="block text-sm ">
+
+                                                    <input
+
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700  focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled/>
+                                                </label>
+                                                <label class="block text-sm ">
+
+                                                    <input
+
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" disabled/>
+                                                </label>
+
+                                            </div>
+
+                                            {{-- @php
+                                                    $totalfirykm = 0;
+                                                @endphp --}}
+                                            <div
+                                                class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg  ">
+
+                                                <label class="block text-sm ">
+
+                                                    <input
+
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                                <label class="block text-sm ">
+
+                                                    <input
+                                                        class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        disabled />
+                                                </label>
+                                            </div>
+                                        </td>
                                         <td class="px-2 py-1 text-xs  bg-emerald-100">
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
