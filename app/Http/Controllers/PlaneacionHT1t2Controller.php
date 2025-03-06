@@ -265,9 +265,9 @@ class PlaneacionHT1t2Controller extends Controller
 
         $indata = YK006::query()->insert($datas);
         // $indatasql = LOGSUP::query()->insert($datasql);
-        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-        $result = odbc_exec($conn, $query);
+        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        // $query = "CALL LX834OU.YMP006C";
+        // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
         $plan1 = IIM::query()
@@ -637,7 +637,7 @@ dd();
             $padre += ['total1'  =>(($total1/5)*3)+0];
             $padre += ['total2' =>(($total2/5)*2)+0];
             $total=(($total1/5)*3)+(($total2/5)*2);
-            $padre += ['total' => $total1+$total2];
+            
             $total=(($total1/5)*3)+(($total2/5)*2);
 
             $fetemp = Carbon::parse($hoy);
@@ -682,6 +682,9 @@ dd();
                 $fetemp->addDay();
                 $contd++;
             }
+
+            // dd(  $firmepro,$prod['IPROD']);
+            $padre += ['total' => $contotal* $pqa[$pos]];
 
 
             if (count($valPDp) > 0) {
@@ -1121,7 +1124,7 @@ dd();
 
 
         if ($request->Type == 1) {
-            $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
+            $datos = self::CargarforcastF1only($plan1, $fecha, $dias,$tipo);
 
             return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC ?? '', 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar ?? '', 'pagina' => 0, 'tpag' => $total ?? 0]);
         } else {
