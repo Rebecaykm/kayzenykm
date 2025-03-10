@@ -270,6 +270,8 @@ class PlaneacionHT1t2Controller extends Controller
         // $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
+
+        $tipo = ($request->Type == 'T1') ? "TIER1%" : "TIER2%";
         $plan1 = IIM::query()
         ->select('IPROD', 'IREF04', 'IDSCE')
         ->whereIn('IREF04', $array)
@@ -282,16 +284,18 @@ class PlaneacionHT1t2Controller extends Controller
         ->distinct('IPROD')
         ->get()
         ->toArray();
-
+    
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias,$tipo);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
         // dd($datos);
-        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
+        return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0,'type'=>$tipo]);
     }
 
     public function update(Request $request)
     {
+       
+
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -373,7 +377,8 @@ class PlaneacionHT1t2Controller extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        $query = "CALL LX834OU02.YMP006C";//proto
+        // $query = "CALL LX834OU.YMP006C";//live
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
@@ -396,7 +401,7 @@ class PlaneacionHT1t2Controller extends Controller
 
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-dd();
+
         return view('planeacion.plancomponenteH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => $total]);
     }
 
