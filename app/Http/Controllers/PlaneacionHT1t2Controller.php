@@ -264,10 +264,10 @@ class PlaneacionHT1t2Controller extends Controller
         }
 
         $indata = YK006::query()->insert($datas);
-        // $indatasql = LOGSUP::query()->insert($datasql);
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU.YMP006C";
-        // $result = odbc_exec($conn, $query);
+        $indatasql = LOGSUP::query()->insert($datasql);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU.YMP006C";
+        $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
 
@@ -284,7 +284,7 @@ class PlaneacionHT1t2Controller extends Controller
         ->distinct('IPROD')
         ->get()
         ->toArray();
-    
+
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias,$tipo);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
@@ -294,7 +294,7 @@ class PlaneacionHT1t2Controller extends Controller
 
     public function update(Request $request)
     {
-       
+
 
         $inF1 = array();
         $TP = $request->SeProject;
@@ -377,8 +377,8 @@ class PlaneacionHT1t2Controller extends Controller
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU02.YMP006C";//proto
-        // $query = "CALL LX834OU.YMP006C";//live
+        // $query = "CALL LX834OU02.YMP006C";//proto
+        $query = "CALL LX834OU.YMP006C";//live
 
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
@@ -642,7 +642,7 @@ class PlaneacionHT1t2Controller extends Controller
             $padre += ['total1'  =>(($total1/5)*3)+0];
             $padre += ['total2' =>(($total2/5)*2)+0];
             $total=(($total1/5)*3)+(($total2/5)*2);
-            
+
             $total=(($total1/5)*3)+(($total2/5)*2);
 
             $fetemp = Carbon::parse($hoy);
