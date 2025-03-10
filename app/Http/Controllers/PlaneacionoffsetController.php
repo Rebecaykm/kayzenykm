@@ -339,7 +339,7 @@ class PlaneacionoffsetController extends Controller
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        // dd($datos);
+
         return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
 
@@ -452,8 +452,8 @@ class PlaneacionoffsetController extends Controller
 
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU02.YMP006C";
-       $query = "CALL LX834OU.YMR002C";
+        $query = "CALL LX834OU.YMP006C";
+    //    $query = "CALL LX834OU.YMR002C";
 
          $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
