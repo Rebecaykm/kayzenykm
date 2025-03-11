@@ -53,7 +53,7 @@ class StoreIPYF013Job implements ShouldQueue
                 ->orderByDesc('created_at')
                 ->first();
 
-            $status = IPYF013::query()->insert([
+            IPYF013::query()->insert([
                 'YFWRKC' => $this->productionPlan->partNumber->workcenter->number ?? '',
                 'YFWRKN' => $this->productionPlan->partNumber->workcenter->name ?? '',
                 'YFRDTE' => Carbon::parse($this->productionPlan->date)->format('Ymd') ?? '',
@@ -75,18 +75,6 @@ class StoreIPYF013Job implements ShouldQueue
                 // 'YFFIL1' => ,
                 // 'YFFIL2' => ,
             ]);
-
-            // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-            // $query = "CALL LX834OU.YSF013B";
-            // $result = odbc_exec($conn, $query);
-
-            // if ($result) {
-            //     Log::info("La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-            // } else {
-            //     Log::info("Error en la consulta: " . odbc_errormsg($conn));
-            // }
-
-            // odbc_close($conn);
         } catch (\Exception $e) {
             Log::error('Error en StoreIPYF013Job: ' . $e->getMessage());
         }

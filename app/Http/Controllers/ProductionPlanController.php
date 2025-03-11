@@ -19,9 +19,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Validators\ValidationException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProductionPlanController extends Controller
 {
@@ -269,10 +272,148 @@ class ProductionPlanController extends Controller
 
     public function generarReporte()
     {
-        $workCenter = Workcenter::query()->where('name', 'MP11M')->first();
-        $shiftId = 1;
-        $date = '2025-02-04';
+        // $workCenter = Workcenter::query()->where('name', 'MP11M')->first();
+        // $shiftId = 1;
+        // $date = '2025-02-04';
 
-        return Excel::download(new ReporteExport($workCenter->id, $shiftId, $date), 'forma_modificado.xlsx');
+        // return Excel::download(new ReporteExport($workCenter->id, $shiftId, $date), 'forma_modificado.xlsx');
+
+        // $filePath = storage_path('app/public/forma.xlsx');
+
+        // $spreadsheet = IOFactory::load($filePath);
+        // $sheet = $spreadsheet->getActiveSheet();
+
+        // $productionPlans = ProductionPlan::query()
+        //     ->select(
+        //         'production_plans.id as id',
+        //         'lines.name as lineName',
+        //         'workcenters.name as workName',
+        //         'part_numbers.number as partNumber',
+        //         'production_plans.plan_quantity as planQuantity',
+        //         'production_plans.production_quantity as productionQuantity',
+        //         'production_plans.date as planDate',
+        //         'shifts.name as shiftName'
+        //     )
+        //     ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
+        //     ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
+        //     ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+        //     ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+        //     ->where('production_plans.shift_id', $shiftId)
+        //     ->where('production_plans.date', $date)
+        //     ->where('workcenters.id', $workCenter->id)
+        //     ->get();
+
+        // $groupedResults = $productionPlans->groupBy(function ($item) {
+        //     return $item->workName;
+        // });
+
+        // $finalResult = [];
+
+        // foreach ($groupedResults as $workName => $workGroup) {
+        //     $lineName = $workGroup->first()->lineName;
+        //     $shiftName = $workGroup->first()->shiftName;
+        //     $planDate = $workGroup->first()->planDate;
+
+        //     $productionPlan = $workGroup->map(function ($item) {
+        //         return [
+        //             'partNumber' => $item->partNumber,
+        //             'planQuantity' => $item->planQuantity,
+        //             'productionQuantity' => $item->productionQuantity,
+        //         ];
+        //     });
+
+        //     $finalResult[] = [
+        //         'lineName' => $lineName,
+        //         'workName' => $workName,
+        //         'shiftName' => $shiftName,
+        //         'planDate' => $planDate,
+        //         'productionPlan' => $productionPlan,
+        //     ];
+        // }
+
+        // foreach ($finalResult as $final) {
+
+        //     $sheet->setCellValue('D9', $final['lineName']);
+        //     $sheet->setCellValue('H9', $final['workName']);
+        //     $sheet->setCellValue('H9', $final['shiftName']);
+        //     $sheet->setCellValue('D11', $final['shiftName']);
+        //     $sheet->setCellValue('H11', $final['planDate']);
+
+        //     $tempFile = tempnam(sys_get_temp_dir(), 'excel') . '.xlsx';
+        //     $writer = new Xlsx($spreadsheet);
+        //     $writer->save($tempFile);
+
+        //     return Response::download($tempFile, 'FORMA75_' . Carbon::now()->format('YmdHis') . '.xlsx')->deleteFileAfterSend(true);
+        // }
+
+
+        $workCenter = Workcenter::where('name', 'MK02 PW61')->first();
+        $shiftId = 1;
+        $date = '2025-02-10';
+
+        $filePath = storage_path('app/public/forma.xlsx');
+
+        // Cargar plantilla
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $productionPlans = ProductionPlan::query()
+            ->select(
+                'production_plans.id as id',
+                'lines.name as lineName',
+                'workcenters.name as workName',
+                'part_numbers.number as partNumber',
+                'production_plans.plan_quantity as planQuantity',
+                'production_plans.production_quantity as productionQuantity',
+                'production_plans.date as planDate',
+                'shifts.name as shiftName'
+            )
+            ->join('shifts', 'production_plans.shift_id', '=', 'shifts.id')
+            ->join('part_numbers', 'production_plans.part_number_id', '=', 'part_numbers.id')
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->where('production_plans.shift_id', $shiftId)
+            ->where('production_plans.date', $date)
+            ->where('workcenters.id', $workCenter->id)
+            ->get();
+
+        // Agrupar resultados por estación de trabajo
+        $groupedResults = $productionPlans->groupBy('workName');
+
+        if ($groupedResults->isEmpty()) {
+            return back()->with('error', 'No hay datos para generar el reporte.');
+        }
+
+        // Tomamos el primer grupo (si solo quieres generar un archivo para una estación de trabajo)
+        $firstGroup = $groupedResults->first();
+
+        // Extraer datos generales
+        $lineName = $firstGroup->first()->lineName;
+        $workName = $firstGroup->first()->workName;
+        $shiftName = $firstGroup->first()->shiftName;
+        $planDate = $firstGroup->first()->planDate;
+
+        // Escribir datos en la cabecera del archivo
+        $sheet->setCellValue('D9', $lineName);
+        $sheet->setCellValue('H9', $workName);
+        $sheet->setCellValue('D11', $shiftName);
+        $sheet->setCellValue('H11', $planDate);
+
+        // Escribir datos de producción en filas de la hoja de cálculo
+        $startRow = 15; // Supongamos que los datos comienzan en la fila 14
+        foreach ($firstGroup as $index => $plan) {
+            $sheet->setCellValue("C" . ($startRow + $index), $plan->partNumber);
+            $sheet->setCellValue("E" . ($startRow + $index), $plan->planQuantity);
+            $sheet->setCellValue("M" . ($startRow + $index), $plan->productionQuantity);
+        }
+
+        // Crear el archivo en memoria
+        $fileName = 'FORMA75_' . Carbon::now()->format('YmdHis') . '.xlsx';
+        $tempFile = storage_path('app/public/' . $fileName);
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        return Response::download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 }

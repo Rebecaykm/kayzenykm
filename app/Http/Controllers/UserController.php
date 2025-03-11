@@ -94,7 +94,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['nullable', 'string', 'max:255', Rule::unique('users')],
-            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:table_name'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'infor' => ['nullable', 'string'],
             'role_id' => ['required', 'integer'],

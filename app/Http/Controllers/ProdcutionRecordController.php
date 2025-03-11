@@ -22,6 +22,7 @@ use Dompdf\Dompdf;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -397,57 +398,57 @@ class ProdcutionRecordController extends Controller
 
                 $printer->close();
             } else {
-                $connector = new NetworkPrintConnector($printer->ip, $printer->port);
-                $printer = new Printer($connector);
-                $command = '
-                        R CW816 PF*
-                        H1;f3;o558,22;c61;b0;h12;w14;d3,Departamento
-                        H2;f3;o526,34;c61;b0;h20;w10;d3,' . strtoupper(trim($partNumber->workcenter->line->departament->name)) . '
-                        L50;f0;o481,345;l100;w3
-                        H3;f3;o558,350;c61;b0;h12;w14;d3,Estacion
-                        H4;f3;o526,350;c61;b0;;h20;w10;d3,' . trim($partNumber->workcenter->name) . '
-                        L51;f0;o481,580;l100;w3
-                        H5;f3;o558,584;c61;b0;h12;w14;d3,Proyecto
-                        H6;f3;o526,584;c61;b0;;h20;w10;d3,' . $models . '
-                        L25;f1;o481,809;l787;w3
-                        H7;f3;o480,22;c61;b0;;h20;w10;d3,Part number
-                        H8;f3;o440,100;c68;b0;h26;w26;d3,' . trim($partNumber->number) . '
-                        L26;f1;o381,809;l787;w3
-                        H9;f3;o380,22;c61;b0;h12;w14;d3,Fecha de produccion
-                        H10;f3;o350,22;c61;b0;h20;w10;d3,' . $productionPlan->date . '
-                        L52;f0;o306,415;l80;w3
-                        H11;f3;o380,420;c61;b0;h12;w14;d3,Consecutivo
-                        H12;f3;o350,420;c61;b0;h20;w10;d3,' . $result->sequence . '
-                        L27;f1;o306,809;l787;w3
-                        H13;f3;o305,22;c61;b0;h12;w14;d3,Contenedor
-                        H14;f3;o280,34;c61;b0;h20;w10;d3,.' . trim($partNumber->standardPackage->name) . '
-                        L53;f0;o231,345;l80;w3
-                        H15;f3;o305,350;c61;b0;h12;w14;d3,SNP
-                        H16;f3;o280,350;c61;b0;;h20;w10;d3,' . $partNumber->quantity . '
-                        L28;f1;o231,809;l787;w3
-                        H29;f3;o230,22;c61;b0;h8;w14;d3,CANTIDAD PRODUCIDA
-                        H17;f3;o220,42;c61;b0;h40;w14;d3,' . $currentQuantity . '
-                        H18;f3;o200,22;c61;b0;;h20;w10;d3,
-                        H19;f3;o120,22;c61;b0;h8;w14;d3,IDENTIFATION CARD
-                        H20;f3;o100,22;c61;b0;;h10;w10;d3,"*** ORIGINAL ***"
-                        H21;f3;o80,22;c61;b0;;h8;w10;d3,FECHA DE IMPRESION
-                        H23;f3;o60,22;c61;b0;h10;w14;d3,' . now() . '
-                        H22;f3;o20,22;c61;b0;h8;w14;d3,Y-TEC KEYLEX MEXICO
-                        B24;o0,450;c17,200,0;w5;h5;d3,%SERIAL%%part_number%%estacion%
-                        D0
-                        R
-                        l13
-                        E*,1
-                        1
-                        1
-                    ';
-                $printer->getPrintConnector()->write($command);
-                $printer->getPrintConnector()->finalize();
+                // $connector = new NetworkPrintConnector($printer->ip, $printer->port);
+                // $printer = new Printer($connector);
+                // $command = '
+                //         R CW816 PF*
+                //         H1;f3;o558,22;c61;b0;h12;w14;d3,Departamento
+                //         H2;f3;o526,34;c61;b0;h20;w10;d3,' . strtoupper(trim($partNumber->workcenter->line->departament->name)) . '
+                //         L50;f0;o481,345;l100;w3
+                //         H3;f3;o558,350;c61;b0;h12;w14;d3,Estacion
+                //         H4;f3;o526,350;c61;b0;;h20;w10;d3,' . trim($partNumber->workcenter->name) . '
+                //         L51;f0;o481,580;l100;w3
+                //         H5;f3;o558,584;c61;b0;h12;w14;d3,Proyecto
+                //         H6;f3;o526,584;c61;b0;;h20;w10;d3,' . $models . '
+                //         L25;f1;o481,809;l787;w3
+                //         H7;f3;o480,22;c61;b0;;h20;w10;d3,Part number
+                //         H8;f3;o440,100;c68;b0;h26;w26;d3,' . trim($partNumber->number) . '
+                //         L26;f1;o381,809;l787;w3
+                //         H9;f3;o380,22;c61;b0;h12;w14;d3,Fecha de produccion
+                //         H10;f3;o350,22;c61;b0;h20;w10;d3,' . $productionPlan->date . '
+                //         L52;f0;o306,415;l80;w3
+                //         H11;f3;o380,420;c61;b0;h12;w14;d3,Consecutivo
+                //         H12;f3;o350,420;c61;b0;h20;w10;d3,' . $result->sequence . '
+                //         L27;f1;o306,809;l787;w3
+                //         H13;f3;o305,22;c61;b0;h12;w14;d3,Contenedor
+                //         H14;f3;o280,34;c61;b0;h20;w10;d3,.' . trim($partNumber->standardPackage->name) . '
+                //         L53;f0;o231,345;l80;w3
+                //         H15;f3;o305,350;c61;b0;h12;w14;d3,SNP
+                //         H16;f3;o280,350;c61;b0;;h20;w10;d3,' . $partNumber->quantity . '
+                //         L28;f1;o231,809;l787;w3
+                //         H29;f3;o230,22;c61;b0;h8;w14;d3,CANTIDAD PRODUCIDA
+                //         H17;f3;o220,42;c61;b0;h40;w14;d3,' . $currentQuantity . '
+                //         H18;f3;o200,22;c61;b0;;h20;w10;d3,
+                //         H19;f3;o120,22;c61;b0;h8;w14;d3,IDENTIFATION CARD
+                //         H20;f3;o100,22;c61;b0;;h10;w10;d3,"*** ORIGINAL ***"
+                //         H21;f3;o80,22;c61;b0;;h8;w10;d3,FECHA DE IMPRESION
+                //         H23;f3;o60,22;c61;b0;h10;w14;d3,' . now() . '
+                //         H22;f3;o20,22;c61;b0;h8;w14;d3,Y-TEC KEYLEX MEXICO
+                //         B24;o0,450;c17,200,0;w5;h5;d3,%SERIAL%%part_number%%estacion%
+                //         D0
+                //         R
+                //         l13
+                //         E*,1
+                //         1
+                //         1
+                //     ';
+                // $printer->getPrintConnector()->write($command);
+                // $printer->getPrintConnector()->finalize();
             }
         } catch (\Exception $e) {
             Log::error('Error al imprimir etiqueta: ' . $e->getMessage());
 
-            DB::rollback();
+            // DB::rollback();
         }
     }
 

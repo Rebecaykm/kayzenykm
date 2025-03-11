@@ -241,19 +241,24 @@
             }
 
             var printer = "{{ $productionPlan->partNumber->workcenter->printer->ip ?? '' }}";
+            var statusProduction = '{{ $productionPlan->status->name }}';
 
-            if (printer) {
-                window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity;
+            if (statusProduction != 'INACTIVO') {
+                if (printer) {
+                    window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity;
+                } else {
+                    var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity, '_blank');
+
+                    ventanaImpresion.onload = function() {
+                        ventanaImpresion.print();
+                        // ventanaImpresion.onafterprint = function() {
+                        //     ventanaImpresion.close();
+                        // };
+                        window.location.reload();
+                    };
+                }
             } else {
-                var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId + '&quantity=' + quantity, '_blank');
-
-                ventanaImpresion.onload = function() {
-                    ventanaImpresion.print();
-                    // ventanaImpresion.onafterprint = function() {
-                    //     ventanaImpresion.close();
-                    // };
-                    window.location.reload();
-                };
+                alert("El Registro de Producción ya fue finalizada anteriormente.");
             }
         }
     </script>
