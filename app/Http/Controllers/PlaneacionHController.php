@@ -103,8 +103,9 @@ class PlaneacionHController extends Controller
             $total = 0;
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
+           $tipo='920';
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.planfinalH', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total,'type'=>$tipo]);
         }
     }
 

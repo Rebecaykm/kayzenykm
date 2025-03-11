@@ -8,6 +8,8 @@
             <form method="post" action="{{ route('planeacionH.create') }}">
                 @csrf
                 <input type="hidden" name="Planeacion" value="1">
+                <input  value="920"
+                name="Type" hidden/>
                 <div class="flex flex-col space-y-4">
                     <div class="flex flex-col sm:flex-row sm:space-x-3">
                         <div class="flex-auto">
