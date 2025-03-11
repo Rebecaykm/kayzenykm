@@ -286,18 +286,23 @@
 
             var productionPlanId = '{{ $productionPlan->id }}';
             var partNumberId = '{{ $productionPlan->partNumber->id }}';
+            var statusProduction = '{{ $productionPlan->status->name }}';
 
             var printer = "{{ $productionPlan->partNumber->workcenter->printer->ip ?? '' }}";
 
-            if (printer) {
-                window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId;
-            } else {
-                var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId, '_blank');
+            if (statusProduction != 'INACTIVO') {
+                if (printer) {
+                    window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId;
+                } else {
+                    var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId, '_blank');
 
-                ventanaImpresion.onload = function() {
-                    ventanaImpresion.print();
-                    window.location.reload();
-                };
+                    ventanaImpresion.onload = function() {
+                        ventanaImpresion.print();
+                        window.location.reload();
+                    };
+                }
+            } else {
+                alert("El Registro de Producción ya fue finalizada anteriormente.");
             }
         }
     </script>
