@@ -384,14 +384,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
     Route::post('planeacionS1/updatef1', [\App\Http\Controllers\PlaneacionS1Controller::class, 'updateF1'])->name('planeacionS1.updatef1');
 
+Route::get('planeacionH', [\App\Http\Controllers\PlaneacionHController::class, 'index'])->name('planeacionH.index');
+// Route::get('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
+Route::post('planeacionH/create', [\App\Http\Controllers\PlaneacionHController::class, 'create'])->name('planeacionH.create');
+Route::post('planeacionHT/create', [\App\Http\Controllers\PlaneacionHT1t2Controller::class, 'create'])->name('planeacionHT.create');
+Route::post('planeacionHT/updatef1', [\App\Http\Controllers\PlaneacionHT1t2Controller::class, 'updatef1'])->name('planeacionHT.updatef1');
 
-
-    Route::get('planeacionH', [\App\Http\Controllers\PlaneacionHController::class, 'index'])->name('planeacionH.index');
-    // Route::get('planeacionS1/create', [\App\Http\Controllers\PlaneacionS1Controller::class, 'create'])->name('planeacionS1.create');
-    Route::post('planeacionH/create', [\App\Http\Controllers\PlaneacionHController::class, 'create'])->name('planeacionH.create');
-    Route::post('planeacionH/updatef1', [\App\Http\Controllers\PlaneacionHController::class, 'updateF1'])->name('planeacionH.updatef1');
-    Route::post('planeacionH/update', [\App\Http\Controllers\PlaneacionHController::class, 'update'])->name('planeacionH.update');
-    Route::post('planeacionH/siguiente', [\App\Http\Controllers\PlaneacionHController::class, 'siguiente'])->name('planeacionH.siguiente');
+Route::post('planeacionH/updatef1', [\App\Http\Controllers\PlaneacionHController::class, 'updateF1'])->name('planeacionH.updatef1');
+Route::post('planeacionH/update', [\App\Http\Controllers\PlaneacionHController::class, 'update'])->name('planeacionH.update');
+Route::post('planeacionH/siguiente', [\App\Http\Controllers\PlaneacionHController::class, 'siguiente'])->name('planeacionH.siguiente');
 });
 
 Route::get('reporte', [ProductionPlanController::class, 'generarReporte']);

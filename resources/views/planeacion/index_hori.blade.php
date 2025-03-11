@@ -15,11 +15,7 @@
                                 <span class="text-gray-700 dark:text-gray-400">Proyecto</span>
                                 <select id="SeProject1" name="SeProject" onchange="PCenable()"
                                     class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none">
-                                    <option value="">Seleccione un Proyecto</option>
                                     <option value="11,811">920B</option>
-                                    <option value="7,79,710">J34A</option>
-                                    <option value="9,79">J34H</option>
-
                                 </select>
                             </label>
                         </div>
@@ -40,6 +36,62 @@
                         </svg>
                         <span>Ajustar</span>
                     </button>
+                </div>
+            </form>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <form method="post" action="{{ route('planeacionHT.create') }}">
+                @csrf
+                <input type="hidden" name="Planeacion" value="1">
+                <div class="flex flex-col space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:space-x-3">
+                        <div class="flex-auto">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Proyecto</span>
+                                <select id="SeProject1" name="SeProject" onchange="PCenable()"
+                                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-blue-400 focus:outline-none" required>
+                                    <option value="">Seleccione un Proyecto</option>
+                                    <option value="7,79,710">J34A</option>
+                                    <option value="9,79">J34H</option>
+
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="flex-auto">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Fecha inicial</span>
+                                <input name="fecha" type="date"
+                                    class="block w-full mt-1 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none form-input" required />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:space-x-3">
+                        <div class="flex-auto">
+                            <label class="block text-sm">
+                                <input type="radio" value="T1"
+                                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none"
+                                    name="Type" required/>
+                                <span class="ml-2">Partes Directas</span>
+                                <br>
+                                <input type="radio" value="T2"
+                                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none"
+                                    name="Type" required />
+                                <span class="ml-2">Partes Indirectas</span>
+                            </label>
+                        </div>
+                        <div class="flex-auto">
+                            <button
+                                class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                </svg>
+                                <span>Ajustar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -77,8 +129,8 @@
                     </div>
                     <button
                         class="w-full flex items-center justify-center px-5 py-3 text-sm font-medium leading-5 text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
