@@ -444,7 +444,7 @@
                                                     </label>
                                                     <label class="block text-sm ">
 
-                                                        <input id='{{ $CinN }}' 
+                                                        <input id='{{ $CinN }}'
                                                             onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
                                                             value="{{ $valchFN }}"
                                                             class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -571,7 +571,7 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             =
                                             <label class="block text-sm ">
-                                                <input name='totalForMMVO' id='totalForMMVO' 
+                                                <input name='totalForMMVO' id='totalForMMVO'
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                     disabled />
                                             </label>
@@ -593,7 +593,7 @@
                                                     $contfim = $totalfirM / $info['Qty'];
                                                     $contykm = $totalfirykm / $info['Qty'];
                                                 @endphp
-                                                <input 
+                                                <input
                                                     value="{{ $totalfirykm }}"
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                     disabled />
@@ -659,7 +659,7 @@
                                                     $contotalphp = 'conttotalFirykm' . $namenA;
                                                 @endphp
                                                 <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
-                                                  
+
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                     disabled />
                                             </label>
@@ -667,9 +667,9 @@
                                         <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                             =
                                             <label class="block text-sm ">
-                                                
-                                                <input 
-                                                 
+
+                                                <input
+
                                                     class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                     disabled />
                                             </label>
@@ -961,7 +961,7 @@
 
                                                         <label class="block text-sm ">
 
-                                                            <input id='{{ $CinD }}' 
+                                                            <input id='{{ $CinD }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
                                                                 value="{{ $valchFD }}"
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -969,7 +969,7 @@
                                                         </label>
                                                         <label class="block text-sm ">
 
-                                                            <input id='{{ $CinN }}' 
+                                                            <input id='{{ $CinN }}'
                                                                 onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id,'<?php echo $info['Qty']; ?>')"
                                                                 value="{{ $valchFN }}"
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -981,6 +981,7 @@
                                             @php
                                                 $hoy = date('Ymd', strtotime($hoy . '+1 day'));
                                                 $contdias++;
+                                                $T2=$info['total2']??0;
                                             @endphp
                                         @endwhile
                                         <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
@@ -1002,7 +1003,7 @@
                                                 @endif
                                                 <label class="block text-sm ">
 
-                                                    <input value='{{    $info['total2']  }}'
+                                                    <input value='{{    $T2}}'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -1011,12 +1012,13 @@
                                             @php
                                             $totalforM =  0;
                                            $totalfirykm=  $info['total'];
+                                           $T1=$info['total1']??0 ;
                                             @endphp
 
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 @if($type=='TIER2%')
                                                 <label class="block text-sm ">
-                                                    <input value='{{  $info['total1'] }}'
+                                                    <input value='{{  $T1 }}'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                         disabled />
                                                 </label>
@@ -1115,8 +1117,8 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
-                                               
-                                                    <input 
+
+                                                    <input
                                                         value="{{ $totalfirykm }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
@@ -1125,7 +1127,7 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
-                                                
+
                                                     <input  id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{    $totalKFP }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
@@ -1176,7 +1178,7 @@
                                                         $contotalphp = 'conttotalFirykm' . $namenA;
                                                     @endphp
                                                     <input id='{{ $contotalphp }}' name='{{ $contotalphp }}'
-                                                      
+
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -1184,9 +1186,9 @@
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                 =
                                                 <label class="block text-sm ">
-                                                    
+
                                                     <input
-                                                   
+
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
                                                         disabled />
                                                 </label>
@@ -1316,7 +1318,7 @@
                 val11 = parseInt(document.getElementById('C'+parte  + '/' + arr[2] + '/D/' + wc).value);
                 val12 = parseInt(document.getElementById('C'+parte  + '/' + arr[2] + '/N/' + wc).value);
 
-              
+
 
                 valtotal = (val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12)*SNP;
                 document.getElementById('totalFirykm' + parte).value = valtotal;
