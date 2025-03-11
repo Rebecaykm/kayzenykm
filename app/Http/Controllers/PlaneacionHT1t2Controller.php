@@ -190,6 +190,7 @@ class PlaneacionHT1t2Controller extends Controller
      */
     public function updateF1(Request $request)
     {
+
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -265,6 +266,7 @@ class PlaneacionHT1t2Controller extends Controller
 
         $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
+
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
