@@ -27,55 +27,27 @@ class LoadToInfor extends Command
      */
     public function handle()
     {
-        //     try {
-        //         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-
-        //         if ($conn === false) {
-        //             Log::critical("Error al conectar con la base de datos Infor.");
-        //             return;
-        //         }
-
-        //         $query = "CALL LX834OU02.YSF013C";
-        //         $result = odbc_exec($conn, $query);
-
-        //         if ($result) {
-        //             Log::info("LX834OU02.YSF013C.- La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-        //         } else {
-        //             Log::critical("Error en la consulta: " . odbc_errormsg($conn));
-        //         }
-        //     } catch (\Exception $e) {
-        //         Log::alert($e->getMessage());
-        //     } finally {
-        //         if (isset($conn)) {
-        //             odbc_close($conn);
-        //         }
-        //     }
-
-        //     $this->info('Process completed');
-        // }
-
         try {
             $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-            if (!$conn) {
-                throw new Exception("No se pudo establecer la conexión ODBC");
+
+            if ($conn === false) {
+                throw new Exception("Error al conectar con la base de datos Infor.");
             }
 
-            $query = "CALL LX834OU02.YSF013C";
+            $query = "CALL LX834OU.YSF013C";
             $result = odbc_exec($conn, $query);
 
-            if (!$result) {
-                // Si no se pudo ejecutar la consulta, registra un mensaje de error
-                throw new Exception("Error al ejecutar la consulta: " . odbc_errormsg($conn));
+            if ($result) {
+                Log::info("LX834OU.YSF013C : La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
+            } else {
+                throw new Exception("LX834OU.YSF013C : Error en la consulta: " . odbc_errormsg($conn));
             }
-
-            // Si la consulta se ejecuta con éxito, registra un mensaje de éxito
-            Log::info("LX834OU02.YSF013C - La consulta se ejecutó con éxito en " . date('Y-m-d H:i:s'));
-
-            // Cierra la conexión ODBC
-            odbc_close($conn);
         } catch (Exception $e) {
-            // Captura cualquier excepción que ocurra durante la ejecución
-            Log::error("Error durante la ejecución de la consulta: " . $e->getMessage());
+            Log::alert($e->getMessage());
+        } finally {
+            if (isset($conn)) {
+                odbc_close($conn);
+            }
         }
     }
 }

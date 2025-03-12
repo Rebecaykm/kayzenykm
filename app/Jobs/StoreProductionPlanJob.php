@@ -40,26 +40,20 @@ class StoreProductionPlanJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $date = Carbon::parse($this->date)->format('Y-m-d');
-
-        $item = PartNumber::where('number', $this->partNumber)->first();
-        $openShift = Shift::where('abbreviation', substr($this->shift, 4, 1))->first();
+        $partNumber = PartNumber::query()->where('number', $this->partNumber)->first();
+        $shift = Shift::query()->where('abbreviation', $this->shift)->first();
         $status = Status::where('name', 'PENDIENTE')->first();
 
-        $productionPlan = ProductionPlan::with(['partNumber', 'shift'])
-            ->where('part_number_id', $item->id)
-            ->where('date', $date)
-            ->where('shift_id', optional($openShift)->id)
-            ->firstOrNew();
+        $productionPlan = ProductionPlan::query()->where([['part_number_id', $partNumber->id], ['plan_quantity', $this->quantity], ['date', $this->date], ['shift_id', $shift->id]])->first();
 
-        if (!$productionPlan->exists) {
-            $productionPlan->fill([
-                'part_number_id' => $item->id ?? null,
-                'date' => $date ?? null,
-                'shift_id' => optional($openShift)->id ?? null,
-                'plan_quantity' => intval($this->quantity) ?? null,
-                'status_id' => $status->id ?? null,
-            ])->save();
+        if ($productionPlan === null) {
+            ProductionPlan::create([
+                'part_number_id' => $partNumber->id,
+                'plan_quantity' => $this->quantity,
+                'date' => $this->date,
+                'shift_id' => $shift->id,
+                'status_id' => $status->id
+            ]);
         }
     }
 }

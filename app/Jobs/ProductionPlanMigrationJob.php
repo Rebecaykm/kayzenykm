@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\FSO;
 use App\Models\KFP;
+use App\Models\PartNumber;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,25 +32,50 @@ class ProductionPlanMigrationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // $prodcutionPlans = KFP::query()->select('FPROD', 'FRDTE', 'FTYPE', 'FQTY', 'FCLAS', 'FDATE', 'FWHSE', 'FPCNO')->where('FTYPE', 'F')->orderBy('FRDTE', 'DESC')->get();
 
-        $prodcutionPlans = DB::connection('odbc-connection-lx834f02')
-            ->table('LX834F01.KFP')
-            ->select('LX834F01.KFP.FPROD', 'LX834F01.KFP.FRDTE', 'LX834F01.KFP.FTYPE', 'LX834F01.KFP.FQTY', 'LX834F01.KFP.FCLAS', 'LX834F01.KFP.FDATE', 'LX834F01.KFP.FWHSE', 'LX834F01.KFP.FPCNO', 'LX834F01.IIM.IMPLC')
-            ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.KFP.FPROD')
-            ->where([['LX834F01.KFP.FTYPE', 'F'], ['LX834F01.IIM.IMPLC', '!=', 'OBSOLETE']])
-            ->whereIn('LX834F01.IIM.ICLAS', ['M1', 'M2', 'M3', 'M4'])
-            ->orderBy('LX834F01.KFP.FRDTE', 'DESC')
+        $today = Carbon::now();
+
+        $startDate = $today->copy()->format('Ymd');
+        $endDate = $today->copy()->format('Ymd');
+
+        $partNumbers = PartNumber::query()
+            ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
+            ->join('lines', 'workcenters.line_id', '=', 'lines.id')
+            ->whereIn('workcenters.id', [33, 48, 47, 46])
+            ->pluck('part_numbers.number')
+            ->toArray();
+
+        $productionPlans = FSO::query()
+            ->select(
+                DB::raw('SPROD AS part_number'),
+                'SQREQ as planned_quantity',
+                DB::raw("VARCHAR(SUBSTR(SRDTE, 1, 4) || '-' || SUBSTR(SRDTE, 5, 2) || '-' || SUBSTR(SRDTE, 7, 2)) AS planned_date"),
+                DB::raw("SUBSTR(TRIM(SOCNO), LENGTH(TRIM(SOCNO)), 1) AS planned_shift"),
+            )
+            ->whereIn(DB::raw('SPROD'), $partNumbers)
+            ->whereBetween('SRDTE', [$startDate, $endDate])
             ->get();
 
-        foreach ($prodcutionPlans as $key => $prodcutionPlan) {
-            // Log::info("$prodcutionPlan->FPROD, $prodcutionPlan->FQTY, $prodcutionPlan->FRDTE, $prodcutionPlan->FPCNO");
+        foreach ($productionPlans as $key => $productionPlan) {
             StoreProductionPlanJob::dispatch(
-                $prodcutionPlan->FPROD,
-                $prodcutionPlan->FQTY,
-                $prodcutionPlan->FRDTE,
-                $prodcutionPlan->FPCNO
+                $productionPlan->PART_NUMBER,
+                $productionPlan->planned_quantity,
+                $productionPlan->PLANNED_DATE,
+                $productionPlan->PLANNED_SHIFT
             );
         }
+
+        // $prodcutionPlans = KFP::query()->select('FPROD', 'FRDTE', 'FTYPE', 'FQTY', 'FCLAS', 'FDATE', 'FWHSE', 'FPCNO')->where('FTYPE', 'F')->orderBy('FRDTE', 'DESC')->get();
+
+        // $prodcutionPlans = DB::connection('odbc-connection-lx834f02')
+        //     ->table('LX834F01.KFP')
+        //     ->select('LX834F01.KFP.FPROD', 'LX834F01.KFP.FRDTE', 'LX834F01.KFP.FTYPE', 'LX834F01.KFP.FQTY', 'LX834F01.KFP.FCLAS', 'LX834F01.KFP.FDATE', 'LX834F01.KFP.FWHSE', 'LX834F01.KFP.FPCNO', 'LX834F01.IIM.IMPLC')
+        //     ->join('LX834F01.IIM', 'LX834F01.IIM.IPROD', '=', 'LX834F01.KFP.FPROD')
+        //     ->where([['LX834F01.KFP.FTYPE', 'F'], ['LX834F01.IIM.IMPLC', '!=', 'OBSOLETE']])
+        //     ->whereIn('LX834F01.IIM.ICLAS', ['M1', 'M2', 'M3', 'M4'])
+        //     ->orderBy('LX834F01.KFP.FRDTE', 'DESC')
+        //     ->get();
+
+
     }
 }
