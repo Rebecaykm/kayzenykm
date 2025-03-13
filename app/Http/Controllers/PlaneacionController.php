@@ -434,7 +434,7 @@ DD('SDNNSKL');
         $query = "CALL LX834OU.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
-        ProductionPlanByArrayMigrationJob::dispatch($datval);
+        // ProductionPlanByArrayMigrationJob::dispatch($datval);
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)

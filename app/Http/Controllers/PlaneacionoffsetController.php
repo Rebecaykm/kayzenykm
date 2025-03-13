@@ -346,7 +346,8 @@ class PlaneacionoffsetController extends Controller
     public function update(Request $request)
     {
 
-dd('hsjhd');
+
+
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -458,7 +459,7 @@ dd('hsjhd');
          $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
-        ProductionPlanByArrayMigrationJob::dispatch($datval);
+        // ProductionPlanByArrayMigrationJob::dispatch($datval);
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
