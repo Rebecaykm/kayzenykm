@@ -435,6 +435,8 @@ DD('SDNNSKL');
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
         // ProductionPlanByArrayMigrationJob::dispatch($datval);
+
+    // chachito no seas cabron
         $plan1 = IIM::query()
             ->select('IPROD', 'IREF04')
             ->wherein('IREF04 ', $array)
