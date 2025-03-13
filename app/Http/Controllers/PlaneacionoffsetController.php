@@ -346,7 +346,7 @@ class PlaneacionoffsetController extends Controller
     public function update(Request $request)
     {
 
-
+dd('hsjhd');
         $inF1 = array();
         $TP = $request->SeProject;
         $CP = $request->SePC;
@@ -452,8 +452,8 @@ class PlaneacionoffsetController extends Controller
 
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
-    //    $query = "CALL LX834OU.YMR002C";
+        // $query = "CALL LX834OU.YMP006C";
+       $query = "CALL LX834OU.YMR002C";
 
          $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
