@@ -591,7 +591,7 @@ class PlaneacionHT1t2Controller extends Controller
             $tfirme = 0;
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
-
+            $total2=0;
             if($ty=='TIER1%')
             {
 
