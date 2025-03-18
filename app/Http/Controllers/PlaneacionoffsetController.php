@@ -790,7 +790,7 @@ if($total==0)
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
-            $padre+=['FIRMFOR'=> $firfor->toarray()];
+            $padre+=['FIRMFOR'=> $firfor->toarray()??0];
             $padre += ['tPlan' => $tPlan];
             $padre += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'], $prowk);
