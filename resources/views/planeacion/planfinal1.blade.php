@@ -142,10 +142,10 @@
                                                     WRKcenter {{ $info['WRC'] }}<br>
                                                     Container {{ $info['typkt'] }}<br>
                                                     ULTIMO FIRME<br>
-                                                    FECHA: <br>{{ $firmfor['DRSDT'] }} al  {{ $firmfor['DREDT'] }}<br>
-                                                    FIRME:  {{ $firmfor['DROQY'] }}<br>
-                                                    FORSCASTE {{ $firmfor['DRFQY'] }}<br>
-                                                    DIFERENCIA <br> QTY: {{ $firmfor['DRDQY']}}<br> RATE: {{ $firmfor['DRDRT']}}
+                                                    FECHA: <br>{{ $firmfor['DRSDT']??0 }} al  {{ $firmfor['DREDT']??0 }}<br>
+                                                    FIRME:  {{ $firmfor['DROQY']??0 }}<br>
+                                                    FORSCASTE {{ $firmfor['DRFQY']??0 }}<br>
+                                                    DIFERENCIA <br> QTY: {{ $firmfor['DRDQY']??0}}<br> RATE: {{ $firmfor['DRDRT']??0}}
                                                 </div>
                                             </td>
                                         @else

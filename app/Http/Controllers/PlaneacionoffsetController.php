@@ -782,7 +782,9 @@ if($total==0)
                 $planpadre += $firme;
             }
 
-        $firfor= $YK007->where('DPROD', $prod['IPROD'])->first();
+        $firfor=  optional($YK007->where('DPROD', $prod['IPROD'])->first())->toarray()??[];
+
+
 
         // $arrfirfor=[];
         // $arrfirfor+=['DRSDT'=>$firfor['DRSDT']??0,'DREDT'=>$firfor['DREDT']??0,'DROQY'=>$firfor['DROQY']??0 ,'DRFQY'=>$firfor['DRFQY']??0,'DRDQY'=>$firfor['DRDQY']??0,'DRDRT'=>$firfor['DRDRT']??0];
@@ -790,7 +792,7 @@ if($total==0)
             $pos = array_search($prod['IPROD'], $prodcqa);
             $padre += ['Qty' => $pqa[$pos] ?? 0];
             $padre += ['typkt' => $typkt[$pos] ?? 'N/A'];
-            $padre+=['FIRMFOR'=> $firfor->toarray()??0];
+            $padre+=['FIRMFOR'=> $firfor];
             $padre += ['tPlan' => $tPlan];
             $padre += ['tfirme' => $tfirme];
             $poskwr = array_search($prod['IPROD'], $prowk);
@@ -805,7 +807,7 @@ if($total==0)
 
         return $totalpa;
     }
-
+//
     public function Buscar(Request $request)
     {
         $inF1 = array();
