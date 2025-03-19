@@ -105,8 +105,8 @@
                                     <div class="font-bold">{{ $datossubs['sub'] }}</div>
                                     <div class="text-sm text-gray-500">SNP: {{ $datossubs['Qty'] }}</div>
                                     <div class="text-sm text-gray-500"> WC: {{ $datossubs['wrk'] }}</div>
-                                    {{-- <div class="text-sm text-gray-500"> Min balance: {{ $datossubs['minbal'] }}</div> --}}
                                     <div class="text-sm text-gray-500"> Contenedor:{{ $datossubs['typkt'] }}</div>
+                                    <div class="text-sm text-gray-500"> Carriover: {{ $datossubs['carrieover']+0 }}</div>
                                     <input type="checkbox" id="{{ 'Che/on/' . $namenA }}"
                                         name="{{ 'Che/on/' . $namenA }}" /> Aplica cambio <br />
                                     <div class="font-bold"> Nivel:--------{{ $datossubs['level'] }}<br></div>

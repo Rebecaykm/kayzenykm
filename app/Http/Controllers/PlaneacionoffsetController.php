@@ -13,6 +13,7 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
+use App\Models\YK011;
 use App\Models\YK007;
 use App\Models\YK0062;
 use Carbon\Carbon;
@@ -572,7 +573,9 @@ if($total==0)
             ->wherein("RPROD", $sub1)
             ->get()->toarray();
         $prowk = array_column($WCT, 'RPROD');
-
+        $yk011=YK011::query()->select('CID','CPROD','CICLAS','CRDTE','CRQTY','CRSNP','CRBOXQ','CRFAC','CRWRKC','CRWHS')
+        ->wherein("CPROD", $sub1)
+        ->get();
 
         $coleccion = collect();
         // finales
@@ -617,9 +620,9 @@ if($total==0)
                 }
             }
 
-            $total = 0;
             $Tshopkmr = 0;
-            $prodcqa = $cond->where('IPROD', $subs);
+
+            $YK011Se= optional($yk011->where('CPROD',$subs)->first())??[];
 
             $poskwr = array_search($subs, $prowk);
 
@@ -639,7 +642,8 @@ if($total==0)
                 'Tfirme' => $Tfirme,
                 'KMRpadres' => $texpadre ?? 0,
                 'Totalpadres' => $Tshopkmr,
-                'offset' => $ofsg
+                'offset' => $ofsg,
+                'carrieover'=>$YK011Se->CRQTY
             ]);
 
             // $sepa += [$subs => $numpar];

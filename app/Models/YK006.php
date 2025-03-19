@@ -11,8 +11,8 @@ class YK006 extends Model
     // protected $connection = 'odbc-connection-lx834fu01';
 
     // protected $table = 'LX834FU01.YK006';
-    protected $connection = 'odbc-connection-lx834fu01';
-    protected $table = 'LX834FU01.YK006';
+    protected $connection = 'odbc-connection-lx834fu02';
+    protected $table = 'LX834FU02.YK006';
 
     protected $fillable = [
         'K6PROD',
