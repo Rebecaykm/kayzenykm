@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('infor:workcenter')->dailyAt('00:00');
         $schedule->command('infor:partnumber')->dailyAt('00:30');
         $schedule->command('infor:work-part')->dailyAt('02:00');
-        $schedule->command('infor:production-plan')->dailyAt('07:00');
+        $schedule->command('infor:production-plan')->twiceDaily(7, 19);
     }
 
     /**
