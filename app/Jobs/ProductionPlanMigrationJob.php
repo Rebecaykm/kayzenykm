@@ -41,7 +41,7 @@ class ProductionPlanMigrationJob implements ShouldQueue
         $partNumbers = PartNumber::query()
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->whereIn('workcenters.id', [33, 48, 47, 46])
+            ->whereIn('workcenters.id', [79, 143, 54, 294])
             ->pluck('part_numbers.number')
             ->toArray();
 

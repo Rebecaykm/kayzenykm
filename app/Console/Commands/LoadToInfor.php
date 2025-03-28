@@ -13,14 +13,14 @@ class LoadToInfor extends Command
      *
      * @var string
      */
-    protected $signature = 'plan:load-to-infor';
+    protected $signature = 'infor:load-to-infor';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Call the process LX834OU02/YSF013C in Infor.';
+    protected $description = 'Call the process LX834OU/YSF013C in Infor.';
 
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class LoadToInfor extends Command
     public function handle()
     {
         try {
-            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+            $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR", "LXSECOFR");
 
             if ($conn === false) {
                 throw new Exception("Error al conectar con la base de datos Infor.");

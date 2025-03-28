@@ -10,7 +10,7 @@ class YK011 extends Model
     use HasFactory;
 
     protected $connection = 'odbc-connection-lx834fu01';
-    protected $table = 'LX834FU02.YK011';
+    protected $table = 'LX834FU01.YK011';
 
     protected $fillable = [
         'CID',
