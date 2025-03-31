@@ -643,9 +643,11 @@ class PlaneacionHT1t2Controller extends Controller
 
             $padre += ['total1'  =>(($total1/5)*3)+0];
             $padre += ['total2' =>(($total2/5)*2)+0];
-            $total=(($total1/5)*3)+(($total2/5)*2);
+
 
             $total=(($total1/5)*3)+(($total2/5)*2);
+
+
 
             $fetemp = Carbon::parse($hoy);
             $fintem = Carbon::parse($totalF);
@@ -653,39 +655,69 @@ class PlaneacionHT1t2Controller extends Controller
             $firme = [];
             $firmepro = [];
             $pos = array_search($prod['IPROD'], $prodcqa);
-            $totalcon =  ceil(($total / $pqa[$pos]) / 10);
-            $contotal = 0;
+            $totalcon =  floor(($total / $pqa[$pos]) / 10);
+            $residuo=($total / $pqa[$pos]) % 10;
+            $contres=0;
+            $contotal =  $totalcon;
 
             while ($contd <= 5) {
                 $dia = $fetemp->format('Ymd');
-                if ($contotal <  ceil($total / $pqa[$pos])) {
-                    $re = $contotal * $pqa[$pos] - $total;
-                    if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
-                        $re = $total - $contotal * $pqa[$pos];
-                        $firmepro += ['CH' . $dia . 'D' => ceil($re / $pqa[$pos])];
-                        $firmepro += ['H' . $dia . 'D' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
-                        $contotal = $contotal + ceil($re / $pqa[$pos]);
-                    } else {
-                        $firmepro += ['CH' . $dia . 'D' =>  $totalcon];
-                        $firmepro += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
-                        $contotal = $contotal + $totalcon;
-                    }
+                if($contres<=$residuo)
+                {
+                    $re = 1+$totalcon ;
+                            $firmepro += ['CH' . $dia . 'D' =>  $re];
+                            $firmepro += ['H' . $dia . 'D' =>   $re* $pqa[$pos]];
+                            $contres+=1;
+                }else
+                {
+                    $re = $totalcon ;
+                    $firmepro += ['CH' . $dia . 'D' =>  $re];
+                    $firmepro += ['H' . $dia . 'D' =>   $re* $pqa[$pos]];
 
-                    if ($contotal <= ceil($total / $pqa[$pos])) {
-
-                        if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
-                            $re = $total - $contotal * $pqa[$pos];
-                            $firmepro += ['CH' . $dia . 'N' => ceil($re / $pqa[$pos])];
-                            $firmepro += ['H' . $dia . 'N' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
-                            $contotal = $contotal + ceil($re / $pqa[$pos]);
-                        } else {
-
-                            $firmepro += ['CH' . $dia . 'N' =>  $totalcon];
-                            $firmepro += ['H' . $dia . 'N' =>  $totalcon * $pqa[$pos]];
-                            $contotal = $contotal + $totalcon;
-                        }
-                    }
                 }
+                if($contres<=$residuo)
+                {
+                    $re = 1+$totalcon ;
+                            $firmepro += ['CH' . $dia . 'N' =>  $re];
+                            $firmepro += ['H' . $dia . 'N' =>   $re* $pqa[$pos]];
+                            $contres+=1;
+                }else
+                {
+                    $re = $totalcon;
+                    $firmepro += ['CH' . $dia . 'N' =>  $re];
+                    $firmepro += ['H' . $dia . 'N' =>   $re* $pqa[$pos]];
+                }
+
+
+
+                // if ($contotal <  ceil($total / $pqa[$pos])) {
+                //     $re = $contotal * $pqa[$pos] - $total;
+                //     if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
+                //         $re = $total - $contotal * $pqa[$pos];
+                //         $firmepro += ['CH' . $dia . 'D' => ceil($re / $pqa[$pos])];
+                //         $firmepro += ['H' . $dia . 'D' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
+                //         $contotal = $contotal + ceil($re / $pqa[$pos]);
+                //     } else {
+                //         $firmepro += ['CH' . $dia . 'D' =>  $totalcon];
+                //         $firmepro += ['H' . $dia . 'D' =>  $totalcon * $pqa[$pos]];
+                //         $contotal = $contotal + $totalcon;
+                //     }
+
+                //     if ($contotal <= ceil($total / $pqa[$pos])) {
+
+                //         if ($total < ($contotal + $totalcon) * $pqa[$pos]) {
+                //             $re = $total - $contotal * $pqa[$pos];
+                //             $firmepro += ['CH' . $dia . 'N' => ceil($re / $pqa[$pos])];
+                //             $firmepro += ['H' . $dia . 'N' =>  ceil($re / $pqa[$pos]) * $pqa[$pos]];
+                //             $contotal = $contotal + ceil($re / $pqa[$pos]);
+                //         } else {
+
+                //             $firmepro += ['CH' . $dia . 'N' =>  $totalcon];
+                //             $firmepro += ['H' . $dia . 'N' =>  $totalcon * $pqa[$pos]];
+                //             $contotal = $contotal + $totalcon;
+                //         }
+                //     }
+                // }
                 $fetemp->addDay();
                 $contd++;
             }

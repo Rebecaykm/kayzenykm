@@ -654,6 +654,7 @@ class PlaneacionHController extends Controller
             $firme = [];
             $pos = array_search($prod['IPROD'], $prodcqa);
             $totalcon =  ceil(($total / $pqa[$pos]) / 10);
+
             $contotal = 0;
             //             if($prod['IPROD']=='VA4128B04                          ')
             //             {

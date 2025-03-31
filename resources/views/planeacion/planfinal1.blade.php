@@ -132,7 +132,7 @@
                                                 {{ $contp }}
                                             </td>
                                             @php
-                                                $firmfor = $info['FIRMFOR'];
+                                                $firmfor = $info['FIRMFOR']??[];
 
                                             @endphp
                                             <td class="px-2 py-1 text-xs  ">
