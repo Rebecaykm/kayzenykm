@@ -108,15 +108,17 @@
                                 </div>
                             </th>
                             <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
-
-                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                <div class="flex flex-row gap-x-4 justify-center items-center p-0 rounded-lg">
+                                   Forecast
+                                </div>
+                                <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-green-400">
                                     <label
-                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                        1 forcast
+                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input border  ">
+                                       1 W
                                     </label>
                                     <label
                                         class="block w-20 gap-x-2 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
-                                        2 forcast
+                                        2 W
                                     </label>
                                 </div>
                             </th>
@@ -132,7 +134,6 @@
                         class="text-center bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                         @foreach ($res as $info1)
                             @php
-
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
@@ -771,11 +772,8 @@
                                                         disabled />
                                                 </label>
                                             </div>
-
                                         </td>
-
                                         @php
-
                                             $hoy = $fecha;
                                             $contdias = 0;
                                             $namenA = strtr($padre, ' ', '_');
@@ -786,7 +784,6 @@
                                             $valeclN = 0;
                                             $totalKFP = 0;
                                             $workcen = $info['WRC'];
-
                                         @endphp
                                         @while ($contdias < $dias - 1)
                                             @if ($contdias == 6)
@@ -794,7 +791,6 @@
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
                                                             @php
-
                                                                 $valFDsec =
                                                                     $info[
                                                                         'Forsec' .
@@ -804,7 +800,6 @@
                                                                             ) .
                                                                             'D'
                                                                     ] ?? 0;
-
                                                                 $valsec =
                                                                     $info[
                                                                         'eclsec' .
@@ -814,31 +809,22 @@
                                                                             ) .
                                                                             'D'
                                                                     ] ?? 0;
-
                                                                 $workcen = $info['WRC'];
-
                                                             @endphp
                                                             <input value='{{ $valFDsec }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
-
-
                                                     </div>
-
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
-
                                                             <input value='{{ $valsec }}'
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />
                                                         </label>
-
-
                                                     </div>
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label class="block text-sm ">
-
                                                             <input value=''
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                                 disabled />

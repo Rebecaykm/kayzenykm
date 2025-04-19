@@ -13,6 +13,7 @@ use App\Models\ECL;
 use App\Models\YMCOM;
 use App\Models\FSO;
 use App\Models\YK006;
+use App\Models\YK008;
 use Carbon\Carbon;
 use App\Exports\PlanExport;
 use App\Exports\PlanFinalExport;
@@ -80,7 +81,7 @@ class PlaneacionHT1t2Controller extends Controller
                 ['IMPLC', '!=', 'OBSOLETE'],
             ])
             ->where('ICLAS', 'F1')
-            ->where('IDSCE', 'like', $tipo) // Se agregan los '%' para búsquedas parciales
+            ->where('IDSCE', 'like', $tipo)
             ->distinct('IPROD')
             ->get()
             ->toArray();
@@ -452,6 +453,7 @@ class PlaneacionHT1t2Controller extends Controller
                 ])
                 ->whereraw("(MCFPRO='" . $prod['IPROD'] . "') AND  (MCCCLS='M2' or  MCCCLS='M3' or  MCCCLS='M4')")
                 ->get()->toarray();
+                dd($Sub );
 
             if (count($Sub) == 0) {
                 $datossub = [];
@@ -523,22 +525,30 @@ class PlaneacionHT1t2Controller extends Controller
         $totalF = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
         $totalF2 = date('Ymd', strtotime($hoy . '+' . 15 . ' day'));
         $finaArra = array_column($prods, 'IPROD');
-        $finales = implode("' OR  MPROD='", $finaArra);
-        $finalesecl = implode("' OR  LPROD='", $finaArra);
-        $finaleswrk = implode("' OR  RPROD='", $finaArra);
+
+
+
         $Qa = implode("' OR  IPROD='", $finaArra);
-        $finaleskfp = implode("' OR  FPROD='", $finaArra);
+
         $valfinales = KMR::query() //forecast
             ->select('MPROD', 'MRDTE', 'MQTY', 'MRCNO')
             ->where('MRDTE', '>=', $hoy)
             ->where('MRDTE', '<', $totalF2)
             ->where('MTYPE', '=', 'F')
-            ->whereraw("(MPROD='" . $finales . "')")
+            ->wherein("MPROD"    ,  $finaArra )
             ->get();
+
+        $valkmrback=YK008::query()
+        ->select('K8ID','K8PROD','K8RDTE','K8RCNO','K8QTY')
+        ->where('K8RDTE', '>=', $hoy)
+            ->where('K8RDTE', '<', $totalF2)
+            ->wherein("K8PROD"    ,  $finaArra )
+            ->get();
+
 
         $MBMS = ECL::query()
             ->selectRaw('LSDTE, SUM(LQORD) as Total,CLCNO,LPROD ')
-            ->whereraw("(LPROD='" . $finalesecl . "')")
+            ->wherein("LPROD" ,  $finaArra )
             ->where([
                 ['LSDTE', '>=', $hoy],
                 ['LSDTE', '<', $totalF2],
@@ -560,13 +570,13 @@ class PlaneacionHT1t2Controller extends Controller
 
         $WCT = FRT::query()
             ->select('RWRKC', 'RPROD')
-            ->whereraw("(RPROD='" . $finaleswrk . "')")
+            ->wherein("RPROD" ,  $finaArra )
             ->get()->toarray();
         $prowk = array_column($WCT, 'RPROD');
         $wk = array_column($WCT, 'RWRKC');
         $valPDp = KFP::query() //plan
             ->select('FRDTE', 'FQTY', 'FPCNO', 'FTYPE', 'FPROD')
-            ->whereraw("(FPROD='" . $finaleskfp . "')")
+            ->wherein("FPROD",  $finaArra )
             ->where([
                 ['FRDTE', '>=', $hoy],
                 ['FRDTE', '<', $totalF2],
@@ -592,15 +602,14 @@ class PlaneacionHT1t2Controller extends Controller
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
             $total2=0;
+            $total1=0;
             if($ty=='TIER1%')
             {
 
                 if (count($valfinales) > 0) {
-                    $total1 = 0;
 
                     $foract=$valfinales->where('MPROD','==',$prod['IPROD'])->first();
                     $fornext=$valfinales->where('MPROD','==',$prod['IPROD'])->skip(1)->first();
-
                    if ($foract) {
                         $forcastp += ['For' . $foract->MRDTE . substr($foract->MRCNO, 4, 1) =>$foract->MQTY+0];
                     }
@@ -609,7 +618,20 @@ class PlaneacionHT1t2Controller extends Controller
                         $forcastp += ['Forsec' . $fornext->MRDTE . substr($fornext->MRCNO, 4, 1) =>$fornext->MQTY+0];
                     }
                     $total2=$fornext->MQTY??0;
+                }
+                if (count( $valkmrback) > 0) {
 
+                    $foract= $valkmrback->where('K8PROD','==',$prod['IPROD'])->first();
+                    $fornext= $valkmrback->where('K8PROD','==',$prod['IPROD'])->skip(1)->first();
+
+                   if ($foract) {
+                        $forcastp += ['Forbk' . $foract->K8RDTE . substr($foract->K8RCNO, 4, 1) =>$foract->K8QTY+0];
+                    }
+                    if ($foract->K8QTY+0> $total1)
+                    {
+
+                        $total1=$foract->K8QTY+0;
+                    }
                 }
 
 
@@ -641,8 +663,10 @@ class PlaneacionHT1t2Controller extends Controller
 
             }
 
-            $padre += ['total1'  =>(($total1/5)*3)+0];
-            $padre += ['total2' =>(($total2/5)*2)+0];
+
+
+            $padre += ['total1'  =>((($total1/5)*3)+0)??0];
+            $padre += ['total2' =>((($total2/5)*2)+0)??0];
 
 
             $total=(($total1/5)*3)+(($total2/5)*2);
