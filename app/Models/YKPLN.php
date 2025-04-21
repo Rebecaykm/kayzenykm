@@ -9,6 +9,6 @@ class YKPLN extends Model
 {
     use HasFactory;
 
-    protected $connection = 'odbc-connection-lx834fu01';
-    protected $table = 'LX834FU01.YKPLN';
+    protected $connection = 'odbc-connection-lx834fu02';
+    protected $table = 'LX834FU02.YKPLN';
 }

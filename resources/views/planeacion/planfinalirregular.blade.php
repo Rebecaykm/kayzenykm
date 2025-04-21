@@ -65,16 +65,33 @@
                                 $totalD = 0;
                                 $fin = date('Ymd', strtotime($hoy . '+' . $dias . ' day'));
                                 $diasjava = '';
-                                $diaspor = 1;
+                                $diaspor = 0;
                             @endphp
                             @while ($hoy != $fin)
+
+                                @if ($diaspor == 7)
+                                    <th aling="center" class="sticky headerpx-4 py-3 text-xs text-center ">
+                                        <div class='W-full'>
+                                            <label class="block text-sm ">
+
+                                                <input id='TotalP' name='TotalP'
+                                                    onchange="myFunction2(this.id)" value=''
+                                                    class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+                                            </label>
+                                        </div>
+                                        <div class='w-full'>
+                                            Total
+                                        </div>
+                                    </th>
+                                @endif
+
                                 @if (date('w', strtotime($hoy)) == 0)
                                 @else
                                     @php
                                         $dianombre = [
                                             0 => 'Lunes',
                                             1 => 'Martes',
-                                            2 => 'Miércoles',
+                                            2 => 'Miercoles',
                                             3 => 'Jueves',
                                             4 => 'Viernes',
                                         ];
@@ -90,6 +107,7 @@
                                                         onchange="myFunction2(this.id)" value='30'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
+                                            </div>
                                         @endif
 
                                         <div class='W-full'>
@@ -116,6 +134,8 @@
                                     $totalD = $totalD + 1;
                                     $diaspor += 1;
                                 @endphp
+
+
                             @endwhile
                             <th class=" header px-4 py-3 sticky ">
                                 Parte <br> Total
@@ -225,9 +245,41 @@
                                             $valeclD = 0;
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
+                                            $totalid = $namenA . 'T';
                                         @endphp
                                         @while ($contdias < $dias)
-                                            @if ($contdias == 7)
+                                            @if ($contdias == 6)
+                                                <td class="px-2 py-1 text-xs  bg-emerald-100">
+                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                        =
+                                                        <label class="block text-sm ">
+                                                            <input name='{{ $totalid }}' id='{{ $totalid }}'
+                                                                value="{{ $totalforM }}"
+                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                                disabled />
+                                                        </label>
+                                                    </div>
+                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                        <label class="block text-sm ">
+                                                            <input id='totalFirMMVO' name='totalFirMMVO'
+                                                                value="{{ $totalfirM }}"
+                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                                disabled />
+                                                        </label>
+                                                    </div>
+                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                        =
+                                                        <label class="block text-sm ">
+                                                            @php
+                                                                $otalphp = 'totalFirykm' . $namenA;
+                                                            @endphp
+                                                            <input id='{{ $otalphp }}' name='{{ $otalphp }}'
+                                                                value="{{ $totalfirykm }}"
+                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                                disabled />
+                                                        </label>
+                                                    </div>
+                                                </td>
                                             @else
                                                 <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -294,6 +346,7 @@
                                                                 $valRN = 0;
                                                                 $inD = $namenA . '/' . $hoy . '/D/' . $info['WRC'];
                                                                 $inN = $namenA . '/' . $hoy . '/N/' . $info['WRC'];
+
                                                                 if ($contdias == 6) {
                                                                     $valFiD = 0;
                                                                     $valFiN = 0;
@@ -332,21 +385,21 @@
                                                     </div>
 
                                                     @if ($contdias <= 5)
-
                                                         @php
-                                                        $dianombre = [
-                                                            0 => 'Lunes',
-                                                            1 => 'Martes',
-                                                            2 => 'Miércoles',
-                                                            3 => 'Jueves',
-                                                            4 => 'Viernes',
-                                                        ];
+                                                            $dianombre = [
+                                                                0 => 'Lunes',
+                                                                1 => 'Martes',
+                                                                2 => 'Miercoles',
+                                                                3 => 'Jueves',
+                                                                4 => 'Viernes',
+                                                            ];
 
-                                                        $clase = $dianombre[$contdias] ?? 'Día no válido';
-                                                    @endphp
+                                                            $clase1 = $dianombre[$contdias] ?? 'Día no válido';
+                                                        @endphp
+
 
                                                         <div
-                                                            class=" {{ $clase }}  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                                            class=" {{ $clase1 }}  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
                                                             <label class="block text-sm ">
 
@@ -366,10 +419,12 @@
                                                         </div>
                                                     @else
                                                         <div
-                                                            class=" {{ $clase }}  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
+                                                            class="   flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg ">
 
                                                             <label
                                                                 class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
+
+
                                                             {{ $valFiD }}
                                                             </label>
                                                             <label
@@ -554,18 +609,47 @@
         </script>
         <script>
             function myFunction2(dianom) {
-                console.log(dianom);
-                console.log(document.querySelectorAll('.'+dianom).length);
-               var lun= document.getElementById(dianom).value;
-                document.querySelectorAll('.'+dianom).forEach(fila => {
-                    const inputs = fila.querySelectorAll('input');
-                    inputs.forEach(input => {
-                        $nuevov=(lun*10)/100;
-                        input.value=$nuevov;
-                        console.log(input.id);
+                // console.log(dianom);
+                // console.log(document.querySelectorAll('.' + dianom).length);
+                var act = document.getElementById(dianom);
+                var lun = document.getElementById('Lunes').value;
+                console.log(lun);
+                var Martes = document.getElementById('Martes').value;
+                console.log(Martes);
+                var Miercoles = document.getElementById('Miercoles').value;
+                console.log(Miercoles);
+                var Jueves = document.getElementById('Jueves').value;
+                console.log(Jueves);
+                var Viernes = document.getElementById('Viernes').value;
+                console.log(Viernes);
+            
+                var totalporcentaje = Number(lun) + Number(Martes) + Number(Miercoles) + Number(Jueves) + Number(Viernes);
+                 document.getElementById('TotalP').value=totalporcentaje ;
+                // console.log('totalporcentaje')
+                if (totalporcentaje > 100) {
+                    // console.log('mayor a 100 ');
+                    act.style.borderColor = "red";
+                    document.getElementById('TotalP').style.borderColor ='red'
+                } else {
+                    act.style.borderColor = "blue";
+                      document.getElementById('TotalP').style.borderColor ='blue';
+                    var valinp = 0;
+                    var totalp = '';
+                    document.querySelectorAll('.' + dianom).forEach(fila => {
+                        const inputs = fila.querySelectorAll('input');
+                        inputs.forEach(input => {
+                            const partes = input.id.split('/');
+                            const primerValor = partes[0];
+                            totalp = document.getElementById(primerValor + "T").value;
+                            // var val = primerValor + " / " + totalp;
+                            valinp = input.value;
+                            $nuevov = (act.value * totalp) / 100;
+                            input.value = $nuevov;
+
+                        });
                     });
-                });
-                console.log('hola');
+                }
+
             }
         </script>
 
