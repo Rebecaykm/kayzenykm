@@ -197,7 +197,7 @@ class ChartController extends Controller
             $line = $productionPlan->line_name;
             $planDate = $productionPlan->plan_date;
             $shift = $productionPlan->shift_name;
-            $partNumber = $productionPlan->part_number;
+            $partNumber = trim($productionPlan->part_number);
             $planQuantity = $productionPlan->plan_quantity;
             $productionQuantity = $productionPlan->production_quantity;
 

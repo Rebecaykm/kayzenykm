@@ -292,6 +292,10 @@
 
             if (statusProduction != 'INACTIVO') {
                 if (printer) {
+                    // TODO
+                }
+
+                if(printer) {
                     window.location.href = '{{ route("printipl") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId;
                 } else {
                     var ventanaImpresion = window.open('{{ route("examples") }}?productionPlanId=' + productionPlanId + '&partNumberId=' + partNumberId, '_blank');

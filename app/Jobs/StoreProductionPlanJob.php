@@ -41,10 +41,32 @@ class StoreProductionPlanJob implements ShouldQueue
     public function handle(): void
     {
         $partNumber = PartNumber::query()->where('number', $this->partNumber)->first();
+
+        if (!$partNumber) {
+            Log::error('PartNumber no encontrado', ['number' => $this->partNumber]);
+            return;
+        }
+
         $shift = Shift::query()->where('abbreviation', $this->shift)->first();
+
+        if (!$shift) {
+            Log::error('Shift no encontrado', ['abbreviation' => $this->shift]);
+            return;
+        }
+
         $status = Status::where('name', 'PENDIENTE')->first();
 
-        $productionPlan = ProductionPlan::query()->where([['part_number_id', $partNumber->id], ['plan_quantity', $this->quantity], ['date', $this->date], ['shift_id', $shift->id]])->first();
+        if (!$status) {
+            Log::error('Status PENDIENTE no encontrado');
+            return;
+        }
+
+        $productionPlan = ProductionPlan::query()
+            ->where('part_number_id', $partNumber->id)
+            ->where('plan_quantity', $this->quantity)
+            ->where('date', $this->date)
+            ->where('shift_id', $shift->id)
+            ->first();
 
         if ($productionPlan === null) {
             ProductionPlan::create([
