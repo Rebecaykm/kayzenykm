@@ -74,8 +74,8 @@
                                         <div class='W-full'>
                                             <label class="block text-sm ">
 
-                                                <input id='TotalP' name='TotalP'
-                                                    onchange="myFunction2(this.id)" value=''
+                                                <input id='TotalP' name='TotalP' onchange="myFunction2(this.id)"
+                                                    value=''
                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                             </label>
                                         </div>
@@ -104,7 +104,7 @@
                                                 <label class="block text-sm ">
 
                                                     <input id='{{ $dianom }}' name='{{ $dianom }}'
-                                                        onchange="myFunction2(this.id)" value='30'
+                                                        onchange="myFunction2(this.id)" value='0'
                                                         class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                 </label>
                                             </div>
@@ -151,7 +151,8 @@
                                 $contp += 1;
                                 $info = $info1['padre'];
                                 $padre = $info['parte'];
-
+                                $namenA = strtr($padre, ' ', '_');
+                                $CPW = $namenA . 'Week';
                             @endphp
                             @switch($info['WRC'])
                                 @case(111020)
@@ -173,7 +174,7 @@
                                 @break
 
                                 @default
-                                    <tr class="text-gray-700 dark:text-gray-400  text-xs ">
+                                    <tr class=" {{ $CPW }} text-gray-700 dark:text-gray-400  text-xs ">
                                         @if (strpos($padre, 'SOR') === false)
                                             <td class="px-2 py-1 text-s  ">
                                                 {{ $contp }}
@@ -201,7 +202,6 @@
                                             <td class="px-2 py-1 text-s bg-yellow-300">
                                                 {{ $contp }}
                                             </td>
-
                                             <td class="px-2 py-1 text-xs bg-yellow-300">
                                                 <div class="w-20 text-xs dark:border-gray-600 dark:bg-gray-700">
                                                     {{ $padre }}<br>
@@ -246,6 +246,9 @@
                                             $valeclN = 0;
                                             $workcen = $info['WRC'];
                                             $totalid = $namenA . 'T';
+                                            $sumtotal = $namenA . 'ST';
+                                            $sumtotalE = $namenA . 'STE';
+                                            $CPW = $namenA . 'Week';
                                         @endphp
                                         @while ($contdias < $dias)
                                             @if ($contdias == 6)
@@ -273,15 +276,27 @@
                                                             @php
                                                                 $otalphp = 'totalFirykm' . $namenA;
                                                             @endphp
-                                                            <input id='{{ $otalphp }}' name='{{ $otalphp }}'
+                                                            <input id='{{ $sumtotal }}' name='{{ $sumtotal }}'
                                                                 value="{{ $totalfirykm }}"
                                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                                disabled />
+                                                                disabled/>
+                                                        </label>
+                                                    </div>
+                                                    <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                        =
+                                                        <label class="block text-sm ">
+                                                            @php
+                                                                $otalphp = 'totalFirykm' . $namenA;
+                                                            @endphp
+                                                            <input id='{{ $sumtotalE }}' name='{{ $sumtotalE }}'
+                                                                value="{{ $totalfirykm }}"
+                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                                />
                                                         </label>
                                                     </div>
                                                 </td>
                                             @else
-                                                <td class="px-2 py-1 text-xs text-center bg-emerald-50 ">
+                                                <td class="  px-2 py-1 text-xs text-center bg-emerald-50 ">
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
                                                         <label
                                                             class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input ">
@@ -395,20 +410,21 @@
                                                             ];
 
                                                             $clase1 = $dianombre[$contdias] ?? 'Día no válido';
+
                                                         @endphp
 
 
                                                         <div
-                                                            class=" {{ $clase1 }}  flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
+                                                            class=" {{ $clase1 }}   flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg border-4 border-blue-400">
 
-                                                            <label class="block text-sm ">
+                                                            <label class=" block text-sm ">
 
                                                                 <input id='{{ $inD }}' name='{{ $inD }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
                                                                     value='{{ $valFiD }}'
                                                                     class="block w-20 text-xs dark:border-green-600 dark:bg-green-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
                                                             </label>
-                                                            <label class="block text-sm ">
+                                                            <label class="  block text-sm ">
 
                                                                 <input id='{{ $inN }}' name='{{ $inN }}'
                                                                     onchange="myFunction('<?php echo $diasjava; ?>', '<?php echo $namenA; ?>','<?php echo $workcen; ?>',this.id)"
@@ -450,7 +466,7 @@
                                                 <label class="block text-sm ">
                                                     <input name='totalForMMVO' id='totalForMMVO' value="{{ $totalforM }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                        disabled />
+                                                         disabled/>
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -469,7 +485,19 @@
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{ $totalfirykm }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                        disabled />
+                                                        disabled/>
+                                                </label>
+                                            </div>
+                                            <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
+                                                =
+                                                <label class="block text-sm ">
+                                                    @php
+                                                        $otalphp = 'totalFirykm' . $namenA;
+                                                    @endphp
+                                                    <input id='{{ $otalphp }}' name='{{ $otalphp }}'
+                                                        value="{{ $totalfirykm}}"
+                                                        class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
+                                                       disabled />
                                                 </label>
                                             </div>
                                         </td>
@@ -580,30 +608,27 @@
         </div>
         <script>
             function myFunction(dias, parte, wc, idtest) {
-
+                console.log(parte+'ST');
+                console.log(dias);
                 let mensaje = dias;
                 let arr = mensaje.split('/');
-                console.log(parte + '/' + arr[0] + '/D/' + wc, arr)
-                val1 = parseInt(document.getElementById(parte + '/' + arr[4] + '/D/' + wc).value);
-                val2 = parseInt(document.getElementById(parte + '/' + arr[4] + '/N/' + wc).value);
-                val3 = parseInt(document.getElementById(parte + '/' + arr[5] + '/D/' + wc).value);
-                val4 = parseInt(document.getElementById(parte + '/' + arr[5] + '/N/' + wc).value);
-                val5 = parseInt(document.getElementById(parte + '/' + arr[6] + '/D/' + wc).value);
-                val6 = parseInt(document.getElementById(parte + '/' + arr[6] + '/N/' + wc).value);
-                val7 = parseInt(document.getElementById(parte + '/' + arr[7] + '/D/' + wc).value);
-                val8 = parseInt(document.getElementById(parte + '/' + arr[7] + '/N/' + wc).value);
-                val9 = parseInt(document.getElementById(parte + '/' + arr[3] + '/D/' + wc).value);
-                val10 = parseInt(document.getElementById(parte + '/' + arr[3] + '/N/' + wc).value);
-                val11 = parseInt(document.getElementById(parte + '/' + arr[2] + '/D/' + wc).value);
-                val12 = parseInt(document.getElementById(parte + '/' + arr[2] + '/N/' + wc).value);
-
-
+                console.log(arr );
+                // console.log(parte + '/' + arr[0] + '/D/' + wc, arr)
+                val1 = parseInt(document.getElementById(parte + '/' + arr[20] + '/D/' + wc).value);
+                val2 = parseInt(document.getElementById(parte + '/' + arr[20] + '/N/' + wc).value);
+                val3 = parseInt(document.getElementById(parte + '/' + arr[19] + '/D/' + wc).value);
+                val4 = parseInt(document.getElementById(parte + '/' + arr[19] + '/N/' + wc).value);
+                val5 = parseInt(document.getElementById(parte + '/' + arr[18] + '/D/' + wc).value);
+                val6 = parseInt(document.getElementById(parte + '/' + arr[18] + '/N/' + wc).value);
+                val7 = parseInt(document.getElementById(parte + '/' + arr[17] + '/D/' + wc).value);
+                val8 = parseInt(document.getElementById(parte + '/' + arr[17] + '/N/' + wc).value);
+                val9 = parseInt(document.getElementById(parte + '/' + arr[16] + '/D/' + wc).value);
+                val10 = parseInt(document.getElementById(parte + '/' + arr[16] + '/N/' + wc).value);
+                val11 = parseInt(document.getElementById(parte + '/' + arr[15] + '/D/' + wc).value);
+                val12 = parseInt(document.getElementById(parte + '/' + arr[15] + '/N/' + wc).value);
                 valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12;
-                document.getElementById('totalFirykm' + parte).value = valtotal;
-                console.log(valtotal, document.getElementById('totalFirykm' + parte).value);
-
-
-
+                console.log(val1 +'_'+ val2 +'_'+ val3 +'_'+ val4 +'_'+ val5 +'_'+ val6 +'_'+ val7 +'_'+ val8 +'_'+ val9 +'_'+ val10 +'_'+ val11 +'_'+ val12);
+                document.getElementById(parte+'ST').value = valtotal;
 
             }
         </script>
@@ -613,38 +638,58 @@
                 // console.log(document.querySelectorAll('.' + dianom).length);
                 var act = document.getElementById(dianom);
                 var lun = document.getElementById('Lunes').value;
-                console.log(lun);
                 var Martes = document.getElementById('Martes').value;
-                console.log(Martes);
                 var Miercoles = document.getElementById('Miercoles').value;
-                console.log(Miercoles);
                 var Jueves = document.getElementById('Jueves').value;
-                console.log(Jueves);
                 var Viernes = document.getElementById('Viernes').value;
-                console.log(Viernes);
-            
+
+
                 var totalporcentaje = Number(lun) + Number(Martes) + Number(Miercoles) + Number(Jueves) + Number(Viernes);
-                 document.getElementById('TotalP').value=totalporcentaje ;
+                document.getElementById('TotalP').value = totalporcentaje;
                 // console.log('totalporcentaje')
                 if (totalporcentaje > 100) {
                     // console.log('mayor a 100 ');
                     act.style.borderColor = "red";
-                    document.getElementById('TotalP').style.borderColor ='red'
+                    document.getElementById('TotalP').style.borderColor = 'red'
                 } else {
                     act.style.borderColor = "blue";
-                      document.getElementById('TotalP').style.borderColor ='blue';
+                    document.getElementById('TotalP').style.borderColor = 'blue';
                     var valinp = 0;
                     var totalp = '';
+                    var totalf = '';
                     document.querySelectorAll('.' + dianom).forEach(fila => {
                         const inputs = fila.querySelectorAll('input');
+
                         inputs.forEach(input => {
+                            console.log(input.id);
                             const partes = input.id.split('/');
                             const primerValor = partes[0];
-                            totalp = document.getElementById(primerValor + "T").value;
-                            // var val = primerValor + " / " + totalp;
+                            totalp = document.getElementById(primerValor + "STE").value;
                             valinp = input.value;
-                            $nuevov = (act.value * totalp) / 100;
-                            input.value = $nuevov;
+                            nuevov =Math.round(((act.value * totalp) / 100) / 2);
+                            input.value = nuevov;
+                            document.querySelectorAll('.' + primerValor + 'Week').forEach(fila => {
+                                const inputsweek = fila.querySelectorAll('input');
+                                // console.log(primerValor + 'Week');
+                                // inputsweek.forEach(input => {
+                                    // console.log(inputsweek[17].id);
+                                    document.getElementById(primerValor + "ST").value =
+                                    Number( inputsweek[3].value )
+                                +Number( inputsweek[4].value )
+                                +Number(inputsweek[5].value )
+                                    +Number( inputsweek[6].value )
+                                    +Number( inputsweek[7].value )
+                                    +Number(inputsweek[8].value )
+                                    +Number( inputsweek[9].value)
+                                    +Number(inputsweek[10].value)
+                                    +Number(inputsweek[11].value)
+                                    +Number(inputsweek[12].value);
+                            });
+
+
+
+                            // var val = primerValor + " / " + totalp;
+
 
                         });
                     });
