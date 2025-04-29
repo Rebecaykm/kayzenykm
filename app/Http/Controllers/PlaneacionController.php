@@ -325,12 +325,12 @@ class PlaneacionController extends Controller
             $CONT = $CONT + 1;
         }
 
-    // $indata = YK006::query()->insert($datas);
+    $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
 
-        // $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        // $query = "CALL LX834OU.YMP006C";
-        // $result = odbc_exec($conn, $query);
+        $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
+        $query = "CALL LX834OU02.YMP006C";
+        $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
 
