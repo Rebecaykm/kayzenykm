@@ -107,6 +107,8 @@ class PlaneacionController extends Controller
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
             return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            // return view('planeacion.planfinalirregular', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+
         }
     }
 
@@ -323,11 +325,11 @@ class PlaneacionController extends Controller
             $CONT = $CONT + 1;
         }
 
-        $indata = YK006::query()->insert($datas);
+    $indata = YK006::query()->insert($datas);
         $indatasql = LOGSUP::query()->insert($datasql);
 
         $conn = odbc_connect("Driver={Client Access ODBC Driver (32-bit)};System=192.168.200.7;", "LXSECOFR;", "LXSECOFR;");
-        $query = "CALL LX834OU.YMP006C";
+        $query = "CALL LX834OU02.YMP006C";
         $result = odbc_exec($conn, $query);
         $array = explode(",", $TP);
 
@@ -349,7 +351,7 @@ class PlaneacionController extends Controller
         $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
         $partsrev = array_column($plan1, 'IPROD');
         $cadepar = $request->nextp . "and IPROD!=" . implode("' OR  IPROD='", $partsrev);
-        // dd($datos);
+
         return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => $request->paginate, 'tpag' => 0]);
     }
 
