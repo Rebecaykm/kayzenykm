@@ -26,6 +26,7 @@ class WorkcenterMigration extends Command
      */
     public function handle()
     {
+        info("Process WorkcenterMigrationJob is running at ". now());
         WorkcenterMigrationJob::dispatch();
     }
 }

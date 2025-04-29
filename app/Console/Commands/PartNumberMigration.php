@@ -26,6 +26,7 @@ class PartNumberMigration extends Command
      */
     public function handle()
     {
+        info("Process PartNumberMigrationJob is running at ". now());
         PartNumberMigrationJob::dispatch();
     }
 }

@@ -35,6 +35,7 @@
         </div>
 
         <div class="flex justify-end px-4 mb-2 gap-4">
+            @can('add-production')
             <div>
                 <a href="{{ route('production-plan.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                     <span class="mr-4">{{ __('Agregar a Plan') }}</span>
@@ -43,6 +44,7 @@
                     </svg>
                 </a>
             </div>
+            @endcan
             <!-- <div>
                 <a href="{{ route('unemployment-record.create') }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray">
                     <span class="mr-4">{{ __('Registrar Paro') }}</span>
@@ -169,7 +171,7 @@
                                     </a>
                                     @endif
 
-                                    @can('prodcution-record.index')
+                                    @can('cancel')
                                     @if ($productionPlan->production_quantity == 0 && ($productionPlan->status->name == 'PENDIENTE' || $productionPlan->status->name == 'PRODUCCIÓN DETENIDA'))
                                     <form action="{{ route('prodcution-record.cancel-production') }}" method="POST" class=" items-center justify-center">
                                         @csrf

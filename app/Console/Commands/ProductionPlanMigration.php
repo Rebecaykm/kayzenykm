@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProductionPlanMigrationJob;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ProductionPlanMigration extends Command
 {
@@ -26,6 +28,7 @@ class ProductionPlanMigration extends Command
      */
     public function handle()
     {
+        info("Process ProductionPlanMigration is running at ". now());
         ProductionPlanMigrationJob::dispatch();
     }
 }
