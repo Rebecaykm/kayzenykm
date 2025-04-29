@@ -91,6 +91,7 @@ class PlaneacionController extends Controller
 
             return view('planeacion.plancomponente', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
+            dd('skdm');
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
