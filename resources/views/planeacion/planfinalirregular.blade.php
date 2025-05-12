@@ -185,6 +185,8 @@
                                             @endphp
                                             <td class="px-2 py-1 text-xs  ">
                                                 <div class="w-30 text-xs dark:border-gray-600 dark:bg-gray-700">
+
+
                                                     {{ $padre }}<br>
                                                     SNP {{ $info['Qty'] }}<br>
                                                     WRKcenter {{ $info['WRC'] }}<br>
@@ -279,7 +281,7 @@
                                                             <input id='{{ $sumtotal }}' name='{{ $sumtotal }}'
                                                                 value="{{ $totalfirykm }}"
                                                                 class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                                disabled/>
+                                                                disabled />
                                                         </label>
                                                     </div>
                                                     <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -290,8 +292,7 @@
                                                             @endphp
                                                             <input id='{{ $sumtotalE }}' name='{{ $sumtotalE }}'
                                                                 value="{{ $totalfirykm }}"
-                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                                />
+                                                                class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input" />
                                                         </label>
                                                     </div>
                                                 </td>
@@ -324,22 +325,17 @@
                                                                 } else {
                                                                     $firme = $info['F'];
 
-                                                                    if (
-                                                                        array_key_exists('F' . $hoy . 'D', $firme) ==
-                                                                        false
-                                                                    ) {
-                                                                        $valFiD = 0;
-                                                                    } else {
-                                                                        $valFiD = $firme['F' . $hoy . 'D'];
-                                                                    }
-                                                                    if (
-                                                                        array_key_exists('F' . $hoy . 'N', $firme) ==
-                                                                        false
-                                                                    ) {
-                                                                        $valFiN = 0;
-                                                                    } else {
-                                                                        $valFiN = $firme['F' . $hoy . 'N'];
-                                                                    }
+                                                                    $valFiD = array_key_exists('F' . $hoy . 'D', $firme)
+                                                                        ? $firme['F' . $hoy . 'D']
+                                                                        : (array_key_exists('P' . $hoy . 'D', $firme)
+                                                                            ? $firme['P' . $hoy . 'D']
+                                                                            : 0);
+
+                                                                    $valFiN = array_key_exists('F' . $hoy . 'N', $firme)
+                                                                        ? $firme['F' . $hoy . 'N']
+                                                                        : (array_key_exists('P' . $hoy . 'N', $firme)
+                                                                            ? $firme['P' . $hoy . 'N']
+                                                                            : 0);
                                                                 }
 
                                                                 if (
@@ -370,7 +366,6 @@
                                                                 $totalfirM += $valeclD + $valeclN;
                                                                 $totalfirykm += $valFiN + $valFiD;
                                                                 $workcen = $info['WRC'];
-
                                                             @endphp
 
                                                             {{ $valFD }}
@@ -466,7 +461,7 @@
                                                 <label class="block text-sm ">
                                                     <input name='totalForMMVO' id='totalForMMVO' value="{{ $totalforM }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                         disabled/>
+                                                        disabled />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -485,7 +480,7 @@
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
                                                         value="{{ $totalfirykm }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                        disabled/>
+                                                        disabled />
                                                 </label>
                                             </div>
                                             <div class="flex flex-row gap-x-4 justify-end items-center p-0 rounded-lg">
@@ -495,9 +490,9 @@
                                                         $otalphp = 'totalFirykm' . $namenA;
                                                     @endphp
                                                     <input id='{{ $otalphp }}' name='{{ $otalphp }}'
-                                                        value="{{ $totalfirykm}}"
+                                                        value="{{ $totalfirykm }}"
                                                         class="block w-20 text-xs dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray bg-green-400 form-input"
-                                                       disabled />
+                                                        disabled />
                                                 </label>
                                             </div>
                                         </td>
@@ -608,11 +603,11 @@
         </div>
         <script>
             function myFunction(dias, parte, wc, idtest) {
-                console.log(parte+'ST');
+                console.log(parte + 'ST');
                 console.log(dias);
                 let mensaje = dias;
                 let arr = mensaje.split('/');
-                console.log(arr );
+                console.log(arr);
                 // console.log(parte + '/' + arr[0] + '/D/' + wc, arr)
                 val1 = parseInt(document.getElementById(parte + '/' + arr[20] + '/D/' + wc).value);
                 val2 = parseInt(document.getElementById(parte + '/' + arr[20] + '/N/' + wc).value);
@@ -627,8 +622,9 @@
                 val11 = parseInt(document.getElementById(parte + '/' + arr[15] + '/D/' + wc).value);
                 val12 = parseInt(document.getElementById(parte + '/' + arr[15] + '/N/' + wc).value);
                 valtotal = val1 + val2 + val3 + val4 + val5 + val6 + val7 + val8 + val9 + val10 + val11 + val12;
-                console.log(val1 +'_'+ val2 +'_'+ val3 +'_'+ val4 +'_'+ val5 +'_'+ val6 +'_'+ val7 +'_'+ val8 +'_'+ val9 +'_'+ val10 +'_'+ val11 +'_'+ val12);
-                document.getElementById(parte+'ST').value = valtotal;
+                console.log(val1 + '_' + val2 + '_' + val3 + '_' + val4 + '_' + val5 + '_' + val6 + '_' + val7 + '_' + val8 +
+                    '_' + val9 + '_' + val10 + '_' + val11 + '_' + val12);
+                document.getElementById(parte + 'ST').value = valtotal;
 
             }
         </script>
@@ -666,24 +662,24 @@
                             const primerValor = partes[0];
                             totalp = document.getElementById(primerValor + "STE").value;
                             valinp = input.value;
-                            nuevov =Math.round(((act.value * totalp) / 100) / 2);
+                            nuevov = Math.round(((act.value * totalp) / 100) / 2);
                             input.value = nuevov;
                             document.querySelectorAll('.' + primerValor + 'Week').forEach(fila => {
                                 const inputsweek = fila.querySelectorAll('input');
                                 // console.log(primerValor + 'Week');
                                 // inputsweek.forEach(input => {
-                                    // console.log(inputsweek[17].id);
-                                    document.getElementById(primerValor + "ST").value =
-                                    Number( inputsweek[3].value )
-                                +Number( inputsweek[4].value )
-                                +Number(inputsweek[5].value )
-                                    +Number( inputsweek[6].value )
-                                    +Number( inputsweek[7].value )
-                                    +Number(inputsweek[8].value )
-                                    +Number( inputsweek[9].value)
-                                    +Number(inputsweek[10].value)
-                                    +Number(inputsweek[11].value)
-                                    +Number(inputsweek[12].value);
+                                // console.log(inputsweek[17].id);
+                                document.getElementById(primerValor + "ST").value =
+                                    Number(inputsweek[3].value) +
+                                    Number(inputsweek[4].value) +
+                                    Number(inputsweek[5].value) +
+                                    Number(inputsweek[6].value) +
+                                    Number(inputsweek[7].value) +
+                                    Number(inputsweek[8].value) +
+                                    Number(inputsweek[9].value) +
+                                    Number(inputsweek[10].value) +
+                                    Number(inputsweek[11].value) +
+                                    Number(inputsweek[12].value);
                             });
 
 
