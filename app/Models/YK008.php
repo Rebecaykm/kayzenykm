@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+class YK008 extends Model
+{
+    use HasFactory;
+
+    protected $connection = 'odbc-connection-lx834fu02';
+    protected $table = 'LX834FU02.YK008';
+
+    /**
+     *  baqse de datos de infor para sacar historico de KMR
+     */
+    public function fromDateTime($value)
+    {
+        return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    }
+
+    protected $fillable = [
+        'K8ID',
+        'K8PROD',
+        'K8RDTE',
+        'K8RCNO',
+        'K8QTY',
+    ];
+
+    /**
+     * Registration of changes to open orders in YF005
+     *
+     * @param string $swrkc
+     * @param string $sddte
+     * @param string $sord
+     * @param string $sprod
+     * @param string $sqreq
+     * @param string $sqfin
+     * @param string $cdte
+     * @param string $canc
+     * @return bool
+     */
+    public static function storeOpenOrder(string $swrkc, string $sddte, string $sord, string $sprod, string $sqreq, string $sqfin, string $cdte, string $canc)
+    {
+        return YF005::query()->insert([
+            'F5ID' => 'SO',
+            'F5WRKC' => $swrkc,
+            'F5DDTE' => $sddte,
+            'F5ORD' => $sord,
+            'F5PROD' => $sprod,
+            'F5QREQ' => $sqreq,
+            'F5QFIN' => $sqfin,
+            'F5CDTE' => $cdte,
+            'F5CAN' => $canc,
+            'F5IUSR' => Auth::user()->infor ?? '',
+            'F5IDTE' => Carbon::now()->format('Ymd'),
+            'F5ITIM' => Carbon::now()->format('His'),
+        ]);
+    }
+}

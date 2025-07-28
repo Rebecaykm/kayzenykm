@@ -83,6 +83,7 @@ class PlaneacionoffsetController extends Controller
             // dd( $cadepar );
             return view('planeacion.plancomponenteOSmmmmm', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
         } else {
+
             $plan1 = IIM::query()
                 ->select('IPROD', 'IREF04')
                 ->wherein('IREF04 ', $array)
@@ -97,7 +98,9 @@ class PlaneacionoffsetController extends Controller
             $datos = self::CargarforcastF1only($plan1, $fecha, $dias);
             $partsrev = array_column($plan1, 'IPROD');
             $cadepar = implode("' OR  IPROD='", $partsrev);
-            return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            //  return view('planeacion.planfinal1', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+            return view('planeacion.planfinalirregular', ['res' => $datos, 'tp' => $TP, 'cp' => $CP, 'wc' => $WC, 'fecha' => $fecha, 'dias' => $dias, 'partesne' => $cadepar, 'pagina' => 0, 'tpag' => $total]);
+
         }
     }
 
@@ -710,7 +713,7 @@ if($total==0)
                 ['FRDTE', '<', $totalF],
             ])
             ->get()->toarray();
-
+          
          $YK007=YK007::query('DPROD','DRSDT','DREDT' ,'DROQY','DRFQY','DRDQY','DRDRT')
          ->wherein('DPROD',$finaArra)
          ->get();
@@ -761,6 +764,7 @@ if($total==0)
                 $total = 0;
                 foreach ($valPDp as $reg6) {
                     if ($reg6['FPROD'] == $prod['IPROD']) {
+                       
                         // if($prod['IPROD']=="BDTS53816                          ")
                         // {
                         //     dd($prod['IPROD'],  $reg6['FRDTE'],
@@ -768,6 +772,7 @@ if($total==0)
                         //     $tipo = $reg6['FTYPE'],
                         //     $total = $reg6['FQTY']);
                         // }
+                  
                         $dia = $reg6['FRDTE'];
                         $turno = $reg6['FPCNO'];
                         $tipo = $reg6['FTYPE'];
@@ -783,8 +788,10 @@ if($total==0)
                         }
                     }
                 }
+               
                 $planpadre += $firme;
             }
+           
 
         $firfor=  optional($YK007->where('DPROD', $prod['IPROD'])->first())->toarray()??[];
 
