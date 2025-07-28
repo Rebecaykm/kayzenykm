@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 label: 'Cantidad Planificada',
                                 data: Object.values(data).map(entry => entry.planQuantity),
-                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235)',
                                 borderWidth: 1
                             }, {
                                 label: 'Cantidad Producida',
                                 data: Object.values(data).map(entry => entry.productionQuantity),
-                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192)',
                                 borderWidth: 1
                             }]
                         },

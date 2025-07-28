@@ -19,17 +19,17 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('infor:workcenter')->dailyAt('00:00');
-        $schedule->command('infor:partnumber')->dailyAt('00:30');
-        $schedule->command('infor:work-part')->dailyAt('02:00');
+        $schedule->command('infor:workcenter')->cron('0 0 * * 1');
+        $schedule->command('infor:partnumber')->cron('0 1 * * 1');
+        $schedule->command('infor:work-part')->cron('0 3 * * 1');
         $schedule->command('infor:production-plan')->twiceDaily(7, 19);
-         $schedule->command('infor:load-to-infor')->hourly();
+        $schedule->command('infor:load-to-infor')->hourly();
     }
 
     /**

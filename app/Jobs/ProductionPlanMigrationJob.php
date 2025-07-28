@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\FSO;
 use App\Models\KFP;
 use App\Models\PartNumber;
+use App\Models\Workcenter;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -32,16 +33,14 @@ class ProductionPlanMigrationJob implements ShouldQueue
      */
     public function handle(): void
     {
-
         $today = Carbon::now();
-
         $startDate = $today->copy()->format('Ymd');
         $endDate = $today->copy()->format('Ymd');
 
         $partNumbers = PartNumber::query()
             ->join('workcenters', 'part_numbers.workcenter_id', '=', 'workcenters.id')
             ->join('lines', 'workcenters.line_id', '=', 'lines.id')
-            ->whereIn('workcenters.id', [79, 143, 54, 294])
+            ->whereIn('lines.id', [33, 46, 47, 48, 50, 51, 52, 53, 54])
             ->pluck('part_numbers.number')
             ->toArray();
 
