@@ -79,12 +79,14 @@ class ScrapRateController extends Controller
 
             $record  = YHSCR::query()
                 ->where(DB::raw('TRIM(SCPROD)'), $request->partNumber)
-                ->where(DB::raw('TRIM(SCSTDT)'), 'LIKE', $startDate)
                 ->where(DB::raw('TRIM(SCCRDT)'), 'LIKE', $request->createdDate)
                 ->where(DB::raw('TRIM(SCCRTM)'), 'LIKE', $request->createdTime)
                 ->where(DB::raw('TRIM(SCCRUS)'), 'LIKE', $request->createdUser)
                 ->where(DB::raw('TRIM(SCCRWS)'), 'LIKE', $request->createdWs)
-                ->update(['SCRATE' => $scrapRateDecimal]);
+                ->update([
+                    'SCRATE' => $scrapRateDecimal,
+                    'SCSTDT' => $startDate
+                ]);
 
             if (!$record) {
                 return back()->with('error', 'Registro no encontrado.');
@@ -92,7 +94,7 @@ class ScrapRateController extends Controller
 
             if ($record) {
                 return redirect()->route('scrap-rate.index')
-                ->with('success', 'La tasa de scrap se ha actualizado correctamente.');
+                    ->with('success', 'La tasa de scrap se ha actualizado correctamente.');
             }
 
             return back()->with('error', 'No se pudo actualizar el registro.');

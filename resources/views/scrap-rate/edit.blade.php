@@ -40,8 +40,8 @@
                             type="date"
                             name="startDate"
                             value="{{ $startDate }}"
-                            readonly
-                            class="block w-full mt-1 text-sm dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 form-input bg-gray-100 cursor-not-allowed" />
+                            required
+                            class="block w-full mt-1 text-sm dark:border-gray-700 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input pr-12" />
                     </label>
 
                     <!-- Tasa de Scrap como porcentaje -->
@@ -56,7 +56,7 @@
                                 min="0"
                                 max="100"
                                 required
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input pr-12" />
+                                class="block w-full mt-1 text-sm dark:border-gray-700 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input pr-12" />
                         </div>
                     </label>
                 </div>
