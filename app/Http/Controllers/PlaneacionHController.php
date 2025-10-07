@@ -622,6 +622,7 @@ class PlaneacionHController extends Controller
             $tfirme = 0;
             $forcastp = [];
             $padre += ['parte' => $prod['IPROD']];
+                  $total = 0;
             if (count($valfinales) > 0) {
                 $total = 0;
                 foreach ($valfinales as $reg4) {
@@ -640,7 +641,8 @@ class PlaneacionHController extends Controller
                     if ($reg1['LPROD'] == $prod['IPROD']) {
                         $dia = $reg1['LSDTE'];
                         $turno = $reg1['CLCNO'];
-                        $total = $reg1['TOTAL'] + 0;
+
+                        $total = $reg1['TOTAL']??0 + 0;
                         $valt = substr($turno, 4, 1);
 
                         $forcastp += ['ecl' . $dia . 'D' => $total];
@@ -653,7 +655,7 @@ class PlaneacionHController extends Controller
             $contd = 1;
             $firme = [];
             $pos = array_search($prod['IPROD'], $prodcqa);
-            $totalcon =  ceil(($total / $pqa[$pos]) / 10);
+            $totalcon =  ceil(($total / $pqa[$pos]) / 10)??0;
 
             $contotal = 0;
             //             if($prod['IPROD']=='VA4128B04                          ')
